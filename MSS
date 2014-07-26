@@ -1,0 +1,1 @@
+This is the code base for MasterSword: Source.  It is a fork of jimbobcb's fork of the Source SDK 2013 code base.
