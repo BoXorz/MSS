@@ -54,3 +54,8 @@ config.cfg
 # shader files
 *.tmp
 
+# BOXBOX added these
+*.exe
+*.pdb
+*.dll
+*.lib
