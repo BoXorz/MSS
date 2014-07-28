@@ -1543,7 +1543,7 @@ bool CBaseCombatCharacter::BecomeRagdoll( const CTakeDamageInfo &info, const Vec
 #ifdef HL2_DLL	
 
 	bool bMegaPhyscannonActive = false;
-#if !defined( HL2MP )
+#if !defined( MSS )
 	bMegaPhyscannonActive = HL2GameRules()->MegaPhyscannonActive();
 #endif // !HL2MP
 
@@ -3102,7 +3102,7 @@ void CBaseCombatCharacter::VPhysicsShadowCollision( int index, gamevcollisioneve
 	// which can occur owing to ordering issues it appears.
 	float flOtherAttackerTime = 0.0f;
 
-#if defined( HL2_DLL ) && !defined( HL2MP )
+#if defined( HL2_DLL ) && !defined( MSS )
 	if ( HL2GameRules()->MegaPhyscannonActive() == true )
 	{
 		flOtherAttackerTime = 1.0f;

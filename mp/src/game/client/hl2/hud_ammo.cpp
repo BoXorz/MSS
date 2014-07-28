@@ -335,7 +335,7 @@ void CHudAmmo::Paint( void )
 {
 	BaseClass::Paint();
 
-#ifndef HL2MP
+#ifndef MSS
 	if ( m_hCurrentVehicle == NULL && m_iconPrimaryAmmo )
 	{
 		int nLabelHeight;
@@ -368,7 +368,7 @@ public:
 
 	void Init( void )
 	{
-#ifndef HL2MP
+#ifndef MSS
 		wchar_t *tempString = g_pVGuiLocalize->Find("#Valve_Hud_AMMO_ALT");
 		if (tempString)
 		{
@@ -423,7 +423,7 @@ public:
 	{
 		BaseClass::Paint();
 
-#ifndef HL2MP
+#ifndef MSS
 		if ( m_iconSecondaryAmmo )
 		{
 			int nLabelHeight;

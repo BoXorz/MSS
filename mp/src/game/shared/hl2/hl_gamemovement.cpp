@@ -1130,7 +1130,7 @@ void CHL2GameMovement::SetGroundEntity( trace_t *pm )
 
 bool CHL2GameMovement::CanAccelerate()
 {
-#ifdef HL2MP 
+#ifdef MSS 
 	if ( player->IsObserver() )
 	{
 		return true;

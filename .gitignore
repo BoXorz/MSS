@@ -58,4 +58,3 @@ config.cfg
 *.exe
 *.pdb
 *.dll
-*.lib

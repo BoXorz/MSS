@@ -656,7 +656,7 @@ void CNewRecharge::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE 
 	{
 		nIncrementArmor = 10;
 		
-#ifdef HL2MP
+#ifdef MSS
 		nIncrementArmor = 2;
 #endif
 

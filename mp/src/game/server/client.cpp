@@ -311,7 +311,7 @@ void ClientPrecache( void )
 	CBaseEntity::PrecacheModel( "sprites/purpleglow1.vmt" );	
 	CBaseEntity::PrecacheModel( "sprites/purplelaser1.vmt" );	
 	
-#ifndef HL2MP
+#ifndef MSS
 	CBaseEntity::PrecacheScriptSound( "Hud.Hint" );
 #endif // HL2MP
 	CBaseEntity::PrecacheScriptSound( "Player.FallDamage" );

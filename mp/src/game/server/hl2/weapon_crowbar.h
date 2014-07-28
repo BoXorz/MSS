@@ -13,7 +13,7 @@
 #pragma once
 #endif
 
-#ifdef HL2MP
+#ifdef MSS
 #error weapon_crowbar.h must not be included in hl2mp. The windows compiler will use the wrong class elsewhere if it is.
 #endif
 

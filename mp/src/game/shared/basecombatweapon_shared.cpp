@@ -32,7 +32,7 @@
 #include "fmtstr.h"
 #include "gameweaponmanager.h"
 
-#ifdef HL2MP
+#ifdef MSS
 	#include "hl2mp_gamerules.h"
 #endif
 
@@ -753,7 +753,7 @@ void CBaseCombatWeapon::OnPickedUp( CBaseCombatCharacter *pNewOwner )
 		m_OnNPCPickup.FireOutput(pNewOwner, this);
 	}
 
-#ifdef HL2MP
+#ifdef MSS
 	HL2MPRules()->RemoveLevelDesignerPlacedObject( this );
 #endif
 
@@ -1008,7 +1008,7 @@ void CBaseCombatWeapon::Equip( CBaseCombatCharacter *pOwner )
 void CBaseCombatWeapon::SetActivity( Activity act, float duration ) 
 { 
 	//Adrian: Oh man...
-#if !defined( CLIENT_DLL ) && (defined( HL2MP ) || defined( PORTAL ))
+#if !defined( CLIENT_DLL ) && (defined( MSS ) || defined( PORTAL ))
 	SetModel( GetWorldModel() );
 #endif
 	
@@ -1019,7 +1019,7 @@ void CBaseCombatWeapon::SetActivity( Activity act, float duration )
 		sequence = SelectWeightedSequence( ACT_VM_IDLE );
 
 	//Adrian: Oh man again...
-#if !defined( CLIENT_DLL ) && (defined( HL2MP ) || defined( PORTAL ))
+#if !defined( CLIENT_DLL ) && (defined( MSS ) || defined( PORTAL ))
 	SetModel( GetViewModel() );
 #endif
 

@@ -14,7 +14,7 @@
 #include "physics_saverestore.h"
 #include "world.h"
 
-#ifdef HL2MP
+#ifdef MSS
 #include "hl2mp_gamerules.h"
 #endif
 
@@ -98,7 +98,7 @@ BEGIN_DATADESC( CItem )
 	DEFINE_THINKFUNC( Materialize ),
 	DEFINE_THINKFUNC( ComeToRest ),
 
-#if defined( HL2MP ) || defined( TF_DLL )
+#if defined( MSS ) || defined( TF_DLL )
 	DEFINE_FIELD( m_flNextResetCheckTime, FIELD_TIME ),
 	DEFINE_THINKFUNC( FallThink ),
 #endif
@@ -202,7 +202,7 @@ void CItem::Spawn( void )
 	}
 #endif //CLIENT_DLL
 
-#if defined( HL2MP ) || defined( TF_DLL )
+#if defined( MSS ) || defined( TF_DLL )
 	SetThink( &CItem::FallThink );
 	SetNextThink( gpGlobals->curtime + 0.1f );
 #endif
@@ -272,7 +272,7 @@ void CItem::ComeToRest( void )
 	}
 }
 
-#if defined( HL2MP ) || defined( TF_DLL )
+#if defined( MSS ) || defined( TF_DLL )
 
 //-----------------------------------------------------------------------------
 // Purpose: Items that have just spawned run this think to catch them when 
@@ -284,7 +284,7 @@ void CItem::FallThink ( void )
 {
 	SetNextThink( gpGlobals->curtime + 0.1f );
 
-#if defined( HL2MP )
+#if defined( MSS )
 	bool shouldMaterialize = false;
 	IPhysicsObject *pPhysics = VPhysicsGetObject();
 	if ( pPhysics )
@@ -447,7 +447,7 @@ void CItem::ItemTouch( CBaseEntity *pOther )
 		{
 			UTIL_Remove( this );
 
-#ifdef HL2MP
+#ifdef MSS
 			HL2MPRules()->RemoveLevelDesignerPlacedObject( this );
 #endif
 		}
@@ -491,7 +491,7 @@ void CItem::Materialize( void )
 	{
 		// changing from invisible state to visible.
 
-#ifdef HL2MP
+#ifdef MSS
 		EmitSound( "AlyxEmp.Charge" );
 #else
 		EmitSound( "Item.Materialize" );

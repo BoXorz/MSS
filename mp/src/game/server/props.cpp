@@ -835,7 +835,7 @@ void CBreakableProp::Spawn()
 	
 	//jmd: I am guessing that the call to Spawn will set any flags that should be set anyway; this
 	//clears flags we don't want (specifically the FL_ONFIRE for explosive barrels in HL2MP)]
-#ifdef HL2MP
+#ifdef MSS
 	ClearFlags();
 #endif 
 
@@ -1732,7 +1732,7 @@ void CBreakableProp::Break( CBaseEntity *pBreaker, const CTakeDamageInfo &info )
 		WRITE_ANGLES( GetAbsAngles() );
 		MessageEnd();
 
-#ifndef HL2MP
+#ifndef MSS
 		UTIL_Remove( this );
 #endif
 		return;
@@ -1798,7 +1798,7 @@ void CBreakableProp::Break( CBaseEntity *pBreaker, const CTakeDamageInfo &info )
 		}
 	}
 
-#ifndef HL2MP
+#ifndef MSS
 	UTIL_Remove( this );
 #endif
 }

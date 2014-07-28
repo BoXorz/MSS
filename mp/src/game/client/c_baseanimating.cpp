@@ -880,7 +880,7 @@ void C_BaseAnimating::RemoveBaseAnimatingInterpolatedVars()
 	RemoveVar( m_flEncodedController, false );
 	RemoveVar( m_flPoseParameter, false );
 
-#ifdef HL2MP
+#ifdef MSS
 	// HACK:  Don't want to remove interpolation for predictables in hl2dm, though
 	// The animation state stuff sets the pose parameters -- so they should interp
 	//  but m_flCycle is not touched, so it's only set during prediction (which occurs on tick boundaries)
@@ -3746,7 +3746,7 @@ void C_BaseAnimating::FireEvent( const Vector& origin, const QAngle& angles, int
 
 	case CL_EVENT_FOOTSTEP_LEFT:
 		{
-#ifndef HL2MP
+#ifndef MSS
 			char pSoundName[256];
 			if ( !options || !options[0] )
 			{
@@ -3772,7 +3772,7 @@ void C_BaseAnimating::FireEvent( const Vector& origin, const QAngle& angles, int
 
 	case CL_EVENT_FOOTSTEP_RIGHT:
 		{
-#ifndef HL2MP
+#ifndef MSS
 			char pSoundName[256];
 			if ( !options || !options[0] )
 			{

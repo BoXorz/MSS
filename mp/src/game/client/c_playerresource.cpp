@@ -9,7 +9,7 @@
 #include "c_team.h"
 #include "gamestringpool.h"
 
-#ifdef HL2MP
+#ifdef MSS
 #include "hl2mp_gamerules.h"
 #endif
 
@@ -65,7 +65,7 @@ C_PlayerResource::C_PlayerResource()
 		m_Colors[i] = COLOR_GREY;
 	}
 
-#ifdef HL2MP
+#ifdef MSS
 	m_Colors[TEAM_COMBINE] = COLOR_BLUE;
 	m_Colors[TEAM_REBELS] = COLOR_RED;
 	m_Colors[TEAM_UNASSIGNED] = COLOR_YELLOW;

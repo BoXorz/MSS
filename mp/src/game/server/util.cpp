@@ -345,7 +345,7 @@ int UTIL_DropToFloor( CBaseEntity *pEntity, unsigned int mask, CBaseEntity *pIgn
 
 	trace_t	trace;
 
-#ifndef HL2MP
+#ifndef MSS
 	// HACK: is this really the only sure way to detect crossing a terrain boundry?
 	UTIL_TraceEntity( pEntity, pEntity->GetAbsOrigin(), pEntity->GetAbsOrigin(), mask, pIgnore, pEntity->GetCollisionGroup(), &trace );
 	if (trace.fraction == 0.0)

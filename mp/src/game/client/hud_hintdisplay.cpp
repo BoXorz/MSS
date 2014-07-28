@@ -320,7 +320,7 @@ void CHudHintDisplay::LocalizeAndDisplay( const char *pszHudTxtMsg, const char *
 		C_BasePlayer *pLocalPlayer = C_BasePlayer::GetLocalPlayer();
 		if ( pLocalPlayer )
 		{
-#ifndef HL2MP
+#ifndef MSS
 			if ( sv_hudhint_sound.GetBool() && cl_hudhint_sound.GetBool() )
 			{
 				pLocalPlayer->EmitSound( "Hud.Hint" );

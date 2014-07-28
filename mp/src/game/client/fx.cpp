@@ -40,7 +40,7 @@ CLIENTEFFECT_MATERIAL( "effects/muzzleflash4" )
 CLIENTEFFECT_MATERIAL( "effects/bluemuzzle" )
 CLIENTEFFECT_MATERIAL( "effects/gunshipmuzzle" )
 CLIENTEFFECT_MATERIAL( "effects/gunshiptracer" )
-#ifndef HL2MP
+#ifndef MSS
 CLIENTEFFECT_MATERIAL( "effects/huntertracer" )
 #endif
 CLIENTEFFECT_MATERIAL( "sprites/physcannon_bluelight2" )
