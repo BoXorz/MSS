@@ -1163,21 +1163,23 @@ void CBaseHudChat::StartMessageMode( int iMessageModeType )
 
 	m_pChatInput->ClearEntry();
 
-	const wchar_t *pszPrompt = ( m_nMessageMode == MM_SAY ) ? g_pVGuiLocalize->Find( "#chat_say" ) : g_pVGuiLocalize->Find( "#chat_say_team" ); 
+// BOXBOX replacing line below
+//	const wchar_t *pszPrompt = ( m_nMessageMode == MM_SAY ) ? g_pVGuiLocalize->Find( "#chat_say" ) : g_pVGuiLocalize->Find( "#chat_say_team" ); 
+	const wchar_t *pszPrompt = g_pVGuiLocalize->Find( "#chat_say" );
 	if ( pszPrompt )
 	{
 		m_pChatInput->SetPrompt( pszPrompt );
 	}
 	else
 	{
-		if ( m_nMessageMode == MM_SAY )
-		{
+//		if ( m_nMessageMode == MM_SAY )
+//		{
 			m_pChatInput->SetPrompt( L"Say :" );
-		}
-		else
-		{
-			m_pChatInput->SetPrompt( L"Say (TEAM) :" );
-		}
+//		}
+//		else
+//		{
+//			m_pChatInput->SetPrompt( L"Say (TEAM) :" );
+//		}
 	}
 	
 	if ( GetChatHistory() )
@@ -1615,7 +1617,9 @@ This is a very long string that I am going to attempt to paste into the cs hud c
 		}
 
 		char szbuf[144];	// more than 128
-		Q_snprintf( szbuf, sizeof(szbuf), "%s \"%s\"", m_nMessageMode == MM_SAY ? "say" : "say_team", ansi );
+// BOXBOX replacing line below
+//		Q_snprintf( szbuf, sizeof(szbuf), "%s \"%s\"", m_nMessageMode == MM_SAY ? "say" : "say_team", ansi );
+		Q_snprintf( szbuf, sizeof(szbuf), "%s \"%s\"", "say", ansi );
 
 		engine->ClientCmd_Unrestricted(szbuf);
 	}

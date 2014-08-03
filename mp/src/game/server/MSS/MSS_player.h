@@ -1,23 +1,19 @@
-//========= Copyright Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//=============================================================================//
+
+// The MasterSword: Source player
+
 #ifndef MSS_PLAYER_H
-#define HL2MP_PLAYER_H
+#define MSS_PLAYER_H
 #pragma once
 
-class CHL2MP_Player;
+class CMSS_Player;
 
 #include "basemultiplayerplayer.h"
 #include "hl2_playerlocaldata.h"
 #include "hl2_player.h"
 #include "simtimer.h"
 #include "soundenvelope.h"
-#include "hl2mp_player_shared.h"
-#include "hl2mp_gamerules.h"
+#include "MSS_player_shared.h"
+#include "MSS_gamerules.h"
 #include "utldict.h"
 
 //=============================================================================
@@ -29,24 +25,24 @@ public:
 	HL2MPPlayerState m_iPlayerState;
 	const char *m_pStateName;
 
-	void (CHL2MP_Player::*pfnEnterState)();	// Init and deinit the state.
-	void (CHL2MP_Player::*pfnLeaveState)();
+	void (CMSS_Player::*pfnEnterState)();	// Init and deinit the state.
+	void (CMSS_Player::*pfnLeaveState)();
 
-	void (CHL2MP_Player::*pfnPreThink)();	// Do a PreThink() in this state.
+	void (CMSS_Player::*pfnPreThink)();	// Do a PreThink() in this state.
 };
 
-class CHL2MP_Player : public CHL2_Player
+class CMSS_Player : public CHL2_Player
 {
 public:
-	DECLARE_CLASS( CHL2MP_Player, CHL2_Player );
+	DECLARE_CLASS( CMSS_Player, CHL2_Player );
 
-	CHL2MP_Player();
-	~CHL2MP_Player( void );
+	CMSS_Player();
+	~CMSS_Player( void );
 	
-	static CHL2MP_Player *CreatePlayer( const char *className, edict_t *ed )
+	static CMSS_Player *CreatePlayer( const char *className, edict_t *ed )
 	{
-		CHL2MP_Player::s_PlayerEdict = ed;
-		return (CHL2MP_Player*)CreateEntityByName( className );
+		CMSS_Player::s_PlayerEdict = ed;
+		return (CMSS_Player*)CreateEntityByName( className );
 	}
 
 	DECLARE_SERVERCLASS();
@@ -98,9 +94,9 @@ public:
 	void SetPlayerTeamModel( void );
 	Activity TranslateTeamActivity( Activity ActToTranslate );
 	
-	float GetNextModelChangeTime( void ) { return m_flNextModelChangeTime; }
-	float GetNextTeamChangeTime( void ) { return m_flNextTeamChangeTime; }
-	void  PickDefaultSpawnTeam( void );
+//	float GetNextModelChangeTime( void ) { return m_flNextModelChangeTime; } // BOXBOX removing these
+//	float GetNextTeamChangeTime( void ) { return m_flNextTeamChangeTime; }
+//	void  PickDefaultSpawnTeam( void );
 	void  SetupPlayerSoundsByModel( const char *pModelName );
 	const char *GetPlayerModelSoundPrefix( void );
 	int	  GetPlayerModelType( void ) { return m_iPlayerSoundType;	}
@@ -148,8 +144,8 @@ private:
 	CNetworkVar( int, m_iSpawnInterpCounter );
 	CNetworkVar( int, m_iPlayerSoundType );
 
-	float m_flNextModelChangeTime;
-	float m_flNextTeamChangeTime;
+//	float m_flNextModelChangeTime; // BOXBOX removing these
+//	float m_flNextTeamChangeTime;
 
 	float m_flSlamProtectTime;	
 
@@ -165,12 +161,12 @@ private:
 	bool m_bReady;
 };
 
-inline CHL2MP_Player *ToHL2MPPlayer( CBaseEntity *pEntity )
+inline CMSS_Player *ToHL2MPPlayer( CBaseEntity *pEntity )
 {
 	if ( !pEntity || !pEntity->IsPlayer() )
 		return NULL;
 
-	return dynamic_cast<CHL2MP_Player*>( pEntity );
+	return dynamic_cast<CMSS_Player*>( pEntity );
 }
 
-#endif //HL2MP_PLAYER_H
+#endif //MSS_PLAYER_H

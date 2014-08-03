@@ -15,7 +15,7 @@
 #include "world.h"
 
 #ifdef MSS
-#include "hl2mp_gamerules.h"
+#include "MSS_gamerules.h"
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
@@ -303,7 +303,7 @@ void CItem::FallThink ( void )
 		m_vOriginalSpawnOrigin = GetAbsOrigin();
 		m_vOriginalSpawnAngles = GetAbsAngles();
 
-		HL2MPRules()->AddLevelDesignerPlacedObject( this );
+		MSSRules()->AddLevelDesignerPlacedObject( this );
 	}
 #endif // HL2MP
 
@@ -448,7 +448,7 @@ void CItem::ItemTouch( CBaseEntity *pOther )
 			UTIL_Remove( this );
 
 #ifdef MSS
-			HL2MPRules()->RemoveLevelDesignerPlacedObject( this );
+			MSSRules()->RemoveLevelDesignerPlacedObject( this );
 #endif
 		}
 	}

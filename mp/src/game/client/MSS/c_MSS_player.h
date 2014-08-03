@@ -9,30 +9,30 @@
 #define HL2MP_PLAYER_H
 #pragma once
 
-class C_HL2MP_Player;
+class C_MSS_Player;
 #include "c_basehlplayer.h"
-#include "hl2mp_player_shared.h"
+#include "MSS_player_shared.h"
 #include "beamdraw.h"
 
 //=============================================================================
 // >> HL2MP_Player
 //=============================================================================
-class C_HL2MP_Player : public C_BaseHLPlayer
+class C_MSS_Player : public C_BaseHLPlayer
 {
 public:
-	DECLARE_CLASS( C_HL2MP_Player, C_BaseHLPlayer );
+	DECLARE_CLASS( C_MSS_Player, C_BaseHLPlayer );
 
 	DECLARE_CLIENTCLASS();
 	DECLARE_PREDICTABLE();
 	DECLARE_INTERPOLATION();
 
 
-	C_HL2MP_Player();
-	~C_HL2MP_Player( void );
+	C_MSS_Player();
+	~C_MSS_Player( void );
 
 	void ClientThink( void );
 
-	static C_HL2MP_Player* GetLocalHL2MPPlayer();
+	static C_MSS_Player* GetLocalHL2MPPlayer();
 	
 	virtual int DrawModel( int flags );
 	virtual void AddEntity( void );
@@ -88,7 +88,7 @@ public:
 
 private:
 	
-	C_HL2MP_Player( const C_HL2MP_Player & );
+	C_MSS_Player( const C_MSS_Player & );
 
 	CPlayerAnimState m_PlayerAnimState;
 
@@ -129,12 +129,12 @@ private:
 	bool m_fIsWalking;
 };
 
-inline C_HL2MP_Player *ToHL2MPPlayer( CBaseEntity *pEntity )
+inline C_MSS_Player *ToHL2MPPlayer( CBaseEntity *pEntity )
 {
 	if ( !pEntity || !pEntity->IsPlayer() )
 		return NULL;
 
-	return dynamic_cast<C_HL2MP_Player*>( pEntity );
+	return dynamic_cast<C_MSS_Player*>( pEntity );
 }
 
 

@@ -10,8 +10,8 @@
 #include "hl2mpclientscoreboard.h"
 #include "c_team.h"
 #include "c_playerresource.h"
-#include "c_hl2mp_player.h"
-#include "hl2mp_gamerules.h"
+#include "c_MSS_player.h"
+#include "MSS_gamerules.h"
 
 #include <KeyValues.h>
 
@@ -332,7 +332,9 @@ void CHL2MPClientScoreBoardDialog::InitScoreboardSections()
 	// fill out the structure of the scoreboard
 	AddHeader();
 
-	if ( HL2MPRules()->IsTeamplay() )
+ // BOXBOX removing teams  BOXBOX TODO remove scoreboard completely?
+/*
+	if ( MSSRules()->IsTeamplay() )
 	{
 		// add the team sections
 		AddSection( TYPE_TEAM, TEAM_COMBINE );
@@ -340,8 +342,8 @@ void CHL2MPClientScoreBoardDialog::InitScoreboardSections()
 	}
 	else
 	{
-		AddSection( TYPE_TEAM, TEAM_UNASSIGNED );
-	}
+*/		AddSection( TYPE_TEAM, TEAM_UNASSIGNED );
+//	}
 	AddSection( TYPE_TEAM, TEAM_SPECTATOR );
 }
 
@@ -379,8 +381,10 @@ void CHL2MPClientScoreBoardDialog::UpdateTeamInfo()
 			wchar_t string1[1024];
 			wchar_t wNumPlayers[6];
 
-			if ( HL2MPRules()->IsTeamplay() == false )
-			{
+// BOXBOX TODO fixup the scoreboard, if one is to be used at all!
+
+//			if ( MSSRules()->IsTeamplay() == false )
+//			{
 				_snwprintf( wNumPlayers, ARRAYSIZE(wNumPlayers), L"%i", iNumPlayersInGame );
 #ifdef WIN32
 				_snwprintf( name, ARRAYSIZE(name), L"%s", g_pVGuiLocalize->Find("#ScoreBoard_Deathmatch") );
@@ -398,8 +402,8 @@ void CHL2MPClientScoreBoardDialog::UpdateTeamInfo()
 				{
 					g_pVGuiLocalize->ConstructString( string1, sizeof(string1), g_pVGuiLocalize->Find("#ScoreBoard_Players"), 2, teamName, wNumPlayers );
 				}
-			}
-			else
+//			}
+/*			else
 			{
 				_snwprintf(wNumPlayers, ARRAYSIZE(wNumPlayers), L"%i", team->Get_Number_Players());
 
@@ -433,7 +437,7 @@ void CHL2MPClientScoreBoardDialog::UpdateTeamInfo()
 				}
 
 			}
-		
+*/		
 			m_pPlayerList->ModifyColumn(sectionID, "name", string1);
 		}
 	}
@@ -495,6 +499,9 @@ void CHL2MPClientScoreBoardDialog::AddSection(int teamType, int teamNumber)
 
 int CHL2MPClientScoreBoardDialog::GetSectionFromTeamNumber( int teamNumber )
 {
+
+ // BOXBOX removing teams
+/*
 	switch ( teamNumber )
 	{
 	case TEAM_COMBINE:
@@ -506,7 +513,7 @@ int CHL2MPClientScoreBoardDialog::GetSectionFromTeamNumber( int teamNumber )
 	default:
 		return SCORESECTION_FREEFORALL;
 	}
-	return SCORESECTION_FREEFORALL;
+*/	return SCORESECTION_FREEFORALL;
 }
 
 //-----------------------------------------------------------------------------

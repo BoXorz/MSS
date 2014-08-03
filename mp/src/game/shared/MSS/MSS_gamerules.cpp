@@ -1,18 +1,15 @@
-//========= Copyright Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
+
+// BOXBOX MasterSword: Source - game rules
+
 #include "cbase.h"
-#include "hl2mp_gamerules.h"
+#include "MSS_gamerules.h"
 #include "viewport_panel_names.h"
 #include "gameeventdefs.h"
 #include <KeyValues.h>
 #include "ammodef.h"
 
 #ifdef CLIENT_DLL
-	#include "c_hl2mp_player.h"
+	#include "c_MSS_player.h"
 #else
 
 	#include "eventqueue.h"
@@ -26,9 +23,9 @@
 	#include <ctype.h>
 	#include "voice_gamemgr.h"
 	#include "iscorer.h"
-	#include "hl2mp_player.h"
+	#include "MSS_player.h"
 	#include "weapon_hl2mpbasehlmpcombatweapon.h"
-	#include "team.h"
+//	#include "team.h" // BOXBOX removing teams
 	#include "voice_gamemgr.h"
 	#include "hl2mp_gameinterface.h"
 	#include "hl2mp_cvars.h"
@@ -41,23 +38,23 @@ extern void respawn(CBaseEntity *pEdict, bool fCopyCorpse);
 
 extern bool FindInList( const char **pStrings, const char *pToFind );
 
-ConVar sv_hl2mp_weapon_respawn_time( "sv_hl2mp_weapon_respawn_time", "20", FCVAR_GAMEDLL | FCVAR_NOTIFY );
-ConVar sv_hl2mp_item_respawn_time( "sv_hl2mp_item_respawn_time", "30", FCVAR_GAMEDLL | FCVAR_NOTIFY );
+//ConVar sv_hl2mp_weapon_respawn_time( "sv_hl2mp_weapon_respawn_time", "20", FCVAR_GAMEDLL | FCVAR_NOTIFY ); // BOXBOX weapons do not respawn
+ConVar sv_hl2mp_item_respawn_time( "sv_hl2mp_item_respawn_time", "30", FCVAR_GAMEDLL | FCVAR_NOTIFY ); // BOXBOX TODO should certain items respawn?(last resort for players in dire straights)
 ConVar sv_report_client_settings("sv_report_client_settings", "0", FCVAR_GAMEDLL | FCVAR_NOTIFY );
 
 extern ConVar mp_chattime;
 
-extern CBaseEntity	 *g_pLastCombineSpawn;
-extern CBaseEntity	 *g_pLastRebelSpawn;
+//extern CBaseEntity	 *g_pLastCombineSpawn; // BOXBOX removing
+//extern CBaseEntity	 *g_pLastRebelSpawn;
 
 #define WEAPON_MAX_DISTANCE_FROM_SPAWN 64
 
 #endif
 
 
-REGISTER_GAMERULES_CLASS( CHL2MPRules );
-
-BEGIN_NETWORK_TABLE_NOBASE( CHL2MPRules, DT_HL2MPRules )
+REGISTER_GAMERULES_CLASS( CMSSRules );
+/* BOXBOX NETCODE don't need this
+BEGIN_NETWORK_TABLE_NOBASE( CMSSRules, DT_MSSRules )
 
 	#ifdef CLIENT_DLL
 		RecvPropBool( RECVINFO( m_bTeamPlayEnabled ) ),
@@ -66,10 +63,13 @@ BEGIN_NETWORK_TABLE_NOBASE( CHL2MPRules, DT_HL2MPRules )
 	#endif
 
 END_NETWORK_TABLE()
+*/
 
+// LINK_ENTITY_TO_CLASS( MSS_gamerules, CMSSGameRulesProxy ); // BOXBOX was MSS_gamerules
 
-LINK_ENTITY_TO_CLASS( hl2mp_gamerules, CHL2MPGameRulesProxy );
-IMPLEMENT_NETWORKCLASS_ALIASED( HL2MPGameRulesProxy, DT_HL2MPGameRulesProxy )
+/* BOXBOX don't need this
+IMPLEMENT_NETWORKCLASS_ALIASED( MSSGameRulesProxy, DT_MSSGameRulesProxy )
+*/
 
 static HL2MPViewVectors g_HL2MPViewVectors(
 	Vector( 0, 0, 64 ),       //VEC_VIEW (m_vView) 
@@ -90,12 +90,13 @@ static HL2MPViewVectors g_HL2MPViewVectors(
 	Vector( 16,  16,  60 )	  //VEC_CROUCH_TRACE_MAX (m_vCrouchTraceMax)
 );
 
-static const char *s_PreserveEnts[] =
+static const char *s_PreserveEnts[] = // BOXBOX TODO check the exact function of this, do we need it?
 {
 	"ai_network",
 	"ai_hint",
-	"hl2mp_gamerules",
-	"team_manager",
+	"MSS_gamerules",
+//	"HL2MP_gamerules",
+//	"team_manager", // BOXBOX removing teams
 	"player_manager",
 	"env_soundscape",
 	"env_soundscape_proxy",
@@ -112,10 +113,11 @@ static const char *s_PreserveEnts[] =
 	"info_node",
 	"info_target",
 	"info_node_hint",
-	"info_player_deathmatch",
-	"info_player_combine",
-	"info_player_rebel",
-	"info_map_parameters",
+	"mss_spawnpoint", // BOXBOX
+//	"info_player_deathmatch",
+//	"info_player_combine",
+//	"info_player_rebel",
+	"info_map_parameters", // BOXBOX TODO what is this?  Can it translate to an mss_mapinfo entity?
 	"keyframe_rope",
 	"move_rope",
 	"info_ladder",
@@ -136,27 +138,29 @@ static const char *s_PreserveEnts[] =
 
 
 #ifdef CLIENT_DLL
-	void RecvProxy_HL2MPRules( const RecvProp *pProp, void **pOut, void *pData, int objectID )
+	void RecvProxy_MSSRules( const RecvProp *pProp, void **pOut, void *pData, int objectID )
 	{
-		CHL2MPRules *pRules = HL2MPRules();
+		CMSSRules *pRules = MSSRules();
 		Assert( pRules );
 		*pOut = pRules;
 	}
-
-	BEGIN_RECV_TABLE( CHL2MPGameRulesProxy, DT_HL2MPGameRulesProxy )
-		RecvPropDataTable( "hl2mp_gamerules_data", 0, 0, &REFERENCE_RECV_TABLE( DT_HL2MPRules ), RecvProxy_HL2MPRules )
+/* BOXBOX don't need this
+	BEGIN_RECV_TABLE( CMSSGameRulesProxy, DT_MSSGameRulesProxy )
+		RecvPropDataTable( "MSS_gamerules_data", 0, 0, &REFERENCE_RECV_TABLE( DT_MSSRules ), RecvProxy_MSSRules )
 	END_RECV_TABLE()
+	*/
 #else
-	void* SendProxy_HL2MPRules( const SendProp *pProp, const void *pStructBase, const void *pData, CSendProxyRecipients *pRecipients, int objectID )
+	void* SendProxy_MSSRules( const SendProp *pProp, const void *pStructBase, const void *pData, CSendProxyRecipients *pRecipients, int objectID )
 	{
-		CHL2MPRules *pRules = HL2MPRules();
+		CMSSRules *pRules = MSSRules();
 		Assert( pRules );
 		return pRules;
 	}
-
-	BEGIN_SEND_TABLE( CHL2MPGameRulesProxy, DT_HL2MPGameRulesProxy )
-		SendPropDataTable( "hl2mp_gamerules_data", 0, &REFERENCE_SEND_TABLE( DT_HL2MPRules ), SendProxy_HL2MPRules )
+/* BOXBOX don't need this
+	BEGIN_SEND_TABLE( CMSSGameRulesProxy, DT_MSSGameRulesProxy )
+		SendPropDataTable( "MSS_gamerules_data", 0, &REFERENCE_SEND_TABLE( DT_MSSRules ), SendProxy_MSSRules )
 	END_SEND_TABLE()
+	*/
 #endif
 
 #ifndef CLIENT_DLL
@@ -174,7 +178,7 @@ static const char *s_PreserveEnts[] =
 
 #endif
 
-// NOTE: the indices here must match TEAM_TERRORIST, TEAM_CT, TEAM_SPECTATOR, etc.
+/* BOXBOX commenting out
 char *sTeamNames[] =
 {
 	"Unassigned",
@@ -182,11 +186,13 @@ char *sTeamNames[] =
 	"Combine",
 	"Rebels",
 };
+*/
 
-CHL2MPRules::CHL2MPRules()
+CMSSRules::CMSSRules()
 {
 #ifndef CLIENT_DLL
-	// Create the team managers
+	// BOXBOX removing teams
+/*
 	for ( int i = 0; i < ARRAYSIZE( sTeamNames ); i++ )
 	{
 		CTeam *pTeam = static_cast<CTeam*>(CreateEntityByName( "team_manager" ));
@@ -194,14 +200,14 @@ CHL2MPRules::CHL2MPRules()
 
 		g_Teams.AddToTail( pTeam );
 	}
+*/
+//	m_bTeamPlayEnabled = teamplay.GetBool(); // BOXBOX removing these
+//	m_flIntermissionEndTime = 0.0f;
+//	m_flGameStartTime = 0;
 
-	m_bTeamPlayEnabled = teamplay.GetBool();
-	m_flIntermissionEndTime = 0.0f;
-	m_flGameStartTime = 0;
-
-	m_hRespawnableItemsAndWeapons.RemoveAll();
+//	m_hRespawnableItemsAndWeapons.RemoveAll();
 	m_tmNextPeriodicThink = 0;
-	m_flRestartGameTime = 0;
+//	m_flRestartGameTime = 0;
 	m_bCompleteReset = false;
 	m_bHeardAllPlayersReady = false;
 	m_bAwaitingReadyRestart = false;
@@ -210,26 +216,26 @@ CHL2MPRules::CHL2MPRules()
 #endif
 }
 
-const CViewVectors* CHL2MPRules::GetViewVectors()const
+const CViewVectors* CMSSRules::GetViewVectors()const
 {
 	return &g_HL2MPViewVectors;
 }
 
-const HL2MPViewVectors* CHL2MPRules::GetHL2MPViewVectors()const
+const HL2MPViewVectors* CMSSRules::GetHL2MPViewVectors()const
 {
 	return &g_HL2MPViewVectors;
 }
 	
-CHL2MPRules::~CHL2MPRules( void )
+CMSSRules::~CMSSRules( void )
 {
-#ifndef CLIENT_DLL
+//#ifndef CLIENT_DLL
 	// Note, don't delete each team since they are in the gEntList and will 
 	// automatically be deleted from there, instead.
-	g_Teams.Purge();
-#endif
+//	g_Teams.Purge();
+//#endif
 }
 
-void CHL2MPRules::CreateStandardEntities( void )
+void CMSSRules::CreateStandardEntities( void )
 {
 
 #ifndef CLIENT_DLL
@@ -237,22 +243,19 @@ void CHL2MPRules::CreateStandardEntities( void )
 
 	BaseClass::CreateStandardEntities();
 
-	g_pLastCombineSpawn = NULL;
-	g_pLastRebelSpawn = NULL;
+//	g_pLastCombineSpawn = NULL;
+//	g_pLastRebelSpawn = NULL;
 
 #ifdef DBGFLAG_ASSERT
 	CBaseEntity *pEnt = 
 #endif
-	CBaseEntity::Create( "hl2mp_gamerules", vec3_origin, vec3_angle );
+	CBaseEntity::Create( "MSS_gamerules", vec3_origin, vec3_angle ); // BOXBOX was "MSS_gamerules"
 	Assert( pEnt );
 #endif
 }
 
-//=========================================================
-// FlWeaponRespawnTime - what is the time in the future
-// at which this weapon may spawn?
-//=========================================================
-float CHL2MPRules::FlWeaponRespawnTime( CBaseCombatWeapon *pWeapon )
+/* BOXBOX removing this stuff
+float CMSSRules::FlWeaponRespawnTime( CBaseCombatWeapon *pWeapon )
 {
 #ifndef CLIENT_DLL
 	if ( weaponstay.GetInt() > 0 )
@@ -271,7 +274,7 @@ float CHL2MPRules::FlWeaponRespawnTime( CBaseCombatWeapon *pWeapon )
 }
 
 
-bool CHL2MPRules::IsIntermission( void )
+bool CMSSRules::IsIntermission( void )
 {
 #ifndef CLIENT_DLL
 	return m_flIntermissionEndTime > gpGlobals->curtime;
@@ -279,23 +282,27 @@ bool CHL2MPRules::IsIntermission( void )
 
 	return false;
 }
+*/
 
-void CHL2MPRules::PlayerKilled( CBasePlayer *pVictim, const CTakeDamageInfo &info )
+void CMSSRules::PlayerKilled( CBasePlayer *pVictim, const CTakeDamageInfo &info )
 {
 #ifndef CLIENT_DLL
-	if ( IsIntermission() )
-		return;
+//	if ( IsIntermission() ) // BOXBOX removing intermission
+//		return;
 	BaseClass::PlayerKilled( pVictim, info );
 #endif
 }
 
 
-void CHL2MPRules::Think( void )
+void CMSSRules::Think( void )
 {
 
 #ifndef CLIENT_DLL
 	
 	CGameRules::Think();
+
+	// BOXBOX Don't need this stuff
+/*
 
 	if ( g_fGameOver )   // someone else quit the game already
 	{
@@ -372,11 +379,13 @@ void CHL2MPRules::Think( void )
 	}
 
 	ManageObjectRelocation();
-
+*/
 #endif
 }
 
-void CHL2MPRules::GoToIntermission( void )
+/* BOXBOX removing this
+
+void CMSSRules::GoToIntermission( void )
 {
 #ifndef CLIENT_DLL
 	if ( g_fGameOver )
@@ -400,7 +409,7 @@ void CHL2MPRules::GoToIntermission( void )
 	
 }
 
-bool CHL2MPRules::CheckGameOver()
+bool CMSSRules::CheckGameOver()
 {
 #ifndef CLIENT_DLL
 	if ( g_fGameOver )   // someone else quit the game already
@@ -417,17 +426,16 @@ bool CHL2MPRules::CheckGameOver()
 
 	return false;
 }
+*/
 
 // when we are within this close to running out of entities,  items 
 // marked with the ITEM_FLAG_LIMITINWORLD will delay their respawn
-#define ENTITY_INTOLERANCE	100
 
-//=========================================================
-// FlWeaponRespawnTime - Returns 0 if the weapon can respawn 
-// now,  otherwise it returns the time at which it can try
-// to spawn again.
-//=========================================================
-float CHL2MPRules::FlWeaponTryRespawn( CBaseCombatWeapon *pWeapon )
+//#define ENTITY_INTOLERANCE	100 // BOXBOX Don't need this
+
+/* BOXBOX don't need this
+
+float CMSSRules::FlWeaponTryRespawn( CBaseCombatWeapon *pWeapon )
 {
 #ifndef CLIENT_DLL
 	if ( pWeapon && (pWeapon->GetWeaponFlags() & ITEM_FLAG_LIMITINWORLD) )
@@ -446,7 +454,7 @@ float CHL2MPRules::FlWeaponTryRespawn( CBaseCombatWeapon *pWeapon )
 // VecWeaponRespawnSpot - where should this weapon spawn?
 // Some game variations may choose to randomize spawn locations
 //=========================================================
-Vector CHL2MPRules::VecWeaponRespawnSpot( CBaseCombatWeapon *pWeapon )
+Vector CMSSRules::VecWeaponRespawnSpot( CBaseCombatWeapon *pWeapon )
 {
 #ifndef CLIENT_DLL
 	CWeaponHL2MPBase *pHL2Weapon = dynamic_cast< CWeaponHL2MPBase*>( pWeapon );
@@ -459,6 +467,7 @@ Vector CHL2MPRules::VecWeaponRespawnSpot( CBaseCombatWeapon *pWeapon )
 	
 	return pWeapon->GetAbsOrigin();
 }
+*/
 
 #ifndef CLIENT_DLL
 
@@ -471,6 +480,8 @@ CWeaponHL2MPBase* IsManagedObjectAWeapon( CBaseEntity *pObject )
 {
 	return dynamic_cast< CWeaponHL2MPBase*>( pObject );
 }
+
+/* BOXBOX don't need this
 
 bool GetObjectsOriginalParameters( CBaseEntity *pObject, Vector &vOriginalOrigin, QAngle &vOriginalAngles )
 {
@@ -500,7 +511,7 @@ bool GetObjectsOriginalParameters( CBaseEntity *pObject, Vector &vOriginalOrigin
 	return false;
 }
 
-void CHL2MPRules::ManageObjectRelocation( void )
+void CMSSRules::ManageObjectRelocation( void ) // BOXBOX TODO check into all of this
 {
 	int iTotal = m_hRespawnableItemsAndWeapons.Count();
 
@@ -551,11 +562,12 @@ void CHL2MPRules::ManageObjectRelocation( void )
 		}
 	}
 }
+*/
 
 //=========================================================
 //AddLevelDesignerPlacedWeapon
 //=========================================================
-void CHL2MPRules::AddLevelDesignerPlacedObject( CBaseEntity *pEntity )
+void CMSSRules::AddLevelDesignerPlacedObject( CBaseEntity *pEntity )
 {
 	if ( m_hRespawnableItemsAndWeapons.Find( pEntity ) == -1 )
 	{
@@ -566,7 +578,7 @@ void CHL2MPRules::AddLevelDesignerPlacedObject( CBaseEntity *pEntity )
 //=========================================================
 //RemoveLevelDesignerPlacedWeapon
 //=========================================================
-void CHL2MPRules::RemoveLevelDesignerPlacedObject( CBaseEntity *pEntity )
+void CMSSRules::RemoveLevelDesignerPlacedObject( CBaseEntity *pEntity )
 {
 	if ( m_hRespawnableItemsAndWeapons.Find( pEntity ) != -1 )
 	{
@@ -574,11 +586,8 @@ void CHL2MPRules::RemoveLevelDesignerPlacedObject( CBaseEntity *pEntity )
 	}
 }
 
-//=========================================================
-// Where should this item respawn?
-// Some game variations may choose to randomize spawn locations
-//=========================================================
-Vector CHL2MPRules::VecItemRespawnSpot( CItem *pItem )
+/* BOXBOX removing all this
+Vector CMSSRules::VecItemRespawnSpot( CItem *pItem )
 {
 	return pItem->GetOriginalSpawnOrigin();
 }
@@ -586,7 +595,7 @@ Vector CHL2MPRules::VecItemRespawnSpot( CItem *pItem )
 //=========================================================
 // What angles should this item use to respawn?
 //=========================================================
-QAngle CHL2MPRules::VecItemRespawnAngles( CItem *pItem )
+QAngle CMSSRules::VecItemRespawnAngles( CItem *pItem )
 {
 	return pItem->GetOriginalSpawnAngles();
 }
@@ -594,17 +603,17 @@ QAngle CHL2MPRules::VecItemRespawnAngles( CItem *pItem )
 //=========================================================
 // At what time in the future may this Item respawn?
 //=========================================================
-float CHL2MPRules::FlItemRespawnTime( CItem *pItem )
+float CMSSRules::FlItemRespawnTime( CItem *pItem )
 {
 	return sv_hl2mp_item_respawn_time.GetFloat();
 }
-
+*/
 
 //=========================================================
 // CanHaveWeapon - returns false if the player is not allowed
 // to pick up this weapon
 //=========================================================
-bool CHL2MPRules::CanHavePlayerItem( CBasePlayer *pPlayer, CBaseCombatWeapon *pItem )
+bool CMSSRules::CanHavePlayerItem( CBasePlayer *pPlayer, CBaseCombatWeapon *pItem )
 {
 	if ( weaponstay.GetInt() > 0 )
 	{
@@ -617,11 +626,9 @@ bool CHL2MPRules::CanHavePlayerItem( CBasePlayer *pPlayer, CBaseCombatWeapon *pI
 
 #endif
 
-//=========================================================
-// WeaponShouldRespawn - any conditions inhibiting the
-// respawning of this weapon?
-//=========================================================
-int CHL2MPRules::WeaponShouldRespawn( CBaseCombatWeapon *pWeapon )
+/* BOXBOX removing this
+
+int CMSSRules::WeaponShouldRespawn( CBaseCombatWeapon *pWeapon )
 {
 #ifndef CLIENT_DLL
 	if ( pWeapon->HasSpawnFlags( SF_NORESPAWN ) )
@@ -632,15 +639,17 @@ int CHL2MPRules::WeaponShouldRespawn( CBaseCombatWeapon *pWeapon )
 
 	return GR_WEAPON_RESPAWN_YES;
 }
+*/
 
 //-----------------------------------------------------------------------------
 // Purpose: Player has just left the game
 //-----------------------------------------------------------------------------
-void CHL2MPRules::ClientDisconnected( edict_t *pClient )
+void CMSSRules::ClientDisconnected( edict_t *pClient )
 {
 #ifndef CLIENT_DLL
 	// Msg( "CLIENT DISCONNECTED, REMOVING FROM TEAM.\n" );
 
+/* BOXBOX removing this
 	CBasePlayer *pPlayer = (CBasePlayer *)CBaseEntity::Instance( pClient );
 	if ( pPlayer )
 	{
@@ -650,7 +659,7 @@ void CHL2MPRules::ClientDisconnected( edict_t *pClient )
 			pPlayer->GetTeam()->RemovePlayer( pPlayer );
 		}
 	}
-
+*/
 	BaseClass::ClientDisconnected( pClient );
 
 #endif
@@ -660,7 +669,7 @@ void CHL2MPRules::ClientDisconnected( edict_t *pClient )
 //=========================================================
 // Deathnotice. 
 //=========================================================
-void CHL2MPRules::DeathNotice( CBasePlayer *pVictim, const CTakeDamageInfo &info )
+void CMSSRules::DeathNotice( CBasePlayer *pVictim, const CTakeDamageInfo &info )
 {
 #ifndef CLIENT_DLL
 	// Work out what killed the player, and send a message to all clients about it
@@ -756,12 +765,13 @@ void CHL2MPRules::DeathNotice( CBasePlayer *pVictim, const CTakeDamageInfo &info
 
 }
 
-void CHL2MPRules::ClientSettingsChanged( CBasePlayer *pPlayer )
+void CMSSRules::ClientSettingsChanged( CBasePlayer *pPlayer )
 {
 #ifndef CLIENT_DLL
+ // BOXBOX don't need all this
 	
-	CHL2MP_Player *pHL2Player = ToHL2MPPlayer( pPlayer );
-
+	CMSS_Player *pMSSPlayer = ToHL2MPPlayer( pPlayer );
+/*
 	if ( pHL2Player == NULL )
 		return;
 
@@ -786,7 +796,7 @@ void CHL2MPRules::ClientSettingsChanged( CBasePlayer *pPlayer )
 			return;
 		}
 
-		if ( HL2MPRules()->IsTeamplay() == false )
+		if ( MSSRules()->IsTeamplay() == false )
 		{
 			pHL2Player->SetPlayerModel();
 
@@ -813,13 +823,16 @@ void CHL2MPRules::ClientSettingsChanged( CBasePlayer *pPlayer )
 	{
 		UTIL_LogPrintf( "\"%s\" cl_cmdrate = \"%s\"\n", pHL2Player->GetPlayerName(), engine->GetClientConVarValue( pHL2Player->entindex(), "cl_cmdrate" ));
 	}
+*/
+
+	pMSSPlayer->SetModel( "models/player/humanmale.mdl" ); // BOXBOX TODO change this when character selection done
 
 	BaseClass::ClientSettingsChanged( pPlayer );
 #endif
 	
 }
-
-int CHL2MPRules::PlayerRelationship( CBaseEntity *pPlayer, CBaseEntity *pTarget )
+/*
+int CMSSRules::PlayerRelationship( CBaseEntity *pPlayer, CBaseEntity *pTarget )
 {
 #ifndef CLIENT_DLL
 	// half life multiplay has a simple concept of Player Relationships.
@@ -835,42 +848,43 @@ int CHL2MPRules::PlayerRelationship( CBaseEntity *pPlayer, CBaseEntity *pTarget 
 
 	return GR_NOTTEAMMATE;
 }
+*/
 
-const char *CHL2MPRules::GetGameDescription( void )
+const char *CMSSRules::GetGameDescription( void )
 { 
-	if ( IsTeamplay() )
-		return "Team Deathmatch"; 
+//	if ( IsTeamplay() )
+//		return "Team Deathmatch"; 
 
-	return "Deathmatch"; 
+	return "MasterSword: Source"; 
 } 
 
-bool CHL2MPRules::IsConnectedUserInfoChangeAllowed( CBasePlayer *pPlayer )
+bool CMSSRules::IsConnectedUserInfoChangeAllowed( CBasePlayer *pPlayer )
 {
 	return true;
 }
  
-float CHL2MPRules::GetMapRemainingTime()
+/* BOXBOX no time limits
+
+float CMSSRules::GetMapRemainingTime()
 {
 	// if timelimit is disabled, return 0
-	if ( mp_timelimit.GetInt() <= 0 )
+//	if ( mp_timelimit.GetInt() <= 0 )
 		return 0;
 
 	// timelimit is in minutes
 
-	float timeleft = (m_flGameStartTime + mp_timelimit.GetInt() * 60.0f ) - gpGlobals->curtime;
+//	float timeleft = (m_flGameStartTime + mp_timelimit.GetInt() * 60.0f ) - gpGlobals->curtime;
 
-	return timeleft;
+//	return timeleft;
 }
+*/
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-void CHL2MPRules::Precache( void )
+void CMSSRules::Precache( void )
 {
-	CBaseEntity::PrecacheScriptSound( "AlyxEmp.Charge" );
+//	CBaseEntity::PrecacheScriptSound( "AlyxEmp.Charge" ); // BOXBOX commenting out
 }
 
-bool CHL2MPRules::ShouldCollide( int collisionGroup0, int collisionGroup1 )
+bool CMSSRules::ShouldCollide( int collisionGroup0, int collisionGroup1 )
 {
 	if ( collisionGroup0 > collisionGroup1 )
 	{
@@ -888,14 +902,14 @@ bool CHL2MPRules::ShouldCollide( int collisionGroup0, int collisionGroup1 )
 
 }
 
-bool CHL2MPRules::ClientCommand( CBaseEntity *pEdict, const CCommand &args )
+bool CMSSRules::ClientCommand( CBaseEntity *pEdict, const CCommand &args )
 {
 #ifndef CLIENT_DLL
 	if( BaseClass::ClientCommand( pEdict, args ) )
 		return true;
 
 
-	CHL2MP_Player *pPlayer = (CHL2MP_Player *) pEdict;
+	CMSS_Player *pPlayer = (CMSS_Player *) pEdict;
 
 	if ( pPlayer->ClientCommand( args ) )
 		return true;
@@ -906,6 +920,8 @@ bool CHL2MPRules::ClientCommand( CBaseEntity *pEdict, const CCommand &args )
 
 // shared ammo definition
 // JAY: Trying to make a more physical bullet response
+
+// BOXBOX TODO ammo stuff...
 #define BULLET_MASS_GRAINS_TO_LB(grains)	(0.002285*(grains)/16.0f)
 #define BULLET_MASS_GRAINS_TO_KG(grains)	lbs2kg(BULLET_MASS_GRAINS_TO_LB(grains))
 
@@ -933,7 +949,7 @@ CAmmoDef *GetAmmoDef()
 		def.AddAmmoType("Buckshot",			DMG_BULLET | DMG_BUCKSHOT,	TRACER_LINE,			0,			0,			30,			BULLET_IMPULSE(400, 1200),	0 );
 		def.AddAmmoType("RPG_Round",		DMG_BURN,					TRACER_NONE,			0,			0,			3,			0,							0 );
 		def.AddAmmoType("SMG1_Grenade",		DMG_BURN,					TRACER_NONE,			0,			0,			3,			0,							0 );
-		def.AddAmmoType("Grenade",			DMG_BURN,					TRACER_NONE,			0,			0,			5,			0,							0 );
+		def.AddAmmoType("Grenade",			DMG_BURN,					TRACER_NONE,			80,			0,			5,			0,							0 ); // BOXBOX changed 0 to 80
 		def.AddAmmoType("slam",				DMG_BURN,					TRACER_NONE,			0,			0,			5,			0,							0 );
 	}
 
@@ -950,6 +966,8 @@ CAmmoDef *GetAmmoDef()
 
 #else
 
+// BOXBOX removing this below
+/*
 #ifdef DEBUG
 
 	// Handler for the "bot" command.
@@ -975,8 +993,8 @@ CAmmoDef *GetAmmoDef()
 	ConCommand cc_Bot( "bot", Bot_f, "Add a bot.", FCVAR_CHEAT );
 
 #endif
-
-	bool CHL2MPRules::FShouldSwitchWeapon( CBasePlayer *pPlayer, CBaseCombatWeapon *pWeapon )
+*/
+	bool CMSSRules::FShouldSwitchWeapon( CBasePlayer *pPlayer, CBaseCombatWeapon *pWeapon )
 	{		
 		if ( pPlayer->GetActiveWeapon() && pPlayer->IsNetClient() )
 		{
@@ -995,8 +1013,10 @@ CAmmoDef *GetAmmoDef()
 
 #ifndef CLIENT_DLL
 
-void CHL2MPRules::RestartGame()
+/* BOXBOX don't need this
+void CMSSRules::RestartGame()
 {
+
 	// bounds check
 	if ( mp_timelimit.GetInt() < 0 )
 	{
@@ -1014,7 +1034,7 @@ void CHL2MPRules::RestartGame()
 	// now respawn all players
 	for (int i = 1; i <= gpGlobals->maxClients; i++ )
 	{
-		CHL2MP_Player *pPlayer = (CHL2MP_Player*) UTIL_PlayerByIndex( i );
+		CMSS_Player *pPlayer = (CMSS_Player*) UTIL_PlayerByIndex( i );
 
 		if ( !pPlayer )
 			continue;
@@ -1057,9 +1077,11 @@ void CHL2MPRules::RestartGame()
 
 		gameeventmanager->FireEvent( event );
 	}
-}
 
-void CHL2MPRules::CleanUpMap()
+}
+*/
+
+void CMSSRules::CleanUpMap()
 {
 	// Recreate all the map entities from the map data (preserving their indices),
 	// then remove everything else except the players.
@@ -1156,7 +1178,7 @@ void CHL2MPRules::CleanUpMap()
 	MapEntity_ParseAllEntities( engine->GetMapEntitiesString(), &filter, true );
 }
 
-void CHL2MPRules::CheckChatForReadySignal( CHL2MP_Player *pPlayer, const char *chatmsg )
+void CMSSRules::CheckChatForReadySignal( CMSS_Player *pPlayer, const char *chatmsg )
 {
 	if( m_bAwaitingReadyRestart && FStrEq( chatmsg, mp_ready_signal.GetString() ) )
 	{
@@ -1166,8 +1188,8 @@ void CHL2MPRules::CheckChatForReadySignal( CHL2MP_Player *pPlayer, const char *c
 		}		
 	}
 }
-
-void CHL2MPRules::CheckRestartGame( void )
+/* BOXBOX don't need this
+void CMSSRules::CheckRestartGame( void )
 {
 	// Restart the game if specified by the server
 	int iRestartDelay = mp_restartgame.GetInt();
@@ -1214,12 +1236,13 @@ void CHL2MPRules::CheckRestartGame( void )
 		m_flRestartGameTime = -1;
 	}
 }
+*/
 
-void CHL2MPRules::CheckAllPlayersReady( void )
+void CMSSRules::CheckAllPlayersReady( void )
 {
 	for (int i = 1; i <= gpGlobals->maxClients; i++ )
 	{
-		CHL2MP_Player *pPlayer = (CHL2MP_Player*) UTIL_PlayerByIndex( i );
+		CMSS_Player *pPlayer = (CMSS_Player*) UTIL_PlayerByIndex( i );
 
 		if ( !pPlayer )
 			continue;
@@ -1232,16 +1255,16 @@ void CHL2MPRules::CheckAllPlayersReady( void )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-const char *CHL2MPRules::GetChatFormat( bool bTeamOnly, CBasePlayer *pPlayer )
+const char *CMSSRules::GetChatFormat( bool bTeamOnly, CBasePlayer *pPlayer )
 {
 	if ( !pPlayer )  // dedicated server output
 	{
 		return NULL;
 	}
+/* BOXBOX removing teams
 
 	const char *pszFormat = NULL;
 
-	// team only
 	if ( bTeamOnly == TRUE )
 	{
 		if ( pPlayer->GetTeamNumber() == TEAM_SPECTATOR )
@@ -1261,7 +1284,7 @@ const char *CHL2MPRules::GetChatFormat( bool bTeamOnly, CBasePlayer *pPlayer )
 			}
 		}
 	}
-	// everyone
+
 	else
 	{
 		if ( pPlayer->GetTeamNumber() != TEAM_SPECTATOR )
@@ -1274,7 +1297,9 @@ const char *CHL2MPRules::GetChatFormat( bool bTeamOnly, CBasePlayer *pPlayer )
 		}
 	}
 
-	return pszFormat;
+*/
+//	return pszFormat;
+	return "HL2MP_Chat_All";
 }
 
 #endif

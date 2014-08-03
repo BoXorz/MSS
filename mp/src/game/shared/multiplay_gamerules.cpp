@@ -751,22 +751,22 @@ ConVarRef suitcharger( "sk_suitcharger" );
 	//=========================================================
 	void CMultiplayRules::PlayerKilled( CBasePlayer *pVictim, const CTakeDamageInfo &info )
 	{
-		DeathNotice( pVictim, info );
+		DeathNotice( pVictim, info ); // BOXBOX not causing crash
 
-		// Find the killer & the scorer
-		CBaseEntity *pInflictor = info.GetInflictor();
-		CBaseEntity *pKiller = info.GetAttacker();
-		CBasePlayer *pScorer = GetDeathScorer( pKiller, pInflictor, pVictim );
+		// BOXBOX commenting these out
+//		CBaseEntity *pInflictor = info.GetInflictor();
+//		CBaseEntity *pKiller = info.GetAttacker();
+//		CBasePlayer *pScorer = GetDeathScorer( pKiller, pInflictor, pVictim );
 		
-		pVictim->IncrementDeathCount( 1 );
+//		pVictim->IncrementDeathCount( 1 ); // BOXBOX don't need this
 
 		// dvsents2: uncomment when removing all FireTargets
 		// variant_t value;
 		// g_EventQueue.AddEvent( "game_playerdie", "Use", value, 0, pVictim, pVictim );
-		FireTargets( "game_playerdie", pVictim, pVictim, USE_TOGGLE, 0 );
+//		FireTargets( "game_playerdie", pVictim, pVictim, USE_TOGGLE, 0 ); // BOXBOX commenting out
 
-		// Did the player kill himself?
-		if ( pVictim == pScorer )  
+		// BOXBOX don'y need this
+/*		if ( pVictim == pScorer )  
 		{			
 			if ( UseSuicidePenalty() )
 			{
@@ -795,7 +795,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 				pVictim->IncrementFragCount( -1 );
 			}					
 		}
-	}
+*/	}
 
 	//=========================================================
 	// Deathnotice. 

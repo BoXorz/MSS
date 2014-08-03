@@ -7,12 +7,12 @@
 #include "cbase.h"
 #include "hud.h"
 #include "hudelement.h"
-#include "c_hl2mp_player.h"
+#include "c_MSS_player.h"
 #include "c_playerresource.h"
 #include "vgui_entitypanel.h"
 #include "iclientmode.h"
 #include "vgui/ILocalize.h"
-#include "hl2mp_gamerules.h"
+#include "MSS_gamerules.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -106,7 +106,7 @@ void CTargetID::Paint()
 	wchar_t sIDString[ MAX_ID_STRING ];
 	sIDString[0] = 0;
 
-	C_HL2MP_Player *pPlayer = C_HL2MP_Player::GetLocalHL2MPPlayer();
+	C_MSS_Player *pPlayer = C_MSS_Player::GetLocalHL2MPPlayer();
 
 	if ( !pPlayer )
 		return;
@@ -140,7 +140,7 @@ void CTargetID::Paint()
 	if ( iEntIndex )
 	{
 		C_BasePlayer *pPlayer = static_cast<C_BasePlayer*>(cl_entitylist->GetEnt( iEntIndex ));
-		C_BasePlayer *pLocalPlayer = C_BasePlayer::GetLocalPlayer();
+//		C_BasePlayer *pLocalPlayer = C_BasePlayer::GetLocalPlayer();
 
 		const char *printFormatString = NULL;
 		wchar_t wszPlayerName[ MAX_PLAYER_NAME_LENGTH ];
@@ -158,15 +158,16 @@ void CTargetID::Paint()
 			bShowPlayerName = true;
 			g_pVGuiLocalize->ConvertANSIToUnicode( pPlayer->GetPlayerName(),  wszPlayerName, sizeof(wszPlayerName) );
 			
-			if ( HL2MPRules()->IsTeamplay() == true && pPlayer->InSameTeam(pLocalPlayer) )
+/* BOXBOX changing this
+			if ( MSSRules()->IsTeamplay() == true && pPlayer->InSameTeam(pLocalPlayer) )
 			{
 				printFormatString = "#Playerid_sameteam";
 				bShowHealth = true;
 			}
 			else
 			{
-				printFormatString = "#Playerid_diffteam";
-			}
+*/				printFormatString = "#Playerid_diffteam";
+//			}
 		
 
 			if ( bShowHealth )

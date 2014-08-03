@@ -1657,7 +1657,7 @@ void CBasePlayer::Event_Killed( const CTakeDamageInfo &info )
 
 	g_pGameRules->PlayerKilled( this, info );
 
-	gamestats->Event_PlayerKilled( this, info );
+	gamestats->Event_PlayerKilled( this, info ); // BOXBOX not causing crash
 
 	RumbleEffect( RUMBLE_STOP_ALL, 0, RUMBLE_FLAGS_NONE );
 
@@ -4798,9 +4798,9 @@ CBaseEntity *CBasePlayer::EntSelectSpawnPoint()
 		pSpot = g_pLastSpawn;
 		// Randomize the start spot
 		for ( int i = random->RandomInt(1,5); i > 0; i-- )
-			pSpot = gEntList.FindEntityByClassname( pSpot, "info_player_deathmatch" );
+			pSpot = gEntList.FindEntityByClassname( pSpot, "mss_spawnpoint" ); // BOXBOX was "info_player_deathmatch"
 		if ( !pSpot )  // skip over the null point
-			pSpot = gEntList.FindEntityByClassname( pSpot, "info_player_deathmatch" );
+			pSpot = gEntList.FindEntityByClassname( pSpot, "mss_spawnpoint" ); // BOXBOX was "info_player_deathmatch"
 
 		CBaseEntity *pFirstSpot = pSpot;
 
@@ -4813,7 +4813,7 @@ CBaseEntity *CBasePlayer::EntSelectSpawnPoint()
 				{
 					if ( pSpot->GetLocalOrigin() == vec3_origin )
 					{
-						pSpot = gEntList.FindEntityByClassname( pSpot, "info_player_deathmatch" );
+						pSpot = gEntList.FindEntityByClassname( pSpot, "mss_spawnpoint" ); // BOXBOX was "info_player_deathmatch"
 						continue;
 					}
 
@@ -4822,7 +4822,7 @@ CBaseEntity *CBasePlayer::EntSelectSpawnPoint()
 				}
 			}
 			// increment pSpot
-			pSpot = gEntList.FindEntityByClassname( pSpot, "info_player_deathmatch" );
+			pSpot = gEntList.FindEntityByClassname( pSpot, "mss_spawnpoint" ); // BOXBOX was "info_player_deathmatch"
 		} while ( pSpot != pFirstSpot ); // loop if we're not back to the start
 
 		// we haven't found a place to spawn yet,  so kill any guy at the first spawn point and spawn there

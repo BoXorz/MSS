@@ -1736,15 +1736,6 @@
     <ClInclude Include="MSS\hl2mp_gameinterface.h">
       <Filter>Source Files\MSS</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\game\shared\MSS\hl2mp_gamerules.h">
-      <Filter>Source Files\MSS</Filter>
-    </ClInclude>
-    <ClInclude Include="MSS\hl2mp_player.h">
-      <Filter>Source Files\MSS</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\game\shared\MSS\hl2mp_player_shared.h">
-      <Filter>Source Files\MSS</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\game\shared\MSS\hl2mp_weapon_parse.h">
       <Filter>Source Files\MSS</Filter>
     </ClInclude>
@@ -1825,6 +1816,15 @@
     </ClInclude>
     <ClInclude Include="toolframework_server.h">
       <Filter>Tools Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\MSS\MSS_gamerules.h">
+      <Filter>Source Files\MSS</Filter>
+    </ClInclude>
+    <ClInclude Include="MSS\MSS_player.h">
+      <Filter>Source Files\MSS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\MSS\MSS_player_shared.h">
+      <Filter>Source Files\MSS</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3271,22 +3271,10 @@
     <ClCompile Include="MSS\hl2mp_bot_temp.cpp">
       <Filter>Source Files\MSS</Filter>
     </ClCompile>
-    <ClCompile Include="MSS\hl2mp_client.cpp">
-      <Filter>Source Files\MSS</Filter>
-    </ClCompile>
     <ClCompile Include="MSS\hl2mp_cvars.cpp">
       <Filter>Source Files\MSS</Filter>
     </ClCompile>
     <ClCompile Include="MSS\hl2mp_gameinterface.cpp">
-      <Filter>Source Files\MSS</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\game\shared\MSS\hl2mp_gamerules.cpp">
-      <Filter>Source Files\MSS</Filter>
-    </ClCompile>
-    <ClCompile Include="MSS\hl2mp_player.cpp">
-      <Filter>Source Files\MSS</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\game\shared\MSS\hl2mp_player_shared.cpp">
       <Filter>Source Files\MSS</Filter>
     </ClCompile>
     <ClCompile Include="..\..\game\shared\MSS\hl2mp_weapon_parse.cpp">
@@ -3552,6 +3540,18 @@
     </ClCompile>
     <ClCompile Include="toolframework_server.cpp">
       <Filter>Tools Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="MSS\MSS_client.cpp">
+      <Filter>Source Files\MSS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\MSS\MSS_gamerules.cpp">
+      <Filter>Source Files\MSS</Filter>
+    </ClCompile>
+    <ClCompile Include="MSS\MSS_player.cpp">
+      <Filter>Source Files\MSS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\MSS\MSS_player_shared.cpp">
+      <Filter>Source Files\MSS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

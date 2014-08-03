@@ -9,10 +9,10 @@
 #include "in_buttons.h"
 
 #ifdef CLIENT_DLL
-	#include "c_hl2mp_player.h"
+	#include "c_MSS_player.h"
 #else
 	#include "grenade_ar2.h"
-	#include "hl2mp_player.h"
+	#include "MSS_player.h"
 	#include "basegrenade_shared.h"
 #endif
 

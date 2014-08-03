@@ -31,7 +31,7 @@ enum HL2MPPlayerState
 
 
 #if defined( CLIENT_DLL )
-#define CHL2MP_Player C_HL2MP_Player
+#define CMSS_Player C_MSS_Player
 #endif
 
 class CPlayerAnimState
@@ -44,7 +44,7 @@ public:
 		TURN_RIGHT
 	};
 
-	CPlayerAnimState( CHL2MP_Player *outer );
+	CPlayerAnimState( CMSS_Player *outer );
 
 	Activity			BodyYawTranslateActivity( Activity activity );
 
@@ -54,7 +54,7 @@ public:
 				
 	void				GetPoseParameters( CStudioHdr *pStudioHdr, float poseParameter[MAXSTUDIOPOSEPARAM] );
 
-	CHL2MP_Player		*GetOuter();
+	CMSS_Player		*GetOuter();
 
 private:
 	void				GetOuterAbsVelocity( Vector& vel );
@@ -68,7 +68,7 @@ private:
 
 	void				ComputePlaybackRate();
 
-	CHL2MP_Player		*m_pOuter;
+	CMSS_Player		*m_pOuter;
 
 	float				m_flGaitYaw;
 	float				m_flStoredCycle;

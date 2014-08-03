@@ -376,13 +376,13 @@ public:
 	virtual void CreateStandardEntities();
 
 	// Team name, etc shown in chat and dedicated server console
-	virtual const char *GetChatPrefix( bool bTeamOnly, CBasePlayer *pPlayer );
+	virtual const char *GetChatPrefix( /*bool bTeamOnly,*/ CBasePlayer *pPlayer );
 
 	// Location name shown in chat
-	virtual const char *GetChatLocation( bool bTeamOnly, CBasePlayer *pPlayer ) { return NULL; }
+	virtual const char *GetChatLocation(/* bool bTeamOnly,*/ CBasePlayer *pPlayer ) { return NULL; }
 
 	// VGUI format string for chat, if desired
-	virtual const char *GetChatFormat( bool bTeamOnly, CBasePlayer *pPlayer ) { return NULL; }
+	virtual const char *GetChatFormat( /*bool bTeamOnly,*/ CBasePlayer *pPlayer ) { return NULL; } // BOXBOX removing teams
 
 	// Whether props that are on fire should get a DLIGHT.
 	virtual bool ShouldBurningPropsEmitLight() { return false; }

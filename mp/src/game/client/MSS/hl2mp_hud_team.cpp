@@ -7,12 +7,12 @@
 #include "cbase.h"
 #include "hud.h"
 #include "hudelement.h"
-#include "c_hl2mp_player.h"
+#include "c_MSS_player.h"
 #include "c_playerresource.h"
 #include "vgui_entitypanel.h"
 #include "iclientmode.h"
 #include "vgui/ILocalize.h"
-#include "hl2mp_gamerules.h"
+#include "MSS_gamerules.h"
 #include "c_team.h"
 #include <vgui_controls/AnimationController.h>
 // memdbgon must be the last include file in a .cpp file!!!
@@ -138,8 +138,8 @@ void CTeamPlayHud::OnThink()
 	if ( pLocalPlayer == NULL )
 		 return;
 
-	if ( HL2MPRules()->IsTeamplay() == false )
-		 return;
+//	if ( MSSRules()->IsTeamplay() == false )
+//		 return;
 
 	if ( pLocalPlayer->IsAlive() == false )
 		 return;

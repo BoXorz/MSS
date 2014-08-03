@@ -31,7 +31,7 @@
 #include "te_effect_dispatch.h"
 #include "globals.h"
 #include "nav_mesh.h"
-#include "team.h"
+// #include "team.h" // BOXBOX removing teams
 #include "datacache/imdlcache.h"
 #include "basemultiplayerplayer.h"
 #include "voice_gamemgr.h"
@@ -95,8 +95,10 @@ char * CheckChatText( CBasePlayer *pPlayer, char *text )
 // say blah blah blah
 // or as
 // blah blah blah
-//
-void Host_Say( edict_t *pEdict, const CCommand &args, bool teamonly )
+
+// BOXBOX remaking this, taking teams out
+
+void Host_Say( edict_t *pEdict, const CCommand &args/*, bool teamonly*/ )
 {
 	CBasePlayer *client;
 	int		j;
@@ -104,7 +106,7 @@ void Host_Say( edict_t *pEdict, const CCommand &args, bool teamonly )
 	char	text[256];
 	char    szTemp[256];
 	const char *cpSay = "say";
-	const char *cpSayTeam = "say_team";
+//	const char *cpSayTeam = "say_team";
 	const char *pcmd = args[0];
 	bool bSenderDead = false;
 
@@ -112,7 +114,7 @@ void Host_Say( edict_t *pEdict, const CCommand &args, bool teamonly )
 	if ( args.ArgC() == 0 )
 		return;
 
-	if ( !stricmp( pcmd, cpSay) || !stricmp( pcmd, cpSayTeam ) )
+	if ( !stricmp( pcmd, cpSay)/* || !stricmp( pcmd, cpSayTeam )*/ )
 	{
 		if ( args.ArgC() >= 2 )
 		{
@@ -174,9 +176,9 @@ void Host_Say( edict_t *pEdict, const CCommand &args, bool teamonly )
 	const char *pszLocation = NULL;
 	if ( g_pGameRules )
 	{
-		pszFormat = g_pGameRules->GetChatFormat( teamonly, pPlayer );
-		pszPrefix = g_pGameRules->GetChatPrefix( teamonly, pPlayer );	
-		pszLocation = g_pGameRules->GetChatLocation( teamonly, pPlayer );
+		pszFormat = g_pGameRules->GetChatFormat( /*teamonly,*/ pPlayer );
+		pszPrefix = g_pGameRules->GetChatPrefix( /*teamonly,*/ pPlayer );	
+		pszLocation = g_pGameRules->GetChatLocation( /*teamonly,*/ pPlayer );
 	}
 
 	const char *pszPlayerName = pPlayer ? pPlayer->GetPlayerName():"Console";
@@ -222,8 +224,8 @@ void Host_Say( edict_t *pEdict, const CCommand &args, bool teamonly )
 		if ( !(client->IsNetClient()) )	// Not a client ? (should never be true)
 			continue;
 
-		if ( teamonly && g_pGameRules->PlayerCanHearChat( client, pPlayer ) != GR_TEAMMATE )
-			continue;
+//		if ( teamonly && g_pGameRules->PlayerCanHearChat( client, pPlayer ) != GR_TEAMMATE )
+//			continue;
 
 		if ( pPlayer && !client->CanHearAndReadChatFrom( pPlayer ) )
 			continue;
@@ -270,23 +272,23 @@ void Host_Say( edict_t *pEdict, const CCommand &args, bool teamonly )
 	int userid = 0;
 	const char *networkID = "Console";
 	const char *playerName = "Console";
-	const char *playerTeam = "Console";
+//	const char *playerTeam = "Console";
 	if ( pPlayer )
 	{
 		userid = pPlayer->GetUserID();
 		networkID = pPlayer->GetNetworkIDString();
 		playerName = pPlayer->GetPlayerName();
-		CTeam *team = pPlayer->GetTeam();
+/*		CTeam *team = pPlayer->GetTeam();
 		if ( team )
 		{
 			playerTeam = team->GetName();
 		}
-	}
+*/	}
 		
-	if ( teamonly )
+/*	if ( teamonly )
 		UTIL_LogPrintf( "\"%s<%i><%s><%s>\" say_team \"%s\"\n", playerName, userid, networkID, playerTeam, p );
 	else
-		UTIL_LogPrintf( "\"%s<%i><%s><%s>\" say \"%s\"\n", playerName, userid, networkID, playerTeam, p );
+*/		UTIL_LogPrintf( "\"%s<%i><%s><%s>\" say \"%s\"\n", playerName, userid, networkID, /*playerTeam,*/ p );
 
 	IGameEvent * event = gameeventmanager->CreateEvent( "player_say", true );
 
@@ -754,7 +756,7 @@ CON_COMMAND( say, "Display player message" )
 	{
 		if (( pPlayer->LastTimePlayerTalked() + TALK_INTERVAL ) < gpGlobals->curtime) 
 		{
-			Host_Say( pPlayer->edict(), args, 0 );
+			Host_Say( pPlayer->edict(), args/*, 0*/ ); // BOXBOX removing teams
 			pPlayer->NotePlayerTalked();
 		}
 	}
@@ -764,13 +766,12 @@ CON_COMMAND( say, "Display player message" )
 	// text via a script.  This can be exploited to flood everyone off.
 	else if ( UTIL_GetCommandClientIndex() == 0 )
 	{
-		Host_Say( NULL, args, 0 );
+		Host_Say( NULL, args/*, 0*/ );
 	}
 }
 
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
+/* BOXBOX removing teams
 CON_COMMAND( say_team, "Display player message to team" )
 {
 	CBasePlayer *pPlayer = ToBasePlayer( UTIL_GetCommandClient() ); 
@@ -783,7 +784,7 @@ CON_COMMAND( say_team, "Display player message to team" )
 		}
 	}
 }
-
+*/
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------

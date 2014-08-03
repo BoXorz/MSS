@@ -28,7 +28,7 @@
 #include "func_break.h"
 
 #ifdef MSS
-	#include "hl2mp_gamerules.h"
+	#include "MSS_gamerules.h"
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
@@ -582,7 +582,7 @@ void CBaseCombatWeapon::Materialize( void )
 		VPhysicsInitNormal( SOLID_BBOX, GetSolidFlags() | FSOLID_TRIGGER, false );
 		SetMoveType( MOVETYPE_VPHYSICS );
 
-		HL2MPRules()->AddLevelDesignerPlacedObject( this );
+		MSSRules()->AddLevelDesignerPlacedObject( this );
 	}
 #else
 	SetSolid( SOLID_BBOX );

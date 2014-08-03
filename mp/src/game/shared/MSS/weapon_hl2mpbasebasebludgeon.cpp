@@ -15,9 +15,9 @@
 #include "animation.h"
 
 #if defined( CLIENT_DLL )
-	#include "c_hl2mp_player.h"
+	#include "c_MSS_player.h"
 #else
-	#include "hl2mp_player.h"
+	#include "MSS_player.h"
 	#include "ndebugoverlay.h"
 	#include "te_effect_dispatch.h"
 	#include "ilagcompensationmanager.h"
@@ -103,7 +103,7 @@ void CBaseHL2MPBludgeonWeapon::PrimaryAttack()
 {
 	
 #ifndef CLIENT_DLL
-	CHL2MP_Player *pPlayer = ToHL2MPPlayer( GetPlayerOwner() );
+	CMSS_Player *pPlayer = ToHL2MPPlayer( GetPlayerOwner() );
 	// Move other players back to history positions based on local player's lag
 	lagcompensation->StartLagCompensation( pPlayer, pPlayer->GetCurrentCommand() );
 #endif

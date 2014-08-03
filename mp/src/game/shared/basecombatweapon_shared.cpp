@@ -33,7 +33,7 @@
 #include "gameweaponmanager.h"
 
 #ifdef MSS
-	#include "hl2mp_gamerules.h"
+	#include "MSS_gamerules.h"
 #endif
 
 #endif
@@ -754,7 +754,7 @@ void CBaseCombatWeapon::OnPickedUp( CBaseCombatCharacter *pNewOwner )
 	}
 
 #ifdef MSS
-	HL2MPRules()->RemoveLevelDesignerPlacedObject( this );
+	MSSRules()->RemoveLevelDesignerPlacedObject( this );
 #endif
 
 	// Someone picked me up, so make it so that I can't be removed.

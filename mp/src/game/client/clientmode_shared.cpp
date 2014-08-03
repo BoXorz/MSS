@@ -627,7 +627,7 @@ int	ClientModeShared::KeyInput( int down, ButtonCode_t keynum, const char *pszCu
 		}
 		return 0;
 	}
-	else if ( pszCurrentBinding &&
+/*	else if ( pszCurrentBinding &&
 				( Q_strcmp( pszCurrentBinding, "messagemode2" ) == 0 ||
 				  Q_strcmp( pszCurrentBinding, "say_team" ) == 0 ) )
 	{
@@ -637,7 +637,7 @@ int	ClientModeShared::KeyInput( int down, ButtonCode_t keynum, const char *pszCu
 		}
 		return 0;
 	}
-	
+*/	
 	// If we're voting...
 #ifdef VOTING_ENABLED
 	CHudVote *pHudVote = GET_HUDELEMENT( CHudVote );

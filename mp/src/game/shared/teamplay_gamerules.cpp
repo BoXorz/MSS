@@ -339,7 +339,7 @@ void CTeamplayRules::PlayerKilled( CBasePlayer *pVictim, const CTakeDamageInfo &
 	if ( !m_DisableDeathPenalty )
 	{
 		BaseClass::PlayerKilled( pVictim, info );
-		RecountTeams();
+//		RecountTeams(); // BOXBOX removing teams
 	}
 }
 

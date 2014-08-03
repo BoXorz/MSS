@@ -6,23 +6,23 @@
 
 #include "cbase.h"
 #include "vcollide_parse.h"
-#include "c_hl2mp_player.h"
+#include "c_MSS_player.h"
 #include "view.h"
 #include "takedamageinfo.h"
-#include "hl2mp_gamerules.h"
+#include "MSS_gamerules.h"
 #include "in_buttons.h"
 #include "iviewrender_beams.h"			// flashlight beam
 #include "r_efx.h"
 #include "dlight.h"
 
 // Don't alias here
-#if defined( CHL2MP_Player )
-#undef CHL2MP_Player	
+#if defined( CMSS_Player )
+#undef CMSS_Player	
 #endif
 
-LINK_ENTITY_TO_CLASS( player, C_HL2MP_Player );
+LINK_ENTITY_TO_CLASS( player, C_MSS_Player );
 
-IMPLEMENT_CLIENTCLASS_DT(C_HL2MP_Player, DT_HL2MP_Player, CHL2MP_Player)
+IMPLEMENT_CLIENTCLASS_DT(C_MSS_Player, DT_HL2MP_Player, CMSS_Player)
 	RecvPropFloat( RECVINFO( m_angEyeAngles[0] ) ),
 	RecvPropFloat( RECVINFO( m_angEyeAngles[1] ) ),
 	RecvPropEHandle( RECVINFO( m_hRagdoll ) ),
@@ -32,7 +32,7 @@ IMPLEMENT_CLIENTCLASS_DT(C_HL2MP_Player, DT_HL2MP_Player, CHL2MP_Player)
 	RecvPropBool( RECVINFO( m_fIsWalking ) ),
 END_RECV_TABLE()
 
-BEGIN_PREDICTION_DATA( C_HL2MP_Player )
+BEGIN_PREDICTION_DATA( C_MSS_Player )
 	DEFINE_PRED_FIELD( m_fIsWalking, FIELD_BOOLEAN, FTYPEDESC_INSENDTABLE ),
 END_PREDICTION_DATA()
 
@@ -45,7 +45,7 @@ static ConVar cl_defaultweapon( "cl_defaultweapon", "weapon_physcannon", FCVAR_U
 
 void SpawnBlood (Vector vecSpot, const Vector &vecDir, int bloodColor, float flDamage);
 
-C_HL2MP_Player::C_HL2MP_Player() : m_PlayerAnimState( this ), m_iv_angEyeAngles( "C_HL2MP_Player::m_iv_angEyeAngles" )
+C_MSS_Player::C_MSS_Player() : m_PlayerAnimState( this ), m_iv_angEyeAngles( "C_MSS_Player::m_iv_angEyeAngles" )
 {
 	m_iIDEntIndex = 0;
 	m_iSpawnInterpCounterCache = 0;
@@ -60,12 +60,12 @@ C_HL2MP_Player::C_HL2MP_Player() : m_PlayerAnimState( this ), m_iv_angEyeAngles(
 	m_pFlashlightBeam = NULL;
 }
 
-C_HL2MP_Player::~C_HL2MP_Player( void )
+C_MSS_Player::~C_MSS_Player( void )
 {
 	ReleaseFlashlight();
 }
 
-int C_HL2MP_Player::GetIDTarget() const
+int C_MSS_Player::GetIDTarget() const
 {
 	return m_iIDEntIndex;
 }
@@ -73,7 +73,7 @@ int C_HL2MP_Player::GetIDTarget() const
 //-----------------------------------------------------------------------------
 // Purpose: Update this client's target entity
 //-----------------------------------------------------------------------------
-void C_HL2MP_Player::UpdateIDTarget()
+void C_MSS_Player::UpdateIDTarget()
 {
 	if ( !IsLocalPlayer() )
 		return;
@@ -103,7 +103,7 @@ void C_HL2MP_Player::UpdateIDTarget()
 	}
 }
 
-void C_HL2MP_Player::TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, trace_t *ptr, CDmgAccumulator *pAccumulator )
+void C_MSS_Player::TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, trace_t *ptr, CDmgAccumulator *pAccumulator )
 {
 	Vector vecOrigin = ptr->endpos - vecDir * 4;
 
@@ -120,14 +120,15 @@ void C_HL2MP_Player::TraceAttack( const CTakeDamageInfo &info, const Vector &vec
 
 		int blood = BloodColor();
 		
+/* BOXBOX removing this
 		CBaseEntity *pAttacker = info.GetAttacker();
 
 		if ( pAttacker )
 		{
-			if ( HL2MPRules()->IsTeamplay() && pAttacker->InSameTeam( this ) == true )
+			if ( MSSRules()->IsTeamplay() && pAttacker->InSameTeam( this ) == true )
 				return;
 		}
-
+*/
 		if ( blood != DONT_BLEED )
 		{
 			SpawnBlood( vecOrigin, vecDir, blood, flDistance );// a little surface blood.
@@ -137,12 +138,12 @@ void C_HL2MP_Player::TraceAttack( const CTakeDamageInfo &info, const Vector &vec
 }
 
 
-C_HL2MP_Player* C_HL2MP_Player::GetLocalHL2MPPlayer()
+C_MSS_Player* C_MSS_Player::GetLocalHL2MPPlayer()
 {
-	return (C_HL2MP_Player*)C_BasePlayer::GetLocalPlayer();
+	return (C_MSS_Player*)C_BasePlayer::GetLocalPlayer();
 }
 
-void C_HL2MP_Player::Initialize( void )
+void C_MSS_Player::Initialize( void )
 {
 	m_headYawPoseParam = LookupPoseParameter( "head_yaw" );
 	GetPoseParameterRange( m_headYawPoseParam, m_headYawMin, m_headYawMax );
@@ -157,7 +158,7 @@ void C_HL2MP_Player::Initialize( void )
 	}
 }
 
-CStudioHdr *C_HL2MP_Player::OnNewModel( void )
+CStudioHdr *C_MSS_Player::OnNewModel( void )
 {
 	CStudioHdr *hdr = BaseClass::OnNewModel();
 	
@@ -170,7 +171,7 @@ CStudioHdr *C_HL2MP_Player::OnNewModel( void )
 /**
  * Orient head and eyes towards m_lookAt.
  */
-void C_HL2MP_Player::UpdateLookAt( void )
+void C_MSS_Player::UpdateLookAt( void )
 {
 	// head yaw
 	if (m_headYawPoseParam < 0 || m_headPitchPoseParam < 0)
@@ -221,7 +222,7 @@ void C_HL2MP_Player::UpdateLookAt( void )
 	SetPoseParameter( m_headPitchPoseParam, m_flCurrentHeadPitch );
 }
 
-void C_HL2MP_Player::ClientThink( void )
+void C_MSS_Player::ClientThink( void )
 {
 	bool bFoundViewTarget = false;
 	
@@ -266,7 +267,7 @@ void C_HL2MP_Player::ClientThink( void )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-int C_HL2MP_Player::DrawModel( int flags )
+int C_MSS_Player::DrawModel( int flags )
 {
 	if ( !m_bReadyToDraw )
 		return 0;
@@ -277,7 +278,7 @@ int C_HL2MP_Player::DrawModel( int flags )
 //-----------------------------------------------------------------------------
 // Should this object receive shadows?
 //-----------------------------------------------------------------------------
-bool C_HL2MP_Player::ShouldReceiveProjectedTextures( int flags )
+bool C_MSS_Player::ShouldReceiveProjectedTextures( int flags )
 {
 	Assert( flags & SHADOW_FLAGS_PROJECTED_TEXTURE_TYPE_MASK );
 
@@ -292,7 +293,7 @@ bool C_HL2MP_Player::ShouldReceiveProjectedTextures( int flags )
 	return BaseClass::ShouldReceiveProjectedTextures( flags );
 }
 
-void C_HL2MP_Player::DoImpactEffect( trace_t &tr, int nDamageType )
+void C_MSS_Player::DoImpactEffect( trace_t &tr, int nDamageType )
 {
 	if ( GetActiveWeapon() )
 	{
@@ -303,7 +304,7 @@ void C_HL2MP_Player::DoImpactEffect( trace_t &tr, int nDamageType )
 	BaseClass::DoImpactEffect( tr, nDamageType );
 }
 
-void C_HL2MP_Player::PreThink( void )
+void C_MSS_Player::PreThink( void )
 {
 	QAngle vTempAngles = GetLocalAngles();
 
@@ -336,7 +337,7 @@ void C_HL2MP_Player::PreThink( void )
 	}
 }
 
-const QAngle &C_HL2MP_Player::EyeAngles()
+const QAngle &C_MSS_Player::EyeAngles()
 {
 	if( IsLocalPlayer() )
 	{
@@ -351,7 +352,7 @@ const QAngle &C_HL2MP_Player::EyeAngles()
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void C_HL2MP_Player::AddEntity( void )
+void C_MSS_Player::AddEntity( void )
 {
 	BaseClass::AddEntity();
 
@@ -440,7 +441,7 @@ void C_HL2MP_Player::AddEntity( void )
 	}
 }
 
-ShadowType_t C_HL2MP_Player::ShadowCastType( void ) 
+ShadowType_t C_MSS_Player::ShadowCastType( void ) 
 {
 	if ( !IsVisible() )
 		 return SHADOWS_NONE;
@@ -449,7 +450,7 @@ ShadowType_t C_HL2MP_Player::ShadowCastType( void )
 }
 
 
-const QAngle& C_HL2MP_Player::GetRenderAngles()
+const QAngle& C_MSS_Player::GetRenderAngles()
 {
 	if ( IsRagdoll() )
 	{
@@ -461,7 +462,7 @@ const QAngle& C_HL2MP_Player::GetRenderAngles()
 	}
 }
 
-bool C_HL2MP_Player::ShouldDraw( void )
+bool C_MSS_Player::ShouldDraw( void )
 {
 	// If we're dead, our ragdoll will be drawn for us instead.
 	if ( !IsAlive() )
@@ -479,7 +480,7 @@ bool C_HL2MP_Player::ShouldDraw( void )
 	return BaseClass::ShouldDraw();
 }
 
-void C_HL2MP_Player::NotifyShouldTransmit( ShouldTransmitState_t state )
+void C_MSS_Player::NotifyShouldTransmit( ShouldTransmitState_t state )
 {
 	if ( state == SHOULDTRANSMIT_END )
 	{
@@ -492,7 +493,7 @@ void C_HL2MP_Player::NotifyShouldTransmit( ShouldTransmitState_t state )
 	BaseClass::NotifyShouldTransmit( state );
 }
 
-void C_HL2MP_Player::OnDataChanged( DataUpdateType_t type )
+void C_MSS_Player::OnDataChanged( DataUpdateType_t type )
 {
 	BaseClass::OnDataChanged( type );
 
@@ -504,7 +505,7 @@ void C_HL2MP_Player::OnDataChanged( DataUpdateType_t type )
 	UpdateVisibility();
 }
 
-void C_HL2MP_Player::PostDataUpdate( DataUpdateType_t updateType )
+void C_MSS_Player::PostDataUpdate( DataUpdateType_t updateType )
 {
 	if ( m_iSpawnInterpCounter != m_iSpawnInterpCounterCache )
 	{
@@ -516,7 +517,7 @@ void C_HL2MP_Player::PostDataUpdate( DataUpdateType_t updateType )
 	BaseClass::PostDataUpdate( updateType );
 }
 
-void C_HL2MP_Player::ReleaseFlashlight( void )
+void C_MSS_Player::ReleaseFlashlight( void )
 {
 	if( m_pFlashlightBeam )
 	{
@@ -527,7 +528,7 @@ void C_HL2MP_Player::ReleaseFlashlight( void )
 	}
 }
 
-float C_HL2MP_Player::GetFOV( void )
+float C_MSS_Player::GetFOV( void )
 {
 	//Find our FOV with offset zoom value
 	float flFOVOffset = C_BasePlayer::GetFOV() + GetZoom();
@@ -545,7 +546,7 @@ float C_HL2MP_Player::GetFOV( void )
 // Autoaim
 // set crosshair position to point to enemey
 //=========================================================
-Vector C_HL2MP_Player::GetAutoaimVector( float flDelta )
+Vector C_MSS_Player::GetAutoaimVector( float flDelta )
 {
 	// Never autoaim a predicted weapon (for now)
 	Vector	forward;
@@ -556,7 +557,7 @@ Vector C_HL2MP_Player::GetAutoaimVector( float flDelta )
 //-----------------------------------------------------------------------------
 // Purpose: Returns whether or not we are allowed to sprint now.
 //-----------------------------------------------------------------------------
-bool C_HL2MP_Player::CanSprint( void )
+bool C_MSS_Player::CanSprint( void )
 {
 	return ( (!m_Local.m_bDucked && !m_Local.m_bDucking) && (GetWaterLevel() != 3) );
 }
@@ -564,7 +565,7 @@ bool C_HL2MP_Player::CanSprint( void )
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void C_HL2MP_Player::StartSprinting( void )
+void C_MSS_Player::StartSprinting( void )
 {
 	if( m_HL2Local.m_flSuitPower < 10 )
 	{
@@ -587,13 +588,13 @@ void C_HL2MP_Player::StartSprinting( void )
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void C_HL2MP_Player::StopSprinting( void )
+void C_MSS_Player::StopSprinting( void )
 {
 	SetMaxSpeed( HL2_NORM_SPEED );
 	m_fIsSprinting = false;
 }
 
-void C_HL2MP_Player::HandleSpeedChanges( void )
+void C_MSS_Player::HandleSpeedChanges( void )
 {
 	int buttonsChanged = m_afButtonPressed | m_afButtonReleased;
 
@@ -642,7 +643,7 @@ void C_HL2MP_Player::HandleSpeedChanges( void )
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void C_HL2MP_Player::StartWalking( void )
+void C_MSS_Player::StartWalking( void )
 {
 	SetMaxSpeed( HL2_WALK_SPEED );
 	m_fIsWalking = true;
@@ -650,13 +651,13 @@ void C_HL2MP_Player::StartWalking( void )
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void C_HL2MP_Player::StopWalking( void )
+void C_MSS_Player::StopWalking( void )
 {
 	SetMaxSpeed( HL2_NORM_SPEED );
 	m_fIsWalking = false;
 }
 
-void C_HL2MP_Player::ItemPreFrame( void )
+void C_MSS_Player::ItemPreFrame( void )
 {
 	if ( GetFlags() & FL_FROZEN )
 		 return;
@@ -672,7 +673,7 @@ void C_HL2MP_Player::ItemPreFrame( void )
 
 }
 	
-void C_HL2MP_Player::ItemPostFrame( void )
+void C_MSS_Player::ItemPostFrame( void )
 {
 	if ( GetFlags() & FL_FROZEN )
 		 return;
@@ -680,14 +681,14 @@ void C_HL2MP_Player::ItemPostFrame( void )
 	BaseClass::ItemPostFrame();
 }
 
-C_BaseAnimating *C_HL2MP_Player::BecomeRagdollOnClient()
+C_BaseAnimating *C_MSS_Player::BecomeRagdollOnClient()
 {
 	// Let the C_CSRagdoll entity do this.
 	// m_builtRagdoll = true;
 	return NULL;
 }
 
-void C_HL2MP_Player::CalcView( Vector &eyeOrigin, QAngle &eyeAngles, float &zNear, float &zFar, float &fov )
+void C_MSS_Player::CalcView( Vector &eyeOrigin, QAngle &eyeAngles, float &zNear, float &zFar, float &fov )
 {
 	if ( m_lifeState != LIFE_ALIVE && !IsObserver() )
 	{
@@ -730,7 +731,7 @@ void C_HL2MP_Player::CalcView( Vector &eyeOrigin, QAngle &eyeAngles, float &zNea
 	BaseClass::CalcView( eyeOrigin, eyeAngles, zNear, zFar, fov );
 }
 
-IRagdoll* C_HL2MP_Player::GetRepresentativeRagdoll() const
+IRagdoll* C_MSS_Player::GetRepresentativeRagdoll() const
 {
 	if ( m_hRagdoll.Get() )
 	{
@@ -838,7 +839,7 @@ void C_HL2MPRagdoll::CreateHL2MPRagdoll( void )
 {
 	// First, initialize all our data. If we have the player's entity on our client,
 	// then we can make ourselves start out exactly where the player is.
-	C_HL2MP_Player *pPlayer = dynamic_cast< C_HL2MP_Player* >( m_hPlayer.Get() );
+	C_MSS_Player *pPlayer = dynamic_cast< C_MSS_Player* >( m_hPlayer.Get() );
 	
 	if ( pPlayer && !pPlayer->IsDormant() )
 	{
@@ -976,7 +977,7 @@ void C_HL2MPRagdoll::SetupWeights( const matrix3x4_t *pBoneToWorld, int nFlexWei
 	}
 }
 
-void C_HL2MP_Player::PostThink( void )
+void C_MSS_Player::PostThink( void )
 {
 	BaseClass::PostThink();
 

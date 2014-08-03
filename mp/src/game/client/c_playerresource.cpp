@@ -10,7 +10,7 @@
 #include "gamestringpool.h"
 
 #ifdef MSS
-#include "hl2mp_gamerules.h"
+#include "MSS_gamerules.h"
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
@@ -65,11 +65,13 @@ C_PlayerResource::C_PlayerResource()
 		m_Colors[i] = COLOR_GREY;
 	}
 
+ /* BOXBOX removing teams
 #ifdef MSS
 	m_Colors[TEAM_COMBINE] = COLOR_BLUE;
 	m_Colors[TEAM_REBELS] = COLOR_RED;
 	m_Colors[TEAM_UNASSIGNED] = COLOR_YELLOW;
 #endif
+*/
 
 	g_PR = this;
 }

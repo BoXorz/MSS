@@ -1877,16 +1877,7 @@
     <ClInclude Include="hl2\hud_suitpower.h">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClInclude>
-    <ClInclude Include="MSS\c_hl2mp_player.h">
-      <Filter>Source Files\MSS</Filter>
-    </ClInclude>
     <ClInclude Include="MSS\clientmode_hl2mpnormal.h">
-      <Filter>Source Files\MSS</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\game\shared\MSS\hl2mp_gamerules.h">
-      <Filter>Source Files\MSS</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\game\shared\MSS\hl2mp_player_shared.h">
       <Filter>Source Files\MSS</Filter>
     </ClInclude>
     <ClInclude Include="..\..\game\shared\MSS\hl2mp_weapon_parse.h">
@@ -1939,6 +1930,15 @@
     </ClInclude>
     <ClInclude Include="toolframework_client.h">
       <Filter>Tool Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\MSS\MSS_gamerules.h">
+      <Filter>Source Files\MSS</Filter>
+    </ClInclude>
+    <ClInclude Include="MSS\c_MSS_player.h">
+      <Filter>Source Files\MSS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\MSS\MSS_player_shared.h">
+      <Filter>Source Files\MSS</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3202,19 +3202,10 @@
     <ClCompile Include="hl2\vgui_rootpanel_hl2.cpp">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClCompile>
-    <ClCompile Include="MSS\c_hl2mp_player.cpp">
-      <Filter>Source Files\MSS</Filter>
-    </ClCompile>
     <ClCompile Include="MSS\c_te_hl2mp_shotgun_shot.cpp">
       <Filter>Source Files\MSS</Filter>
     </ClCompile>
     <ClCompile Include="MSS\clientmode_hl2mpnormal.cpp">
-      <Filter>Source Files\MSS</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\game\shared\MSS\hl2mp_gamerules.cpp">
-      <Filter>Source Files\MSS</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\game\shared\MSS\hl2mp_player_shared.cpp">
       <Filter>Source Files\MSS</Filter>
     </ClCompile>
     <ClCompile Include="..\..\game\shared\MSS\hl2mp_weapon_parse.cpp">
@@ -3498,6 +3489,15 @@
     </ClCompile>
     <ClCompile Include="toolframework_client.cpp">
       <Filter>Tool Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\MSS\MSS_gamerules.cpp">
+      <Filter>Source Files\MSS</Filter>
+    </ClCompile>
+    <ClCompile Include="MSS\c_MSS_player.cpp">
+      <Filter>Source Files\MSS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\MSS\MSS_player_shared.cpp">
+      <Filter>Source Files\MSS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

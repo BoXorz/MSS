@@ -11,9 +11,9 @@
 #include "engine/IEngineSound.h"
 
 #if defined( CLIENT_DLL )
-	#include "c_hl2mp_player.h"
+	#include "c_MSS_player.h"
 #else
-	#include "hl2mp_player.h"
+	#include "MSS_player.h"
 	#include "grenade_tripmine.h"
 	#include "grenade_satchel.h"
 	#include "entitylist.h"
@@ -339,7 +339,7 @@ void CWeapon_SLAM::StartSatchelDetonate()
 //-----------------------------------------------------------------------------
 void CWeapon_SLAM::TripmineAttach( void )
 {
-	CHL2MP_Player *pOwner  = ToHL2MPPlayer( GetOwner() );
+	CMSS_Player *pOwner  = ToHL2MPPlayer( GetOwner() );
 	if (!pOwner)
 	{
 		return;
@@ -698,7 +698,7 @@ void CWeapon_SLAM::SLAMThink( void )
 //-----------------------------------------------------------------------------
 bool CWeapon_SLAM::CanAttachSLAM( void )
 {
-	CHL2MP_Player *pOwner = ToHL2MPPlayer( GetOwner() );
+	CMSS_Player *pOwner = ToHL2MPPlayer( GetOwner() );
 
 	if (!pOwner)
 	{

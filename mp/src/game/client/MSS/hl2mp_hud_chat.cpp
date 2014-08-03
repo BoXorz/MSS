@@ -12,8 +12,8 @@
 #include "vgui/ILocalize.h"
 #include "c_team.h"
 #include "c_playerresource.h"
-#include "c_hl2mp_player.h"
-#include "hl2mp_gamerules.h"
+#include "c_MSS_player.h"
+#include "MSS_gamerules.h"
 #include "ihudlcd.h"
 
 
@@ -96,9 +96,9 @@ int CHudChat::GetChatInputOffset( void )
 		return 0;
 }
 
-Color CHudChat::GetClientColor( int clientIndex )
+Color CHudChat::GetClientColor( int clientIndex ) // BOXBOX removing teams
 {
-	if ( clientIndex == 0 ) // console msg
+/*	if ( clientIndex == 0 ) // console msg
 	{
 		return g_ColorYellow;
 	}
@@ -111,6 +111,6 @@ Color CHudChat::GetClientColor( int clientIndex )
 		default	: return g_ColorYellow;
 		}
 	}
-
+*/
 	return g_ColorYellow;
 }
