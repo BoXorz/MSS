@@ -20,7 +20,7 @@
 	#include "beam_shared.h"
 #endif
 
-#include "weapon_hl2mpbasehlmpcombatweapon.h"
+#include "weapon_MSSbasecombatweapon.h"
 #include "effect_dispatch_data.h"
 
 // memdbgon must be the last include file in a .cpp file!!!

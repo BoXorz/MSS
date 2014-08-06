@@ -16,7 +16,7 @@
 	#include "basegrenade_shared.h"
 #endif
 
-#include "weapon_hl2mpbase.h"
+#include "weapon_MSSbase.h"
 #include "weapon_hl2mpbase_machinegun.h"
 
 #ifdef CLIENT_DLL

@@ -7,7 +7,7 @@
 
 #include "cbase.h"
 #include "npcevent.h"
-#include "weapon_hl2mpbasebasebludgeon.h"
+#include "weapon_MSSbasebasebludgeon.h"
 #include "IEffects.h"
 #include "debugoverlay_shared.h"
 
@@ -47,9 +47,9 @@ extern ConVar metropolice_move_and_melee;
 #define CWeaponStunStick C_WeaponStunStick
 #endif
 
-class CWeaponStunStick : public CBaseHL2MPBludgeonWeapon
+class CWeaponStunStick : public CBaseMSSBludgeonWeapon
 {
-	DECLARE_CLASS( CWeaponStunStick, CBaseHL2MPBludgeonWeapon );
+	DECLARE_CLASS( CWeaponStunStick, CBaseMSSBludgeonWeapon );
 	
 public:
 

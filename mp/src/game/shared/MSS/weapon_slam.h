@@ -15,7 +15,7 @@
 #define	WEAPONSLAM_H
 
 #include "basegrenade_shared.h"
-#include "weapon_hl2mpbasehlmpcombatweapon.h"
+#include "weapon_MSSbasecombatweapon.h"
 
 enum
 {

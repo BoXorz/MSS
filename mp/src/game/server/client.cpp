@@ -315,7 +315,7 @@ void ClientPrecache( void )
 	
 #ifndef MSS
 	CBaseEntity::PrecacheScriptSound( "Hud.Hint" );
-#endif // HL2MP
+#endif
 	CBaseEntity::PrecacheScriptSound( "Player.FallDamage" );
 	CBaseEntity::PrecacheScriptSound( "Player.Swim" );
 
@@ -332,8 +332,8 @@ void ClientPrecache( void )
 	CBaseEntity::PrecacheScriptSound( "Bounce.Flesh" );
 	CBaseEntity::PrecacheScriptSound( "Bounce.Wood" );
 	CBaseEntity::PrecacheScriptSound( "Bounce.Shrapnel" );
-	CBaseEntity::PrecacheScriptSound( "Bounce.ShotgunShell" );
-	CBaseEntity::PrecacheScriptSound( "Bounce.Shell" );
+//	CBaseEntity::PrecacheScriptSound( "Bounce.ShotgunShell" ); // BOXBOX don't need these
+//	CBaseEntity::PrecacheScriptSound( "Bounce.Shell" );
 	CBaseEntity::PrecacheScriptSound( "Bounce.Concrete" );
 
 	ClientGamePrecache();
@@ -832,8 +832,7 @@ CON_COMMAND( fov, "Change players FOV" )
 }
 
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
+/* BOXBOX don't need this
 void CC_Player_SetModel( const CCommand &args )
 {
 	if ( gpGlobals->deathmatch )
@@ -849,10 +848,9 @@ void CC_Player_SetModel( const CCommand &args )
 	}
 }
 static ConCommand setmodel("setmodel", CC_Player_SetModel, "Changes's player's model", FCVAR_CHEAT );
+*/
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
+
 void CC_Player_TestDispatchEffect( const CCommand &args )
 {
 	CBasePlayer *pPlayer = ToBasePlayer( UTIL_GetCommandClient() );
@@ -928,6 +926,7 @@ void CC_Player_TestDispatchEffect( const CCommand &args )
 
 static ConCommand test_dispatcheffect("test_dispatcheffect", CC_Player_TestDispatchEffect, "Test a clientside dispatch effect.\n\tUsage: test_dispatcheffect <effect name> <distance away> <flags> <magnitude> <scale>\n\tDefaults are: <distance 1024> <flags 0> <magnitude 0> <scale 0>\n", FCVAR_CHEAT);
 
+/* BOXBOX don't need this
 #ifdef HL2_DLL
 //-----------------------------------------------------------------------------
 // Purpose: Quickly switch to the physics cannon, or back to previous item
@@ -992,9 +991,9 @@ void CC_Player_BugBaitSwap( void )
 	}
 }
 static ConCommand bugswap("bug_swap", CC_Player_BugBaitSwap, "Automatically swaps the current weapon for the bug bait and back again.", FCVAR_CHEAT );
+*/
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
+
 void CC_Player_Use( const CCommand &args )
 {
 	CBasePlayer *pPlayer = ToBasePlayer( UTIL_GetCommandClient() ); 
@@ -1176,9 +1175,6 @@ CON_COMMAND_F( setpos, "Move player to specified origin (must have sv_cheats).",
 }
 
 
-//------------------------------------------------------------------------------
-// Sets client to godmode
-//------------------------------------------------------------------------------
 void CC_setang_f (const CCommand &args)
 {
 	if ( !sv_cheats->GetBool() )

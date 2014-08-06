@@ -27,9 +27,9 @@
 #include "iservervehicle.h"
 #include "func_break.h"
 
-#ifdef MSS
+//#ifdef MSS
 	#include "MSS_gamerules.h"
-#endif
+//#endif
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -86,7 +86,7 @@ void W_Precache(void)
 #endif
 
 	CBaseEntity::PrecacheScriptSound( "BaseCombatWeapon.WeaponDrop" );
-	CBaseEntity::PrecacheScriptSound( "BaseCombatWeapon.WeaponMaterialize" );
+//	CBaseEntity::PrecacheScriptSound( "BaseCombatWeapon.WeaponMaterialize" ); // BOXBOX weapons don't respawn
 }
 
 //-----------------------------------------------------------------------------
@@ -192,14 +192,12 @@ void CBaseCombatWeapon::HandleAnimEvent( animevent_t *pEvent )
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Make the weapon visible and tangible
-//-----------------------------------------------------------------------------
-CBaseEntity* CBaseCombatWeapon::Respawn( void )
+
+CBaseEntity* CBaseCombatWeapon::Respawn( void ) // BOXBOX weapons do not respawn
 {
 	// make a copy of this weapon that is invisible and inaccessible to players (no touch function). The weapon spawn/respawn code
 	// will decide when to make the weapon visible and touchable.
-	CBaseEntity *pNewWeapon = CBaseEntity::Create( GetClassname(), g_pGameRules->VecWeaponRespawnSpot( this ), GetLocalAngles(), GetOwnerEntity() );
+/*	CBaseEntity *pNewWeapon = CBaseEntity::Create( GetClassname(), g_pGameRules->VecWeaponRespawnSpot( this ), GetLocalAngles(), GetOwnerEntity() );
 
 	if ( pNewWeapon )
 	{
@@ -219,6 +217,8 @@ CBaseEntity* CBaseCombatWeapon::Respawn( void )
 	}
 
 	return pNewWeapon;
+*/
+	return NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -478,6 +478,7 @@ void CBaseCombatWeapon::Kill( void )
 //-----------------------------------------------------------------------------
 void CBaseCombatWeapon::FallInit( void )
 {
+	UTIL_CenterPrintAll( "CBaseCombatWeapon::FallInit\n" ); // BOXBOX TODO BUG HUNT melee weapons don't drop!
 	SetModel( GetWorldModel() );
 	VPhysicsDestroyObject();
 
@@ -566,13 +567,13 @@ void CBaseCombatWeapon::Materialize( void )
 {
 	if ( IsEffectActive( EF_NODRAW ) )
 	{
-		// changing from invisible state to visible.
+/*
 #ifdef MSS
 		EmitSound( "AlyxEmp.Charge" );
 #else
-		EmitSound( "BaseCombatWeapon.WeaponMaterialize" );
+	EmitSound( "BaseCombatWeapon.WeaponMaterialize" );
 #endif
-		
+*/			
 		RemoveEffects( EF_NODRAW );
 		DoMuzzleFlash();
 	}
@@ -582,7 +583,7 @@ void CBaseCombatWeapon::Materialize( void )
 		VPhysicsInitNormal( SOLID_BBOX, GetSolidFlags() | FSOLID_TRIGGER, false );
 		SetMoveType( MOVETYPE_VPHYSICS );
 
-		MSSRules()->AddLevelDesignerPlacedObject( this );
+//		MSSRules()->AddLevelDesignerPlacedObject( this );
 	}
 #else
 	SetSolid( SOLID_BBOX );
@@ -597,25 +598,26 @@ void CBaseCombatWeapon::Materialize( void )
 //-----------------------------------------------------------------------------
 // Purpose: See if the game rules will let this weapon respawn
 //-----------------------------------------------------------------------------
-void CBaseCombatWeapon::AttemptToMaterialize( void )
+
+void CBaseCombatWeapon::AttemptToMaterialize( void ) // BOXBOX changing this
 {
-	float time = g_pGameRules->FlWeaponTryRespawn( this );
+//	float time = g_pGameRules->FlWeaponTryRespawn( this );
 
-	if ( time == 0 )
-	{
+//	if ( time == 0 )
+//	{
 		Materialize();
-		return;
-	}
+//		return;
+//	}
 
-	SetNextThink( gpGlobals->curtime + time );
+//	SetNextThink( gpGlobals->curtime + time );
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Weapon has been picked up, should it respawn?
 //-----------------------------------------------------------------------------
-void CBaseCombatWeapon::CheckRespawn( void )
+void CBaseCombatWeapon::CheckRespawn( void ) // BOXBOX no weapon respawning in MSS
 {
-	switch ( g_pGameRules->WeaponShouldRespawn( this ) )
+/*	switch ( g_pGameRules->WeaponShouldRespawn( this ) )
 	{
 	case GR_WEAPON_RESPAWN_YES:
 		Respawn();
@@ -624,6 +626,7 @@ void CBaseCombatWeapon::CheckRespawn( void )
 		return;
 		break;
 	}
+*/
 }
 
 class CWeaponList : public CAutoGameSystem

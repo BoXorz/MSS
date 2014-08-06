@@ -5,7 +5,7 @@
 //=============================================================================//
 
 #include "cbase.h"
-#include "weapon_hl2mpbasehlmpcombatweapon.h"
+#include "weapon_MSSbasecombatweapon.h"
 #include "MSS_player.h"
 #include "globalstate.h"
 #include "game.h"
@@ -16,7 +16,7 @@
 #include "MSS_gamerules.h"
 #include "KeyValues.h"
 #include "team.h"
-#include "weapon_hl2mpbase.h"
+#include "weapon_MSSbase.h"
 #include "grenade_satchel.h"
 #include "eventqueue.h"
 #include "gamestats.h"
@@ -139,6 +139,8 @@ void CMSS_Player::Precache( void )
 
 	PrecacheModel("models/player/humanmale.mdl"); // BOXBOX precache player models
 
+	PrecacheModel("models/combine_soldier.mdl"); // TEMP doesn't prevent crash on 'npc_create npc_combine' command
+
 	//Precache Citizen models
 	int nHeads = ARRAYSIZE( g_ppszRandomCitizenModels );
 	int i;	
@@ -196,10 +198,10 @@ void CMSS_Player::GiveAllItems( void )
 	
 }
 
-void CMSS_Player::GiveDefaultItems( void )
+void CMSS_Player::GiveDefaultItems( void ) // BOXBOX nope
 {
 	EquipSuit();
-
+/*
 	CBasePlayer::GiveAmmo( 255,	"Pistol");
 	CBasePlayer::GiveAmmo( 45,	"SMG1");
 	CBasePlayer::GiveAmmo( 1,	"grenade" );
@@ -232,6 +234,7 @@ void CMSS_Player::GiveDefaultItems( void )
 	{
 		Weapon_Switch( Weapon_OwnsThisType( "weapon_physcannon" ) );
 	}
+*/
 }
 
 /* BOXBOX removing teams
@@ -601,7 +604,7 @@ void CMSS_Player::FireBullets ( const FireBulletsInfo_t &info )
 
 	FireBulletsInfo_t modinfo = info;
 
-	CWeaponHL2MPBase *pWeapon = dynamic_cast<CWeaponHL2MPBase *>( GetActiveWeapon() );
+	CWeaponMSSBase *pWeapon = dynamic_cast<CWeaponMSSBase *>( GetActiveWeapon() );
 
 	if ( pWeapon )
 	{
@@ -1198,7 +1201,9 @@ void CMSS_Player::FlashlightTurnOff( void )
 
 void CMSS_Player::Weapon_Drop( CBaseCombatWeapon *pWeapon, const Vector *pvecTarget, const Vector *pVelocity )
 {
-	//Drop a grenade if it's primed.
+// BOXBOX TODO why do melee weapons not drop?
+
+/*
 	if ( GetActiveWeapon() )
 	{
 		CBaseCombatWeapon *pGrenade = Weapon_OwnsThisType("weapon_frag");
@@ -1212,8 +1217,9 @@ void CMSS_Player::Weapon_Drop( CBaseCombatWeapon *pWeapon, const Vector *pvecTar
 			}
 		}
 	}
-
+*/
 	BaseClass::Weapon_Drop( pWeapon, pvecTarget, pVelocity );
+
 }
 
 
@@ -1270,7 +1276,8 @@ void CMSS_Player::Event_Killed( const CTakeDamageInfo &info )
 			iScoreToAdd = -1;
 		}
 
-// BOXBOX TEMP crash hunt		GetGlobalTeam( pAttacker->GetTeamNumber() )->AddScore( iScoreToAdd );
+// BOXBOX removing teams
+//		GetGlobalTeam( pAttacker->GetTeamNumber() )->AddScore( iScoreToAdd );
 	}
 
 	FlashlightTurnOff();
@@ -1279,6 +1286,7 @@ void CMSS_Player::Event_Killed( const CTakeDamageInfo &info )
 
 	RemoveEffects( EF_NODRAW );	// still draw player body
 	StopZooming();
+
 }
 
 int CMSS_Player::OnTakeDamage( const CTakeDamageInfo &inputInfo )
@@ -1507,9 +1515,9 @@ void CMSS_Player::CheckChatText( char *p, int bufsize )
 
 	delete[] buf;	
 
-	const char *pReadyCheck = p;
+//	const char *pReadyCheck = p;
 
-	MSSRules()->CheckChatForReadySignal( this, pReadyCheck );
+//	MSSRules()->CheckChatForReadySignal( this, pReadyCheck );
 }
 
 void CMSS_Player::State_Transition( HL2MPPlayerState newState )

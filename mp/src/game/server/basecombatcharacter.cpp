@@ -1933,6 +1933,8 @@ void CBaseCombatCharacter::Weapon_Drop( CBaseCombatWeapon *pWeapon, const Vector
 
 	if ( IsPlayer() )
 	{
+//		UTIL_CenterPrintAll( "DROPPING WEAPON\n" ); // BOXBOX TODO BUG HUNT melee weapons don't drop!
+
 		Vector vThrowPos = Weapon_ShootPosition() - Vector(0,0,12);
 
 		if( UTIL_PointContents(vThrowPos) & CONTENTS_SOLID )

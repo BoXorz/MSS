@@ -1877,34 +1877,13 @@
     <ClInclude Include="hl2\hud_suitpower.h">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClInclude>
-    <ClInclude Include="MSS\clientmode_hl2mpnormal.h">
-      <Filter>Source Files\MSS</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\game\shared\MSS\hl2mp_weapon_parse.h">
-      <Filter>Source Files\MSS</Filter>
-    </ClInclude>
     <ClInclude Include="MSS\ui\backgroundpanel.h">
-      <Filter>Source Files\MSS\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="MSS\hl2mp_hud_chat.h">
-      <Filter>Source Files\MSS\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="MSS\ui\hl2mpclientscoreboard.h">
-      <Filter>Source Files\MSS\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="MSS\ui\hl2mptextwindow.h">
       <Filter>Source Files\MSS\UI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\game\shared\MSS\weapon_ar2.h">
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\game\shared\MSS\weapon_hl2mpbase.h">
-      <Filter>Source Files\MSS\Weapons</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\game\shared\MSS\weapon_hl2mpbase_machinegun.h">
-      <Filter>Source Files\MSS\Weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\game\shared\MSS\weapon_hl2mpbasehlmpcombatweapon.h">
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\game\shared\MSS\weapon_physcannon.h">
@@ -1939,6 +1918,33 @@
     </ClInclude>
     <ClInclude Include="..\shared\MSS\MSS_player_shared.h">
       <Filter>Source Files\MSS</Filter>
+    </ClInclude>
+    <ClInclude Include="MSS\clientmode_MSSnormal.h">
+      <Filter>Source Files\MSS</Filter>
+    </ClInclude>
+    <ClInclude Include="MSS\MSS_hud_chat.h">
+      <Filter>Source Files\MSS\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="MSS\ui\MSStextwindow.h">
+      <Filter>Source Files\MSS\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="MSS\ui\MSSclientscoreboard.h">
+      <Filter>Source Files\MSS\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\MSS\MSS_weapon_parse.h">
+      <Filter>Source Files\MSS\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\MSS\weapon_MSSbase.h">
+      <Filter>Source Files\MSS\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\MSS\weapon_MSSbasebasebludgeon.h">
+      <Filter>Source Files\MSS\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\MSS\weapon_MSSbasecombatweapon.h">
+      <Filter>Source Files\MSS\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\MSS\weapon_crowbar.h">
+      <Filter>Source Files\MSS\Weapons</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3205,28 +3211,10 @@
     <ClCompile Include="MSS\c_te_hl2mp_shotgun_shot.cpp">
       <Filter>Source Files\MSS</Filter>
     </ClCompile>
-    <ClCompile Include="MSS\clientmode_hl2mpnormal.cpp">
-      <Filter>Source Files\MSS</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\game\shared\MSS\hl2mp_weapon_parse.cpp">
-      <Filter>Source Files\MSS</Filter>
-    </ClCompile>
     <ClCompile Include="MSS\ui\backgroundpanel.cpp">
       <Filter>Source Files\MSS\UI</Filter>
     </ClCompile>
-    <ClCompile Include="MSS\hl2mp_hud_chat.cpp">
-      <Filter>Source Files\MSS\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="MSS\hl2mp_hud_target_id.cpp">
-      <Filter>Source Files\MSS\UI</Filter>
-    </ClCompile>
     <ClCompile Include="MSS\hl2mp_hud_team.cpp">
-      <Filter>Source Files\MSS\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="MSS\ui\hl2mpclientscoreboard.cpp">
-      <Filter>Source Files\MSS\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="MSS\ui\hl2mptextwindow.cpp">
       <Filter>Source Files\MSS\UI</Filter>
     </ClCompile>
     <ClCompile Include="MSS\hud_deathnotice.cpp">
@@ -3247,16 +3235,7 @@
     <ClCompile Include="..\..\game\shared\MSS\weapon_frag.cpp">
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\game\shared\MSS\weapon_hl2mpbase.cpp">
-      <Filter>Source Files\MSS\Weapons</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\game\shared\MSS\weapon_hl2mpbase_machinegun.cpp">
-      <Filter>Source Files\MSS\Weapons</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\game\shared\MSS\weapon_hl2mpbasebasebludgeon.cpp">
-      <Filter>Source Files\MSS\Weapons</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\game\shared\MSS\weapon_hl2mpbasehlmpcombatweapon.cpp">
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClCompile>
     <ClCompile Include="..\..\game\shared\MSS\weapon_physcannon.cpp">
@@ -3498,6 +3477,36 @@
     </ClCompile>
     <ClCompile Include="..\shared\MSS\MSS_player_shared.cpp">
       <Filter>Source Files\MSS</Filter>
+    </ClCompile>
+    <ClCompile Include="MSS\clientmode_MSSnormal.cpp">
+      <Filter>Source Files\MSS</Filter>
+    </ClCompile>
+    <ClCompile Include="MSS\MSS_hud_chat.cpp">
+      <Filter>Source Files\MSS\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="MSS\MSS_hud_target_id.cpp">
+      <Filter>Source Files\MSS\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="MSS\ui\MSStextwindow.cpp">
+      <Filter>Source Files\MSS\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="MSS\ui\MSSclientscoreboard.cpp">
+      <Filter>Source Files\MSS\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\MSS\MSS_weapon_parse.cpp">
+      <Filter>Source Files\MSS\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\MSS\weapon_MSSbase.cpp">
+      <Filter>Source Files\MSS\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\MSS\weapon_MSSbasebasebludgeon.cpp">
+      <Filter>Source Files\MSS\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\MSS\weapon_MSSbasecombatweapon.cpp">
+      <Filter>Source Files\MSS\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\MSS\weapon_arozensword.cpp">
+      <Filter>Source Files\MSS\Weapons</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

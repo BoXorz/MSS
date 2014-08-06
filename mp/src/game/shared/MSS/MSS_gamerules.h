@@ -14,8 +14,8 @@
 #include "MSS_player.h"
 #endif
 
-#define VEC_CROUCH_TRACE_MIN	MSSRules()->GetHL2MPViewVectors()->m_vCrouchTraceMin
-#define VEC_CROUCH_TRACE_MAX	MSSRules()->GetHL2MPViewVectors()->m_vCrouchTraceMax
+#define VEC_CROUCH_TRACE_MIN	MSSRules()->GetMSSViewVectors()->m_vCrouchTraceMin
+#define VEC_CROUCH_TRACE_MAX	MSSRules()->GetMSSViewVectors()->m_vCrouchTraceMax
 
 /* BOXBOX commenting out
 enum
@@ -39,10 +39,10 @@ public:
 };
 */
 
-class HL2MPViewVectors : public CViewVectors
+class MSSViewVectors : public CViewVectors
 {
 public:
-	HL2MPViewVectors( 
+	MSSViewVectors( 
 		Vector vView,
 		Vector vHullMin,
 		Vector vHullMax,
@@ -72,6 +72,7 @@ public:
 	Vector m_vCrouchTraceMin;
 	Vector m_vCrouchTraceMax;	
 };
+
 
 class CMSSRules : public CMultiplayRules // BOXBOX was based on CTeamplayRules
 {
@@ -108,10 +109,10 @@ public:
 	// derive this function if your mod uses encrypted weapon info files
 	virtual const unsigned char *GetEncryptionKey( void ) { return (unsigned char *)"mS4tEw1N"; } // BOXBOX was "x9Ke0BY7"
 	virtual const CViewVectors* GetViewVectors() const;
-	const HL2MPViewVectors* GetHL2MPViewVectors() const;
+	const MSSViewVectors* GetMSSViewVectors() const;
 
 //	float GetMapRemainingTime(); // BOXBOX removing timelimit
-	void CleanUpMap();
+//	void CleanUpMap();
 //	void CheckRestartGame(); // BOXBOX removing these
 //	void RestartGame();
 	
@@ -119,14 +120,14 @@ public:
 //	virtual Vector VecItemRespawnSpot( CItem *pItem ); // BOXBOX weapons do not respawn
 //	virtual QAngle VecItemRespawnAngles( CItem *pItem );
 //	virtual float	FlItemRespawnTime( CItem *pItem );
-	virtual bool	CanHavePlayerItem( CBasePlayer *pPlayer, CBaseCombatWeapon *pItem ); // BOXBOX TODO change this to respond to player advancement
+//	virtual bool	CanHavePlayerItem( CBasePlayer *pPlayer, CBaseCombatWeapon *pItem ); // BOXBOX TODO change this ?
 	virtual bool FShouldSwitchWeapon( CBasePlayer *pPlayer, CBaseCombatWeapon *pWeapon );// BOXBOX TODO do we need this in it's current form?
 
-	void	AddLevelDesignerPlacedObject( CBaseEntity *pEntity );
-	void	RemoveLevelDesignerPlacedObject( CBaseEntity *pEntity );
-	void	ManageObjectRelocation( void );
-	void    CheckChatForReadySignal( CMSS_Player *pPlayer, const char *chatmsg );
-	const char *GetChatFormat( bool bTeamOnly, CBasePlayer *pPlayer );
+//	void	AddLevelDesignerPlacedObject( CBaseEntity *pEntity );
+//	void	RemoveLevelDesignerPlacedObject( CBaseEntity *pEntity );
+//	void	ManageObjectRelocation( void );
+//	void    CheckChatForReadySignal( CMSS_Player *pPlayer, const char *chatmsg ); // BOXBOX don't need this
+	const char *GetChatFormat( /*bool bTeamOnly,*/ CBasePlayer *pPlayer ) { return "MSS_Chat_All"; }
 
 #endif
 	virtual void ClientDisconnected( edict_t *pClient );
@@ -138,24 +139,28 @@ public:
 
 	
 //	bool	IsTeamplay( void ) { return m_bTeamPlayEnabled;	} // BOXBOX removing teams
-	void	CheckAllPlayersReady( void ); // BOXBOX TODO see if we need this
+//	void	CheckAllPlayersReady( void ); // BOXBOX TODO see if we need this
 
-	virtual bool IsConnectedUserInfoChangeAllowed( CBasePlayer *pPlayer );
+//	virtual bool IsConnectedUserInfoChangeAllowed( CBasePlayer *pPlayer );
 	
 private:
-	
-//	CNetworkVar( bool, m_bTeamPlayEnabled ); // BOXBOX NETCODE removing teams
-//	CNetworkVar( float, m_flGameStartTime ); // BOXBOX NETCODE don't need this
-	CUtlVector<EHANDLE> m_hRespawnableItemsAndWeapons;
-	float m_tmNextPeriodicThink;
-//	float m_flRestartGameTime; // BOXBOX removing
-	bool m_bCompleteReset;
-	bool m_bAwaitingReadyRestart;
-	bool m_bHeardAllPlayersReady;
 
 #ifndef CLIENT_DLL
-	bool m_bChangelevelDone;
+	virtual void	InitDefaultAIRelationships( void ); // BOXBOX copied from hl2_gamerules, to get monsters working!
 #endif
+
+//	CNetworkVar( bool, m_bTeamPlayEnabled ); // BOXBOX NETCODE removing teams
+//	CNetworkVar( float, m_flGameStartTime ); // BOXBOX NETCODE don't need this
+//	CUtlVector<EHANDLE> m_hRespawnableItemsAndWeapons;
+//	float m_tmNextPeriodicThink;
+//	float m_flRestartGameTime; // BOXBOX removing
+//	bool m_bCompleteReset;
+//	bool m_bAwaitingReadyRestart;
+//	bool m_bHeardAllPlayersReady;
+
+//#ifndef CLIENT_DLL
+//	bool m_bChangelevelDone;
+//#endif
 };
 
 inline CMSSRules* MSSRules()

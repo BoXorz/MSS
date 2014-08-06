@@ -1657,9 +1657,9 @@ void CBasePlayer::Event_Killed( const CTakeDamageInfo &info )
 
 	g_pGameRules->PlayerKilled( this, info );
 
-	gamestats->Event_PlayerKilled( this, info ); // BOXBOX not causing crash
+	gamestats->Event_PlayerKilled( this, info );
 
-	RumbleEffect( RUMBLE_STOP_ALL, 0, RUMBLE_FLAGS_NONE );
+//	RumbleEffect( RUMBLE_STOP_ALL, 0, RUMBLE_FLAGS_NONE );
 
 #if defined( WIN32 ) && !defined( _X360 )
 	// NVNT set the drag to zero in the case of underwater death.
@@ -1682,12 +1682,12 @@ void CBasePlayer::Event_Killed( const CTakeDamageInfo &info )
 		m_iHealth = 0;
 	}
 
-	// holster the current weapon
+	/* BOXBOX don't want to holster weapon, want it to drop
 	if ( GetActiveWeapon() )
 	{
 		GetActiveWeapon()->Holster();
 	}
-
+*/
 	SetAnimation( PLAYER_DIE );
 
 	if ( !IsObserver() )
@@ -7271,6 +7271,7 @@ void CBasePlayer::Weapon_Drop( CBaseCombatWeapon *pWeapon, const Vector *pvecTar
 	{
 		bWasActiveWeapon = true;
 	}
+
 
 	if ( pWeapon )
 	{

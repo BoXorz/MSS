@@ -751,7 +751,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 	//=========================================================
 	void CMultiplayRules::PlayerKilled( CBasePlayer *pVictim, const CTakeDamageInfo &info )
 	{
-		DeathNotice( pVictim, info ); // BOXBOX not causing crash
+		DeathNotice( pVictim, info );
 
 		// BOXBOX commenting these out
 //		CBaseEntity *pInflictor = info.GetInflictor();
@@ -765,7 +765,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 		// g_EventQueue.AddEvent( "game_playerdie", "Use", value, 0, pVictim, pVictim );
 //		FireTargets( "game_playerdie", pVictim, pVictim, USE_TOGGLE, 0 ); // BOXBOX commenting out
 
-		// BOXBOX don'y need this
+		// BOXBOX don't need this
 /*		if ( pVictim == pScorer )  
 		{			
 			if ( UseSuicidePenalty() )

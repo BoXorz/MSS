@@ -41,7 +41,7 @@
 #include "weapon_physcannon.h"
 #include "physics_saverestore.h"
 #include "movevars_shared.h"
-#include "weapon_hl2mpbasehlmpcombatweapon.h"
+#include "weapon_MSSbasecombatweapon.h"
 #include "vphysics/friction.h"
 #include "debugoverlay_shared.h"
 

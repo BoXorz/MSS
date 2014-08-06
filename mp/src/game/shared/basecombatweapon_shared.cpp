@@ -661,8 +661,9 @@ void CBaseCombatWeapon::Drop( const Vector &vecVelocity )
 	// Once somebody drops a gun, it's fair game for removal when/if
 	// a game_weapon_manager does a cleanup on surplus weapons in the
 	// world.
-	SetRemoveable( true );
-	WeaponManager_AmmoMod( this );
+
+	SetRemoveable( false ); // BOXBOX changed to false
+//	WeaponManager_AmmoMod( this ); // BOXBOX removed
 
 	//If it was dropped then there's no need to respawn it.
 	AddSpawnFlags( SF_NORESPAWN );
@@ -703,6 +704,7 @@ void CBaseCombatWeapon::Drop( const Vector &vecVelocity )
 
 	// If we're not allowing to spawn due to the gamerules,
 	// remove myself when I'm dropped by an NPC.
+
 	if ( pOwner && pOwner->IsNPC() )
 	{
 		if ( g_pGameRules->IsAllowedToSpawn( this ) == false )
@@ -715,11 +717,8 @@ void CBaseCombatWeapon::Drop( const Vector &vecVelocity )
 }
 
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : *pPicker - 
-//-----------------------------------------------------------------------------
-void CBaseCombatWeapon::OnPickedUp( CBaseCombatCharacter *pNewOwner )
+
+void CBaseCombatWeapon::OnPickedUp( CBaseCombatCharacter *pNewOwner ) // BOXBOX TODO change this
 {
 #if !defined( CLIENT_DLL )
 	RemoveEffects( EF_ITEM_BLINK );
@@ -752,11 +751,11 @@ void CBaseCombatWeapon::OnPickedUp( CBaseCombatCharacter *pNewOwner )
 	{
 		m_OnNPCPickup.FireOutput(pNewOwner, this);
 	}
-
+/*
 #ifdef MSS
 	MSSRules()->RemoveLevelDesignerPlacedObject( this );
 #endif
-
+*/
 	// Someone picked me up, so make it so that I can't be removed.
 	SetRemoveable( false );
 #endif

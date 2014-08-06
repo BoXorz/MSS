@@ -15,7 +15,7 @@
 	#include "MSS_player.h"
 #endif
 
-#include "weapon_hl2mpbasehlmpcombatweapon.h"
+#include "weapon_MSSbasecombatweapon.h"
 
 #ifdef CLIENT_DLL
 #define CWeapon357 C_Weapon357

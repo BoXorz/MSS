@@ -8,7 +8,7 @@
 #include "hudelement.h"
 #include "hud_macros.h"
 #include "c_playerresource.h"
-#include "clientmode_hl2mpnormal.h"
+#include "clientmode_MSSnormal.h"
 #include <vgui_controls/Controls.h>
 #include <vgui_controls/Panel.h>
 #include <vgui/ISurface.h>

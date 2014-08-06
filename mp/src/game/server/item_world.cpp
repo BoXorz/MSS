@@ -303,7 +303,7 @@ void CItem::FallThink ( void )
 		m_vOriginalSpawnOrigin = GetAbsOrigin();
 		m_vOriginalSpawnAngles = GetAbsAngles();
 
-		MSSRules()->AddLevelDesignerPlacedObject( this );
+//		MSSRules()->AddLevelDesignerPlacedObject( this );
 	}
 #endif // HL2MP
 
@@ -446,10 +446,11 @@ void CItem::ItemTouch( CBaseEntity *pOther )
 		else
 		{
 			UTIL_Remove( this );
-
+/*
 #ifdef MSS
 			MSSRules()->RemoveLevelDesignerPlacedObject( this );
 #endif
+*/
 		}
 	}
 	else if (gEvilImpulse101)

@@ -7,7 +7,7 @@
 
 #include "cbase.h"
 #include "MSS/weapon_crowbar.h"
-#include "weapon_hl2mpbasehlmpcombatweapon.h"
+#include "weapon_MSSbasecombatweapon.h"
 #include "gamerules.h"
 #include "ammodef.h"
 #include "mathlib/mathlib.h"

@@ -16,8 +16,8 @@
 #pragma once
 
 
-#include "weapon_hl2mpbasehlmpcombatweapon.h"
-#include "weapon_hl2mpbasebasebludgeon.h"
+#include "weapon_MSSbasecombatweapon.h"
+#include "weapon_MSSbasebasebludgeon.h"
 
 
 #ifdef CLIENT_DLL
@@ -28,10 +28,10 @@
 // CWeaponCrowbar
 //-----------------------------------------------------------------------------
 
-class CWeaponCrowbar : public CBaseHL2MPBludgeonWeapon
+class CWeaponCrowbar : public CBaseMSSBludgeonWeapon
 {
 public:
-	DECLARE_CLASS( CWeaponCrowbar, CBaseHL2MPBludgeonWeapon );
+	DECLARE_CLASS( CWeaponCrowbar, CBaseMSSBludgeonWeapon );
 
 	DECLARE_NETWORKCLASS(); 
 	DECLARE_PREDICTABLE();

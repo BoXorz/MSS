@@ -467,7 +467,7 @@ void CHL2_Player::EquipSuit( bool bPlayEffects )
 
 	if ( bPlayEffects == true )
 	{
-		StartAdmireGlovesAnimation();
+//		StartAdmireGlovesAnimation(); // BOXBOX nope
 	}
 }
 

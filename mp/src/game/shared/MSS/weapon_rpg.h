@@ -12,7 +12,7 @@
 #pragma once
 #endif
 
-#include "weapon_hl2mpbasehlmpcombatweapon.h"
+#include "weapon_MSSbasecombatweapon.h"
 
 #ifdef CLIENT_DLL
 
