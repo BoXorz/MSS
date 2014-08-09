@@ -367,7 +367,7 @@ public:
 	virtual bool		RemoveEntityRelationship( CBaseEntity *pEntity );
 	virtual void		AddClassRelationship( Class_T nClass, Disposition_t nDisposition, int nPriority );
 
-//	virtual void		ChangeTeam( int iTeamNum );
+	virtual void		ChangeTeam( int iTeamNum );
 
 	// Nav hull type
 	Hull_t	GetHullType() const				{ return m_eHull; }
@@ -399,14 +399,14 @@ public:
 	bool				IsAllowedToPickupWeapons( void ) { return !m_bPreventWeaponPickup; }
 	void				SetPreventWeaponPickup( bool bPrevent ) { m_bPreventWeaponPickup = bPrevent; }
 	bool				m_bPreventWeaponPickup;
-/*
+
 	virtual CNavArea *GetLastKnownArea( void ) const		{ return m_lastNavArea; }		// return the last nav area the player occupied - NULL if unknown
 	virtual bool IsAreaTraversable( const CNavArea *area ) const;							// return true if we can use the given area 
 	virtual void ClearLastKnownArea( void );
 	virtual void UpdateLastKnownArea( void );										// invoke this to update our last known nav area (since there is no think method chained to CBaseCombatCharacter)
 	virtual void OnNavAreaChanged( CNavArea *enteredArea, CNavArea *leftArea ) { }	// invoked (by UpdateLastKnownArea) when we enter a new nav area (or it is reset to NULL)
 	virtual void OnNavAreaRemoved( CNavArea *removedArea );
-*/
+
 	// -----------------------
 	// Notification from INextBots.
 	// -----------------------

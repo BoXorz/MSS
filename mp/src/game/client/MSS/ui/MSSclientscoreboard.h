@@ -5,8 +5,8 @@
 // $NoKeywords: $
 //=============================================================================//
 
-#ifndef CMSSClientScoreBoardDialog_H
-#define CMSSClientScoreBoardDialog_H
+#ifndef CHL2MPCLIENTSCOREBOARDDIALOG_H
+#define CHL2MPCLIENTSCOREBOARDDIALOG_H
 #ifdef _WIN32
 #pragma once
 #endif
@@ -16,20 +16,20 @@
 //-----------------------------------------------------------------------------
 // Purpose: Game ScoreBoard
 //-----------------------------------------------------------------------------
-class CMSSClientScoreBoardDialog : public CClientScoreBoardDialog
+class CHL2MPClientScoreBoardDialog : public CClientScoreBoardDialog
 {
 private:
-	DECLARE_CLASS_SIMPLE(CMSSClientScoreBoardDialog, CClientScoreBoardDialog);
+	DECLARE_CLASS_SIMPLE(CHL2MPClientScoreBoardDialog, CClientScoreBoardDialog);
 	
 public:
-	CMSSClientScoreBoardDialog(IViewPort *pViewPort);
-	~CMSSClientScoreBoardDialog();
+	CHL2MPClientScoreBoardDialog(IViewPort *pViewPort);
+	~CHL2MPClientScoreBoardDialog();
 
 
 protected:
 	// scoreboard overrides
 	virtual void InitScoreboardSections();
-//	virtual void UpdateTeamInfo();
+	virtual void UpdateTeamInfo();
 	virtual bool GetPlayerScoreInfo(int playerIndex, KeyValues *outPlayerInfo);
 	virtual void UpdatePlayerInfo();
 
@@ -40,10 +40,9 @@ protected:
 
 private:
 	virtual void AddHeader(); // add the start header of the scoreboard
-//	virtual void AddSection(int teamType, int teamNumber); // add a new section header for a team
+	virtual void AddSection(int teamType, int teamNumber); // add a new section header for a team
 
-//	int GetSectionFromTeamNumber( int teamNumber );
-
+	int GetSectionFromTeamNumber( int teamNumber );
 	enum 
 	{ 
 		CSTRIKE_NAME_WIDTH = 320,
@@ -61,4 +60,4 @@ private:
 };
 
 
-#endif // CMSSClientScoreBoardDialog_H
+#endif // CHL2MPCLIENTSCOREBOARDDIALOG_H

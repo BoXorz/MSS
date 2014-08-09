@@ -28,6 +28,9 @@
     <Filter Include="Source Files\MSS\Weapons">
       <UniqueIdentifier>{02F5D287-0857-4311-D27D-F604E60865D5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Navigation Mesh">
+      <UniqueIdentifier>{B09D60FE-50B0-FE99-73C2-303E809808E2}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\Precompiled Header">
       <UniqueIdentifier>{A7D26A13-21F4-C6B5-5922-8A4FB05AF07D}</UniqueIdentifier>
     </Filter>
@@ -1457,6 +1460,33 @@
     <ClInclude Include="tactical_mission.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="team.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="team_control_point.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="team_control_point_master.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="team_control_point_round.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="team_objectiveresource.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="team_spawnpoint.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="team_train_watcher.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\game\shared\teamplay_gamerules.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\game\shared\teamplay_round_timer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\game\shared\tempentity.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -1467,6 +1497,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="trains.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="trigger_area_capture.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="triggers.h">
@@ -1720,6 +1753,30 @@
     </ClInclude>
     <ClInclude Include="..\..\game\shared\MSS\weapon_slam.h">
       <Filter>Source Files\MSS\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="nav.h">
+      <Filter>Source Files\Navigation Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="nav_area.h">
+      <Filter>Source Files\Navigation Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="nav_colors.h">
+      <Filter>Source Files\Navigation Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="nav_entities.h">
+      <Filter>Source Files\Navigation Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="nav_ladder.h">
+      <Filter>Source Files\Navigation Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="nav_mesh.h">
+      <Filter>Source Files\Navigation Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="nav_node.h">
+      <Filter>Source Files\Navigation Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="nav_pathfind.h">
+      <Filter>Source Files\Navigation Mesh</Filter>
     </ClInclude>
     <ClInclude Include="plasma.h">
       <Filter>Source Files\temporary entities</Filter>
@@ -2770,6 +2827,36 @@
     <ClCompile Include="tanktrain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="team.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="team_control_point.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="team_control_point_master.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="team_control_point_round.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="team_objectiveresource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="team_spawnpoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="team_train_watcher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\game\shared\teamplay_gamerules.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\game\shared\teamplay_round_timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\game\shared\teamplayroundbased_gamerules.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="TemplateEntities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -2801,6 +2888,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="trains.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="trigger_area_capture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="triggers.cpp">
@@ -3234,6 +3324,42 @@
     </ClCompile>
     <ClCompile Include="..\..\game\shared\MSS\weapon_stunstick.cpp">
       <Filter>Source Files\MSS\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="nav_area.cpp">
+      <Filter>Source Files\Navigation Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="nav_colors.cpp">
+      <Filter>Source Files\Navigation Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="nav_edit.cpp">
+      <Filter>Source Files\Navigation Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="nav_entities.cpp">
+      <Filter>Source Files\Navigation Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="nav_file.cpp">
+      <Filter>Source Files\Navigation Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="nav_generate.cpp">
+      <Filter>Source Files\Navigation Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="nav_ladder.cpp">
+      <Filter>Source Files\Navigation Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="nav_merge.cpp">
+      <Filter>Source Files\Navigation Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="nav_mesh.cpp">
+      <Filter>Source Files\Navigation Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="nav_mesh_factory.cpp">
+      <Filter>Source Files\Navigation Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="nav_node.cpp">
+      <Filter>Source Files\Navigation Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="nav_simplify.cpp">
+      <Filter>Source Files\Navigation Mesh</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files\Precompiled Header</Filter>

@@ -54,7 +54,7 @@ public:
 	virtual void PreThink( void );
 	virtual void PlayerDeathThink( void );
 	virtual void SetAnimation( PLAYER_ANIM playerAnim );
-//	virtual bool HandleCommand_JoinTeam( int team ); // BOXBOX removing teams
+	virtual bool HandleCommand_JoinTeam( int team );
 	virtual bool ClientCommand( const CCommand &args );
 	virtual void CreateViewModel( int viewmodelindex = 0 );
 	virtual bool BecomeRagdollOnClient( const Vector &force );
@@ -64,7 +64,7 @@ public:
 	virtual void FireBullets ( const FireBulletsInfo_t &info );
 	virtual bool Weapon_Switch( CBaseCombatWeapon *pWeapon, int viewmodelindex = 0);
 	virtual bool BumpWeapon( CBaseCombatWeapon *pWeapon );
-//	virtual void ChangeTeam( int iTeam );
+	virtual void ChangeTeam( int iTeam );
 	virtual void PickupObject ( CBaseEntity *pObject, bool bLimitMassAndSize );
 	virtual void PlayStepSound( Vector &vecOrigin, surfacedata_t *psurface, float fvol, bool force );
 	virtual void Weapon_Drop( CBaseCombatWeapon *pWeapon, const Vector *pvecTarget = NULL, const Vector *pVelocity = NULL );
@@ -91,8 +91,8 @@ public:
 
 	void ResetAnimation( void );
 	void SetPlayerModel( void );
-//	void SetPlayerTeamModel( void );
-//	Activity TranslateTeamActivity( Activity ActToTranslate );
+	void SetPlayerTeamModel( void );
+	Activity TranslateTeamActivity( Activity ActToTranslate );
 	
 //	float GetNextModelChangeTime( void ) { return m_flNextModelChangeTime; } // BOXBOX removing these
 //	float GetNextTeamChangeTime( void ) { return m_flNextTeamChangeTime; }
@@ -105,12 +105,12 @@ public:
 
 	void Reset();
 
-//	bool IsReady(); // BOXBOX don't need this
-//	void SetReady( bool bReady );
+	bool IsReady();
+	void SetReady( bool bReady );
 
 	void CheckChatText( char *p, int bufsize );
 
-	void State_Transition( HL2MPPlayerState newState ); // BOXBOX TODO do we need states?
+	void State_Transition( HL2MPPlayerState newState );
 	void State_Enter( HL2MPPlayerState newState );
 	void State_Leave();
 	void State_PreThink();
@@ -126,7 +126,7 @@ public:
 	virtual void StopObserverMode( void );
 
 
-	Vector m_vecTotalBulletForce;	//BOXBOX TODO don't need this
+	Vector m_vecTotalBulletForce;	//Accumulator for bullet force in a single frame
 
 	// Tracks our ragdoll entity.
 	CNetworkHandle( CBaseEntity, m_hRagdoll );	// networked entity handle 
@@ -158,7 +158,7 @@ private:
 	CUtlDict<float,int>	m_RateLimitLastCommandTimes;
 
     bool m_bEnterObserver;
-//	bool m_bReady;
+	bool m_bReady;
 };
 
 inline CMSS_Player *ToHL2MPPlayer( CBaseEntity *pEntity )

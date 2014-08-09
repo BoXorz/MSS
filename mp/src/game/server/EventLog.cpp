@@ -39,11 +39,11 @@ bool CEventLog::PrintEvent( IGameEvent *event )
 	{
 		return PrintPlayerEvent( event );
 	}
-/*	else if ( Q_strncmp(name, "team_", strlen("team_")) == 0 )
+	else if ( Q_strncmp(name, "team_", strlen("team_")) == 0 )
 	{
 		return PrintTeamEvent( event );
 	}
-*/	else if ( Q_strncmp(name, "game_", strlen("game_")) == 0 )
+	else if ( Q_strncmp(name, "game_", strlen("game_")) == 0 )
 	{
 		return PrintGameEvent( event );
 	}
@@ -78,15 +78,15 @@ bool CEventLog::PrintPlayerEvent( IGameEvent *event )
 		const char *reason = event->GetString("reason" );
 		const char *name = event->GetString("name" );
 		const char *networkid = event->GetString("networkid" );
-/*		CTeam *team = NULL;
+		CTeam *team = NULL;
 		CBasePlayer *pPlayer = UTIL_PlayerByUserId( userid );
 
 		if ( pPlayer )
 		{
 			team = pPlayer->GetTeam();
 		}
-*/
-		UTIL_LogPrintf( "\"%s<%i><%s>\" disconnected (reason \"%s\")\n", name, userid, networkid, /*team ? team->GetName() : "",*/ reason );
+
+		UTIL_LogPrintf( "\"%s<%i><%s><%s>\" disconnected (reason \"%s\")\n", name, userid, networkid, team ? team->GetName() : "", reason );
 		return true;
 	}
 
@@ -97,7 +97,6 @@ bool CEventLog::PrintPlayerEvent( IGameEvent *event )
 		return false;
 	}
 
-/*
 	if ( !Q_strncmp( eventName, "player_team", Q_strlen("player_team") ) )
 	{
 		const bool bDisconnecting = event->GetBool( "disconnect" );
@@ -119,37 +118,71 @@ bool CEventLog::PrintPlayerEvent( IGameEvent *event )
 
 		return true;
 	}
-	else
-*/	
-	if ( !Q_strncmp( eventName, "player_death", Q_strlen("player_death") ) ) // BOXBOX TODO change all this to death from monsters?
+	else if ( !Q_strncmp( eventName, "player_death", Q_strlen("player_death") ) )
 	{
 		const int attackerid = event->GetInt("attacker" );
 
+#ifdef MSS
 		const char *weapon = event->GetString( "weapon" );
-
+#endif
+		
 		CBasePlayer *pAttacker = UTIL_PlayerByUserId( attackerid );
-
+		CTeam *team = pPlayer->GetTeam();
+		CTeam *attackerTeam = NULL;
+		
+		if ( pAttacker )
+		{
+			attackerTeam = pAttacker->GetTeam();
+		}
 		if ( pPlayer == pAttacker && pPlayer )  
 		{  
 
-			UTIL_LogPrintf( "\"%s<%i><%s>\" committed suicide with \"%s\"\n",  
+#ifdef MSS
+			UTIL_LogPrintf( "\"%s<%i><%s><%s>\" committed suicide with \"%s\"\n",  
 							pPlayer->GetPlayerName(),
 							userid,
 							pPlayer->GetNetworkIDString(),
+							team ? team->GetName() : "",
 							weapon
 							);
+#else
+			UTIL_LogPrintf( "\"%s<%i><%s><%s>\" committed suicide with \"%s\"\n",  
+							pPlayer->GetPlayerName(),
+							userid,
+							pPlayer->GetNetworkIDString(),
+							team ? team->GetName() : "",
+							pAttacker->GetClassname()
+							);
+#endif
 		}
 		else if ( pAttacker )
 		{
-			UTIL_LogPrintf( "\"%s<%i><%s>\" killed \"%s<%i><%s>\" with \"%s\"\n",  
+			CTeam *attackerTeam = pAttacker->GetTeam();
+
+#ifdef MSS
+			UTIL_LogPrintf( "\"%s<%i><%s><%s>\" killed \"%s<%i><%s><%s>\" with \"%s\"\n",  
 							pAttacker->GetPlayerName(),
 							attackerid,
 							pAttacker->GetNetworkIDString(),
+							attackerTeam ? attackerTeam->GetName() : "",
 							pPlayer->GetPlayerName(),
 							userid,
 							pPlayer->GetNetworkIDString(),
+							team ? team->GetName() : "",
 							weapon
 							);
+#else
+			UTIL_LogPrintf( "\"%s<%i><%s><%s>\" killed \"%s<%i><%s><%s>\"\n",  
+							pAttacker->GetPlayerName(),
+							attackerid,
+							pAttacker->GetNetworkIDString(),
+							attackerTeam ? attackerTeam->GetName() : "",
+							pPlayer->GetPlayerName(),
+							userid,
+							pPlayer->GetNetworkIDString(),
+							team ? team->GetName() : ""
+							);								
+#endif
 		}
 		else
 		{  
@@ -157,7 +190,8 @@ bool CEventLog::PrintPlayerEvent( IGameEvent *event )
 			UTIL_LogPrintf( "\"%s<%i><%s><%s>\" committed suicide with \"world\"\n",
 							pPlayer->GetPlayerName(),
 							userid,
-							pPlayer->GetNetworkIDString()
+							pPlayer->GetNetworkIDString(),
+							team ? team->GetName() : ""
 							);
 		}
 		return true;
@@ -176,10 +210,12 @@ bool CEventLog::PrintPlayerEvent( IGameEvent *event )
 	{
 		const char *newName = event->GetString( "newname" );
 		const char *oldName = event->GetString( "oldname" );
-		UTIL_LogPrintf( "\"%s<%i><%s>\" changed name to \"%s\"\n", 
+		CTeam *team = pPlayer->GetTeam();
+		UTIL_LogPrintf( "\"%s<%i><%s><%s>\" changed name to \"%s\"\n", 
 					oldName,
 					userid,
 					pPlayer->GetNetworkIDString(),
+					team ? team->GetName() : "",
 					newName
 					);
 		return true;
@@ -190,14 +226,12 @@ bool CEventLog::PrintPlayerEvent( IGameEvent *event )
 	return false;
 }
 
-/*
 bool CEventLog::PrintTeamEvent( IGameEvent *event )
 {
 //	const char * name = event->GetName() + Q_strlen("team_"); // remove prefix
 
 	return false;
 }
-*/
 
 bool CEventLog::PrintOtherEvent( IGameEvent *event )
 {
@@ -210,7 +244,7 @@ bool CEventLog::Init()
 	ListenForGameEvent( "player_changename" );
 	ListenForGameEvent( "player_activate" );
 	ListenForGameEvent( "player_death" );
-//	ListenForGameEvent( "player_team" );
+	ListenForGameEvent( "player_team" );
 	ListenForGameEvent( "player_disconnect" );
 	ListenForGameEvent( "player_connect" );
 

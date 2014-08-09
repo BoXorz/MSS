@@ -10,7 +10,6 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
-/*
 #ifdef GAME_DLL
 void MPForceCameraCallback( IConVar *var, const char *pOldString, float flOldValue )
 {
@@ -20,7 +19,7 @@ void MPForceCameraCallback( IConVar *var, const char *pOldString, float flOldVal
 	}
 }
 #endif 
-*/
+
 // some shared cvars used by game rules
 ConVar mp_forcecamera( 
 	"mp_forcecamera", 
@@ -31,11 +30,9 @@ ConVar mp_forcecamera(
 #endif
 	FCVAR_REPLICATED,
 	"Restricts spectator modes for dead players"
-/*
 #ifdef GAME_DLL
 	, MPForceCameraCallback 
 #endif
-*/
 	);
 	
 ConVar mp_allowspectators(

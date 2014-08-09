@@ -102,7 +102,7 @@ void CPlayerResource::UpdatePlayerData( void )
 			m_iScore.Set( i, pPlayer->FragCount() );
 			m_iDeaths.Set( i, pPlayer->DeathCount() );
 			m_bConnected.Set( i, 1 );
-//			m_iTeam.Set( i, pPlayer->GetTeamNumber() );
+			m_iTeam.Set( i, pPlayer->GetTeamNumber() );
 			m_bAlive.Set( i, pPlayer->IsAlive()?1:0 );
 			m_iHealth.Set(i, MAX( 0, pPlayer->GetHealth() ) );
 

@@ -198,7 +198,7 @@ void CMumbleSystem::PostRender()
 	VectorToMumbleFloatArray( vecCameraUp, g_pMumbleMemory->fCameraTop );
 	VectorToMumbleFloatArray( vecOriginCamera, g_pMumbleMemory->fCameraPosition );
 
-	if ( pPlayer && m_bHasSetPlayerUniqueId /*&& m_nTeamSetInUniqueId != pPlayer->GetTeamNumber()*/ )
+	if ( pPlayer && m_bHasSetPlayerUniqueId && m_nTeamSetInUniqueId != pPlayer->GetTeamNumber() )
 	{
 		// Player changed team since we set the unique ID. Set it again.
 		m_bHasSetPlayerUniqueId = false;
@@ -209,7 +209,7 @@ void CMumbleSystem::PostRender()
 		CSteamID steamid = steamapicontext->SteamUser()->GetSteamID();
 		if ( steamid.IsValid() )
 		{
-			int unTeam = /*pPlayer ? pPlayer->GetTeamNumber() :*/ 0;
+			int unTeam = pPlayer ? pPlayer->GetTeamNumber() : 0;
 			char szSteamId[256];
 			V_sprintf_safe( szSteamId, "universe:%u;account_type:%u;id:%u;instance:%u;team:%d", steamid.GetEUniverse(), steamid.GetEAccountType(), steamid.GetAccountID(), steamid.GetUnAccountInstance(), unTeam );
 

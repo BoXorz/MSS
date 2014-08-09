@@ -334,11 +334,11 @@ void CSpectatorMenu::Update( void )
 		if ( !gr->IsAlive( iPlayerIndex ) )
 			continue;
 
-		wchar_t playerText[ 80 ], playerName[ 64 ]/*, *team, teamText[ 64 ]*/;
-//		char localizeTeamName[64];
+		wchar_t playerText[ 80 ], playerName[ 64 ], *team, teamText[ 64 ];
+		char localizeTeamName[64];
 		char szPlayerIndex[16];
 		g_pVGuiLocalize->ConvertANSIToUnicode( UTIL_SafeName( gr->GetPlayerName(iPlayerIndex) ), playerName, sizeof( playerName ) );
-/*		const char * teamname = gr->GetTeamName( gr->GetTeam(iPlayerIndex) );
+		const char * teamname = gr->GetTeamName( gr->GetTeam(iPlayerIndex) );
 		if ( teamname )
 		{	
 			Q_snprintf( localizeTeamName, sizeof( localizeTeamName ), "#%s", teamname );
@@ -354,8 +354,8 @@ void CSpectatorMenu::Update( void )
 		}
 		else
 		{
-*/			g_pVGuiLocalize->ConstructString( playerText, sizeof( playerText ), g_pVGuiLocalize->Find( "#Spec_PlayerItem" ), 1, playerName );
-//		}
+			g_pVGuiLocalize->ConstructString( playerText, sizeof( playerText ), g_pVGuiLocalize->Find( "#Spec_PlayerItem" ), 1, playerName );
+		}
 
 		Q_snprintf( szPlayerIndex, sizeof( szPlayerIndex ), "%d", iPlayerIndex );
 
@@ -643,16 +643,16 @@ void CSpectatorGUI::Update()
 
 	if ( playernum > 0 && playernum <= gpGlobals->maxClients && gr )
 	{
-		Color c = COLOR_GREY;
+		Color c = gr->GetTeamColor( gr->GetTeam(playernum) ); // Player's team color
 
 		m_pPlayerLabel->SetFgColor( c );
 		
-		wchar_t playerText[ 80 ], playerName[ 64 ]/*, health[ 10 ]*/;
+		wchar_t playerText[ 80 ], playerName[ 64 ], health[ 10 ];
 		V_wcsncpy( playerText, L"Unable to find #Spec_PlayerItem*", sizeof( playerText ) );
 		memset( playerName, 0x0, sizeof( playerName ) );
 
 		g_pVGuiLocalize->ConvertANSIToUnicode( UTIL_SafeName(gr->GetPlayerName( playernum )), playerName, sizeof( playerName ) );
-/*		int iHealth = gr->GetHealth( playernum );
+		int iHealth = gr->GetHealth( playernum );
 		if ( iHealth > 0  && gr->IsAlive(playernum) )
 		{
 			_snwprintf( health, ARRAYSIZE( health ), L"%i", iHealth );
@@ -660,8 +660,8 @@ void CSpectatorGUI::Update()
 		}
 		else
 		{
-*/			g_pVGuiLocalize->ConstructString( playerText, sizeof( playerText ), g_pVGuiLocalize->Find( "#Spec_PlayerItem" ), 1, playerName );
-//		}
+			g_pVGuiLocalize->ConstructString( playerText, sizeof( playerText ), g_pVGuiLocalize->Find( "#Spec_PlayerItem" ), 1, playerName );
+		}
 
 		m_pPlayerLabel->SetText( playerText );
 	}

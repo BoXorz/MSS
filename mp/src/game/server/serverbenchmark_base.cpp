@@ -347,7 +347,7 @@ public:
 			CBasePlayer *pPlayer = UTIL_PlayerByIndex( i );
 			if ( pPlayer && (pPlayer->GetFlags() & FL_FAKECLIENT) )
 			{
-//				crc += pPlayer->GetTeamNumber();
+				crc += pPlayer->GetTeamNumber();
 				crc += (int)pPlayer->GetAbsOrigin().x; 
 				crc += (int)pPlayer->GetAbsOrigin().y; 
 			}

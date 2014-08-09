@@ -648,7 +648,7 @@ public:
 	void InputSetParentAttachment( inputdata_t &inputdata );
 	void InputSetParentAttachmentMaintainOffset( inputdata_t &inputdata );
 	void InputClearParent( inputdata_t &inputdata );
-//	void InputSetTeam( inputdata_t &inputdata );
+	void InputSetTeam( inputdata_t &inputdata );
 	void InputUse( inputdata_t &inputdata );
 	void InputKill( inputdata_t &inputdata );
 	void InputKillHierarchy( inputdata_t &inputdata );
@@ -935,7 +935,7 @@ public:
 	virtual void			ImpactTrace( trace_t *pTrace, int iDamageType, const char *pCustomImpactName = NULL );
 
 	void			AddPoints( int score, bool bAllowNegativeScore );
-//	void			AddPointsToTeam( int score, bool bAllowNegativeScore );
+	void			AddPointsToTeam( int score, bool bAllowNegativeScore );
 	void			RemoveAllDecals( void );
 
 	virtual bool	OnControls( CBaseEntity *pControls ) { return false; }
@@ -960,7 +960,7 @@ public:
 	// UNDONE: Make this data instead of procedural?
 	virtual bool	IsViewable( void );					// is this something that would be looked at (model, sprite, etc.)?
 
-/* BOXBOX removing teams
+	// Team Handling
 	CTeam			*GetTeam( void ) const;				// Get the Team this entity is on
 	int				GetTeamNumber( void ) const;		// Get the Team number of the team this entity is on
 	virtual void	ChangeTeam( int iTeamNum );			// Assign this entity to a team.
@@ -968,7 +968,6 @@ public:
 	bool			InSameTeam( CBaseEntity *pEntity ) const;	// Returns true if the specified entity is on the same team as this one
 	bool			IsInAnyTeam( void ) const;			// Returns true if this entity is in any team
 	const char		*TeamID( void ) const;				// Returns the name of the team this entity is on.
-*/
 
 	// Entity events... these are events targetted to a particular entity
 	// Each event defines its own well-defined event data structure

@@ -15,8 +15,8 @@
 #include "nav_ladder.h"
 #include "tier1/memstack.h"
 
-
-//enum { MAX_NAV_TEAMS = 2 };
+// BOTPORT: Clean up relationship between team index and danger storage in nav areas
+enum { MAX_NAV_TEAMS = 2 };
 
 
 class CFuncElevator;
@@ -217,9 +217,9 @@ protected:
 	/* 36 */	float m_swZ;												// height of the implicit corner defined by (m_nwCorner.x, m_seCorner.y, m_neZ)
 	/* 40 */	Vector m_center;											// centroid of area
 
-	/* 52 */	//unsigned char m_playerCount[ MAX_NAV_TEAMS ];				// the number of players currently in this area
+	/* 52 */	unsigned char m_playerCount[ MAX_NAV_TEAMS ];				// the number of players currently in this area
 
-	/* 54 */	//bool m_isBlocked[ MAX_NAV_TEAMS ];							// if true, some part of the world is preventing movement through this nav area
+	/* 54 */	bool m_isBlocked[ MAX_NAV_TEAMS ];							// if true, some part of the world is preventing movement through this nav area
 
 	/* 56 */	unsigned int m_marker;										// used to flag the area as visited
 	/* 60 */	float m_totalCost;											// the distance so far plus an estimate of the distance left
@@ -301,10 +301,10 @@ public:
 	void SetPlace( Place place )		{ m_place = place; }	// set place descriptor
 	Place GetPlace( void ) const		{ return m_place; }		// get place descriptor
 
-//	void MarkAsBlocked( int teamID, CBaseEntity *blocker, bool bGenerateEvent = true );	// An entity can force a nav area to be blocked
-//	virtual void UpdateBlocked( bool force = false, int teamID = TEAM_ANY );		// Updates the (un)blocked status of the nav area (throttled)
-//	virtual bool IsBlocked( int teamID, bool ignoreNavBlockers = false ) const;
-//	void UnblockArea( int teamID = TEAM_ANY );					// clear blocked status for the given team(s)
+	void MarkAsBlocked( int teamID, CBaseEntity *blocker, bool bGenerateEvent = true );	// An entity can force a nav area to be blocked
+	virtual void UpdateBlocked( bool force = false, int teamID = TEAM_ANY );		// Updates the (un)blocked status of the nav area (throttled)
+	virtual bool IsBlocked( int teamID, bool ignoreNavBlockers = false ) const;
+	void UnblockArea( int teamID = TEAM_ANY );					// clear blocked status for the given team(s)
 
 	void CheckFloor( CBaseEntity *ignore );						// Checks if there is a floor under the nav area, in case a breakable floor is gone
 
@@ -383,8 +383,8 @@ public:
 	NavDirType ComputeDirection( Vector *point ) const;			// return direction from this area to the given point
 
 	//- for hunting algorithm ---------------------------------------------------------------------------
-//	void SetClearedTimestamp( int teamID );						// set this area's "clear" timestamp to now
-//	float GetClearedTimestamp( int teamID ) const;				// get time this area was marked "clear"
+	void SetClearedTimestamp( int teamID );						// set this area's "clear" timestamp to now
+	float GetClearedTimestamp( int teamID ) const;				// get time this area was marked "clear"
 
 	//- hiding spots ------------------------------------------------------------------------------------
 	const HidingSpotVector *GetHidingSpots( void ) const	{ return &m_hidingSpots; }
@@ -393,8 +393,8 @@ public:
 	int GetSpotEncounterCount( void ) const				{ return m_spotEncounters.Count(); }
 
 	//- "danger" ----------------------------------------------------------------------------------------
-//	void IncreaseDanger( int teamID, float amount );			// increase the danger of this area for the given team
-//	float GetDanger( int teamID );								// return the danger of this area (decays over time)
+	void IncreaseDanger( int teamID, float amount );			// increase the danger of this area for the given team
+	float GetDanger( int teamID );								// return the danger of this area (decays over time)
 	virtual float GetDangerDecayRate( void ) const;				// return danger decay rate per second
 
 	//- extents -----------------------------------------------------------------------------------------
@@ -409,13 +409,13 @@ public:
 	void RemoveOrthogonalConnections( NavDirType dir );
 
 	//- occupy time ------------------------------------------------------------------------------------
-//	float GetEarliestOccupyTime( int teamID ) const;			// returns the minimum time for someone of the given team to reach this spot from their spawn
+	float GetEarliestOccupyTime( int teamID ) const;			// returns the minimum time for someone of the given team to reach this spot from their spawn
 	bool IsBattlefront( void ) const	{ return m_isBattlefront; }	// true if this area is a "battlefront" - where rushing teams initially meet
 
 	//- player counting --------------------------------------------------------------------------------
-//	void IncrementPlayerCount( int teamID, int entIndex );		// add one player to this area's count
-//	void DecrementPlayerCount( int teamID, int entIndex );		// subtract one player from this area's count
-//	unsigned char GetPlayerCount( int teamID = 0 ) const;		// return number of players of given team currently within this area (team of zero means any/all)
+	void IncrementPlayerCount( int teamID, int entIndex );		// add one player to this area's count
+	void DecrementPlayerCount( int teamID, int entIndex );		// subtract one player from this area's count
+	unsigned char GetPlayerCount( int teamID = 0 ) const;		// return number of players of given team currently within this area (team of zero means any/all)
 
 	//- lighting ----------------------------------------------------------------------------------------
 	float GetLightIntensity( const Vector &pos ) const;			// returns a 0..1 light intensity for the given point
@@ -519,10 +519,10 @@ public:
 	virtual bool IsPartiallyVisible( const Vector &eye, CBaseEntity *ignore = NULL ) const;				// return true if any portion of the area is visible from given eyepoint (CPU intensive)
 
 	virtual bool IsPotentiallyVisible( const CNavArea *area ) const;		// return true if given area is potentially visible from somewhere in this area (very fast)
-//	virtual bool IsPotentiallyVisibleToTeam( int team ) const;				// return true if any portion of this area is visible to anyone on the given team (very fast)
+	virtual bool IsPotentiallyVisibleToTeam( int team ) const;				// return true if any portion of this area is visible to anyone on the given team (very fast)
 
 	virtual bool IsCompletelyVisible( const CNavArea *area ) const;			// return true if given area is completely visible from somewhere in this area (very fast)
-//	virtual bool IsCompletelyVisibleToTeam( int team ) const;				// return true if given area is completely visible from somewhere in this area by someone on the team (very fast)
+	virtual bool IsCompletelyVisibleToTeam( int team ) const;				// return true if given area is completely visible from somewhere in this area by someone on the team (very fast)
 
 	//-------------------------------------------------------------------------------------
 	/**
@@ -677,11 +677,11 @@ private:
 	CountdownTimer m_avoidanceObstacleTimer;					// Throttle checks on our obstructed state while obstructed
 
 	//- for hunting -------------------------------------------------------------------------------------
-//	float m_clearedTimestamp[ MAX_NAV_TEAMS ];					// time this area was last "cleared" of enemies
+	float m_clearedTimestamp[ MAX_NAV_TEAMS ];					// time this area was last "cleared" of enemies
 
 	//- "danger" ----------------------------------------------------------------------------------------
-//	float m_danger[ MAX_NAV_TEAMS ];							// danger of this area, allowing bots to avoid areas where they died in the past - zero is no danger
-//	float m_dangerTimestamp[ MAX_NAV_TEAMS ];					// time when danger value was set - used for decaying
+	float m_danger[ MAX_NAV_TEAMS ];							// danger of this area, allowing bots to avoid areas where they died in the past - zero is no danger
+	float m_dangerTimestamp[ MAX_NAV_TEAMS ];					// time when danger value was set - used for decaying
 	void DecayDanger( void );
 
 	//- hiding spots ------------------------------------------------------------------------------------
@@ -692,11 +692,11 @@ private:
 	SpotEncounterVector m_spotEncounters;						// list of possible ways to move thru this area, and the spots to look at as we do
 	void AddSpotEncounters( const CNavArea *from, NavDirType fromDir, const CNavArea *to, NavDirType toDir );	// add spot encounter data when moving from area to area
 
-//	float m_earliestOccupyTime[ MAX_NAV_TEAMS ];				// min time to reach this spot from spawn
+	float m_earliestOccupyTime[ MAX_NAV_TEAMS ];				// min time to reach this spot from spawn
 
-//#ifdef DEBUG_AREA_PLAYERCOUNTS
-//	CUtlVector< int > m_playerEntIndices[ MAX_NAV_TEAMS ];
-//#endif
+#ifdef DEBUG_AREA_PLAYERCOUNTS
+	CUtlVector< int > m_playerEntIndices[ MAX_NAV_TEAMS ];
+#endif
 
 	//- lighting ----------------------------------------------------------------------------------------
 	float m_lightIntensity[ NUM_CORNERS ];						// 0..1 light intensity at corners
@@ -882,7 +882,7 @@ inline void CNavArea::RemoveFromClosedList( void )
 	// since "closed" is defined as visited (marked) and not on open list, do nothing
 }
 
-/*
+//--------------------------------------------------------------------------------------------------------------
 inline void CNavArea::SetClearedTimestamp( int teamID )
 {
 	m_clearedTimestamp[ teamID % MAX_NAV_TEAMS ] = gpGlobals->curtime;
@@ -899,7 +899,7 @@ inline float CNavArea::GetEarliestOccupyTime( int teamID ) const
 {
 	return m_earliestOccupyTime[ teamID % MAX_NAV_TEAMS ];
 }
-*/
+
 
 //--------------------------------------------------------------------------------------------------------------
 inline bool CNavArea::IsDamaging( void ) const
@@ -966,7 +966,7 @@ inline bool CNavArea::IsVisible( const Vector &eye, Vector *visSpot ) const
 
 	return false;
 }
-/*
+
 #ifndef DEBUG_AREA_PLAYERCOUNTS
 inline void CNavArea::IncrementPlayerCount( int teamID, int entIndex )
 {
@@ -1011,7 +1011,7 @@ inline unsigned char CNavArea::GetPlayerCount( int teamID ) const
 
 	return total;
 }
-*/
+
 //--------------------------------------------------------------------------------------------------------------
 /**
 * Return Z of area at (x,y) of 'pos'

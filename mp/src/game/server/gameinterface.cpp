@@ -731,16 +731,16 @@ bool CServerGameDLL::DLLInit( CreateInterfaceFn appSystemFactory,
 
 	// try to get debug overlay, may be NULL if on HLDS
 	debugoverlay = (IVDebugOverlay *)appSystemFactory( VDEBUG_OVERLAY_INTERFACE_VERSION, NULL );
-/*
+
 #ifndef _XBOX
 #ifdef USE_NAV_MESH
 	// create the Navigation Mesh interface
 	TheNavMesh = NavMeshFactory();
 #endif
-*/
+
 	// init the gamestatsupload connection
 	gamestatsuploader->InitConnection();
-//#endif
+#endif
 
 	return true;
 }
@@ -777,7 +777,7 @@ void CServerGameDLL::DLLShutdown( void )
 #ifdef CSTRIKE_DLL // BOTPORT: TODO: move these ifdefs out
 	RemoveBotControl();
 #endif
-/*
+
 #ifndef _XBOX
 #ifdef USE_NAV_MESH
 	// destroy the Navigation Mesh interface
@@ -790,7 +790,6 @@ void CServerGameDLL::DLLShutdown( void )
 	// reset (shutdown) the gamestatsupload connection
 	gamestatsuploader->InitConnection();
 #endif
-*/
 
 #ifndef _X360
 	s_SteamAPIContext.Clear(); // Steam API context shutdown
@@ -1127,7 +1126,7 @@ void CServerGameDLL::ServerActivate( edict_t *pEdictList, int edictCount, int cl
 	{
 		think_limit.SetValue( 0 );
 	}
-/*
+
 #ifndef _XBOX
 #ifdef USE_NAV_MESH
 	// load the Navigation Mesh for this map
@@ -1135,7 +1134,7 @@ void CServerGameDLL::ServerActivate( edict_t *pEdictList, int edictCount, int cl
 	TheNavMesh->OnServerActivate();
 #endif
 #endif
-*/
+
 #ifdef CSTRIKE_DLL // BOTPORT: TODO: move these ifdefs out
 	TheBots->ServerActivate();
 #endif
@@ -1222,7 +1221,7 @@ void CServerGameDLL::GameFrame( bool simulating )
 
 	IGameSystem::FrameUpdatePreEntityThinkAllSystems();
 	GameStartFrame();
-/*
+
 #ifndef _XBOX
 #ifdef USE_NAV_MESH
 	TheNavMesh->Update();
@@ -1231,9 +1230,10 @@ void CServerGameDLL::GameFrame( bool simulating )
 #ifdef NEXT_BOT
 	TheNextBots().Update();
 #endif
+
 	gamestatsuploader->UpdateConnection();
 #endif
-*/
+
 	UpdateQueryCache();
 	g_pServerBenchmark->UpdateBenchmark();
 
@@ -1391,7 +1391,7 @@ void CServerGameDLL::LevelShutdown( void )
 	CBaseEntity::SetAllowPrecache( false );
 
 	g_nCurrentChapterIndex = -1;
-/*
+
 #ifndef _XBOX
 #ifdef USE_NAV_MESH
 	// reset the Navigation Mesh
@@ -1401,7 +1401,6 @@ void CServerGameDLL::LevelShutdown( void )
 	}
 #endif
 #endif
-*/
 }
 
 //-----------------------------------------------------------------------------

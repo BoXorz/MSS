@@ -146,7 +146,9 @@ void C_VoteController::ClientThink()
 	SetNextClientThink( gpGlobals->curtime + 0.5f );
 }
 
-
+//-----------------------------------------------------------------------------
+// Purpose:
+//-----------------------------------------------------------------------------
 void C_VoteController::FireGameEvent( IGameEvent *event )
 {
 	CHudVote *pHudVote = GET_HUDELEMENT( CHudVote );
@@ -159,8 +161,6 @@ void C_VoteController::FireGameEvent( IGameEvent *event )
 		C_BasePlayer *pLocalPlayer = C_BasePlayer::GetLocalPlayer();
 		if ( !pLocalPlayer )
 			return;
-
-/* BOXBOX TODO removing teams but use this in some form for map change votes!!! :)
 
 		int team = event->GetInt( "team", TEAM_UNASSIGNED );
 		if ( team > TEAM_UNASSIGNED && team != pLocalPlayer->GetTeamNumber() )
@@ -185,6 +185,5 @@ void C_VoteController::FireGameEvent( IGameEvent *event )
 				pLocalPlayer->EmitSound( "Vote.Cast.Yes" );
 			}
 		}
-*/
 	}
 }

@@ -214,7 +214,7 @@ public:
 
 	void IncrementMapCycleIndex();
 
-	void HaveAllPlayersSpeakConceptIfAllowed( int iConcept, /*int iTeam = TEAM_UNASSIGNED,*/ const char *modifiers = NULL );
+	void HaveAllPlayersSpeakConceptIfAllowed( int iConcept, int iTeam = TEAM_UNASSIGNED, const char *modifiers = NULL );
 
 	virtual void GetTaggedConVarList( KeyValues *pCvarTagList );
 

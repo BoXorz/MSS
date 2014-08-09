@@ -506,7 +506,7 @@ bool C_LocalTempEntity::Frame( float frametime, int framenumber )
 					C_BasePlayer *pPlayer = dynamic_cast<C_BasePlayer*>(pClient);
 					if( pPlayer )
 					{
-//						data.m_nDamageType = pPlayer->GetTeamNumber(); // BOXBOX removing teams
+						data.m_nDamageType = pPlayer->GetTeamNumber();
 					}
 				}
 

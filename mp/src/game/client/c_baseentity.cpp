@@ -3731,7 +3731,9 @@ void C_BaseEntity::operator delete( void *pMem )
 
 #include "tier0/memdbgon.h"
 
-/* BOXBOX here goes nothing! removing teams!!!
+//========================================================================================
+// TEAM HANDLING
+//========================================================================================
 C_Team *C_BaseEntity::GetTeam( void )
 {
 	return GetGlobalTeam( m_iTeamNum );
@@ -3772,7 +3774,7 @@ bool C_BaseEntity::InLocalTeam( void )
 {
 	return ( GetTeam() == GetLocalTeam() );
 }
-*/
+
 
 void C_BaseEntity::SetNextClientThink( float nextThinkTime )
 {
@@ -4893,12 +4895,13 @@ void C_BaseEntity::SetOwnerEntity( C_BaseEntity *pOwner )
 	m_hOwnerEntity = pOwner;
 }
 
-/* BOXBOX removing teams
+//-----------------------------------------------------------------------------
+// Purpose: Put the entity in the specified team
+//-----------------------------------------------------------------------------
 void C_BaseEntity::ChangeTeam( int iTeamNum )
 {
 	m_iTeamNum = iTeamNum;
 }
-*/
 
 //-----------------------------------------------------------------------------
 // Purpose: 

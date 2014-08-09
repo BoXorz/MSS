@@ -1684,7 +1684,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 					if ( !pPlayer->ShouldShowVoiceSubtitleToEnemy() )
 					{
 						// remove players on other teams
-//						filter.RemoveRecipientsNotOnTeam( pPlayer->GetTeam() );
+						filter.RemoveRecipientsNotOnTeam( pPlayer->GetTeam() );
 					}
 
 					// Register this event in the mod-specific usermessages .cpp file if you hit this assert
@@ -1728,7 +1728,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 		return ( !engine->IsDedicatedServer()&& CommandLine()->CheckParm( "-bugbait" ) && sv_cheats->GetBool() );
 	}
 
-	void CMultiplayRules::HaveAllPlayersSpeakConceptIfAllowed( int iConcept, /*int iTeam,*/ const char *modifiers /* = NULL */ )
+	void CMultiplayRules::HaveAllPlayersSpeakConceptIfAllowed( int iConcept, int iTeam /* = TEAM_UNASSIGNED */, const char *modifiers /* = NULL */ )
 	{
 		CBaseMultiplayerPlayer *pPlayer;
 		for ( int i = 1; i <= gpGlobals->maxClients; i++ )
@@ -1738,12 +1738,12 @@ ConVarRef suitcharger( "sk_suitcharger" );
 			if ( !pPlayer )
 				continue;
 
-/*			if ( iTeam != TEAM_UNASSIGNED )
+			if ( iTeam != TEAM_UNASSIGNED )
 			{
 				if ( pPlayer->GetTeamNumber() != iTeam )
 					continue;
 			}
-*/
+
 			pPlayer->SpeakConceptIfAllowed( iConcept, modifiers );
 		}
 	}

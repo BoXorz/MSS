@@ -297,7 +297,9 @@ BEGIN_DATADESC( CFilterClass )
 END_DATADESC()
 
 
-/*
+// ###################################################################
+//	> FilterTeam
+// ###################################################################
 class FilterTeam : public CBaseFilter
 {
 	DECLARE_CLASS( FilterTeam, CBaseFilter );
@@ -320,7 +322,7 @@ BEGIN_DATADESC( FilterTeam )
 	DEFINE_KEYFIELD( m_iFilterTeam,	FIELD_INTEGER,	"filterteam" ),
 
 END_DATADESC()
-*/
+
 
 // ###################################################################
 //	> FilterMassGreater

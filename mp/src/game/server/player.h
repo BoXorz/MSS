@@ -190,8 +190,8 @@ public:
 	virtual const char *GetName();
 	virtual int			GetUserID();
 	virtual const char *GetNetworkIDString();
-//	virtual int			GetTeamIndex();
-//	virtual void		ChangeTeam( int iTeamNum );
+	virtual int			GetTeamIndex();
+	virtual void		ChangeTeam( int iTeamNum );
 	virtual int			GetFragCount();
 	virtual int			GetDeathCount();
 	virtual bool		IsConnected();
@@ -508,7 +508,7 @@ public:
 	bool					UsingStandardWeaponsInVehicle( void );
 	
 	void					AddPoints( int score, bool bAllowNegativeScore );
-//	void					AddPointsToTeam( int score, bool bAllowNegativeScore );
+	void					AddPointsToTeam( int score, bool bAllowNegativeScore );
 	virtual bool			BumpWeapon( CBaseCombatWeapon *pWeapon );
 	bool					RemovePlayerItem( CBaseCombatWeapon *pItem );
 	CBaseEntity				*HasNamedPlayerItem( const char *pszItemName );
@@ -588,8 +588,8 @@ public:
 	float					GetTimeSinceLastUserCommand( void ) { return ( !IsConnected() || IsFakeClient() || IsBot() ) ? 0.f : gpGlobals->curtime - m_flLastUserCommandTime; }
 
 	// Team Handling
-//	virtual void			ChangeTeam( int iTeamNum ) { ChangeTeam(iTeamNum,false, false); }
-//	virtual void			ChangeTeam( int iTeamNum, bool bAutoTeam, bool bSilent );
+	virtual void			ChangeTeam( int iTeamNum ) { ChangeTeam(iTeamNum,false, false); }
+	virtual void			ChangeTeam( int iTeamNum, bool bAutoTeam, bool bSilent );
 
 	// say/sayteam allowed?
 	virtual bool		CanHearAndReadChatFrom( CBasePlayer *pPlayer ) { return true; }

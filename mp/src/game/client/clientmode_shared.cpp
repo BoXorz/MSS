@@ -991,7 +991,6 @@ void ClientModeShared::FireGameEvent( IGameEvent *event )
 			hudChat->Printf( CHAT_FILTER_JOINLEAVE, "%s", szLocalized );
 		}
 	}
-/* BOXBOX removing teams
 	else if ( Q_strcmp( "player_team", eventname ) == 0 )
 	{
 		C_BasePlayer *pPlayer = USERID2PLAYER( event->GetInt("userid") );
@@ -1052,7 +1051,6 @@ void ClientModeShared::FireGameEvent( IGameEvent *event )
 			pPlayer->TeamChange( team );
 		}
 	}
-*/
 	else if ( Q_strcmp( "player_changename", eventname ) == 0 )
 	{
 		if ( !hudChat )
@@ -1076,7 +1074,6 @@ void ClientModeShared::FireGameEvent( IGameEvent *event )
 
 		hudChat->Printf( CHAT_FILTER_NAMECHANGE, "%s", szLocalized );
 	}
-/*
 	else if (Q_strcmp( "teamplay_broadcast_audio", eventname ) == 0 )
 	{
 		int team = event->GetInt( "team" );
@@ -1122,7 +1119,6 @@ void ClientModeShared::FireGameEvent( IGameEvent *event )
 			C_BaseEntity::EmitSound( filter, SOUND_FROM_LOCAL_PLAYER, et );
 		}
 	}
-*/
 	else if ( Q_strcmp( "server_cvar", eventname ) == 0 )
 	{
 		if ( !IsInCommentaryMode() )

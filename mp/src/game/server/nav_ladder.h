@@ -89,7 +89,7 @@ public:
 
 	void Shift( const Vector &shift );							///< shift the nav ladder
 
-//	bool IsUsableByTeam( int teamNumber ) const;
+	bool IsUsableByTeam( int teamNumber ) const;
 	CBaseEntity *GetLadderEntity( void ) const;
 
 private:
@@ -118,7 +118,7 @@ private:
 };
 typedef CUtlVector< CNavLadder * > NavLadderVector;
 
-/*
+
 //--------------------------------------------------------------------------------------------------------------
 inline bool CNavLadder::IsUsableByTeam( int teamNumber ) const
 {
@@ -128,7 +128,7 @@ inline bool CNavLadder::IsUsableByTeam( int teamNumber ) const
 	int ladderTeamNumber = m_ladderEntity->GetTeamNumber();
 	return ( teamNumber == ladderTeamNumber || ladderTeamNumber == TEAM_UNASSIGNED );
 }
-*/
+
 
 //--------------------------------------------------------------------------------------------------------------
 inline CBaseEntity *CNavLadder::GetLadderEntity( void ) const

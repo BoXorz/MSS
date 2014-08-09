@@ -260,13 +260,12 @@ void CMapOverview::UpdatePlayers()
 				player->health = 0;
 			}
 
-/*			if ( player->team != g_PR->GetTeam( i ) )
+			if ( player->team != g_PR->GetTeam( i ) )
 			{
 				player->team = g_PR->GetTeam( i );
 				player->icon = m_TeamIcons[ GetIconNumberFromTeamNumber(player->team)  ];
 				player->color = m_TeamColors[ GetIconNumberFromTeamNumber(player->team) ];
 			}
-*/
 		}
 
 		C_BasePlayer *pPlayer = UTIL_PlayerByIndex( i );
@@ -381,8 +380,8 @@ bool CMapOverview::CanPlayerBeSeen(MapPlayer_t *player)
 		return false; 
 
 	// if local player is on spectator team, he can see everyone
-//	if ( localPlayer->GetTeamNumber() <= TEAM_SPECTATOR )
-//		return true;
+	if ( localPlayer->GetTeamNumber() <= TEAM_SPECTATOR )
+		return true;
 
 	// we never track unassigned or real spectators
 	if ( player->team <= TEAM_SPECTATOR )
@@ -392,13 +391,13 @@ bool CMapOverview::CanPlayerBeSeen(MapPlayer_t *player)
 
 	if ( mp_forcecamera.GetInt() == OBS_ALLOW_NONE )
 		return false;
-/*
+
 	if ( mp_forcecamera.GetInt() == OBS_ALLOW_TEAM )
 	{
 		// true if both players are on the same team
 		return (localPlayer->GetTeamNumber() == player->team );
 	}
-*/
+
 	// by default we can see all players
 	return true;
 }
@@ -412,7 +411,7 @@ bool CMapOverview::CanPlayerHealthBeSeen(MapPlayer_t *player)
 	if ( !localPlayer )
 		return false;
 
-/* BOXBOX removing teams
+	// real spectators can see everything
 	if ( localPlayer->GetTeamNumber() <= TEAM_SPECTATOR )
 		return true;
 
@@ -421,10 +420,9 @@ bool CMapOverview::CanPlayerHealthBeSeen(MapPlayer_t *player)
 		// if forcecamera is on, only show health for teammates
 		return ( localPlayer->GetTeamNumber() == player->team );
 	}
-*/
+
 	return true;
 }
-
 
 // usually name rule is same as health rule
 bool CMapOverview::CanPlayerNameBeSeen(MapPlayer_t *player)

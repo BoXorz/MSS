@@ -83,7 +83,7 @@ bool	IsPlayerIndex( int index );
 int		GetLocalPlayerIndex( void );
 int		GetLocalPlayerVisionFilterFlags( bool bWeaponsCheck = false );
 bool	IsLocalPlayerUsingVisionFilterFlags( int nFlags, bool bWeaponsCheck = false );
-//int		GetLocalPlayerTeam( void );
+int		GetLocalPlayerTeam( void );
 bool	IsLocalPlayerSpectator( void );
 void	NormalizeAngles( QAngle& angles );
 void	InterpolateAngles( const QAngle& start, const QAngle& end, QAngle& output, float frac );

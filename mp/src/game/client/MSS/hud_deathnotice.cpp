@@ -136,7 +136,7 @@ bool CHudDeathNotice::ShouldDraw( void )
 //-----------------------------------------------------------------------------
 void CHudDeathNotice::SetColorForNoticePlayer( int iTeamNumber )
 {
-	surface()->DrawSetTextColor( COLOR_GREY );
+	surface()->DrawSetTextColor( GameResources()->GetTeamColor( iTeamNumber ) );
 }
 
 //-----------------------------------------------------------------------------
@@ -150,7 +150,7 @@ void CHudDeathNotice::Paint()
 	int yStart = GetClientModeHL2MPNormal()->GetDeathMessageStartHeight();
 
 	surface()->DrawSetTextFont( m_hTextFont );
-	surface()->DrawSetTextColor( COLOR_GREY );
+	surface()->DrawSetTextColor( GameResources()->GetTeamColor( 0 ) );
 
 
 	int iCount = m_DeathNotices.Count();
@@ -166,13 +166,13 @@ void CHudDeathNotice::Paint()
 		// Get the team numbers for the players involved
 		int iKillerTeam = 0;
 		int iVictimTeam = 0;
-/*
+
 		if( g_PR )
 		{
 			iKillerTeam = g_PR->GetTeam( m_DeathNotices[i].Killer.iEntIndex );
 			iVictimTeam = g_PR->GetTeam( m_DeathNotices[i].Victim.iEntIndex );
 		}
-*/
+
 		g_pVGuiLocalize->ConvertANSIToUnicode( m_DeathNotices[i].Victim.szName, victim, sizeof( victim ) );
 		g_pVGuiLocalize->ConvertANSIToUnicode( m_DeathNotices[i].Killer.szName, killer, sizeof( killer ) );
 

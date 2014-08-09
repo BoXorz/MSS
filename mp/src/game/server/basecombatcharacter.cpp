@@ -757,7 +757,7 @@ CBaseCombatCharacter::CBaseCombatCharacter( void )
 CBaseCombatCharacter::~CBaseCombatCharacter( void )
 {
 	ResetVisibilityCache( this );
-//	ClearLastKnownArea();
+	ClearLastKnownArea();
 }
 
 //-----------------------------------------------------------------------------
@@ -777,7 +777,7 @@ void CBaseCombatCharacter::Spawn( void )
 	}
 
 	// not standing on a nav area yet
-//	ClearLastKnownArea();
+	ClearLastKnownArea();
 
 }
 
@@ -1662,7 +1662,7 @@ void CBaseCombatCharacter::Event_Killed( const CTakeDamageInfo &info )
 	}
 	
 	// no longer standing on a nav area
-//	ClearLastKnownArea();
+	ClearLastKnownArea();
 
 #if 0
 	// L4D specific hack for zombie commentary mode
@@ -2083,7 +2083,7 @@ void CBaseCombatCharacter::Weapon_Equip( CBaseCombatWeapon *pWeapon )
 	}
 
 	// Weapon is now on my team
-//	pWeapon->ChangeTeam( GetTeamNumber() );
+	pWeapon->ChangeTeam( GetTeamNumber() );
 
 	// ----------------------
 	//  Give Primary Ammo
@@ -2391,7 +2391,7 @@ int CBaseCombatCharacter::OnTakeDamage( const CTakeDamageInfo &info )
 	}
 
 	// track damage history
-/*	if ( info.GetAttacker() )
+	if ( info.GetAttacker() )
 	{
 		int attackerTeam = info.GetAttacker()->GetTeamNumber();
 
@@ -2415,7 +2415,7 @@ int CBaseCombatCharacter::OnTakeDamage( const CTakeDamageInfo &info )
 			}
 		}
 	}
-*/
+
 	switch( m_lifeState )
 	{
 	case LIFE_ALIVE:
@@ -3423,7 +3423,10 @@ float CBaseCombatCharacter::GetFogObscuredRatio( float range ) const
 }
 
 
-/* BOXBOX removing navmesh
+//-----------------------------------------------------------------------------
+// Purpose: Invoke this to update our last known nav area 
+// (since there is no think method chained to CBaseCombatCharacter)
+//-----------------------------------------------------------------------------
 void CBaseCombatCharacter::UpdateLastKnownArea( void )
 {
 #ifdef NEXT_BOT
@@ -3475,7 +3478,9 @@ void CBaseCombatCharacter::UpdateLastKnownArea( void )
 }
 
 
-
+//-----------------------------------------------------------------------------
+// Purpose: Return true if we can use (walk through) the given area 
+//-----------------------------------------------------------------------------
 bool CBaseCombatCharacter::IsAreaTraversable( const CNavArea *area ) const
 {
 	return area ? !area->IsBlocked( GetTeamNumber() ) : false;
@@ -3525,7 +3530,7 @@ void CBaseCombatCharacter::ChangeTeam( int iTeamNum )
 
 	BaseClass::ChangeTeam( iTeamNum );
 }
-*/
+
 
 //-----------------------------------------------------------------------------
 // Return true if we have ever been injured by a member of the given team

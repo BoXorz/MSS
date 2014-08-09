@@ -215,12 +215,12 @@ void CTriggerAreaCapture::StartTouch(CBaseEntity *pOther)
 
 				if ( flRate > 0.0f )
 				{
-/*					CBaseMultiplayerPlayer *pPlayer = ToBaseMultiplayerPlayer(pOther);
+					CBaseMultiplayerPlayer *pPlayer = ToBaseMultiplayerPlayer(pOther);
 					if ( pPlayer && pPlayer->GetTeamNumber() == m_nCapturingTeam )
 					{
 						pPlayer->StartScoringEscortPoints( flRate );
 					}
-*/				}		
+				}		
 			}
 		}
 	}

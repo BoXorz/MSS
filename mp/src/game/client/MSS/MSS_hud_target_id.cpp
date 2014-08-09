@@ -91,12 +91,12 @@ void CTargetID::VidInit()
 	m_flLastChangeTime = 0;
 	m_iLastEntIndex = 0;
 }
-/*
+
 Color CTargetID::GetColorForTargetTeam( int iTeamNumber )
 {
 	return GameResources()->GetTeamColor( iTeamNumber );
 } 
-*/
+
 //-----------------------------------------------------------------------------
 // Purpose: Draw function for the element
 //-----------------------------------------------------------------------------
@@ -111,7 +111,7 @@ void CTargetID::Paint()
 	if ( !pPlayer )
 		return;
 
-//	Color c;
+	Color c;
 
 	// Get our target's ent index
 	int iEntIndex = pPlayer->GetIDTarget();
@@ -153,7 +153,7 @@ void CTargetID::Paint()
 		// Is it a player?
 		if ( IsPlayerIndex( iEntIndex ) )
 		{
-//			c = GetColorForTargetTeam( pPlayer->GetTeamNumber() );
+			c = GetColorForTargetTeam( pPlayer->GetTeamNumber() );
 
 			bShowPlayerName = true;
 			g_pVGuiLocalize->ConvertANSIToUnicode( pPlayer->GetPlayerName(),  wszPlayerName, sizeof(wszPlayerName) );
@@ -166,7 +166,7 @@ void CTargetID::Paint()
 			}
 			else
 			{
-*/				printFormatString = "#Playerid"; // BOXBOX TODO was "Playerid_diffteam" find entry in text files and change it to this
+*/				printFormatString = "#Playerid_diffteam";
 //			}
 		
 
@@ -216,7 +216,7 @@ void CTargetID::Paint()
 			
 			vgui::surface()->DrawSetTextFont( m_hFont );
 			vgui::surface()->DrawSetTextPos( xpos, ypos );
-			vgui::surface()->DrawSetTextColor( COLOR_GREY ); // BOXBOX changed this (was 'c')
+			vgui::surface()->DrawSetTextColor( c );
 			vgui::surface()->DrawPrintText( sIDString, wcslen(sIDString) );
 		}
 	}

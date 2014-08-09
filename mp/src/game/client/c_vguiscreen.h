@@ -163,7 +163,7 @@ private:
 //-----------------------------------------------------------------------------
 // Returns an entity that is the nearby vgui screen; NULL if there isn't one
 //-----------------------------------------------------------------------------
-C_BaseEntity *FindNearbyVguiScreen( const Vector &viewPosition, const QAngle &viewAngle/*, int nTeam = -1*/ );
+C_BaseEntity *FindNearbyVguiScreen( const Vector &viewPosition, const QAngle &viewAngle, int nTeam = -1 );
 
 
 //-----------------------------------------------------------------------------

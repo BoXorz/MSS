@@ -75,7 +75,14 @@ SendProp SendPropIntWithMinusOneFlag( const char *pVarName, int offset, int size
 	return SendPropInt( pVarName, offset, sizeofVar, nBits, SPROP_UNSIGNED, proxyFn );
 }
 
-/*
+//-----------------------------------------------------------------------------
+// Purpose: Proxy that only sends data to team members
+// Input  : *pStruct - 
+//			*pData - 
+//			*pOut - 
+//			objectID - 
+// Output : Returns true on success, false on failure.
+//-----------------------------------------------------------------------------
 void* SendProxy_OnlyToTeam( const SendProp *pProp, const void *pStruct, const void *pVarData, CSendProxyRecipients *pRecipients, int objectID )
 {
 	CBaseEntity *pEntity = (CBaseEntity*)pStruct;
@@ -95,7 +102,6 @@ void* SendProxy_OnlyToTeam( const SendProp *pProp, const void *pStruct, const vo
 	return NULL;
 }
 REGISTER_SEND_PROXY_NON_MODIFIED_POINTER( SendProxy_OnlyToTeam );
-*/
 
 #define TIME_BITS 24
 

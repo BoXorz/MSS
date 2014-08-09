@@ -31,11 +31,11 @@ public:
 
 public : // IGameResources intreface
 
-/*
+	// Team data access 
 	virtual int		GetTeamScore( int index );
 	virtual const char *GetTeamName( int index );
 	virtual const Color&GetTeamColor( int index );
-*/
+
 	// Player data access
 	virtual bool	IsConnected( int index );
 	virtual bool	IsAlive( int index );
@@ -49,7 +49,7 @@ public : // IGameResources intreface
 //	virtual int		GetPacketloss( int index );
 	virtual int		GetPlayerScore( int index );
 	virtual int		GetDeaths( int index );
-//	virtual int		GetTeam( int index );
+	virtual int		GetTeam( int index );
 	virtual int		GetFrags( int index );
 	virtual int		GetHealth( int index );
 

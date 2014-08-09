@@ -32,7 +32,7 @@
 #include "Color.h"
 #include "collisionutils.h"
 #include "functorutils.h"
-//#include "team.h"
+#include "team.h"
 #include "nav_entities.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
@@ -196,7 +196,7 @@ CNavArea::CNavArea( void )
 	ResetNodes();
 
 	int i;
-/*	for ( i=0; i<MAX_NAV_TEAMS; ++i )
+	for ( i=0; i<MAX_NAV_TEAMS; ++i )
 	{
 		m_isBlocked[i] = false;
 
@@ -209,7 +209,7 @@ CNavArea::CNavArea( void )
 	
 		m_playerCount[i] = 0;
 	}
-*/
+
 	// set an ID for splitting and other interactive editing - loads will overwrite this
 	m_id = m_nextID++;
 	m_debugid = 0;
@@ -678,7 +678,7 @@ void CNavArea::OnRoundRestart( void )
 	ClearAllNavCostEntities();
 }
 
-/*
+
 #ifdef DEBUG_AREA_PLAYERCOUNTS
 //--------------------------------------------------------------------------------------------------------------
 void CNavArea::IncrementPlayerCount( int teamID, int entIndex )
@@ -717,7 +717,7 @@ void CNavArea::DecrementPlayerCount( int teamID, int entIndex )
 	--m_playerCount[ teamID ];
 }
 #endif // DEBUG_AREA_PLAYERCOUNTS
-*/
+
 
 //--------------------------------------------------------------------------------------------------------------
 /**
@@ -4152,7 +4152,10 @@ void CNavArea::DecayDanger( void )
 	}
 }
 
-/*
+//--------------------------------------------------------------------------------------------------------------
+/**
+ * Increase the danger of this area for the given team
+ */
 void CNavArea::IncreaseDanger( int teamID, float amount )
 {
 	// before we add the new value, decay what's there
@@ -4164,7 +4167,10 @@ void CNavArea::IncreaseDanger( int teamID, float amount )
 	m_dangerTimestamp[ teamIdx ] = gpGlobals->curtime;
 }
 
-
+//--------------------------------------------------------------------------------------------------------------
+/**
+ * Return the danger of this area (decays over time)
+ */
 float CNavArea::GetDanger( int teamID )
 {
 	DecayDanger();
@@ -4172,7 +4178,7 @@ float CNavArea::GetDanger( int teamID )
 	int teamIdx = teamID % MAX_NAV_TEAMS;
 	return m_danger[ teamIdx ];
 }
-*/
+
 
 //--------------------------------------------------------------------------------------------------------------
 /**
@@ -4612,7 +4618,7 @@ static void CommandNavUpdateBlocked( void )
 static ConCommand nav_update_blocked( "nav_update_blocked", CommandNavUpdateBlocked, "Updates the blocked/unblocked status for every nav area.", FCVAR_GAMEDLL );
 
 
-/*
+//--------------------------------------------------------------------------------------------------------
 bool CNavArea::IsBlocked( int teamID, bool ignoreNavBlockers ) const
 {
 	if ( ignoreNavBlockers && ( m_attributeFlags & NAV_MESH_NAV_BLOCKER ) )
@@ -4709,7 +4715,6 @@ void CNavArea::MarkAsBlocked( int teamID, CBaseEntity *blocker, bool bGenerateEv
 
 //--------------------------------------------------------------------------------------------------------
 // checks if any func_nav_blockers are still blocking the area
-
 void CNavArea::UpdateBlockedFromNavBlockers( void )
 {
 	VPROF( "CNavArea::UpdateBlockedFromNavBlockers" );
@@ -4801,6 +4806,12 @@ void CNavArea::UnblockArea( int teamID )
 	}
 }
 
+
+//--------------------------------------------------------------------------------------------------------------
+/**
+ * Updates the (un)blocked status of the nav area
+ * The semantics of this method have gotten very muddled - needs refactoring (MSB 5/7/09)
+ */
 void CNavArea::UpdateBlocked( bool force, int teamID )
 {
 	VPROF( "CNavArea::UpdateBlocked" );
@@ -4930,12 +4941,16 @@ void CNavArea::UpdateBlocked( bool force, int teamID )
 		}
 	}
 }
-*/
 
+
+//--------------------------------------------------------------------------------------------------------------
+/**
+ * Checks if there is a floor under the nav area, in case a breakable floor is gone
+ */
 void CNavArea::CheckFloor( CBaseEntity *ignore )
 {
-//	if ( IsBlocked( TEAM_ANY ) )
-//		return;
+	if ( IsBlocked( TEAM_ANY ) )
+		return;
 
 	Vector origin = GetCenter();
 	origin.z -= JumpCrouchHeight;
@@ -4957,10 +4972,10 @@ void CNavArea::CheckFloor( CBaseEntity *ignore )
 		&tr );
 
 	// If the center is open space, we're effectively blocked
-//	if ( !tr.startsolid )
-//	{
-//		MarkAsBlocked( TEAM_ANY, NULL );
-//	}
+	if ( !tr.startsolid )
+	{
+		MarkAsBlocked( TEAM_ANY, NULL );
+	}
 
 	/*
 	if ( IsBlocked( TEAM_ANY ) )
@@ -5779,7 +5794,10 @@ bool CNavArea::IsCompletelyVisible( const CNavArea *viewedArea ) const
 }
 
 
-/*
+//--------------------------------------------------------------------------------------------------------
+/**
+ * Return true if any portion of this area is visible to anyone on the given team
+ */
 bool CNavArea::IsPotentiallyVisibleToTeam( int teamIndex ) const
 {
 	VPROF_BUDGET( "CNavArea::IsPotentiallyVisibleToTeam", "NextBot" );
@@ -5803,7 +5821,10 @@ bool CNavArea::IsPotentiallyVisibleToTeam( int teamIndex ) const
 }
 
 
-
+//--------------------------------------------------------------------------------------------------------
+/**
+ * Return true if given area is completely visible from somewhere in this area by someone on the team (very fast)
+ */
 bool CNavArea::IsCompletelyVisibleToTeam( int teamIndex ) const
 {
 	VPROF_BUDGET( "CNavArea::IsCompletelyVisibleToTeam", "NextBot" );
@@ -5825,7 +5846,7 @@ bool CNavArea::IsCompletelyVisibleToTeam( int teamIndex ) const
 
 	return false;
 }
-*/
+
 
 //--------------------------------------------------------------------------------------------------------
 Vector CNavArea::GetRandomPoint( void ) const

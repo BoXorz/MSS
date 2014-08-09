@@ -37,7 +37,7 @@ protected:
 	virtual bool PrintEvent( IGameEvent * event );
 	virtual bool PrintGameEvent( IGameEvent * event );
 	virtual bool PrintPlayerEvent( IGameEvent * event );
-//	virtual bool PrintTeamEvent( IGameEvent * event );
+	virtual bool PrintTeamEvent( IGameEvent * event );
 	virtual bool PrintOtherEvent( IGameEvent * event );
 };
 

@@ -29,9 +29,9 @@ namespace
 		// returns the string of their network (i.e Steam) ID
 		virtual const char *GetNetworkIDString() = 0;
 		// returns the team the player is on
-//		virtual int GetTeamIndex() = 0;
+		virtual int GetTeamIndex() = 0;
 		// changes the player to a new team (if the game dll logic allows it)
-//		virtual void ChangeTeam( int iTeamNum ) = 0;
+		virtual void ChangeTeam( int iTeamNum ) = 0;
 		// returns the number of kills this player has (exact meaning is mod dependent)
 		virtual int	GetFragCount() = 0;
 		// returns the number of deaths this player has (exact meaning is mod dependent)
@@ -122,7 +122,7 @@ edict_t *CPluginBotManager::CreateBot( const char *botname )
 	pPlayer->ClearFlags();
 	pPlayer->AddFlag( FL_CLIENT | FL_FAKECLIENT );
 
-//	pPlayer->ChangeTeam( TEAM_UNASSIGNED );
+	pPlayer->ChangeTeam( TEAM_UNASSIGNED );
 	pPlayer->RemoveAllItems( true );
 	pPlayer->Spawn();
 

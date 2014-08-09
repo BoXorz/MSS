@@ -489,7 +489,6 @@ void CLCD::ShowItems_R( CLCDPage *page, unsigned int dwCurTime, CUtlVector< CLCD
 							Q_strncpy( altprefix, "(playerindexplusone)", sizeof( altprefix ) );
 						}
 						break;
-/* BOXBOX removing teams
 					case AGGTYPE_PERTEAM:
 						{
 							C_BasePlayer *local = C_BasePlayer::GetLocalPlayer();
@@ -508,7 +507,6 @@ void CLCD::ShowItems_R( CLCDPage *page, unsigned int dwCurTime, CUtlVector< CLCD
 							Q_strncpy( prefix, "(playerindex)", sizeof( prefix ) );
 							Q_strncpy( altprefix, "(playerindexplusone)", sizeof( altprefix ) );
 						}
-*/
 						break;
 					}
 
@@ -1182,7 +1180,7 @@ void CLCD::DumpPlayer()
 
 	CDescribeData helper( player );
 	helper.DumpDescription( player->GetPredDescMap() );
-/* BOXBOX removing teams
+
 	Msg( "(localteam)\n\n" );
 
 	C_Team *team = player->GetTeam();
@@ -1191,7 +1189,7 @@ void CLCD::DumpPlayer()
 		CDescribeData helper( team );
 		helper.DumpDescription( team->GetPredDescMap() );
 	}
-*/
+
 	Msg( "(playerresource)\n\n" );
 
 	if ( g_PR )
@@ -1300,12 +1298,10 @@ void CLCD::LookupToken( char const *in, CUtlString& value )
 			{
 				ref = player;
 			}
-/*
 			else if ( !Q_stricmp( token, "localteam" ) )
 			{
 				ref = player->GetTeam();
 			}
-*/
 			else if ( !Q_stricmp( token, "localplayerweapon" ) )
 			{
 				ref = player->GetActiveWeapon();

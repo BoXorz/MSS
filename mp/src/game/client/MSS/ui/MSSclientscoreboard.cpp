@@ -8,7 +8,7 @@
 #include "cbase.h"
 #include "hud.h"
 #include "MSSclientscoreboard.h"
-//#include "c_team.h" // BOXBOX removing teams
+#include "c_team.h"
 #include "c_playerresource.h"
 #include "c_MSS_player.h"
 #include "MSS_gamerules.h"
@@ -25,9 +25,9 @@
 
 using namespace vgui;
 
-//#define TEAM_MAXCOUNT			5
+#define TEAM_MAXCOUNT			5
 
-/* // BOXBOX removing teams
+// id's of sections used in the scoreboard
 enum EScoreboardSections
 {
 	SCORESECTION_COMBINE = 1,
@@ -35,7 +35,7 @@ enum EScoreboardSections
 	SCORESECTION_FREEFORALL = 3,
 	SCORESECTION_SPECTATOR = 4
 };
-*/
+
 const int NumSegments = 7;
 static int coord[NumSegments+1] = {
 	0,
@@ -49,23 +49,23 @@ static int coord[NumSegments+1] = {
 };
 
 //-----------------------------------------------------------------------------
-// Purpose: constructor
+// Purpose: Konstructor
 //-----------------------------------------------------------------------------
-CMSSClientScoreBoardDialog::CMSSClientScoreBoardDialog(IViewPort *pViewPort):CClientScoreBoardDialog(pViewPort)
+CHL2MPClientScoreBoardDialog::CHL2MPClientScoreBoardDialog(IViewPort *pViewPort):CClientScoreBoardDialog(pViewPort)
 {
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Destructor
 //-----------------------------------------------------------------------------
-CMSSClientScoreBoardDialog::~CMSSClientScoreBoardDialog()
+CHL2MPClientScoreBoardDialog::~CHL2MPClientScoreBoardDialog()
 {
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Paint background for rounded corners
 //-----------------------------------------------------------------------------
-void CMSSClientScoreBoardDialog::PaintBackground()
+void CHL2MPClientScoreBoardDialog::PaintBackground()
 {
 	m_pPlayerList->SetBgColor( Color(0, 0, 0, 0) );
 	m_pPlayerList->SetBorder(NULL);
@@ -185,7 +185,7 @@ void CMSSClientScoreBoardDialog::PaintBackground()
 //-----------------------------------------------------------------------------
 // Purpose: Paint border for rounded corners
 //-----------------------------------------------------------------------------
-void CMSSClientScoreBoardDialog::PaintBorder()
+void CHL2MPClientScoreBoardDialog::PaintBorder()
 {
 	int x1, x2, y1, y2;
 	surface()->DrawSetColor(m_borderColor);
@@ -309,7 +309,7 @@ void CMSSClientScoreBoardDialog::PaintBorder()
 //-----------------------------------------------------------------------------
 // Purpose: Apply scheme settings
 //-----------------------------------------------------------------------------
-void CMSSClientScoreBoardDialog::ApplySchemeSettings( vgui::IScheme *pScheme )
+void CHL2MPClientScoreBoardDialog::ApplySchemeSettings( vgui::IScheme *pScheme )
 {
 	BaseClass::ApplySchemeSettings( pScheme );
 
@@ -324,7 +324,7 @@ void CMSSClientScoreBoardDialog::ApplySchemeSettings( vgui::IScheme *pScheme )
 //-----------------------------------------------------------------------------
 // Purpose: sets up base sections
 //-----------------------------------------------------------------------------
-void CMSSClientScoreBoardDialog::InitScoreboardSections()
+void CHL2MPClientScoreBoardDialog::InitScoreboardSections()
 {
 	m_pPlayerList->SetBgColor( Color(0, 0, 0, 0) );
 	m_pPlayerList->SetBorder(NULL);
@@ -332,7 +332,7 @@ void CMSSClientScoreBoardDialog::InitScoreboardSections()
 	// fill out the structure of the scoreboard
 	AddHeader();
 
- // BOXBOX removing teams
+ // BOXBOX removing teams  BOXBOX TODO remove scoreboard completely?
 /*
 	if ( MSSRules()->IsTeamplay() )
 	{
@@ -342,15 +342,15 @@ void CMSSClientScoreBoardDialog::InitScoreboardSections()
 	}
 	else
 	{
-		AddSection( TYPE_TEAM, TEAM_UNASSIGNED );
-	}
+*/		AddSection( TYPE_TEAM, TEAM_UNASSIGNED );
+//	}
 	AddSection( TYPE_TEAM, TEAM_SPECTATOR );
-*/
-
 }
 
-/*
-void CMSSClientScoreBoardDialog::UpdateTeamInfo()
+//-----------------------------------------------------------------------------
+// Purpose: resets the scoreboard team info
+//-----------------------------------------------------------------------------
+void CHL2MPClientScoreBoardDialog::UpdateTeamInfo()
 {
 	if ( g_PR == NULL )
 		return;
@@ -381,8 +381,10 @@ void CMSSClientScoreBoardDialog::UpdateTeamInfo()
 			wchar_t string1[1024];
 			wchar_t wNumPlayers[6];
 
-			if ( MSSRules()->IsTeamplay() == false )
-			{
+// BOXBOX TODO fixup the scoreboard, if one is to be used at all!
+
+//			if ( MSSRules()->IsTeamplay() == false )
+//			{
 				_snwprintf( wNumPlayers, ARRAYSIZE(wNumPlayers), L"%i", iNumPlayersInGame );
 #ifdef WIN32
 				_snwprintf( name, ARRAYSIZE(name), L"%s", g_pVGuiLocalize->Find("#ScoreBoard_Deathmatch") );
@@ -400,8 +402,8 @@ void CMSSClientScoreBoardDialog::UpdateTeamInfo()
 				{
 					g_pVGuiLocalize->ConstructString( string1, sizeof(string1), g_pVGuiLocalize->Find("#ScoreBoard_Players"), 2, teamName, wNumPlayers );
 				}
-			}
-			else
+//			}
+/*			else
 			{
 				_snwprintf(wNumPlayers, ARRAYSIZE(wNumPlayers), L"%i", team->Get_Number_Players());
 
@@ -435,17 +437,16 @@ void CMSSClientScoreBoardDialog::UpdateTeamInfo()
 				}
 
 			}
-		
+*/		
 			m_pPlayerList->ModifyColumn(sectionID, "name", string1);
 		}
 	}
 }
-*/
 
 //-----------------------------------------------------------------------------
 // Purpose: adds the top header of the scoreboars
 //-----------------------------------------------------------------------------
-void CMSSClientScoreBoardDialog::AddHeader()
+void CHL2MPClientScoreBoardDialog::AddHeader()
 {
 	// add the top header
 	m_pPlayerList->AddSection(0, "");
@@ -460,8 +461,10 @@ void CMSSClientScoreBoardDialog::AddHeader()
 //	m_pPlayerList->AddColumnToSection(0, "tracker", "#PlayerTracker", SectionedListPanel::COLUMN_IMAGE | SectionedListPanel::HEADER_TEXT, scheme()->GetProportionalScaledValueEx( GetScheme(), CSTRIKE_FRIENDS_WIDTH ) );
 }
 
-/*
-void CMSSClientScoreBoardDialog::AddSection(int teamType, int teamNumber)
+//-----------------------------------------------------------------------------
+// Purpose: Adds a new section to the scoreboard (i.e the team header)
+//-----------------------------------------------------------------------------
+void CHL2MPClientScoreBoardDialog::AddSection(int teamType, int teamNumber)
 {
 	HFont hFallbackFont = scheme()->GetIScheme( GetScheme() )->GetFont( "DefaultVerySmallFallBack", false );
 
@@ -494,10 +497,11 @@ void CMSSClientScoreBoardDialog::AddSection(int teamType, int teamNumber)
 	}
 }
 
-int CMSSClientScoreBoardDialog::GetSectionFromTeamNumber( int teamNumber )
+int CHL2MPClientScoreBoardDialog::GetSectionFromTeamNumber( int teamNumber )
 {
 
-
+ // BOXBOX removing teams
+/*
 	switch ( teamNumber )
 	{
 	case TEAM_COMBINE:
@@ -509,17 +513,16 @@ int CMSSClientScoreBoardDialog::GetSectionFromTeamNumber( int teamNumber )
 	default:
 		return SCORESECTION_FREEFORALL;
 	}
-	return SCORESECTION_FREEFORALL;
+*/	return SCORESECTION_FREEFORALL;
 }
-*/
 
 //-----------------------------------------------------------------------------
 // Purpose: Adds a new row to the scoreboard, from the playerinfo structure
 //-----------------------------------------------------------------------------
-bool CMSSClientScoreBoardDialog::GetPlayerScoreInfo(int playerIndex, KeyValues *kv)
+bool CHL2MPClientScoreBoardDialog::GetPlayerScoreInfo(int playerIndex, KeyValues *kv)
 {
 	kv->SetInt("playerIndex", playerIndex);
-//	kv->SetInt("team", g_PR->GetTeam( playerIndex ) );
+	kv->SetInt("team", g_PR->GetTeam( playerIndex ) );
 	kv->SetString("name", g_PR->GetPlayerName(playerIndex) );
 	kv->SetInt("deaths", g_PR->GetDeaths( playerIndex ));
 	kv->SetInt("frags", g_PR->GetPlayerScore( playerIndex ));
@@ -545,7 +548,7 @@ bool CMSSClientScoreBoardDialog::GetPlayerScoreInfo(int playerIndex, KeyValues *
 }
 
 enum {
-//	MAX_PLAYERS_PER_TEAM = 16,
+	MAX_PLAYERS_PER_TEAM = 16,
 	MAX_SCOREBOARD_PLAYERS = 32
 };
 struct PlayerScoreInfo
@@ -593,7 +596,7 @@ int PlayerScoreInfoSort( const PlayerScoreInfo *p1, const PlayerScoreInfo *p2 )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CMSSClientScoreBoardDialog::UpdatePlayerInfo()
+void CHL2MPClientScoreBoardDialog::UpdatePlayerInfo()
 {
 	m_iSectionId = 0; // 0'th row is a header
 	int selectedRow = -1;
@@ -614,7 +617,7 @@ void CMSSClientScoreBoardDialog::UpdatePlayerInfo()
 			KeyValues *playerData = new KeyValues("data");
 			GetPlayerScoreInfo( i, playerData );
 			int itemID = FindItemIDForPlayerIndex( i );
-  /*			int sectionID = GetSectionFromTeamNumber( g_PR->GetTeam( i ) );
+  			int sectionID = GetSectionFromTeamNumber( g_PR->GetTeam( i ) );
 						
 			if (itemID == -1)
 			{
@@ -626,14 +629,14 @@ void CMSSClientScoreBoardDialog::UpdatePlayerInfo()
 				// modify the current row
 				m_pPlayerList->ModifyItem( itemID, sectionID, playerData );
 			}
-*/
+
 			if ( i == pPlayer->entindex() )
 			{
 				selectedRow = itemID;	// this is the local player, hilight this row
 			}
 
 			// set the row color based on the players team
-//			m_pPlayerList->SetItemFgColor( itemID, g_PR->GetTeamColor( g_PR->GetTeam( i ) ) );
+			m_pPlayerList->SetItemFgColor( itemID, g_PR->GetTeamColor( g_PR->GetTeam( i ) ) );
 
 			playerData->deleteThis();
 		}

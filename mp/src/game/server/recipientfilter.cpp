@@ -148,7 +148,7 @@ void CRecipientFilter::RemoveRecipientByPlayerIndex( int playerindex )
 
 	m_Recipients.FindAndRemove( playerindex );
 }
-/*
+
 void CRecipientFilter::AddRecipientsByTeam( CTeam *team )
 {
 	Assert( team );
@@ -198,7 +198,7 @@ void CRecipientFilter::RemoveRecipientsNotOnTeam( CTeam *team )
 		}
 	}
 }
-*/
+
 void CRecipientFilter::AddPlayersFromBitMask( CBitVec< ABSOLUTE_PLAYER_LIMIT >& playerbits )
 {
 	int index = playerbits.FindNextSetBit( 0 );
@@ -319,7 +319,9 @@ void CRecipientFilter::SetIgnorePredictionCull( bool ignore )
 	m_bIgnorePredictionCull = ignore;
 }
 
-/*
+//-----------------------------------------------------------------------------
+// Purpose: Simple class to create a filter for all players on a given team 
+//-----------------------------------------------------------------------------
 CTeamRecipientFilter::CTeamRecipientFilter( int team, bool isReliable )
 {
 	if (isReliable)
@@ -356,7 +358,7 @@ CTeamRecipientFilter::CTeamRecipientFilter( int team, bool isReliable )
 		AddRecipient( pPlayer );
 	}
 }
-*/
+
 //-----------------------------------------------------------------------------
 // Purpose: 
 // Input  : origin - 
