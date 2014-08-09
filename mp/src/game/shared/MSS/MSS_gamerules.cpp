@@ -173,7 +173,8 @@ static const char *s_PreserveEnts[] =
 	public:
 		virtual bool		CanPlayerHearPlayer( CBasePlayer *pListener, CBasePlayer *pTalker, bool &bProximity )
 		{
-			return ( pListener->GetTeamNumber() == pTalker->GetTeamNumber() );
+//			return ( pListener->GetTeamNumber() == pTalker->GetTeamNumber() ); // BOXBOX changing this
+			return true;
 		}
 	};
 	CVoiceGameMgrHelper g_VoiceGameMgrHelper;

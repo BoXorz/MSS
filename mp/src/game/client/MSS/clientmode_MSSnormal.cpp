@@ -73,7 +73,7 @@ IViewPortPanel* CHudViewport::CreatePanelByName( const char *szPanelName )
 
 	if ( Q_strcmp( PANEL_SCOREBOARD, szPanelName) == 0 )
 	{
-		newpanel = new CHL2MPClientScoreBoardDialog( this );
+		newpanel = new CMSSClientScoreBoardDialog( this );
 		return newpanel;
 	}
 	else if ( Q_strcmp(PANEL_INFO, szPanelName) == 0 )

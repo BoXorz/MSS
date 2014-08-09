@@ -15,8 +15,8 @@
 #include <game/client/iviewport.h>
 #include "GameEventListener.h"
 
-#define TYPE_NOTEAM			0	// NOTEAM must be zero :)
-#define TYPE_TEAM			1	// a section for a single team	
+//#define TYPE_NOTEAM			0	// NOTEAM must be zero :)
+//#define TYPE_TEAM			1	// a section for a single team	
 #define TYPE_PLAYERS		2
 #define TYPE_SPECTATORS		3	// a section for a spectator group
 #define TYPE_BLANK			4
@@ -71,11 +71,11 @@ protected:
 	// functions to override
 	virtual bool GetPlayerScoreInfo(int playerIndex, KeyValues *outPlayerInfo);
 	virtual void InitScoreboardSections();
-	virtual void UpdateTeamInfo();
+//	virtual void UpdateTeamInfo();
 	virtual void UpdatePlayerInfo();
 	virtual void OnThink();
 	virtual void AddHeader(); // add the start header of the scoreboard
-	virtual void AddSection(int teamType, int teamNumber); // add a new section header for a team
+//	virtual void AddSection(int teamType, int teamNumber); // add a new section header for a team
 	virtual int GetAdditionalHeight() { return 0; }
 
 	// sorts players within a section
@@ -88,7 +88,7 @@ protected:
 	// finds the player in the scoreboard
 	int FindItemIDForPlayerIndex(int playerIndex);
 
-	int m_iNumTeams;
+//	int m_iNumTeams;
 
 	vgui::SectionedListPanel *m_pPlayerList;
 	int				m_iSectionId; // the current section we are entering into

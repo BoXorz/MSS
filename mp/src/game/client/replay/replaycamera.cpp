@@ -842,7 +842,7 @@ void C_ReplayCamera::SpecNamedPlayer( const char *szPlayerName )
 			continue;
 
 		// only follow living players or dedicated spectators
-		if ( pPlayer->IsObserver() && pPlayer->GetTeamNumber() != TEAM_SPECTATOR )
+		if ( pPlayer->IsObserver()/* && pPlayer->GetTeamNumber() != TEAM_SPECTATOR*/ )
 			continue;
 
 		SetPrimaryTarget( index );

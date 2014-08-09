@@ -108,9 +108,9 @@ CMSS_Player::CMSS_Player() : m_PlayerAnimState( this )
 	m_iSpawnInterpCounter = 0;
 
     m_bEnterObserver = false;
-	m_bReady = false;
+//	m_bReady = false;
 
-	BaseClass::ChangeTeam( 0 );
+//	BaseClass::ChangeTeam( 0 );
 	
 //	UseClientSideAnimation();
 }
@@ -338,7 +338,7 @@ void CMSS_Player::Spawn(void)
 
 	SetPlayerUnderwater(false);
 
-	m_bReady = false;
+//	m_bReady = false;
 }
 
 void CMSS_Player::PickupObject( CBaseEntity *pObject, bool bLimitMassAndSize )
@@ -372,9 +372,10 @@ bool CMSS_Player::ValidatePlayerModel( const char *pModel )
 	return false;
 }
 
+/*
 void CMSS_Player::SetPlayerTeamModel( void ) // BOXBOX removing teams
 {
-/*
+
 	const char *szModelName = NULL;
 	szModelName = engine->GetClientConVarValue( engine->IndexOfEdict( edict() ), "cl_playermodel" );
 
@@ -420,8 +421,9 @@ void CMSS_Player::SetPlayerTeamModel( void ) // BOXBOX removing teams
 	SetupPlayerSoundsByModel( szModelName );
 
 	m_flNextModelChangeTime = gpGlobals->curtime + MODEL_CHANGE_INTERVAL;
-	*/
+
 }
+*/
 
 void CMSS_Player::SetPlayerModel( void ) // BOXBOX don't need this
 {
@@ -666,6 +668,7 @@ bool CMSS_Player::WantsLagCompensationOnEntity( const CBasePlayer *pPlayer, cons
 	return true;
 }
 
+/*
 Activity CMSS_Player::TranslateTeamActivity( Activity ActToTranslate ) // BOXBOX removing teams
 {
 /*
@@ -680,9 +683,10 @@ Activity CMSS_Player::TranslateTeamActivity( Activity ActToTranslate ) // BOXBOX
 
 	if ( ActToTranslate == ACT_WALK )
 		 return ACT_WALK_AIM_AGITATED;
-*/
+
 	return ActToTranslate;
 }
+*/
 
 extern ConVar hl2_normspeed;
 
@@ -796,7 +800,7 @@ void CMSS_Player::SetAnimation( PLAYER_ANIM playerAnim )
 			}
 		}
 
-		idealActivity = TranslateTeamActivity( idealActivity );
+//		idealActivity = TranslateTeamActivity( idealActivity );
 	}
 	
 	if ( idealActivity == ACT_HL2MP_GESTURE_RANGE_ATTACK )
@@ -903,9 +907,10 @@ bool CMSS_Player::BumpWeapon( CBaseCombatWeapon *pWeapon )
 	return true;
 }
 
+/*
 void CMSS_Player::ChangeTeam( int iTeam )
 {
-/*	if ( GetNextTeamChangeTime() >= gpGlobals->curtime )
+	if ( GetNextTeamChangeTime() >= gpGlobals->curtime )
 	{
 		char szReturnString[128];
 		Q_snprintf( szReturnString, sizeof( szReturnString ), "Please wait %d more seconds before trying to switch teams again.\n", (int)(GetNextTeamChangeTime() - gpGlobals->curtime) );
@@ -955,12 +960,12 @@ void CMSS_Player::ChangeTeam( int iTeam )
 	{
 		CommitSuicide();
 	}
-*/
+
 }
 
 bool CMSS_Player::HandleCommand_JoinTeam( int team ) // BOXBOX removing teams
 {
-/*
+
 	if ( !GetGlobalTeam( team ) || team == 0 )
 	{
 		Warning( "HandleCommand_JoinTeam( %d ) - invalid team index.\n", team );
@@ -998,9 +1003,10 @@ bool CMSS_Player::HandleCommand_JoinTeam( int team ) // BOXBOX removing teams
 
 	// Switch their actual team...
 	ChangeTeam( team );
-*/
+
 	return true;
 }
+*/
 
 bool CMSS_Player::ClientCommand( const CCommand &args )
 {
@@ -1009,7 +1015,7 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 		if ( ShouldRunRateLimitedCommand( args ) )
 		{
 			// instantly join spectators
-			HandleCommand_JoinTeam( TEAM_SPECTATOR );	
+//			HandleCommand_JoinTeam( TEAM_SPECTATOR );	// BOXBOX decide what to do about spectator mode, if anything
 		}
 		return true;
 	}
@@ -1483,6 +1489,7 @@ void CMSS_Player::Reset()
 	ResetFragCount();
 }
 
+/*
 bool CMSS_Player::IsReady()
 {
 	return m_bReady;
@@ -1492,6 +1499,7 @@ void CMSS_Player::SetReady( bool bReady )
 {
 	m_bReady = bReady;
 }
+*/
 
 void CMSS_Player::CheckChatText( char *p, int bufsize )
 {

@@ -67,11 +67,7 @@ void CommandListIssues( void )
 //-----------------------------------------------------------------------------
 ConCommand ListIssues("listissues", CommandListIssues, "List all the issues that can be voted on.", 0);
 
-//-----------------------------------------------------------------------------
-// Purpose: This should eventually ask the player what team they are voting on
-// to take into account different idle / spectator rules.
-//-----------------------------------------------------------------------------
-
+/*
 int GetVoterTeam( CBaseEntity *pEntity )
 {
 	if ( !pEntity )
@@ -81,6 +77,7 @@ int GetVoterTeam( CBaseEntity *pEntity )
 
 	return iTeam;
 }
+*/
 
 //-----------------------------------------------------------------------------
 // Purpose:
@@ -97,7 +94,7 @@ CON_COMMAND( callvote, "Start a vote on an issue." )
 	if( !pVoteCaller )
 		return;
 
-	if ( !sv_vote_allow_spectators.GetBool() )
+/*	if ( !sv_vote_allow_spectators.GetBool() )
 	{
 		if ( pVoteCaller->GetTeamNumber() == TEAM_SPECTATOR )
 		{
@@ -105,7 +102,7 @@ CON_COMMAND( callvote, "Start a vote on an issue." )
 			return;
 		}
 	}
-
+*/
 	// Prevent spamming commands
 #ifndef _DEBUG
 	int nCooldown = 0;
@@ -306,7 +303,7 @@ bool CVoteController::CreateVote( int iEntIndex, const char *pszTypeString, cons
 				m_bIsYesNoVote = pCurrentIssue->IsYesNoVote();
 				m_iActiveIssueIndex = issueIndex;
 				m_iEntityHoldingVote = iEntIndex;
-				if ( !bDedicatedServer )
+/*				if ( !bDedicatedServer )
 				{
 					if( pCurrentIssue->IsAllyRestrictedVote() )
 					{
@@ -317,7 +314,7 @@ bool CVoteController::CreateVote( int iEntIndex, const char *pszTypeString, cons
 						m_iOnlyTeamToVote = TEAM_INVALID;
 					}
 				}
-				
+*/				
 				// Now get our choices
 				m_VoteOptions.RemoveAll();
 				pCurrentIssue->GetVoteOptions( m_VoteOptions );
@@ -439,7 +436,7 @@ CVoteController::TryCastVoteResult CVoteController::TryCastVote( int iEntIndex, 
 	if( m_executeCommandTimer.HasStarted() )
 		return CAST_FAIL_VOTE_CLOSED;
 
-	if( m_potentialIssues[m_iActiveIssueIndex] && m_potentialIssues[m_iActiveIssueIndex]->IsAllyRestrictedVote() )
+/*	if( m_potentialIssues[m_iActiveIssueIndex] && m_potentialIssues[m_iActiveIssueIndex]->IsAllyRestrictedVote() )
 	{
 		CBaseEntity *pVoteHolder = UTIL_EntityByIndex( m_iEntityHoldingVote );
 		CBaseEntity *pVoter = UTIL_EntityByIndex( iEntIndex );
@@ -449,7 +446,7 @@ CVoteController::TryCastVoteResult CVoteController::TryCastVote( int iEntIndex, 
 			return CAST_FAIL_TEAM_RESTRICTED;
 		}
 	}
-
+*/
 	// Look for a previous vote
 	int nOldVote = m_nVotesCast[iEntIndex];
 #ifndef DEBUG
@@ -677,12 +674,12 @@ bool CVoteController::IsValidVoter( CBasePlayer *pWhom )
 	if ( !pWhom->IsConnected() )
 		return false;
 
-	if ( !sv_vote_allow_spectators.GetBool() )
+/*	if ( !sv_vote_allow_spectators.GetBool() )
 	{
 		if ( pWhom->GetTeamNumber() == TEAM_SPECTATOR )
 			return false;
 	}
-
+*/
 #ifndef DEBUG  // Don't want to do this check for debug builds (so we can test with bots)
 	if ( pWhom->IsBot() )
 		return false;
@@ -954,13 +951,13 @@ bool CBaseIssue::CanCallVote( int iEntIndex, const char *pszDetails, vote_create
 	}
 #endif // TF_DLL
 
-	CBaseEntity *pVoteCaller = UTIL_EntityByIndex( iEntIndex );
+/*	CBaseEntity *pVoteCaller = UTIL_EntityByIndex( iEntIndex );
 	if( pVoteCaller && !CanTeamCallVote( GetVoterTeam( pVoteCaller ) ) )
 	{
 		nFailCode = VOTE_FAILED_TEAM_CANT_CALL;
 		return false;
 	}
-
+*/
 	// Did this fail recently?
 	for( int iIndex = 0; iIndex < m_FailedVotes.Count(); iIndex++ )
 	{
@@ -1009,10 +1006,10 @@ int CBaseIssue::CountPotentialVoters( void )
 		CBasePlayer *pPlayer = UTIL_PlayerByIndex( playerIndex );
 		if( g_voteController->IsValidVoter( pPlayer ) )
 		{
-			if ( g_voteController->CanTeamCastVote( GetVoterTeam( pPlayer ) ) )
-			{
+//			if ( g_voteController->CanTeamCastVote( GetVoterTeam( pPlayer ) ) )
+//			{
 				nTotalPlayers++;
-			}
+//			}
 		}
 	}
 

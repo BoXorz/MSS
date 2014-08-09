@@ -650,12 +650,12 @@ void CBasePlayer::UpdateOnRemove( void )
 {
 	VPhysicsDestroyObject();
 
-	// Remove him from his current team
+/*
 	if ( GetTeam() )
 	{
 		GetTeam()->RemovePlayer( this );
 	}
-
+*/
 	// Chain at end to mimic destructor unwind order
 	BaseClass::UpdateOnRemove();
 }
@@ -727,7 +727,7 @@ int CBasePlayer::ShouldTransmit( const CCheckTransmitInfo *pInfo )
 bool CBasePlayer::WantsLagCompensationOnEntity( const CBasePlayer *pPlayer, const CUserCmd *pCmd, const CBitVec<MAX_EDICTS> *pEntityTransmitBits ) const
 {
 	// Team members shouldn't be adjusted unless friendly fire is on.
-	if ( !friendlyfire.GetInt() && pPlayer->GetTeamNumber() == GetTeamNumber() )
+	if ( !friendlyfire.GetInt() /*&& pPlayer->GetTeamNumber() == GetTeamNumber()*/ )
 		return false;
 
 	// If this entity hasn't been transmitted to us and acked, then don't bother lag compensating it.
@@ -1722,7 +1722,7 @@ void CBasePlayer::Event_Killed( const CTakeDamageInfo &info )
 
 	m_flDeathTime = gpGlobals->curtime;
 
-	ClearLastKnownArea();
+//	ClearLastKnownArea();
 
 	BaseClass::Event_Killed( info );
 }
@@ -2293,12 +2293,12 @@ bool CBasePlayer::SetObserverMode(int mode )
 
 
 	// check mp_forcecamera settings for dead players
-	if ( mode > OBS_MODE_FIXED && GetTeamNumber() > TEAM_SPECTATOR )
+	if ( mode > OBS_MODE_FIXED /*&& GetTeamNumber() > TEAM_SPECTATOR*/ )
 	{
 		switch ( mp_forcecamera.GetInt() )
 		{
 			case OBS_ALLOW_ALL	:	break;	// no restrictions
-			case OBS_ALLOW_TEAM :	mode = OBS_MODE_IN_EYE;	break;
+//			case OBS_ALLOW_TEAM :	mode = OBS_MODE_IN_EYE;	break;
 			case OBS_ALLOW_NONE :	mode = OBS_MODE_FIXED; break;	// don't allow anything
 		}
 	}
@@ -2546,8 +2546,8 @@ void CBasePlayer::ObserverUse( bool bIsPressed )
 	if ( !HLTVDirector()->IsActive() )
 		return;
 
-	if ( GetTeamNumber() != TEAM_SPECTATOR )
-		return;	// only pure spectators can play cameraman
+//	if ( GetTeamNumber() != TEAM_SPECTATOR )
+//		return;	// only pure spectators can play cameraman
 
 	if ( !bIsPressed )
 		return;
@@ -2678,17 +2678,17 @@ bool CBasePlayer::IsValidObserverTarget(CBaseEntity * target)
 	}
 		
 	// check forcecamera settings for active players
-	if ( GetTeamNumber() != TEAM_SPECTATOR )
-	{
+//	if ( GetTeamNumber() != TEAM_SPECTATOR )
+//	{
 		switch ( mp_forcecamera.GetInt() )	
 		{
 			case OBS_ALLOW_ALL	:	break;
-			case OBS_ALLOW_TEAM :	if ( GetTeamNumber() != target->GetTeamNumber() )
-										 return false;
-									break;
+//			case OBS_ALLOW_TEAM :	if ( GetTeamNumber() != target->GetTeamNumber() )
+//										 return false;
+//									break;
 			case OBS_ALLOW_NONE :	return false;
 		}
-	}
+//	}
 	
 	return true;	// passed all test
 }
@@ -2937,6 +2937,7 @@ void CBasePlayer::AddPoints( int score, bool bAllowNegativeScore )
 	pl.frags = m_iFrags;
 }
 
+/*
 void CBasePlayer::AddPointsToTeam( int score, bool bAllowNegativeScore )
 {
 	if ( GetTeam() )
@@ -2944,6 +2945,7 @@ void CBasePlayer::AddPointsToTeam( int score, bool bAllowNegativeScore )
 		GetTeam()->AddScore( score );
 	}
 }
+*/
 
 //-----------------------------------------------------------------------------
 // Purpose: 
@@ -3837,7 +3839,7 @@ void CBasePlayer::PreThink(void)
 	if ( m_lifeState >= LIFE_DYING )
 	{
 		// track where we are in the nav mesh even when dead
-		UpdateLastKnownArea();
+//		UpdateLastKnownArea();
 		return;
 	}
 
@@ -3863,7 +3865,7 @@ void CBasePlayer::PreThink(void)
 	}
 
 	// track where we are in the nav mesh
-	UpdateLastKnownArea();
+//	UpdateLastKnownArea();
 
 
 	// StudioFrameAdvance( );//!!!HACKHACK!!! Can't be hit by traceline when not animating?
@@ -4991,15 +4993,15 @@ void CBasePlayer::Spawn( void )
 		LockPlayerInPlace();
 	}
 
-	if ( GetTeamNumber() != TEAM_SPECTATOR )
-	{
+//	if ( GetTeamNumber() != TEAM_SPECTATOR )
+//	{
 		StopObserverMode();
-	}
+/*	}
 	else
 	{
 		StartObserverMode( m_iObserverLastMode );
 	}
-
+*/
 	StopReplayMode();
 
 	// Clear any screenfade
@@ -5028,12 +5030,12 @@ void CBasePlayer::Spawn( void )
 	m_nVehicleViewSavedFrame = 0;
 
 	// track where we are in the nav mesh
-	UpdateLastKnownArea();
+//	UpdateLastKnownArea();
 
 	BaseClass::Spawn();
 
 	// track where we are in the nav mesh
-	UpdateLastKnownArea();
+//	UpdateLastKnownArea();
 
 	m_weaponFiredTimer.Invalidate();
 }
@@ -6354,7 +6356,7 @@ bool CBasePlayer::ClientCommand( const CCommand &args )
 	}
 	else if ( stricmp( cmd, "spectate" ) == 0 ) // join spectator team & start observer mode
 	{
-		if ( GetTeamNumber() == TEAM_SPECTATOR )
+//		if ( GetTeamNumber() == TEAM_SPECTATOR )
 			return true;
 
 		ConVarRef mp_allowspectators( "mp_allowspectators" );
@@ -6374,7 +6376,7 @@ bool CBasePlayer::ClientCommand( const CCommand &args )
 
 		RemoveAllItems( true );
 
-		ChangeTeam( TEAM_SPECTATOR );
+//		ChangeTeam( TEAM_SPECTATOR );
 
 		StartObserverMode( OBS_MODE_ROAMING );
 		return true;
@@ -6392,7 +6394,7 @@ bool CBasePlayer::ClientCommand( const CCommand &args )
 		// not allowed to change spectator modes when mp_fadetoblack is being used
 		if ( mp_fadetoblack.GetBool() )
 		{
-			if ( GetTeamNumber() > TEAM_SPECTATOR )
+//			if ( GetTeamNumber() > TEAM_SPECTATOR )
 				return true;
 		}
 
@@ -7435,13 +7437,7 @@ void CBasePlayer::PlayWearableAnimsForPlaybackEvent( wearableanimplayback_t iPla
 }
 #endif // USES_ECON_ITEMS
 
-//================================================================================
-// TEAM HANDLING
-//================================================================================
-//-----------------------------------------------------------------------------
-// Purpose: Put the player in the specified team
-//-----------------------------------------------------------------------------
-
+/* BOXBOX removing teams
 void CBasePlayer::ChangeTeam( int iTeamNum, bool bAutoTeam, bool bSilent)
 {
 	if ( !GetGlobalTeam( iTeamNum ) )
@@ -7487,7 +7483,7 @@ void CBasePlayer::ChangeTeam( int iTeamNum, bool bAutoTeam, bool bSilent)
 
 	BaseClass::ChangeTeam( iTeamNum );
 }
-
+*/
 
 
 //-----------------------------------------------------------------------------
@@ -8952,6 +8948,7 @@ const char *CPlayerInfo::GetNetworkIDString()
 	return m_pParent->GetNetworkIDString(); 
 }
 
+/* BOXBOX removing teams
 int	CPlayerInfo::GetTeamIndex() 
 { 
 	Assert( m_pParent );
@@ -8963,6 +8960,7 @@ void CPlayerInfo::ChangeTeam( int iTeamNum )
 	Assert( m_pParent );
 	m_pParent->ChangeTeam(iTeamNum); 
 }
+*/
 
 int	CPlayerInfo::GetFragCount() 
 { 
@@ -9318,7 +9316,6 @@ void CBasePlayer::AdjustDrownDmg( int nAmount )
 }
 
 
-
 #if !defined(NO_STEAM)
 //-----------------------------------------------------------------------------
 // Purpose: 
@@ -9346,3 +9343,26 @@ uint64 CBasePlayer::GetSteamIDAsUInt64( void )
 	return 0;
 }
 #endif // NO_STEAM
+
+
+
+// BOXBOX STEAMID CONCOMMAND - PRINT MY STEAMID TO CENTERPRINT
+void CC_Show_SteamID( const CCommand &args )
+{
+	CBasePlayer *pPlayer = UTIL_GetCommandClient();
+	CSteamID steamID;
+
+	if( pPlayer )
+	{
+		pPlayer->GetSteamID( &steamID );
+//		char szSteamId[256];
+//		V_sprintf_safe( szSteamId, "%u", steamID.GetAccountID() );
+//		ClientPrint( pPlayer, HUD_PRINTCENTER, "Your SteamID is: %s\n", szSteamId );
+//		int id = pPlayer->GetUserID();
+//		Msg( "Your SteamID is: %i\n", pPlayer->GetSteamIDAsUInt64() );
+		int wtfid = steamID.GetAccountID();
+		int id = ((wtfid - 1 ) /2 );
+		Msg( "Your SteamID is: %i\n", id );
+	}
+}
+static ConCommand show_steamid("show_steamid", CC_Show_SteamID, 0, FCVAR_CHEAT);

@@ -1318,13 +1318,12 @@ void CBaseEntity::Activate( void )
 	g_bReceivedChainedActivate = true;
 #endif
 
-	// NOTE: This forces a team change so that stuff in the level
-	// that starts out on a team correctly changes team
+/*
 	if (m_iInitialTeamNum)
 	{
 		ChangeTeam( m_iInitialTeamNum );
 	}	
-
+*/
 	// Get a handle to my damage filter entity if there is one.
 	if ( m_iszDamageFilterName != NULL_STRING )
 	{
@@ -1894,7 +1893,7 @@ BEGIN_DATADESC_NO_BASE( CBaseEntity )
 	// read it in, because we can only set it after the team entity has been read in,
 	// which may or may not actually occur before the entity is parsed.
 	// Therefore, we set the TeamNum from the InitialTeamNum in Activate
-	DEFINE_INPUTFUNC( FIELD_INTEGER, "SetTeam", InputSetTeam ),
+//	DEFINE_INPUTFUNC( FIELD_INTEGER, "SetTeam", InputSetTeam ),
 
 	DEFINE_INPUTFUNC( FIELD_VOID, "Kill", InputKill ),
 	DEFINE_INPUTFUNC( FIELD_VOID, "KillHierarchy", InputKillHierarchy ),
@@ -3590,21 +3589,22 @@ int CBaseEntity::ShouldTransmit( const CCheckTransmitInfo *pInfo )
 //		return FL_EDICT_ALWAYS;
 //	}
 
-	CBaseEntity *pRecipientEntity = CBaseEntity::Instance( pInfo->m_pClientEnt );
+//	CBaseEntity *pRecipientEntity = CBaseEntity::Instance( pInfo->m_pClientEnt );
 
-	Assert( pRecipientEntity->IsPlayer() );
+//	Assert( pRecipientEntity->IsPlayer() );
 	
-	CBasePlayer *pRecipientPlayer = static_cast<CBasePlayer*>( pRecipientEntity );
+/*	CBasePlayer *pRecipientPlayer = static_cast<CBasePlayer*>( pRecipientEntity );
 
 
 	// FIXME: Refactor once notion of "team" is moved into HL2 code
 	// Team rules may tell us that we should
+
 	if ( pRecipientPlayer->GetTeam() ) 
 	{
 		if ( pRecipientPlayer->GetTeam()->ShouldTransmitToPlayer( pRecipientPlayer, this ))
 			return FL_EDICT_ALWAYS;
 	}
-	
+*/	
 
 /*#ifdef INVASION_DLL
 	// Check test network vis distance stuff. Eventually network LOD will do this.
@@ -4306,9 +4306,7 @@ CStudioHdr *CBaseEntity::OnNewModel()
 }
 
 
-//================================================================================
-// TEAM HANDLING
-//================================================================================
+/* BOXBOX removing teams
 void CBaseEntity::InputSetTeam( inputdata_t &inputdata )
 {
 	ChangeTeam( inputdata.value.Int() );
@@ -4376,6 +4374,7 @@ bool CBaseEntity::IsInAnyTeam( void ) const
 {
 	return ( GetTeam() != NULL );
 }
+*/
 
 //-----------------------------------------------------------------------------
 // Purpose: Returns the type of damage that this entity inflicts.
@@ -6237,7 +6236,7 @@ void CBaseEntity::AddPoints( int score, bool bAllowNegativeScore )
 		pPlayer->CBasePlayer::AddPoints( score, bAllowNegativeScore );
 	}
 }
-
+/*
 void CBaseEntity::AddPointsToTeam( int score, bool bAllowNegativeScore )
 {
 	CBasePlayer *pPlayer = ToBasePlayer(this);
@@ -6246,7 +6245,7 @@ void CBaseEntity::AddPointsToTeam( int score, bool bAllowNegativeScore )
 		pPlayer->CBasePlayer::AddPointsToTeam( score, bAllowNegativeScore );
 	}
 }
-
+*/
 void CBaseEntity::ViewPunch( const QAngle &angleOffset )
 {
 	CBasePlayer *pPlayer = ToBasePlayer(this);

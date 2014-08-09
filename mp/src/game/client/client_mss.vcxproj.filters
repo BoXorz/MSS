@@ -623,9 +623,6 @@
     <ClInclude Include="c_te_particlesystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="c_team.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="c_tesla.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1781,12 +1778,6 @@
     <ClInclude Include="c_slideshow_display.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="c_team_objectiveresource.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="c_team_train_watcher.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\game\client\c_vote_controller.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -1818,9 +1809,6 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="studio_stats.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\game\shared\teamplay_round_timer.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="vgui_avatarimage.h">
@@ -2225,15 +2213,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="c_sun.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="c_team.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="c_team_objectiveresource.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="c_team_train_watcher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="c_tesla.cpp">
@@ -2833,15 +2812,6 @@
     <ClCompile Include="..\..\game\shared\takedamageinfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\game\shared\teamplay_gamerules.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\game\shared\teamplay_round_timer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\game\shared\teamplayroundbased_gamerules.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\game\shared\test_ehandle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -3212,9 +3182,6 @@
       <Filter>Source Files\MSS</Filter>
     </ClCompile>
     <ClCompile Include="MSS\ui\backgroundpanel.cpp">
-      <Filter>Source Files\MSS\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="MSS\hl2mp_hud_team.cpp">
       <Filter>Source Files\MSS\UI</Filter>
     </ClCompile>
     <ClCompile Include="MSS\hud_deathnotice.cpp">

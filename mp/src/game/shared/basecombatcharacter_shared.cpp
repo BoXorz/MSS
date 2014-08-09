@@ -515,6 +515,7 @@ bool CBaseCombatCharacter::ComputeLOS( const Vector &vecEyePosition, const Vecto
 	return ( result.fraction == 1.0f );
 }
 
+/* BOXBOX l4d stuff
 #if defined(GAME_DLL) && defined(TERROR)
 bool CBaseCombatCharacter::ComputeTargetIsInDarkness( const Vector &vecEyePosition, CNavArea *pTargetNavArea, const Vector &vecTargetPos ) const
 {
@@ -548,7 +549,7 @@ bool CBaseCombatCharacter::ComputeTargetIsInDarkness( const Vector &vecEyePositi
 	return false;
 }
 #endif
-
+*/
 
 //-----------------------------------------------------------------------------
 /**

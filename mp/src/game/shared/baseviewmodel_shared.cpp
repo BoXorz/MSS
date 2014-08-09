@@ -220,10 +220,10 @@ void CBaseViewModel::SpawnControlPanels()
 		float flHeight = lrlocal.y;
 
 		CVGuiScreen *pScreen = CreateVGuiScreen( pScreenClassname, pScreenName, pEntityToSpawnOn, this, nLLAttachmentIndex );
-		pScreen->ChangeTeam( GetTeamNumber() );
+//		pScreen->ChangeTeam( GetTeamNumber() );
 		pScreen->SetActualSize( flWidth, flHeight );
 		pScreen->SetActive( false );
-		pScreen->MakeVisibleOnlyToTeammates( false );
+//		pScreen->MakeVisibleOnlyToTeammates( false );
 	
 #ifdef INVASION_DLL
 		pScreen->SetOverlayMaterial( SCREEN_OVERLAY_MATERIAL );

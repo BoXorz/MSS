@@ -156,6 +156,7 @@ bool C_PlayerResource::IsAlive(int iIndex )
 	return m_bAlive[iIndex];
 }
 
+/* BOXBOX removing teams!
 int C_PlayerResource::GetTeam(int iIndex )
 {
 	if ( iIndex < 1 || iIndex > MAX_PLAYERS )
@@ -188,10 +189,11 @@ int C_PlayerResource::GetTeamScore(int index)
 
 	return team->Get_Score();
 }
+*/
 
 int C_PlayerResource::GetFrags(int index )
 {
-	return 666;
+	return 0;
 }
 
 bool C_PlayerResource::IsLocalPlayer(int index)
@@ -309,7 +311,7 @@ int	C_PlayerResource::GetHealth( int iIndex )
 
 	return m_iHealth[iIndex];
 }
-
+/*
 const Color &C_PlayerResource::GetTeamColor(int index )
 {
 	if ( index < 0 || index >= MAX_TEAMS )
@@ -323,7 +325,7 @@ const Color &C_PlayerResource::GetTeamColor(int index )
 		return m_Colors[index];
 	}
 }
-
+*/
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------

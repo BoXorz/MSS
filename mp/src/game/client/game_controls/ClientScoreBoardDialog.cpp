@@ -296,13 +296,12 @@ void CClientScoreBoardDialog::Update( void )
 	m_fNextUpdateTime = gpGlobals->curtime + 1.0f; 
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Sort all the teams
-//-----------------------------------------------------------------------------
+/* 
 void CClientScoreBoardDialog::UpdateTeamInfo()
 {
 // TODO: work out a sorting algorithm for team display for TF2
 }
+*/
 
 //-----------------------------------------------------------------------------
 // Purpose: 
@@ -332,13 +331,13 @@ void CClientScoreBoardDialog::UpdatePlayerInfo()
 			playerData->SetString("name", newName);
 
 			int itemID = FindItemIDForPlayerIndex( i );
-  			int sectionID = gr->GetTeam( i );
+ //			int sectionID = gr->GetTeam( i );
 			
 			if ( gr->IsLocalPlayer( i ) )
 			{
 				selectedRow = itemID;
 			}
-			if (itemID == -1)
+/*			if (itemID == -1)
 			{
 				// add a new row
 				itemID = m_pPlayerList->AddItem( sectionID, playerData );
@@ -348,10 +347,10 @@ void CClientScoreBoardDialog::UpdatePlayerInfo()
 				// modify the current row
 				m_pPlayerList->ModifyItem( itemID, sectionID, playerData );
 			}
-
 			// set the row color based on the players team
 			m_pPlayerList->SetItemFgColor( itemID, gr->GetTeamColor( sectionID ) );
 
+*/
 			playerData->deleteThis();
 		}
 		else
@@ -385,9 +384,7 @@ void CClientScoreBoardDialog::AddHeader()
 	m_pPlayerList->AddColumnToSection(m_iSectionId, "ping", "#PlayerPing", 0, scheme()->GetProportionalScaledValueEx( GetScheme(),PING_WIDTH) );
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Adds a new section to the scoreboard (i.e the team header)
-//-----------------------------------------------------------------------------
+/*
 void CClientScoreBoardDialog::AddSection(int teamType, int teamNumber)
 {
 	if ( teamType == TYPE_TEAM )
@@ -436,6 +433,7 @@ void CClientScoreBoardDialog::AddSection(int teamType, int teamNumber)
 		m_pPlayerList->AddColumnToSection(m_iSectionId, "frags", "", 0, scheme()->GetProportionalScaledValueEx( GetScheme(),SCORE_WIDTH) );
 	}
 }
+*/
 
 //-----------------------------------------------------------------------------
 // Purpose: Used for sorting players
@@ -532,7 +530,7 @@ void CClientScoreBoardDialog::UpdatePlayerAvatar( int playerIndex, KeyValues *kv
 void CClientScoreBoardDialog::FillScoreBoard()
 {
 	// update totals information
-	UpdateTeamInfo();
+//	UpdateTeamInfo();
 
 	// update player info
 	UpdatePlayerInfo();

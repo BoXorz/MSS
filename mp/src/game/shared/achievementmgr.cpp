@@ -1274,9 +1274,7 @@ bool CalcHasNumClanPlayers( int iClanTeammates )
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Returns the # of teammates of the local player
-//-----------------------------------------------------------------------------
+/*
 int	CalcTeammateCount()
 {
 	Assert( g_pGameRules->IsMultiplayer() );
@@ -1296,6 +1294,7 @@ int	CalcTeammateCount()
 	}
 	return iNumTeammates;
 }
+*/
 
 //-----------------------------------------------------------------------------
 // Purpose: 
@@ -1464,6 +1463,7 @@ void CAchievementMgr::FireGameEvent( IGameEvent *event )
 		// keep track of when the player last changed class
 		m_flLastClassChangeTime =  gpGlobals->curtime;
 	}
+/* BOXBOX removing teams
 	else if ( 0 == Q_strcmp( name, "localplayer_changeteam" ) )
 	{
 		// keep track of the time of transitions to and from a game team
@@ -1502,6 +1502,7 @@ void CAchievementMgr::FireGameEvent( IGameEvent *event )
 			m_iMiniroundsCompleted ++;
 		}
 	}
+*/
 	else if ( 0 == Q_strcmp( name, "player_stats_updated" ) )
 	{
 		FOR_EACH_MAP( m_mapAchievement, i )
@@ -1545,7 +1546,7 @@ void CAchievementMgr::OnKillEvent( CBaseEntity *pVictim, CBaseEntity *pAttacker,
 	}
 #else
 	C_BasePlayer *pLocalPlayer = C_BasePlayer::GetLocalPlayer();
-	bVictimIsPlayerEnemy = !pLocalPlayer->InSameTeam( pVictim );
+//	bVictimIsPlayerEnemy = !pLocalPlayer->InSameTeam( pVictim );
 	if ( pAttacker == pLocalPlayer )
 	{
 		bAttackerIsPlayer = true;

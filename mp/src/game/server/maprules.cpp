@@ -183,14 +183,14 @@ void CGameScore::InputApplyScore( inputdata_t &inputdata )
 	// Only players can use this
 	if ( pActivator->IsPlayer() )
 	{
-		if ( AwardToTeam() )
+/*		if ( AwardToTeam() )
 		{
 			pActivator->AddPointsToTeam( Points(), AllowNegativeScore() );
 		}
 		else
 		{
-			pActivator->AddPoints( Points(), AllowNegativeScore() );
-		}
+*/			pActivator->AddPoints( Points(), AllowNegativeScore() );
+//		}
 	}
 }
 
@@ -202,14 +202,14 @@ void CGameScore::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE us
 	// Only players can use this
 	if ( pActivator->IsPlayer() )
 	{
-		if ( AwardToTeam() )
+/*		if ( AwardToTeam() )
 		{
 			pActivator->AddPointsToTeam( Points(), AllowNegativeScore() );
 		}
 		else
 		{
-			pActivator->AddPoints( Points(), AllowNegativeScore() );
-		}
+*/			pActivator->AddPoints( Points(), AllowNegativeScore() );
+//		}
 	}
 }
 
@@ -670,11 +670,7 @@ void CGamePlayerEquip::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_T
 }
 
 
-//
-// CGamePlayerTeam / game_player_team	-- Changes the team of the player who fired it
-// Flag: Fire once
-// Flag: Kill Player
-// Flag: Gib Player
+/* BOXBOX removing teams
 
 #define SF_PTEAM_FIREONCE			0x0001
 #define SF_PTEAM_KILL    			0x0002
@@ -733,5 +729,5 @@ void CGamePlayerTeam::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TY
 		UTIL_Remove( this );
 	}
 }
-
+*/
 

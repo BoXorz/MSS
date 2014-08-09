@@ -261,9 +261,7 @@ bool C_VGuiScreen::IsVisibleOnlyToTeammates() const
 	return (m_fScreenFlags & VGUI_SCREEN_VISIBLE_TO_TEAMMATES) != 0;
 }
 
-//-----------------------------------------------------------------------------
-// Are we visible to someone on this team?
-//-----------------------------------------------------------------------------
+/* BOXBOX removing teams
 bool C_VGuiScreen::IsVisibleToTeam( int nTeam )
 {
 	// FIXME: Should this maybe go into a derived class of some sort?
@@ -278,7 +276,7 @@ bool C_VGuiScreen::IsVisibleToTeam( int nTeam )
 	
 	return true;
 }
-
+*/
 
 //-----------------------------------------------------------------------------
 // Activate, deactivate the view screen
@@ -570,7 +568,7 @@ int	C_VGuiScreen::DrawModel( int flags )
 	
 	// Don't bother drawing stuff not visible to me...
 	C_BasePlayer *pLocalPlayer = C_BasePlayer::GetLocalPlayer();
-	if (!pLocalPlayer || !IsVisibleToTeam(pLocalPlayer->GetTeamNumber()) )
+	if (!pLocalPlayer /*|| !IsVisibleToTeam(pLocalPlayer->GetTeamNumber())*/ )
 		return 0;
 
 	if ( !IsVisibleToPlayer( pLocalPlayer ) )
@@ -678,7 +676,7 @@ C_VGuiScreen *CVGuiScreenEnumerator::GetVGuiScreen( int index )
 // Look for vgui screens, returns true if it found one ...
 //
 //-----------------------------------------------------------------------------
-C_BaseEntity *FindNearbyVguiScreen( const Vector &viewPosition, const QAngle &viewAngle, int nTeam )
+C_BaseEntity *FindNearbyVguiScreen( const Vector &viewPosition, const QAngle &viewAngle/*, int nTeam*/ )
 {
 	if ( IsX360() )
 	{
@@ -732,8 +730,8 @@ C_BaseEntity *FindNearbyVguiScreen( const Vector &viewPosition, const QAngle &vi
 
 		// FIXME: Should this maybe go into a derived class of some sort?
 		// Don't bother with screens on the wrong team
-		if (!pScreen->IsVisibleToTeam(nTeam))
-			continue;
+//		if (!pScreen->IsVisibleToTeam(nTeam))
+//			continue;
 
 		if ( !pScreen->AcceptsInput() )
 			continue;

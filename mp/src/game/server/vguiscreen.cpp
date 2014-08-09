@@ -259,6 +259,7 @@ void CVGuiScreen::InputSetInactive( inputdata_t &inputdata )
 	SetActive( false );
 }
 
+/*
 bool CVGuiScreen::IsVisibleOnlyToTeammates() const 
 { 
 	return (m_fScreenFlags & VGUI_SCREEN_VISIBLE_TO_TEAMMATES) != 0; 
@@ -293,6 +294,7 @@ bool CVGuiScreen::IsVisibleToTeam( int nTeam )
 	
 	return true;
 }
+*/
 
 //-----------------------------------------------------------------------------
 // Purpose: Screens attached to view models only go to client if viewmodel is being sent, too.

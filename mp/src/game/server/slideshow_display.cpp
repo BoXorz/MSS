@@ -405,10 +405,10 @@ void CSlideshowDisplay::SpawnControlPanels()
 		float flHeight = m_iScreenHeight;
 
 		CVGuiScreen *pScreen = CreateVGuiScreen( pScreenClassname, pScreenName, this, this, -1 );
-		pScreen->ChangeTeam( GetTeamNumber() );
+//		pScreen->ChangeTeam( GetTeamNumber() );
 		pScreen->SetActualSize( flWidth, flHeight );
 		pScreen->SetActive( true );
-		pScreen->MakeVisibleOnlyToTeammates( false );
+//		pScreen->MakeVisibleOnlyToTeammates( false );
 		pScreen->SetTransparency( true );
 		int nScreen = m_hScreens.AddToTail( );
 		m_hScreens[nScreen].Set( pScreen );

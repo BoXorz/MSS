@@ -68,10 +68,7 @@ void CPlayerProximityProxy::OnBind( void *pC_BaseEntity )
 EXPOSE_INTERFACE( CPlayerProximityProxy, IMaterialProxy, "PlayerProximity" IMATERIAL_PROXY_INTERFACE_VERSION );
 
 
-//-----------------------------------------------------------------------------
-// Returns true if the player's team matches that of the entity the proxy material is attached to
-//-----------------------------------------------------------------------------
-
+/* BOXBOX removing teams
 class CPlayerTeamMatchProxy : public CResultProxy
 {
 public:
@@ -110,7 +107,7 @@ void CPlayerTeamMatchProxy::OnBind( void *pC_BaseEntity )
 }
 
 EXPOSE_INTERFACE( CPlayerTeamMatchProxy, IMaterialProxy, "PlayerTeamMatch" IMATERIAL_PROXY_INTERFACE_VERSION );
-
+*/
 
 //-----------------------------------------------------------------------------
 // Returns the player view direction

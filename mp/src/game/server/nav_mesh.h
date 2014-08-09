@@ -72,7 +72,7 @@ public:
 
 	bool operator()( CBaseCombatCharacter *actor )
 	{
-		actor->OnNavAreaRemoved( m_deadArea );
+//		actor->OnNavAreaRemoved( m_deadArea );
 		return true;
 	}
 };
@@ -1254,10 +1254,10 @@ private:
 };
 
 // the global singleton interface
-extern CNavMesh *TheNavMesh;
+//extern CNavMesh *TheNavMesh;
 
 // factory for creating the Navigation Mesh
-extern CNavMesh *NavMeshFactory( void );
+//extern CNavMesh *NavMeshFactory( void );
 
 // for debugging the A* algorithm, if nonzero, show debug display and decrement for each pathfind
 extern int g_DebugPathfindCounter;

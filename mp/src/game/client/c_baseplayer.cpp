@@ -1086,7 +1086,7 @@ void C_BasePlayer::DetermineVguiInputMode( CUserCmd *pCmd )
 	// Not in vgui mode if there are no nearby screens
 	C_BaseEntity *pOldScreen = m_pCurrentVguiScreen.Get();
 
-	m_pCurrentVguiScreen = FindNearbyVguiScreen( EyePosition(), pCmd->viewangles, GetTeamNumber() );
+	m_pCurrentVguiScreen = FindNearbyVguiScreen( EyePosition(), pCmd->viewangles/*, GetTeamNumber()*/ );
 
 	if (pOldScreen != m_pCurrentVguiScreen)
 	{

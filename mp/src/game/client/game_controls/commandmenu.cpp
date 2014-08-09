@@ -264,7 +264,7 @@ bool CommandMenu::LoadFromKeyValues( KeyValues * params )
 	if ( !params )
 		return false;
 
-	Q_snprintf( m_CurrentTeam, 4, "%i", GetLocalPlayerTeam() );
+//	Q_snprintf( m_CurrentTeam, 4, "%i", GetLocalPlayerTeam() );
 
 	Q_FileBase( engine->GetLevelName(), m_CurrentMap, sizeof(m_CurrentMap) );
 	

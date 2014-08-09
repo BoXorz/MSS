@@ -153,6 +153,7 @@ int GetSpectatorTarget( void )
 	}
 }
 
+/* BOXBOX removing teams
 int GetLocalPlayerTeam( void ) 
 { 
 	C_BasePlayer *pPlayer = C_BasePlayer::GetLocalPlayer();
@@ -162,6 +163,7 @@ int GetLocalPlayerTeam( void )
 	else
 		return TEAM_UNASSIGNED;
 }
+*/
 
 //-----------------------------------------------------------------------------
 // Purpose: Convert angles to -180 t 180 range

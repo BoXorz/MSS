@@ -628,7 +628,7 @@ public:
 	// return true if 'adjArea' should be included in the ongoing search
 	virtual bool ShouldSearch( CNavArea *adjArea, CNavArea *currentArea, float travelDistanceSoFar ) 
 	{
-		return !adjArea->IsBlocked( TEAM_ANY );
+//		return !adjArea->IsBlocked( TEAM_ANY );
 	}
 
 	/**

@@ -41,11 +41,11 @@ public:
 	bool IsActive() const;
 	void SetActive( bool bActive );
 
-	// Is this screen only visible to teammates?
+/*
 	bool IsVisibleOnlyToTeammates() const;
 	void MakeVisibleOnlyToTeammates( bool bActive );
 	bool IsVisibleToTeam( int nTeam );
-
+*/
 	// Sets the overlay material
 	void SetOverlayMaterial( const char *pMaterial );
 

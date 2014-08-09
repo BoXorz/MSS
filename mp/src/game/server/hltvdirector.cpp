@@ -226,7 +226,7 @@ void CHLTVDirector::UpdateSettings()
 	if ( m_iCameraManIndex > 0 )
 	{
 		CBasePlayer *pPlayer = UTIL_PlayerByIndex( m_iCameraManIndex );
-		if ( !pPlayer || pPlayer->GetTeamNumber() != TEAM_SPECTATOR )
+		if ( !pPlayer /*|| pPlayer->GetTeamNumber() != TEAM_SPECTATOR*/ )
 		{
 			SetCameraMan( 0 );
 		}
@@ -668,7 +668,7 @@ bool CHLTVDirector::SetCameraMan( int iPlayerIndex )
 	if ( iPlayerIndex > 0 )
 	{
 		pPlayer = UTIL_PlayerByIndex( iPlayerIndex );
-		if ( !pPlayer || pPlayer->GetTeamNumber() != TEAM_SPECTATOR )
+		if ( !pPlayer /*|| pPlayer->GetTeamNumber() != TEAM_SPECTATOR*/ )
 			return false;
 	}
 
@@ -688,7 +688,7 @@ bool CHLTVDirector::SetCameraMan( int iPlayerIndex )
 	{
 		CBasePlayer *pPlayer = UTIL_PlayerByIndex( i );
 
-		if ( pPlayer && pPlayer->GetTeamNumber() == TEAM_SPECTATOR && !pPlayer->IsFakeClient() )
+		if ( pPlayer /*&& pPlayer->GetTeamNumber() == TEAM_SPECTATOR*/ && !pPlayer->IsFakeClient() )
 		{
 			filter.AddRecipient( pPlayer );
 		}
@@ -1089,8 +1089,8 @@ void CHLTVDirector::BuildActivePlayerList()
 		if ( pPlayer->IsObserver() )
 			continue;
 
-		if ( pPlayer->GetTeamNumber() <= TEAM_SPECTATOR )
-			continue;
+//		if ( pPlayer->GetTeamNumber() <= TEAM_SPECTATOR )
+//			continue;
         
 		m_pActivePlayers[m_nNumActivePlayers] = pPlayer;
 		m_nNumActivePlayers++;
