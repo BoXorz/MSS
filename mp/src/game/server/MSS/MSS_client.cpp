@@ -13,6 +13,7 @@
 #include "engine/IEngineSound.h"
 #include "team.h"
 #include "viewport_panel_names.h"
+#include <filesystem.h> // BOXBOX added
 
 #include "tier0/vprof.h"
 
@@ -27,10 +28,67 @@ ConVar sv_motd_unload_on_dismissal( "sv_motd_unload_on_dismissal", "0", 0, "If e
 extern CBaseEntity*	FindPickerEntityClass( CBasePlayer *pPlayer, char *classname );
 extern bool			g_fGameOver;
 
+
+
+// BOXBOX check for charachter file
+/*
+void CheckForCharacterFile( CMSS_Player *pPlayer )
+{
+
+//	BOXBOX here's what needs to happen: First we already passed in a pointer to the joining player, so we have that.
+//	1)- Get the player's Steam ID
+//	2)- Check to see if there is a file on the server for that player based on Steam ID
+//	3a)- If NO,  signal that we need to open the create character panel after the server Info panel closes.
+//	3b)- If YES, signal that we want to open the character selection panel after the server info panel closes.
+
+
+	Msg( "\n**********MASTERSWORD INFORMATION**********\n");
+
+// STEP 1: Get SteamID
+	CSteamID steamID;
+	pPlayer->GetSteamID( &steamID );
+
+	int id = steamID.GetAccountID();
+
+// STEP 2: Convert file number to text
+	// get mod file path
+	char gamedir[256];
+	engine->GetGameDir( gamedir, 256 );
+	
+	char charfile[MAX_PATH];
+	Q_snprintf( charfile, sizeof( charfile ), "characters/%i.txt", id );	// BOXBOX This works!  So far, so good!
+
+	Msg( "Your Charachter file is: %s/%s\n", gamedir, charfile );
+
+// STEP 3: See if file exists
+
+	if( !g_pFullFileSystem->FileExists( charfile ) )
+	{
+			Msg( "No Charachter file found! (%s)\n", charfile );
+			pPlayer->m_bHasCharFile = false;
+			return;
+	}
+
+	Msg( "Charachter file was found! (%s)\n", charfile );
+	pPlayer->m_bHasCharFile = true;
+}
+*/
+
+
 void FinishClientPutInServer( CMSS_Player *pPlayer )
 {
 	pPlayer->InitialSpawn();
 	pPlayer->Spawn();
+
+// BOXBOX adding these to set up the initial camera
+	pPlayer->m_takedamage = DAMAGE_NO;
+	pPlayer->pl.deadflag = true;
+	pPlayer->m_lifeState = LIFE_DEAD;
+	pPlayer->AddEffects( EF_NODRAW );
+	pPlayer->SetThink( NULL );
+	pPlayer->MoveToIntroCamera();
+	pPlayer->SetMoveType( MOVETYPE_NONE );
+// BOXBOX end
 
 	char sName[128];
 	Q_strncpy( sName, pPlayer->GetPlayerName(), sizeof( sName ) );
@@ -58,11 +116,18 @@ void FinishClientPutInServer( CMSS_Player *pPlayer )
 
 	KeyValues *data = new KeyValues("data");
 	data->SetString( "title", title );		// info panel title
-	data->SetString( "type", "1" );			// show userdata from stringtable entry
-	data->SetString( "msg",	"motd" );		// use this stringtable entry
+	data->SetString( "type", "1" );			// BOXBOX type 0 is text, type 1 is INDEX, type 2 is URL, type 3 is FILE
+	data->SetString( "msg",	"motd_text" );		// BOXBOX use "motd_text" stringtable entry
 	data->SetBool( "unload", sv_motd_unload_on_dismissal.GetBool() );
+	data->SetBool( "justjoined", true ); // BOXBOX added this, the player is just joining, so show the character select menu after this closes.
 
-	pPlayer->ShowViewPortPanel( PANEL_INFO, true, data );
+// BOXBOX play music here?
+	pPlayer->EmitSound("Music.Intro");
+
+// BOXBOX show the Join Marquis
+	pPlayer->ShowViewPortPanel( PANEL_JOIN, true, data );
+
+//	pPlayer->ShowViewPortPanel( PANEL_CHARSELECT );
 
 	data->deleteThis();
 }
@@ -74,6 +139,8 @@ void ClientPutInServer( edict_t *pEdict, const char *playername )
 	// Allocate a CMSS_Player for pev, and call spawn
 	CMSS_Player *pPlayer = CMSS_Player::CreatePlayer( "player", pEdict );
 	pPlayer->SetPlayerName( playername );
+
+
 }
 
 

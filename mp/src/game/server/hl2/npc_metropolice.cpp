@@ -854,12 +854,13 @@ void CNPC_MetroPolice::SpeakSentence( int nSentenceType )
 
 	if ( nSentenceType >= SENTENCE_BASE_BEHAVIOR_INDEX )
 	{
+/* BOXBOX removing stuff
 		if ( GetRunningBehavior() == &m_FuncTankBehavior )
 		{
 			SpeakFuncTankSentence( nSentenceType );
 			return;
 		}
-
+*/
 		if ( GetRunningBehavior() == &m_StandoffBehavior )
 		{
 			SpeakStandoffSentence( nSentenceType );
@@ -2431,7 +2432,7 @@ bool CNPC_MetroPolice::CreateBehaviors()
 	AddBehavior( &m_ActBusyBehavior );
 	AddBehavior( &m_AssaultBehavior );
 	AddBehavior( &m_StandoffBehavior );
-	AddBehavior( &m_FuncTankBehavior );
+//	AddBehavior( &m_FuncTankBehavior ); // BOXBOX removing stuff
 	
 	return BaseClass::CreateBehaviors();
 }

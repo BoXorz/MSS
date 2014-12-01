@@ -20,6 +20,7 @@
 
 extern ConVar sv_footsteps;
 
+/* BOXBOX removing footstep override
 const char *g_ppszPlayerSoundPrefixNames[PLAYER_SOUNDS_MAX] =
 {
 	"NPC_Citizen",
@@ -48,6 +49,7 @@ void CMSS_Player::PrecacheFootStepSounds( void )
 		PrecacheScriptSound( szFootStepName );
 	}
 }
+*/
 
 //-----------------------------------------------------------------------------
 // Consider the weapon's built-in accuracy, this character's proficiency with
@@ -62,12 +64,7 @@ Vector CMSS_Player::GetAttackSpread( CBaseCombatWeapon *pWeapon, CBaseEntity *pT
 	return VECTOR_CONE_15DEGREES;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : step - 
-//			fvol - 
-//			force - force sound to play
-//-----------------------------------------------------------------------------
+/* BOXBOX removing footstep override
 void CMSS_Player::PlayStepSound( Vector &vecOrigin, surfacedata_t *psurface, float fvol, bool force )
 {
 	if ( gpGlobals->maxClients > 1 && !sv_footsteps.GetFloat() )
@@ -103,7 +100,7 @@ void CMSS_Player::PlayStepSound( Vector &vecOrigin, surfacedata_t *psurface, flo
 	filter.AddRecipientsByPAS( vecOrigin );
 
 #ifndef CLIENT_DLL
-	// im MP, server removed all players in origins PVS, these players 
+	// in MP, server removed all players in origins PVS, these players 
 	// generate the footsteps clientside
 	if ( gpGlobals->maxClients > 1 )
 		filter.RemoveRecipientsByPVS( vecOrigin );
@@ -120,7 +117,7 @@ void CMSS_Player::PlayStepSound( Vector &vecOrigin, surfacedata_t *psurface, flo
 
 	EmitSound( filter, entindex(), ep );
 }
-
+*/
 
 //==========================
 // ANIMATION CODE

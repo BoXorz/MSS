@@ -42,6 +42,11 @@
 #include "NavProgress.h"
 #include "commentary_modelviewer.h"
 
+// BOXBOX MS PANEL FILES
+#include "MSSJoinMarquis.h"
+#include "MSSCharacterSelect.h"
+#include "MSSCharacterCreate.h"
+
 // our definition
 #include "baseviewport.h"
 #include <filesystem.h>
@@ -68,6 +73,9 @@ using namespace vgui;
 ConVar hud_autoreloadscript("hud_autoreloadscript", "0", FCVAR_NONE, "Automatically reloads the animation script each time one is ran");
 
 static ConVar cl_leveloverviewmarker( "cl_leveloverviewmarker", "0", FCVAR_CHEAT );
+
+
+// BOXBOX TODO make this a cheats only command or remove it!
 
 CON_COMMAND( showpanel, "Shows a viewport panel <name>" )
 {
@@ -195,7 +203,7 @@ void CBaseViewport::OnScreenSizeChanged(int iOldWide, int iOldTall)
 {
 	BaseClass::OnScreenSizeChanged(iOldWide, iOldTall);
 
-	IViewPortPanel* pSpecGuiPanel = FindPanelByName(PANEL_SPECGUI);
+	IViewPortPanel* pSpecGuiPanel = FindPanelByName("PANEL_SPECGUI");
 	bool bSpecGuiWasVisible = pSpecGuiPanel && pSpecGuiPanel->IsVisible();
 	
 	// reload the script file, so the screen positions in it are correct for the new resolution
@@ -219,22 +227,30 @@ void CBaseViewport::OnScreenSizeChanged(int iOldWide, int iOldTall)
 	// re-enable the spectator gui if it was previously visible
 	if ( bSpecGuiWasVisible )
 	{
-		ShowPanel( PANEL_SPECGUI, true );
+		ShowPanel( "PANEL_SPECGUI", true );
 	}
 }
 
 void CBaseViewport::CreateDefaultPanels( void )
 {
-#ifndef _XBOX
+
+//#ifndef _XBOX
 	AddNewPanel( CreatePanelByName( PANEL_SCOREBOARD ), "PANEL_SCOREBOARD" );
-	AddNewPanel( CreatePanelByName( PANEL_INFO ), "PANEL_INFO" );
-	AddNewPanel( CreatePanelByName( PANEL_SPECGUI ), "PANEL_SPECGUI" );
-	AddNewPanel( CreatePanelByName( PANEL_SPECMENU ), "PANEL_SPECMENU" );
 	AddNewPanel( CreatePanelByName( PANEL_NAV_PROGRESS ), "PANEL_NAV_PROGRESS" );
-	// AddNewPanel( CreatePanelByName( PANEL_TEAM ), "PANEL_TEAM" );
-	// AddNewPanel( CreatePanelByName( PANEL_CLASS ), "PANEL_CLASS" );
-	// AddNewPanel( CreatePanelByName( PANEL_BUY ), "PANEL_BUY" );
-#endif
+
+// BOXBOX adding and removing panels here
+	AddNewPanel( CreatePanelByName( PANEL_JOIN ), "PANEL_JOIN" );
+	AddNewPanel( CreatePanelByName( PANEL_CHARSELECT ), "PANEL_CHARSELECT" );
+	AddNewPanel( CreatePanelByName( PANEL_CHARCREATE ), "PANEL_CHARCREATE" );
+
+	AddNewPanel( CreatePanelByName( PANEL_INFO ), "PANEL_INFO" );
+//	AddNewPanel( CreatePanelByName( PANEL_SPECGUI ), "PANEL_SPECGUI" );
+//	AddNewPanel( CreatePanelByName( PANEL_SPECMENU ), "PANEL_SPECMENU" );
+//	AddNewPanel( CreatePanelByName( PANEL_TEAM ), "PANEL_TEAM" );
+//	AddNewPanel( CreatePanelByName( PANEL_CLASS ), "PANEL_CLASS" );
+//	AddNewPanel( CreatePanelByName( PANEL_BUY ), "PANEL_BUY" );
+
+//#endif
 }
 
 void CBaseViewport::UpdateAllPanels( void )
@@ -256,11 +272,30 @@ IViewPortPanel* CBaseViewport::CreatePanelByName(const char *szPanelName)
 {
 	IViewPortPanel* newpanel = NULL;
 
-#ifndef _XBOX
+// BOXBOX reforming this
+
 	if ( Q_strcmp(PANEL_SCOREBOARD, szPanelName) == 0 )
 	{
 		newpanel = new CClientScoreBoardDialog( this );
 	}
+	else if ( Q_strcmp(PANEL_NAV_PROGRESS, szPanelName) == 0 )
+	{
+		newpanel = new CNavProgress( this );
+	}
+
+	else if ( Q_strcmp(PANEL_JOIN, szPanelName) == 0 )
+	{
+		newpanel = new CMSJoinMarquis( this );
+	}
+	else if ( Q_strcmp(PANEL_CHARSELECT, szPanelName) == 0 )
+	{
+		newpanel = new CMSCharSelectMenu( this );
+	}
+	else if ( Q_strcmp(PANEL_CHARCREATE, szPanelName) == 0 )
+	{
+		newpanel = new CMSCharCreateMenu( this );
+	}
+
 	else if ( Q_strcmp(PANEL_INFO, szPanelName) == 0 )
 	{
 		newpanel = new CTextWindow( this );
@@ -269,7 +304,6 @@ IViewPortPanel* CBaseViewport::CreatePanelByName(const char *szPanelName)
 	{
 		newpanel = new CMapOverview( this );
 	}
-	*/
 	else if ( Q_strcmp(PANEL_TEAM, szPanelName) == 0 )
 	{
 		newpanel = new CTeamMenu( this );
@@ -282,19 +316,11 @@ IViewPortPanel* CBaseViewport::CreatePanelByName(const char *szPanelName)
 	{
 		newpanel = new CSpectatorGUI( this );
 	}
-#if !defined( TF_CLIENT_DLL )
-	else if ( Q_strcmp(PANEL_NAV_PROGRESS, szPanelName) == 0 )
-	{
-		newpanel = new CNavProgress( this );
-	}
-#endif	// TF_CLIENT_DLL
-#endif
-
-	if ( Q_strcmp(PANEL_COMMENTARY_MODELVIEWER, szPanelName) == 0 )
+	else if ( Q_strcmp(PANEL_COMMENTARY_MODELVIEWER, szPanelName) == 0 )
 	{
 		newpanel = new CCommentaryModelViewer( this );
 	}
-	
+*/	
 	return newpanel; 
 }
 
@@ -653,7 +679,7 @@ void CBaseViewport::FireGameEvent( IGameEvent * event)
 
 		if ( engine->IsHLTV() )
 		{
-			ShowPanel( PANEL_SPECGUI, true );
+			ShowPanel( "PANEL_SPECGUI", true );
 		}
 	}
 }

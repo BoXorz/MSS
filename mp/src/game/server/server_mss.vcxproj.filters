@@ -1544,9 +1544,6 @@
     <ClInclude Include="hl2\ai_behavior_actbusy.h">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClInclude>
-    <ClInclude Include="hl2\ai_behavior_functank.h">
-      <Filter>Source Files\HL2 DLL</Filter>
-    </ClInclude>
     <ClInclude Include="hl2\ai_behavior_holster.h">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClInclude>
@@ -1599,9 +1596,6 @@
       <Filter>Source Files\HL2 DLL</Filter>
     </ClInclude>
     <ClInclude Include="..\..\game\shared\hl2\env_headcrabcanister_shared.h">
-      <Filter>Source Files\HL2 DLL</Filter>
-    </ClInclude>
-    <ClInclude Include="hl2\func_tank.h">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClInclude>
     <ClInclude Include="hl2\grenade_ar2.h">
@@ -1706,9 +1700,6 @@
     <ClInclude Include="hl2\script_intro.h">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClInclude>
-    <ClInclude Include="hl2\vehicle_apc.h">
-      <Filter>Source Files\HL2 DLL</Filter>
-    </ClInclude>
     <ClInclude Include="hl2\vehicle_crane.h">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClInclude>
@@ -1730,6 +1721,27 @@
     <ClInclude Include="hl2\weapon_flaregun.h">
       <Filter>Source Files\HL2 DLL\unused</Filter>
     </ClInclude>
+    <ClInclude Include="MSS\MSS_bot_temp.h">
+      <Filter>Source Files\MSS</Filter>
+    </ClInclude>
+    <ClInclude Include="MSS\MSS_cvars.h">
+      <Filter>Source Files\MSS</Filter>
+    </ClInclude>
+    <ClInclude Include="MSS\MSS_gameinterface.h">
+      <Filter>Source Files\MSS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\game\shared\MSS\MSS_gamerules.h">
+      <Filter>Source Files\MSS</Filter>
+    </ClInclude>
+    <ClInclude Include="MSS\MSS_player.h">
+      <Filter>Source Files\MSS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\game\shared\MSS\MSS_player_shared.h">
+      <Filter>Source Files\MSS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\game\shared\MSS\MSS_weapon_parse.h">
+      <Filter>Source Files\MSS</Filter>
+    </ClInclude>
     <ClInclude Include="MSS\grenade_satchel.h">
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClInclude>
@@ -1739,16 +1751,19 @@
     <ClInclude Include="MSS\te_hl2mp_shotgun_shot.h">
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\game\shared\MSS\weapon_ar2.h">
+    <ClInclude Include="..\..\game\shared\MSS\weapon_crowbar.h">
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\game\shared\MSS\weapon_hl2mpbase_machinegun.h">
+    <ClInclude Include="..\..\game\shared\MSS\weapon_MSSbase.h">
+      <Filter>Source Files\MSS\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\game\shared\MSS\weapon_MSSbasebasebludgeon.h">
+      <Filter>Source Files\MSS\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\game\shared\MSS\weapon_MSSbasecombatweapon.h">
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\game\shared\MSS\weapon_physcannon.h">
-      <Filter>Source Files\MSS\Weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\game\shared\MSS\weapon_rpg.h">
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\game\shared\MSS\weapon_slam.h">
@@ -1802,38 +1817,11 @@
     <ClInclude Include="toolframework_server.h">
       <Filter>Tools Framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\shared\MSS\MSS_gamerules.h">
+    <ClInclude Include="..\shared\MSS\MSS_shareddefs.h">
       <Filter>Source Files\MSS</Filter>
     </ClInclude>
-    <ClInclude Include="MSS\MSS_player.h">
+    <ClInclude Include="MSS\MSS_charsave.h">
       <Filter>Source Files\MSS</Filter>
-    </ClInclude>
-    <ClInclude Include="..\shared\MSS\MSS_player_shared.h">
-      <Filter>Source Files\MSS</Filter>
-    </ClInclude>
-    <ClInclude Include="MSS\MSS_bot_temp.h">
-      <Filter>Source Files\MSS</Filter>
-    </ClInclude>
-    <ClInclude Include="MSS\MSS_gameinterface.h">
-      <Filter>Source Files\MSS</Filter>
-    </ClInclude>
-    <ClInclude Include="MSS\MSS_cvars.h">
-      <Filter>Source Files\MSS</Filter>
-    </ClInclude>
-    <ClInclude Include="..\shared\MSS\MSS_weapon_parse.h">
-      <Filter>Source Files\MSS</Filter>
-    </ClInclude>
-    <ClInclude Include="..\shared\MSS\weapon_MSSbase.h">
-      <Filter>Source Files\MSS\Weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="..\shared\MSS\weapon_MSSbasebasebludgeon.h">
-      <Filter>Source Files\MSS\Weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="..\shared\MSS\weapon_MSSbasecombatweapon.h">
-      <Filter>Source Files\MSS\Weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="..\shared\MSS\weapon_crowbar.h">
-      <Filter>Source Files\MSS\Weapons</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2953,9 +2941,6 @@
     <ClCompile Include="hl2\ai_behavior_actbusy.cpp">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClCompile>
-    <ClCompile Include="hl2\ai_behavior_functank.cpp">
-      <Filter>Source Files\HL2 DLL</Filter>
-    </ClCompile>
     <ClCompile Include="hl2\ai_behavior_holster.cpp">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClCompile>
@@ -3016,9 +3001,6 @@
     <ClCompile Include="hl2\func_recharge.cpp">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClCompile>
-    <ClCompile Include="hl2\func_tank.cpp">
-      <Filter>Source Files\HL2 DLL</Filter>
-    </ClCompile>
     <ClCompile Include="hl2\grenade_ar2.cpp">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClCompile>
@@ -3058,9 +3040,6 @@
     <ClCompile Include="hl2\info_teleporter_countdown.cpp">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClCompile>
-    <ClCompile Include="hl2\item_ammo.cpp">
-      <Filter>Source Files\HL2 DLL</Filter>
-    </ClCompile>
     <ClCompile Include="hl2\item_battery.cpp">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClCompile>
@@ -3089,9 +3068,6 @@
       <Filter>Source Files\HL2 DLL</Filter>
     </ClCompile>
     <ClCompile Include="hl2\npc_antlionguard.cpp">
-      <Filter>Source Files\HL2 DLL</Filter>
-    </ClCompile>
-    <ClCompile Include="hl2\npc_apcdriver.cpp">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClCompile>
     <ClCompile Include="hl2\npc_attackchopper.cpp">
@@ -3268,14 +3244,35 @@
     <ClCompile Include="hl2\npc_missiledefense.cpp">
       <Filter>Source Files\HL2 DLL\unused</Filter>
     </ClCompile>
-    <ClCompile Include="hl2\vehicle_apc.cpp">
-      <Filter>Source Files\HL2 DLL\unused</Filter>
-    </ClCompile>
     <ClCompile Include="hl2\weapon_cguard.cpp">
       <Filter>Source Files\HL2 DLL\unused</Filter>
     </ClCompile>
     <ClCompile Include="hl2\weapon_flaregun.cpp">
       <Filter>Source Files\HL2 DLL\unused</Filter>
+    </ClCompile>
+    <ClCompile Include="MSS\MSS_bot_temp.cpp">
+      <Filter>Source Files\MSS</Filter>
+    </ClCompile>
+    <ClCompile Include="MSS\MSS_client.cpp">
+      <Filter>Source Files\MSS</Filter>
+    </ClCompile>
+    <ClCompile Include="MSS\MSS_cvars.cpp">
+      <Filter>Source Files\MSS</Filter>
+    </ClCompile>
+    <ClCompile Include="MSS\MSS_gameinterface.cpp">
+      <Filter>Source Files\MSS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\game\shared\MSS\MSS_gamerules.cpp">
+      <Filter>Source Files\MSS</Filter>
+    </ClCompile>
+    <ClCompile Include="MSS\MSS_player.cpp">
+      <Filter>Source Files\MSS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\game\shared\MSS\MSS_player_shared.cpp">
+      <Filter>Source Files\MSS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\game\shared\MSS\MSS_weapon_parse.cpp">
+      <Filter>Source Files\MSS</Filter>
     </ClCompile>
     <ClCompile Include="MSS\grenade_satchel.cpp">
       <Filter>Source Files\MSS\Weapons</Filter>
@@ -3286,13 +3283,7 @@
     <ClCompile Include="MSS\te_hl2mp_shotgun_shot.cpp">
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\game\shared\MSS\weapon_357.cpp">
-      <Filter>Source Files\MSS\Weapons</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\game\shared\MSS\weapon_ar2.cpp">
-      <Filter>Source Files\MSS\Weapons</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\game\shared\MSS\weapon_crossbow.cpp">
+    <ClCompile Include="..\..\game\shared\MSS\weapon_arozensword.cpp">
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClCompile>
     <ClCompile Include="..\..\game\shared\MSS\weapon_crowbar.cpp">
@@ -3301,25 +3292,19 @@
     <ClCompile Include="..\..\game\shared\MSS\weapon_frag.cpp">
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\game\shared\MSS\weapon_hl2mpbase_machinegun.cpp">
+    <ClCompile Include="..\..\game\shared\MSS\weapon_MSSbase.cpp">
+      <Filter>Source Files\MSS\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\game\shared\MSS\weapon_MSSbasebasebludgeon.cpp">
+      <Filter>Source Files\MSS\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\game\shared\MSS\weapon_MSSbasecombatweapon.cpp">
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClCompile>
     <ClCompile Include="..\..\game\shared\MSS\weapon_physcannon.cpp">
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\game\shared\MSS\weapon_pistol.cpp">
-      <Filter>Source Files\MSS\Weapons</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\game\shared\MSS\weapon_rpg.cpp">
-      <Filter>Source Files\MSS\Weapons</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\game\shared\MSS\weapon_shotgun.cpp">
-      <Filter>Source Files\MSS\Weapons</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\game\shared\MSS\weapon_slam.cpp">
-      <Filter>Source Files\MSS\Weapons</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\game\shared\MSS\weapon_smg1.cpp">
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClCompile>
     <ClCompile Include="..\..\game\shared\MSS\weapon_stunstick.cpp">
@@ -3529,41 +3514,14 @@
     <ClCompile Include="toolframework_server.cpp">
       <Filter>Tools Framework</Filter>
     </ClCompile>
-    <ClCompile Include="MSS\MSS_client.cpp">
-      <Filter>Source Files\MSS</Filter>
-    </ClCompile>
-    <ClCompile Include="..\shared\MSS\MSS_gamerules.cpp">
-      <Filter>Source Files\MSS</Filter>
-    </ClCompile>
-    <ClCompile Include="MSS\MSS_player.cpp">
-      <Filter>Source Files\MSS</Filter>
-    </ClCompile>
-    <ClCompile Include="..\shared\MSS\MSS_player_shared.cpp">
-      <Filter>Source Files\MSS</Filter>
-    </ClCompile>
-    <ClCompile Include="MSS\MSS_bot_temp.cpp">
-      <Filter>Source Files\MSS</Filter>
-    </ClCompile>
-    <ClCompile Include="MSS\MSS_gameinterface.cpp">
-      <Filter>Source Files\MSS</Filter>
-    </ClCompile>
-    <ClCompile Include="MSS\MSS_cvars.cpp">
-      <Filter>Source Files\MSS</Filter>
-    </ClCompile>
-    <ClCompile Include="..\shared\MSS\MSS_weapon_parse.cpp">
-      <Filter>Source Files\MSS</Filter>
-    </ClCompile>
-    <ClCompile Include="..\shared\MSS\weapon_MSSbase.cpp">
+    <ClCompile Include="..\shared\MSS\weapon_rustyshortsword.cpp">
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClCompile>
-    <ClCompile Include="..\shared\MSS\weapon_MSSbasebasebludgeon.cpp">
-      <Filter>Source Files\MSS\Weapons</Filter>
+    <ClCompile Include="MSS\MSS_weather.cpp">
+      <Filter>Source Files\MSS</Filter>
     </ClCompile>
-    <ClCompile Include="..\shared\MSS\weapon_MSSbasecombatweapon.cpp">
-      <Filter>Source Files\MSS\Weapons</Filter>
-    </ClCompile>
-    <ClCompile Include="..\shared\MSS\weapon_arozensword.cpp">
-      <Filter>Source Files\MSS\Weapons</Filter>
+    <ClCompile Include="MSS\MSS_charsave.cpp">
+      <Filter>Source Files\MSS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

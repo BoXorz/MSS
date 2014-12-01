@@ -1251,9 +1251,7 @@ enum
 };
 
 
-//------------------------------------------------------------------------------
-// Reesponsible for changing levels when the player touches it
-//------------------------------------------------------------------------------
+// BOXBOX TODO - here is the entity that changes maps upon player touch!  Adjust it to work in MSS system!
 class CChangeLevel : public CBaseTrigger
 {
 	DECLARE_DATADESC();
@@ -1545,9 +1543,9 @@ void CChangeLevel::ChangeLevelNow( CBaseEntity *pActivator )
 
 	Assert(!FStrEq(m_szMapName, ""));
 
-	// Don't work in deathmatch
-	if ( g_pGameRules->IsDeathmatch() )
-		return;
+	// BOXBOX TODO Making these work in MSS as is for now
+//	if ( g_pGameRules->IsDeathmatch() )
+//		return;
 
 	// Some people are firing these multiple times in a frame, disable
 	if ( m_bTouched )
@@ -1618,7 +1616,8 @@ void CChangeLevel::ChangeLevelNow( CBaseEntity *pActivator )
 	// If we're debugging, don't actually change level
 	if ( g_debug_transitions.GetInt() == 0 )
 	{
-		engine->ChangeLevel( st_szNextMap, st_szNextSpot );
+//		engine->ChangeLevel( st_szNextMap, st_szNextSpot ); // BOXBOX replacing this with NULL version below, to make it work in MP
+		engine->ChangeLevel( st_szNextMap, NULL );
 	}
 	else
 	{
@@ -1643,6 +1642,8 @@ void CChangeLevel::TouchChangeLevel( CBaseEntity *pOther )
 	CBasePlayer *pPlayer = ToBasePlayer(pOther);
 	if ( !pPlayer )
 		return;
+
+//	Msg("GOT TOUCH PLAYER FOR CHANGELEVEL\n"); // BOXBOX works so far
 
 	if( pPlayer->IsSinglePlayerGameEnding() )
 	{
@@ -2402,6 +2403,9 @@ LINK_ENTITY_TO_CLASS( info_teleport_destination, CPointEntity );
 //-----------------------------------------------------------------------------
 // Purpose: Saves the game when the player touches the trigger. Can be enabled or disabled
 //-----------------------------------------------------------------------------
+
+/* BOXBOX we don't want these save entities because we don't save games in MSS!
+
 class CTriggerToggleSave : public CBaseTrigger
 {
 public:
@@ -2560,7 +2564,7 @@ void CTriggerSave::Touch( CBaseEntity *pOther )
 		engine->ServerCommand( "autosave\n" );
 	}
 }
-
+*/
 
 class CTriggerGravity : public CBaseTrigger
 {

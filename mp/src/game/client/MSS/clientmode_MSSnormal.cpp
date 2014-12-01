@@ -81,7 +81,7 @@ IViewPortPanel* CHudViewport::CreatePanelByName( const char *szPanelName )
 		newpanel = new CHL2MPTextWindow( this );
 		return newpanel;
 	}
-	else if ( Q_strcmp(PANEL_SPECGUI, szPanelName) == 0 )
+	else if ( Q_strcmp("PANEL_SPECGUI", szPanelName) == 0 )
 	{
 		newpanel = new CHL2MPSpectatorGUI( this );	
 		return newpanel;

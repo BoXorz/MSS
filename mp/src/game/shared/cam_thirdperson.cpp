@@ -47,7 +47,10 @@ void ThirdPersonChange( IConVar *pConVar, const char *pOldValue, float flOldValu
 	ToggleThirdPerson( var.GetBool() );
 }
 
-ConVar cl_thirdperson( "cl_thirdperson", "0", FCVAR_NOT_CONNECTED | FCVAR_USERINFO | FCVAR_ARCHIVE | FCVAR_DEVELOPMENTONLY, "Enables/Disables third person", ThirdPersonChange  );
+// BOXBOX changing this to clean up console
+//ConVar cl_thirdperson( "cl_thirdperson", "0", FCVAR_NOT_CONNECTED | FCVAR_USERINFO | FCVAR_ARCHIVE | FCVAR_DEVELOPMENTONLY, "Enables/Disables third person", ThirdPersonChange  );
+ConVar cl_thirdperson( "cl_thirdperson", "0", FCVAR_NOT_CONNECTED | FCVAR_USERINFO | FCVAR_DEVELOPMENTONLY, "Enables/Disables third person", ThirdPersonChange  );
+
 
 #endif
 

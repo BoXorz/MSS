@@ -405,6 +405,7 @@ void CWeaponFrag::CheckThrowPosition( CBasePlayer *pPlayer, const Vector &vecEye
 	}
 }
 
+/* BOXBOX removing this
 void DropPrimedFragGrenade( CMSS_Player *pPlayer, CBaseCombatWeapon *pGrenade )
 {
 	CWeaponFrag *pWeaponFrag = dynamic_cast<CWeaponFrag*>( pGrenade );
@@ -415,6 +416,7 @@ void DropPrimedFragGrenade( CMSS_Player *pPlayer, CBaseCombatWeapon *pGrenade )
 		pWeaponFrag->DecrementAmmo( pPlayer );
 	}
 }
+*/
 
 //-----------------------------------------------------------------------------
 // Purpose: 

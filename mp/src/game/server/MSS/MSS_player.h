@@ -13,16 +13,19 @@ class CMSS_Player;
 #include "simtimer.h"
 #include "soundenvelope.h"
 #include "MSS_player_shared.h"
+#include "MSS_shareddefs.h"
 #include "MSS_gamerules.h"
+#include "MSS_charsave.h"
+
 #include "utldict.h"
 
 //=============================================================================
-// >> HL2MP_Player
+// >> MSS_Player
 //=============================================================================
-class CHL2MPPlayerStateInfo
+class CMSSPlayerStateInfo
 {
 public:
-	HL2MPPlayerState m_iPlayerState;
+	MSSPlayerState m_iPlayerState;
 	const char *m_pStateName;
 
 	void (CMSS_Player::*pfnEnterState)();	// Init and deinit the state.
@@ -54,7 +57,8 @@ public:
 	virtual void PreThink( void );
 	virtual void PlayerDeathThink( void );
 	virtual void SetAnimation( PLAYER_ANIM playerAnim );
-	virtual bool HandleCommand_JoinTeam( int team );
+//	virtual bool HandleCommand_JoinTeam( int team ); // BOXBOX replacing this to keep spectating without teams
+	virtual void HandleCommand_Spectate( void ); // BOXBOX replaced it with this
 	virtual bool ClientCommand( const CCommand &args );
 	virtual void CreateViewModel( int viewmodelindex = 0 );
 	virtual bool BecomeRagdollOnClient( const Vector &force );
@@ -64,9 +68,9 @@ public:
 	virtual void FireBullets ( const FireBulletsInfo_t &info );
 	virtual bool Weapon_Switch( CBaseCombatWeapon *pWeapon, int viewmodelindex = 0);
 	virtual bool BumpWeapon( CBaseCombatWeapon *pWeapon );
-	virtual void ChangeTeam( int iTeam );
+//	virtual void ChangeTeam( int iTeam ); // BOXBOX removing teams
 	virtual void PickupObject ( CBaseEntity *pObject, bool bLimitMassAndSize );
-	virtual void PlayStepSound( Vector &vecOrigin, surfacedata_t *psurface, float fvol, bool force );
+//	virtual void PlayStepSound( Vector &vecOrigin, surfacedata_t *psurface, float fvol, bool force ); // BOXBOX removing footstep override
 	virtual void Weapon_Drop( CBaseCombatWeapon *pWeapon, const Vector *pvecTarget = NULL, const Vector *pVelocity = NULL );
 	virtual void UpdateOnRemove( void );
 	virtual void DeathSound( const CTakeDamageInfo &info );
@@ -75,8 +79,8 @@ public:
 	int FlashlightIsOn( void );
 	void FlashlightTurnOn( void );
 	void FlashlightTurnOff( void );
-	void	PrecacheFootStepSounds( void );
-	bool	ValidatePlayerModel( const char *pModel );
+//	void	PrecacheFootStepSounds( void );
+//	bool	ValidatePlayerModel( const char *pModel ); // BOXBOX don't need this
 
 	QAngle GetAnimEyeAngles( void ) { return m_angEyeAngles.Get(); }
 
@@ -84,37 +88,37 @@ public:
 
 	void CheatImpulseCommands( int iImpulse );
 	void CreateRagdollEntity( void );
-	void GiveAllItems( void );
-	void GiveDefaultItems( void );
+	void GiveAllItems( void ); // BOXBOX TODO impulse 101, keeping for now - for development testing
+//	void GiveDefaultItems( void ); // BOXBOX don't need this
 
 	void NoteWeaponFired( void );
 
 	void ResetAnimation( void );
-	void SetPlayerModel( void );
-	void SetPlayerTeamModel( void );
-	Activity TranslateTeamActivity( Activity ActToTranslate );
+//	void SetPlayerModel( void ); // BOXBOX don't need this
+//	void SetPlayerTeamModel( void ); // BOXBOX removing teams
+//	Activity TranslateTeamActivity( Activity ActToTranslate );
 	
 //	float GetNextModelChangeTime( void ) { return m_flNextModelChangeTime; } // BOXBOX removing these
 //	float GetNextTeamChangeTime( void ) { return m_flNextTeamChangeTime; }
 //	void  PickDefaultSpawnTeam( void );
-	void  SetupPlayerSoundsByModel( const char *pModelName );
-	const char *GetPlayerModelSoundPrefix( void );
-	int	  GetPlayerModelType( void ) { return m_iPlayerSoundType;	}
+//	void  SetupPlayerSoundsByModel( const char *pModelName );
+//	const char *GetPlayerModelSoundPrefix( void );
+//	int	  GetPlayerModelType( void ) { return m_iPlayerSoundType;	}
 	
 	void  DetonateTripmines( void );
 
 	void Reset();
 
-	bool IsReady();
-	void SetReady( bool bReady );
+//	bool IsReady();
+//	void SetReady( bool bReady );
 
 	void CheckChatText( char *p, int bufsize );
 
-	void State_Transition( HL2MPPlayerState newState );
-	void State_Enter( HL2MPPlayerState newState );
+	void State_Transition( MSSPlayerState newState );
+	void State_Enter( MSSPlayerState newState );
 	void State_Leave();
 	void State_PreThink();
-	CHL2MPPlayerStateInfo *State_LookupInfo( HL2MPPlayerState state );
+	CMSSPlayerStateInfo *State_LookupInfo( MSSPlayerState state );
 
 	void State_Enter_ACTIVE();
 	void State_PreThink_ACTIVE();
@@ -133,7 +137,58 @@ public:
 
 	virtual bool	CanHearAndReadChatFrom( CBasePlayer *pPlayer );
 
-		
+	void MoveToIntroCamera(); // BOXBOX rip/modifying this from old sdk code
+
+	bool m_bHasCharFile; // BOXBOX does this player have a character file?	
+
+// BOXBOX MSS STUFF FROM OLD DOGG/BRIAN CODE
+
+	bool m_HasChoosenChar;			//True if the player has choosen a character
+	int m_SelectedChar;				//Index of the character choosen
+
+	void SaveChar( );
+	charloadstatus_e LoadChar( int charSlot );
+	void GetCharacterSaveFileFields( CUtlVector<MSSaveProperty> &allPlayerData );
+	float m_TimeLastSave;
+
+	CNetworkArray( string_t, m_PreloadedCharInfo_Name, MAX_CHAR_SLOTS );
+	CNetworkArray( int, m_PreloadedCharInfo_Model, MAX_CHAR_SLOTS );
+	CNetworkVar( bool, m_PreloadedCharInfo_DoneSending );
+
+	virtual void UpdateStats( void );
+
+protected:
+	CNetworkString(ms_playerName, 32);
+	CNetworkVar(unsigned int, ms_gender); // BOXBOX was bool
+	CNetworkVar(unsigned int, ms_playerKills);
+	CNetworkVar(unsigned int, ms_mana);
+	CNetworkVar(unsigned int, ms_maxMana);
+	CNetworkVar(unsigned int, ms_maxHealth);
+	CNetworkVar(unsigned int, ms_gold);
+	CNetworkVar(unsigned int, ms_alliance);
+	CNetworkVar(unsigned int, ms_race);
+	CNetworkVar(unsigned int, ms_strength);
+	CNetworkVar(unsigned int, ms_dexterity);
+	CNetworkVar(unsigned int, ms_concentration);
+	CNetworkVar(unsigned int, ms_awareness);
+	CNetworkVar(unsigned int, ms_fitness);
+	CNetworkVar(unsigned int, ms_level);
+	CNetworkVar(unsigned int, ms_warriorSkills);
+	CNetworkVar(unsigned int, ms_martialArts);
+	CNetworkVar(unsigned int, ms_smallArms);
+	CNetworkVar(unsigned int, ms_archery);
+	CNetworkVar(unsigned int, ms_spellCasting);
+	CNetworkVar(unsigned int, ms_parry);
+	CNetworkVar(unsigned int, ms_warriorSkillsExpPercent);
+	CNetworkVar(unsigned int, ms_martialArtsExpPercent);
+	CNetworkVar(unsigned int, ms_smallArmsExpPercent);
+	CNetworkVar(unsigned int, ms_archeryExpPercent);
+	CNetworkVar(unsigned int, ms_spellCastingExpPercent);
+	CNetworkVar(unsigned int, ms_parryExpPercent);
+
+
+// BOXBOX end old MSS code
+
 private:
 
 	CNetworkQAngle( m_angEyeAngles );
@@ -142,15 +197,15 @@ private:
 	int m_iLastWeaponFireUsercmd;
 	int m_iModelType;
 	CNetworkVar( int, m_iSpawnInterpCounter );
-	CNetworkVar( int, m_iPlayerSoundType );
+//	CNetworkVar( int, m_iPlayerSoundType );
 
 //	float m_flNextModelChangeTime; // BOXBOX removing these
 //	float m_flNextTeamChangeTime;
 
-	float m_flSlamProtectTime;	
+//	float m_flSlamProtectTime;	
 
-	HL2MPPlayerState m_iPlayerState;
-	CHL2MPPlayerStateInfo *m_pCurStateInfo;
+	MSSPlayerState m_iPlayerState;
+	CMSSPlayerStateInfo *m_pCurStateInfo;
 
 	bool ShouldRunRateLimitedCommand( const CCommand &args );
 
@@ -158,7 +213,11 @@ private:
 	CUtlDict<float,int>	m_RateLimitLastCommandTimes;
 
     bool m_bEnterObserver;
-	bool m_bReady;
+//	bool m_bReady;
+
+
+
+
 };
 
 inline CMSS_Player *ToHL2MPPlayer( CBaseEntity *pEntity )

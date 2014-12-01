@@ -67,7 +67,7 @@ const char *GetStringTeamColor( int i )
 //-----------------------------------------------------------------------------
 // Purpose: Constructor
 //-----------------------------------------------------------------------------
-CTeamMenu::CTeamMenu(IViewPort *pViewPort) : Frame(NULL, PANEL_TEAM )
+CTeamMenu::CTeamMenu(IViewPort *pViewPort) : Frame(NULL, "PANEL_TEAM" )
 {
 	m_pViewPort = pViewPort;
 	m_iJumpKey = BUTTON_CODE_INVALID; // this is looked up in Activate()

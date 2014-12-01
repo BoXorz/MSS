@@ -81,7 +81,7 @@ public:
 	void GatherConditions();
 	void UseFunc( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 
-	CAI_FuncTankBehavior		m_FuncTankBehavior;
+//	CAI_FuncTankBehavior		m_FuncTankBehavior; // BOXBOX removing stuff
 	COutputEvent				m_OnPlayerUse;
 
 	DEFINE_CUSTOM_AI;
@@ -195,13 +195,14 @@ void CNPC_Barney::DeathSound( const CTakeDamageInfo &info )
 bool CNPC_Barney::CreateBehaviors( void )
 {
 	BaseClass::CreateBehaviors();
-	AddBehavior( &m_FuncTankBehavior );
+//	AddBehavior( &m_FuncTankBehavior ); // BOXBOX removing stuff
 
 	return true;
 }
 
 void CNPC_Barney::OnChangeRunningBehavior( CAI_BehaviorBase *pOldBehavior,  CAI_BehaviorBase *pNewBehavior )
 {
+/* BOXBOX removing stuff
 	if ( pNewBehavior == &m_FuncTankBehavior )
 	{
 		m_bReadinessCapable = false;
@@ -210,7 +211,7 @@ void CNPC_Barney::OnChangeRunningBehavior( CAI_BehaviorBase *pOldBehavior,  CAI_
 	{
 		m_bReadinessCapable = IsReadinessCapable();
 	}
-
+*/
 	BaseClass::OnChangeRunningBehavior( pOldBehavior, pNewBehavior );
 }
 

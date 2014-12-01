@@ -26,9 +26,9 @@
 #include <algorithm>
 #include "tier0/valve_minmax_on.h"
 
-#if defined(DOD_DLL) || defined(CSTRIKE_DLL)
+//#if defined(DOD_DLL) || defined(CSTRIKE_DLL) // BOXBOX enabling this for MSS!
 #define USE_DETAIL_SHAPES
-#endif
+//#endif
 
 #ifdef USE_DETAIL_SHAPES
 #include "engine/ivdebugoverlay.h"
@@ -48,7 +48,7 @@
 struct model_t;
 
 
-ConVar cl_detaildist( "cl_detaildist", "1200", 0, "Distance at which detail props are no longer visible" );
+ConVar cl_detaildist( "cl_detaildist", "2400", 0, "Distance at which detail props are no longer visible" ); // BOXBOX was 1200
 ConVar cl_detailfade( "cl_detailfade", "400", 0, "Distance across which detail props fade in" );
 #if defined( USE_DETAIL_SHAPES ) 
 ConVar cl_detail_max_sway( "cl_detail_max_sway", "0", FCVAR_ARCHIVE, "Amplitude of the detail prop sway" );

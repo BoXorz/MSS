@@ -1391,11 +1391,11 @@ bool CPropCombineBall::IsAttractiveTarget( CBaseEntity *pEntity )
 			 return false;
 		
 		//No tracking teammates in teammode!
-		if ( g_pGameRules->IsTeamplay() )
-		{
-			if ( g_pGameRules->PlayerRelationship( GetOwnerEntity(), pEntity ) == GR_TEAMMATE )
-				 return false;
-		}
+//		if ( g_pGameRules->IsTeamplay() )
+//		{
+//			if ( g_pGameRules->PlayerRelationship( GetOwnerEntity(), pEntity ) == GR_TEAMMATE )
+//				 return false;
+//		}
 #endif
 
 		// We must be able to hit them

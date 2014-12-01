@@ -99,7 +99,7 @@ private:
 //-----------------------------------------------------------------------------
 // Purpose: Constructor
 //-----------------------------------------------------------------------------
-CSpectatorMenu::CSpectatorMenu( IViewPort *pViewPort ) : Frame( NULL, PANEL_SPECMENU )
+CSpectatorMenu::CSpectatorMenu( IViewPort *pViewPort ) : Frame( NULL, "PANEL_SPECMENU" )
 {
 	m_iDuckKey = BUTTON_CODE_INVALID;
 		
@@ -399,7 +399,7 @@ void CSpectatorMenu::Update( void )
 //-----------------------------------------------------------------------------
 // Purpose: Constructor
 //-----------------------------------------------------------------------------
-CSpectatorGUI::CSpectatorGUI(IViewPort *pViewPort) : EditablePanel( NULL, PANEL_SPECGUI )
+CSpectatorGUI::CSpectatorGUI(IViewPort *pViewPort) : EditablePanel( NULL, "PANEL_SPECGUI" )
 {
 // 	m_bHelpShown = false;
 //	m_bInsetVisible = false;
@@ -607,7 +607,7 @@ void CSpectatorGUI::Update()
 	int specmode = GetSpectatorMode();
 	int playernum = GetSpectatorTarget();
 
-	IViewPortPanel *overview = gViewPortInterface->FindPanelByName( PANEL_OVERVIEW );
+	IViewPortPanel *overview = gViewPortInterface->FindPanelByName( "PANEL_OVERVIEW" );
 
 	if ( overview && overview->IsVisible() )
 	{

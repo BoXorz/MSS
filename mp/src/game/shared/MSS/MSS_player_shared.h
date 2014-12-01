@@ -21,11 +21,10 @@ enum
 	PLAYER_SOUNDS_MAX,
 };
 
-enum HL2MPPlayerState
+enum MSSPlayerState
 {
-	// Happily running around in the game.
-	STATE_ACTIVE=0,
-	STATE_OBSERVER_MODE,		// Noclipping around, watching players, etc.
+	STATE_ACTIVE=0,			// Happily running around in the game.
+	STATE_OBSERVER_MODE,	// Noclipping around, watching players, etc.
 	NUM_PLAYER_STATES
 };
 

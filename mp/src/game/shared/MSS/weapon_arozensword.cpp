@@ -224,11 +224,16 @@ int CWeaponArozenSword::WeaponMeleeAttack1Condition( float flDot, float flDist )
 void CWeaponArozenSword::Drop( const Vector &vecVelocity )
 {
 #ifndef CLIENT_DLL
-	UTIL_Remove( this );
+//	UTIL_Remove( this ); // BOXBOX This is why weapons wouldn't drop!
+
+	BaseClass::Drop( vecVelocity ); // BOXBOX replaced with this
+
+
+	AddEffects( EF_ITEM_BLINK ); // BOXBOX TODO adding this, but maybe later change it to highlight using code from estranged?
 #endif
 }
 
-float CWeaponArozenSword::GetDamageForActivity( Activity hitActivity ) // BOXBOX TODO set MSS damages
+float CWeaponArozenSword::GetDamageForActivity( Activity hitActivity )
 {
 	return AROZENSWORD_DAMAGE;
 }

@@ -378,7 +378,7 @@ void FX_GunshotSlimeSplash( const Vector &origin, const Vector &normal, float sc
 	}
 	
 #else
-	
+/* BOXBOX removing this	
 	QAngle vecAngles;
 	VectorAngles( normal, vecAngles );
 	if ( scale < 2.0f )
@@ -393,7 +393,7 @@ void FX_GunshotSlimeSplash( const Vector &origin, const Vector &normal, float sc
 	{
 		DispatchParticleEffect( "slime_splash_03", origin, vecAngles );
 	}
-
+*/
 #endif
 
 	//Play a sound

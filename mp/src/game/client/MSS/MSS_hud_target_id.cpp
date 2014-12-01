@@ -166,7 +166,7 @@ void CTargetID::Paint()
 			}
 			else
 			{
-*/				printFormatString = "#Playerid_diffteam";
+*/				printFormatString = "#Playerid"; // BOXBOX TODO was "#Playerid_diffteam". find and change in script file
 //			}
 		
 

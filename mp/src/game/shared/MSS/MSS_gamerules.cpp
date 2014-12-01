@@ -851,9 +851,6 @@ int CMSSRules::PlayerRelationship( CBaseEntity *pPlayer, CBaseEntity *pTarget )
 
 const char *CMSSRules::GetGameDescription( void )
 { 
-//	if ( IsTeamplay() )
-//		return "Team Deathmatch"; 
-
 	return "MasterSword: Source"; 
 }
 
@@ -883,6 +880,8 @@ float CMSSRules::GetMapRemainingTime()
 void CMSSRules::Precache( void )
 {
 //	CBaseEntity::PrecacheScriptSound( "AlyxEmp.Charge" ); // BOXBOX commenting out
+
+	CBaseEntity::PrecacheScriptSound( "Music.Intro" ); // BOXBOX see if this works here
 }
 
 bool CMSSRules::ShouldCollide( int collisionGroup0, int collisionGroup1 ) // BOXBOX TODO change this? looks like players don't collide with weapons

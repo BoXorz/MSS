@@ -478,7 +478,6 @@ void CBaseCombatWeapon::Kill( void )
 //-----------------------------------------------------------------------------
 void CBaseCombatWeapon::FallInit( void )
 {
-	UTIL_CenterPrintAll( "CBaseCombatWeapon::FallInit\n" ); // BOXBOX TODO BUG HUNT melee weapons don't drop!
 	SetModel( GetWorldModel() );
 	VPhysicsDestroyObject();
 

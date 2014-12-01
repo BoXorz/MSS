@@ -373,7 +373,7 @@ CSimpleSimTimer CNPC_Citizen::gm_PlayerSquadEvaluateTimer;
 bool CNPC_Citizen::CreateBehaviors()
 {
 	BaseClass::CreateBehaviors();
-	AddBehavior( &m_FuncTankBehavior );
+//	AddBehavior( &m_FuncTankBehavior ); // BOXBOX removing stuff
 	
 	return true;
 }
@@ -508,13 +508,14 @@ void CNPC_Citizen::Spawn()
 
 	m_flNextHealthSearchTime = gpGlobals->curtime;
 
+/* BOXBOX removing stuff
 	CWeaponRPG *pRPG = dynamic_cast<CWeaponRPG*>(GetActiveWeapon());
 	if ( pRPG )
 	{
 		CapabilitiesRemove( bits_CAP_USE_SHOT_REGULATOR );
 		pRPG->StopGuiding();
 	}
-
+*/
 	m_flTimePlayerStare = FLT_MAX;
 
 	AddEFlags( EFL_NO_DISSOLVE | EFL_NO_MEGAPHYSCANNON_RAGDOLL | EFL_NO_PHYSCANNON_INTERACTION );
@@ -839,10 +840,9 @@ bool CNPC_Citizen::ShouldAlwaysThink()
 #define CITIZEN_FOLLOWER_DESERT_FUNCTANK_DIST	45.0f*12.0f
 bool CNPC_Citizen::ShouldBehaviorSelectSchedule( CAI_BehaviorBase *pBehavior )
 {
+/* BOXBOX removing stuff
 	if( pBehavior == &m_FollowBehavior )
 	{
-		// Suppress follow behavior if I have a func_tank and the func tank is near
-		// what I'm supposed to be following.
 		if( m_FuncTankBehavior.CanSelectSchedule() )
 		{
 			// Is the tank close to the follow target?
@@ -870,12 +870,13 @@ bool CNPC_Citizen::ShouldBehaviorSelectSchedule( CAI_BehaviorBase *pBehavior )
 			}
 		}
 	}
-
+*/
 	return BaseClass::ShouldBehaviorSelectSchedule( pBehavior );
 }
 
 void CNPC_Citizen::OnChangeRunningBehavior( CAI_BehaviorBase *pOldBehavior,  CAI_BehaviorBase *pNewBehavior )
 {
+/* BOXBOX removing stuff
 	if ( pNewBehavior == &m_FuncTankBehavior )
 	{
 		m_bReadinessCapable = false;
@@ -884,7 +885,7 @@ void CNPC_Citizen::OnChangeRunningBehavior( CAI_BehaviorBase *pOldBehavior,  CAI
 	{
 		m_bReadinessCapable = IsReadinessCapable();
 	}
-
+*/
 	BaseClass::OnChangeRunningBehavior( pOldBehavior, pNewBehavior );
 }
 
@@ -1173,14 +1174,14 @@ int CNPC_Citizen::SelectSchedule()
 		Assert( GetMoveParent() && FClassnameIs( GetMoveParent(), "func_tracktrain" ) );
 		return SCHED_CITIZEN_SIT_ON_TRAIN;
 	}
-
+/* BOXBOX removing stuff
 	CWeaponRPG *pRPG = dynamic_cast<CWeaponRPG*>(GetActiveWeapon());
 	if ( pRPG && pRPG->IsGuiding() )
 	{
 		DevMsg( "Citizen in select schedule but RPG is guiding?\n");
 		pRPG->StopGuiding();
 	}
-	
+*/	
 	return BaseClass::SelectSchedule();
 }
 
@@ -1723,7 +1724,7 @@ void CNPC_Citizen::RunTask( const Task_t *pTask )
 			break;
 
 #endif
-
+/* BOXBOX removing stuff
 		case TASK_CIT_RPG_AUGER:
 			{
 				// Keep augering until the RPG has been destroyed
@@ -1804,7 +1805,7 @@ void CNPC_Citizen::RunTask( const Task_t *pTask )
 				pRPG->UpdateNPCLaserPosition( vecLaserPos );
 			}
 			break;
-
+*/
 		default:
 			BaseClass::RunTask( pTask );
 			break;
@@ -1951,13 +1952,14 @@ void CNPC_Citizen::PickupItem( CBaseEntity *pItem )
 bool CNPC_Citizen::IgnorePlayerPushing( void )
 {
 	// If the NPC's on a func_tank that the player cannot man, ignore player pushing
+/* BOXBOX removing stuff
 	if ( m_FuncTankBehavior.IsMounted() )
 	{
 		CFuncTank *pTank = m_FuncTankBehavior.GetFuncTank();
 		if ( pTank && !pTank->IsControllable() )
 			return true;
 	}
-
+*/
 	return false;
 }
 
@@ -2102,7 +2104,7 @@ bool CNPC_Citizen::IsManhackMeleeCombatant()
 Vector CNPC_Citizen::GetActualShootPosition( const Vector &shootOrigin )
 {
 	Vector vecTarget = BaseClass::GetActualShootPosition( shootOrigin );
-
+/* BOXBOX removing stuff
 	CWeaponRPG *pRPG = dynamic_cast<CWeaponRPG*>(GetActiveWeapon());
 	// If we're firing an RPG at a gunship, aim off to it's side, because we'll auger towards it.
 	if ( pRPG && GetEnemy() )
@@ -2144,7 +2146,7 @@ Vector CNPC_Citizen::GetActualShootPosition( const Vector &shootOrigin )
 		}
 
 	}
-
+*/
 	return vecTarget;
 }
 

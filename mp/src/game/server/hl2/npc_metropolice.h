@@ -448,7 +448,7 @@ private:
 	CAI_ActBusyBehavior		m_ActBusyBehavior;
 	CAI_StandoffBehavior	m_StandoffBehavior;
 	CAI_AssaultBehavior		m_AssaultBehavior;
-	CAI_FuncTankBehavior	m_FuncTankBehavior;
+//	CAI_FuncTankBehavior	m_FuncTankBehavior; // BOXBOX removing stuff
 	CAI_RappelBehavior		m_RappelBehavior;
 	CAI_PolicingBehavior	m_PolicingBehavior;
 	CAI_FollowBehavior		m_FollowBehavior;

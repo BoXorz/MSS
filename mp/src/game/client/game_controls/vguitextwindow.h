@@ -23,10 +23,6 @@ namespace vgui
 	class TextEntry;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: displays the MOTD
-//-----------------------------------------------------------------------------
-
 class CTextWindow : public vgui::Frame, public IViewPortPanel
 {
 private:

@@ -111,7 +111,7 @@ protected:	// private structures & types
 
 public: // IViewPortPanel interface:
 
-	virtual const char *GetName( void ) { return PANEL_OVERVIEW; }
+	virtual const char *GetName( void ) { return "PANEL_OVERVIEW"; }
 	virtual void SetData(KeyValues *data);
 	virtual void Reset();
 	virtual void OnThink();

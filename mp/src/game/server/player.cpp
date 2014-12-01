@@ -4783,8 +4783,9 @@ CBaseEntity *CBasePlayer::EntSelectSpawnPoint()
 
 	player = edict();
 
-// choose a info_player_deathmatch point
-	if (g_pGameRules->IsCoOp())
+// BOXBOX reforming spawn points
+
+/*	if (g_pGameRules->IsCoOp())
 	{
 		pSpot = gEntList.FindEntityByClassname( g_pLastSpawn, "info_player_coop");
 		if ( pSpot )
@@ -4795,14 +4796,16 @@ CBaseEntity *CBasePlayer::EntSelectSpawnPoint()
 	}
 	else if ( g_pGameRules->IsDeathmatch() )
 	{
-		pSpot = g_pLastSpawn;
-		// Randomize the start spot
-		for ( int i = random->RandomInt(1,5); i > 0; i-- )
-			pSpot = gEntList.FindEntityByClassname( pSpot, "mss_spawnpoint" ); // BOXBOX was "info_player_deathmatch"
-		if ( !pSpot )  // skip over the null point
-			pSpot = gEntList.FindEntityByClassname( pSpot, "mss_spawnpoint" ); // BOXBOX was "info_player_deathmatch"
+*/
+	pSpot = g_pLastSpawn;
+	// Randomize the start spot
+	for ( int i = random->RandomInt(1,5); i > 0; i-- )
+		pSpot = gEntList.FindEntityByClassname( pSpot, "mss_spawnpoint" );
 
-		CBaseEntity *pFirstSpot = pSpot;
+	if ( !pSpot )  // skip over the null point
+		pSpot = gEntList.FindEntityByClassname( pSpot, "mss_spawnpoint" );
+
+	CBaseEntity *pFirstSpot = pSpot;
 
 		do 
 		{
@@ -4813,7 +4816,7 @@ CBaseEntity *CBasePlayer::EntSelectSpawnPoint()
 				{
 					if ( pSpot->GetLocalOrigin() == vec3_origin )
 					{
-						pSpot = gEntList.FindEntityByClassname( pSpot, "mss_spawnpoint" ); // BOXBOX was "info_player_deathmatch"
+						pSpot = gEntList.FindEntityByClassname( pSpot, "mss_spawnpoint" );
 						continue;
 					}
 
@@ -4822,7 +4825,7 @@ CBaseEntity *CBasePlayer::EntSelectSpawnPoint()
 				}
 			}
 			// increment pSpot
-			pSpot = gEntList.FindEntityByClassname( pSpot, "mss_spawnpoint" ); // BOXBOX was "info_player_deathmatch"
+			pSpot = gEntList.FindEntityByClassname( pSpot, "mss_spawnpoint" );
 		} while ( pSpot != pFirstSpot ); // loop if we're not back to the start
 
 		// we haven't found a place to spawn yet,  so kill any guy at the first spawn point and spawn there
@@ -4837,7 +4840,7 @@ CBaseEntity *CBasePlayer::EntSelectSpawnPoint()
 			}
 			goto ReturnSpot;
 		}
-	}
+//	}
 
 	// If startspot is set, (re)spawn there.
 	if ( !gpGlobals->startspot || !strlen(STRING(gpGlobals->startspot)))
@@ -4865,7 +4868,7 @@ ReturnSpot:
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Called the first time the player's created
+// Purpose: Called the first time the player is created
 //-----------------------------------------------------------------------------
 void CBasePlayer::InitialSpawn( void )
 {
@@ -5064,15 +5067,16 @@ void CBasePlayer::Precache( void )
 	PrecacheScriptSound( "Player.DrownContinue" );
 	PrecacheScriptSound( "Player.Wade" );
 	PrecacheScriptSound( "Player.AmbientUnderWater" );
-	enginesound->PrecacheSentenceGroup( "HEV" );
+//	enginesound->PrecacheSentenceGroup( "HEV" ); // BOXBOX don't need this
 
 	// These are always needed
+/* BOXBOX umm, no they're not.
 #ifndef TF_DLL
 	PrecacheParticleSystem( "slime_splash_01" );
 	PrecacheParticleSystem( "slime_splash_02" );
 	PrecacheParticleSystem( "slime_splash_03" );
 #endif
-
+*/
 	// in the event that the player JUST spawned, and the level node graph
 	// was loaded, fix all of the node graph pointers before the game starts.
 	
@@ -7142,7 +7146,7 @@ QAngle CBasePlayer::AutoaimDeflection( Vector &vecSrc, autoaim_params_t &params 
 				// If this entity is an NPC, only aim if it is an enemy.
 				if ( IRelationType( pEntity ) != D_HT )
 				{
-					if ( !pEntity->IsPlayer() && !g_pGameRules->IsDeathmatch())
+					if ( !pEntity->IsPlayer() /*&& !g_pGameRules->IsDeathmatch()*/ )
 						// Msg( "friend\n");
 						continue;
 				}
@@ -7586,11 +7590,11 @@ void CStripWeapons::StripWeapons(inputdata_t &data, bool stripSuit)
 	{
 		pPlayer = (CBasePlayer *)data.pActivator;
 	}
-	else if ( !g_pGameRules->IsDeathmatch() )
+/*	else if ( !g_pGameRules->IsDeathmatch() ) // BOXBOX removing deathmatch references
 	{
 		pPlayer = UTIL_GetLocalPlayer();
 	}
-
+*/
 	if ( pPlayer )
 	{
 		pPlayer->RemoveAllItems( stripSuit );
@@ -7820,11 +7824,11 @@ void CMovementSpeedMod::InputSpeedMod(inputdata_t &data)
 	{
 		pPlayer = (CBasePlayer *)data.pActivator;
 	}
-	else if ( !g_pGameRules->IsDeathmatch() )
+/*	else if ( !g_pGameRules->IsDeathmatch() ) // BOXBOX removing deathmatch references
 	{
 		pPlayer = UTIL_GetLocalPlayer();
 	}
-
+*/
 	if ( pPlayer )
 	{
 		if ( data.value.Float() != 1.0f )

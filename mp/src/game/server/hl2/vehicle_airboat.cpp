@@ -1675,7 +1675,7 @@ void CPropAirboat::FireGun( )
 		vecEyePosition = vecGunPosition;
 		vecEyeDirection = vecRay;
 	}
-
+/* BOXBOX removing stuff
 	CAPCMissile *pEnt = FindAPCMissileInCone( vecEyePosition, vecEyeDirection, 2.5f );
 	if ( pEnt && (pEnt->GetHealth() > 0) )
 	{
@@ -1704,6 +1704,7 @@ void CPropAirboat::FireGun( )
 //			pEnt->DisableGuiding();
 		}
 	}
+*/
 }
 
 

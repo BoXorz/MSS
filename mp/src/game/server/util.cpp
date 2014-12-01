@@ -1434,7 +1434,7 @@ void UTIL_PlayerDecalTrace( trace_t *pTrace, int playernum )
 	te->PlayerDecal( filter, 0.0,
 		&pTrace->endpos, playernum, pTrace->m_pEnt->entindex() );
 }
-
+/*
 bool UTIL_TeamsMatch( const char *pTeamName1, const char *pTeamName2 )
 {
 	// Everyone matches unless it's teamplay
@@ -1450,7 +1450,7 @@ bool UTIL_TeamsMatch( const char *pTeamName1, const char *pTeamName2 )
 
 	return false;
 }
-
+*/
 
 void UTIL_AxisStringToPointPoint( Vector &start, Vector &end, const char *pString )
 {

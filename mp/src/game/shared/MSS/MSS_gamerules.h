@@ -139,7 +139,7 @@ public:
 
 	
 //	bool	IsTeamplay( void ) { return m_bTeamPlayEnabled;	} // BOXBOX removing teams
-//	void	CheckAllPlayersReady( void ); // BOXBOX TODO see if we need this
+//	void	CheckAllPlayersReady( void ); // BOXBOX don't need this
 
 //	virtual bool IsConnectedUserInfoChangeAllowed( CBasePlayer *pPlayer );
 	

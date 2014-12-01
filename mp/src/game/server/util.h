@@ -367,7 +367,7 @@ void		UTIL_Beam( Vector &Start, Vector &End, int nModelIndex, int nHaloIndex, un
 
 char		*UTIL_VarArgs( PRINTF_FORMAT_STRING const char *format, ... );
 bool		UTIL_IsValidEntity( CBaseEntity *pEnt );
-bool		UTIL_TeamsMatch( const char *pTeamName1, const char *pTeamName2 );
+//bool		UTIL_TeamsMatch( const char *pTeamName1, const char *pTeamName2 );
 
 // snaps a vector to the nearest axis vector (if within epsilon)
 void		UTIL_SnapDirectionToAxis( Vector &direction, float epsilon = 0.002f );

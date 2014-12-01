@@ -696,7 +696,7 @@ void CBaseCombatWeapon::Drop( const Vector &vecVelocity )
 		SetAbsVelocity( vecVelocity );
 	}
 
-	CBaseEntity *pOwner = GetOwnerEntity();
+//	CBaseEntity *pOwner = GetOwnerEntity();
 
 	SetNextThink( gpGlobals->curtime + 1.0f );
 	SetOwnerEntity( NULL );
@@ -705,6 +705,7 @@ void CBaseCombatWeapon::Drop( const Vector &vecVelocity )
 	// If we're not allowing to spawn due to the gamerules,
 	// remove myself when I'm dropped by an NPC.
 
+/* BOXBOX removing this for MSS
 	if ( pOwner && pOwner->IsNPC() )
 	{
 		if ( g_pGameRules->IsAllowedToSpawn( this ) == false )
@@ -713,12 +714,14 @@ void CBaseCombatWeapon::Drop( const Vector &vecVelocity )
 			return;
 		}
 	}
+*/
+
 #endif
 }
 
 
 
-void CBaseCombatWeapon::OnPickedUp( CBaseCombatCharacter *pNewOwner ) // BOXBOX TODO change this
+void CBaseCombatWeapon::OnPickedUp( CBaseCombatCharacter *pNewOwner ) // BOXBOX TODO if weapon is better than current, switch?
 {
 #if !defined( CLIENT_DLL )
 	RemoveEffects( EF_ITEM_BLINK );
@@ -758,6 +761,9 @@ void CBaseCombatWeapon::OnPickedUp( CBaseCombatCharacter *pNewOwner ) // BOXBOX 
 */
 	// Someone picked me up, so make it so that I can't be removed.
 	SetRemoveable( false );
+
+	pNewOwner->SwitchToNextBestWeapon( pNewOwner->GetActiveWeapon() ); // BOXBOX NOW switch weapons on pickup only if new weapon is better
+
 #endif
 }
 

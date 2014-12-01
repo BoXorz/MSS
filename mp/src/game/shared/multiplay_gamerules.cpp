@@ -444,8 +444,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 	}
 
 
-	//=========================================================
-	//=========================================================
+/* BOXBOX don't need these
 	bool CMultiplayRules::IsDeathmatch( void )
 	{
 		return true;
@@ -457,6 +456,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 	{
 		return false;
 	}
+*/
 
 	//=========================================================
 	//=========================================================
@@ -494,17 +494,15 @@ ConVarRef suitcharger( "sk_suitcharger" );
 		return false;
 	}
 
-	//-----------------------------------------------------------------------------
-	// Purpose: Returns the weapon in the player's inventory that would be better than
-	//			the given weapon.
-	//-----------------------------------------------------------------------------
+// BOXBOX reformed this function for MSS
 	CBaseCombatWeapon *CMultiplayRules::GetNextBestWeapon( CBaseCombatCharacter *pPlayer, CBaseCombatWeapon *pCurrentWeapon )
 	{
 		CBaseCombatWeapon *pCheck;
 		CBaseCombatWeapon *pBest;// this will be used in the event that we don't find a weapon in the same category.
 
-		int iCurrentWeight = -1;
-		int iBestWeight = -1;// no weapon lower than -1 can be autoswitched to
+//		int iCurrentWeight = -1;
+//		int iBestWeight = -1;// no weapon lower than -1 can be autoswitched to
+		int iCurrentBestWeight = -1;
 		pBest = NULL;
 
 		// If I have a weapon, make sure I'm allowed to holster it
@@ -517,7 +515,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 				return NULL;
 			}
 
-			iCurrentWeight = pCurrentWeapon->GetWeight();
+			iCurrentBestWeight = pCurrentWeapon->GetWeight();
 		}
 
 		for ( int i = 0 ; i < pPlayer->WeaponCount(); ++i )
@@ -531,6 +529,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 			if ( pCurrentWeapon && !pCheck->AllowsAutoSwitchTo() )
 				continue;
 
+/* BOXBOX commenting this out, because no 2 weapons in MSS should have the same weight, and if they do, we don't want to switch anyway
 			if ( pCheck->GetWeight() > -1 && pCheck->GetWeight() == iCurrentWeight && pCheck != pCurrentWeapon )
 			{
 				// this weapon is from the same category. 
@@ -542,18 +541,21 @@ ConVarRef suitcharger( "sk_suitcharger" );
 					}
 				}
 			}
-			else if ( pCheck->GetWeight() > iBestWeight && pCheck != pCurrentWeapon )// don't reselect the weapon we're trying to get rid of
+			else
+*/			
+			if ( pCheck->GetWeight() > iCurrentBestWeight && pCheck != pCurrentWeapon )// don't reselect the weapon we're trying to get rid of
 			{
 				//Msg( "Considering %s\n", STRING( pCheck->GetClassname() );
 				// we keep updating the 'best' weapon just in case we can't find a weapon of the same weight
 				// that the player was using. This will end up leaving the player with his heaviest-weighted 
 				// weapon. 
-				if ( pCheck->HasAnyAmmo() )
-				{
+
+//				if ( pCheck->HasAnyAmmo() ) // BOXBOX removing ammo check!
+//				{
 					// if this weapon is useable, flag it as the best
-					iBestWeight = pCheck->GetWeight();
+					iCurrentBestWeight = pCheck->GetWeight();
 					pBest = pCheck;
-				}
+//				}
 			}
 		}
 

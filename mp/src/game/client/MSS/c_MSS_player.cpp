@@ -22,14 +22,22 @@
 
 LINK_ENTITY_TO_CLASS( player, C_MSS_Player );
 
-IMPLEMENT_CLIENTCLASS_DT(C_MSS_Player, DT_HL2MP_Player, CMSS_Player)
+IMPLEMENT_CLIENTCLASS_DT(C_MSS_Player, DT_MSS_Player, CMSS_Player)
 	RecvPropFloat( RECVINFO( m_angEyeAngles[0] ) ),
 	RecvPropFloat( RECVINFO( m_angEyeAngles[1] ) ),
 	RecvPropEHandle( RECVINFO( m_hRagdoll ) ),
 	RecvPropInt( RECVINFO( m_iSpawnInterpCounter ) ),
-	RecvPropInt( RECVINFO( m_iPlayerSoundType) ),
+//	RecvPropInt( RECVINFO( m_iPlayerSoundType) ),
 
 	RecvPropBool( RECVINFO( m_fIsWalking ) ),
+
+// BOXBOXBOX MSS STUFF
+	//RecvPropArray( RecvPropString( RECVINFO( m_PreloadedCharInfo ) ), m_PreloadedCharInfo ),
+	//RecvPropArray3( RECVINFO_ARRAY( m_PreloadedCharInfo ), RecvPropString( RECVINFO( m_PreloadedCharInfo ), 0, RecvProxy_Preload ) ),
+	RecvPropArray( RecvPropString( RECVINFO( m_PreloadedCharInfo_Name[0]) ), m_PreloadedCharInfo_Name ),
+	RecvPropArray( RecvPropInt( RECVINFO( m_PreloadedCharInfo_Model[0] ) ), m_PreloadedCharInfo_Model),
+	RecvPropBool( RECVINFO( m_PreloadedCharInfo_DoneSending ) ),
+
 END_RECV_TABLE()
 
 BEGIN_PREDICTION_DATA( C_MSS_Player )

@@ -686,14 +686,14 @@ void C_HLTVCamera::FireGameEvent( IGameEvent * event)
 		if ( engine->IsPlayingDemo() )
         {
 			// for demo playback show full menu
-			gViewPortInterface->ShowPanel( PANEL_SPECMENU, true );
+//			gViewPortInterface->ShowPanel( PANEL_SPECMENU, true );
 
 			SetMode( OBS_MODE_ROAMING );
 		}
 		else
 		{
 			// during live broadcast only show black bars
-			gViewPortInterface->ShowPanel( PANEL_SPECGUI, true );
+//			gViewPortInterface->ShowPanel( PANEL_SPECGUI, true );
 		}
 
 		return;

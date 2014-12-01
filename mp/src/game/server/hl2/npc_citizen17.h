@@ -328,7 +328,7 @@ private:
 	COutputEvent		m_OnNavFailBlocked;
 
 	//-----------------------------------------------------
-	CAI_FuncTankBehavior	m_FuncTankBehavior;
+//	CAI_FuncTankBehavior	m_FuncTankBehavior; // BOXBOX removing stuff
 
 	CHandle<CAI_FollowGoal>	m_hSavedFollowGoalEnt;
 

@@ -33,7 +33,7 @@ public:
 
 	virtual void ApplySchemeSettings( vgui::IScheme *pScheme );
 
-	virtual const char *GetName( void ){ return PANEL_INTRO; }
+	virtual const char *GetName( void ){ return "PANEL_INTRO"; }
 	virtual void SetData( KeyValues *data ){ return; }
 	virtual void Reset();
 	virtual void Update();

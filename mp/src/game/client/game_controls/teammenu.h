@@ -39,7 +39,7 @@ public:
 	CTeamMenu(IViewPort *pViewPort);
 	virtual ~CTeamMenu();
 
-	virtual const char *GetName( void ) { return PANEL_TEAM; }
+	virtual const char *GetName( void ) { return "PANEL_TEAM"; }
 	virtual void SetData(KeyValues *data) {};
 	virtual void Reset() {};
 	virtual void Update();

@@ -122,9 +122,9 @@ public:
 	virtual CBaseCombatWeapon *GetNextBestWeapon( CBaseCombatCharacter *pPlayer, CBaseCombatWeapon *pCurrentWeapon );
 	virtual bool SwitchToNextBestWeapon( CBaseCombatCharacter *pPlayer, CBaseCombatWeapon *pCurrentWeapon );
 
-// Functions to verify the single/multiplayer status of a game
-	virtual bool IsDeathmatch( void );
-	virtual bool IsCoOp( void );
+// BOXBOX not using these
+//	virtual bool IsDeathmatch( void );
+//	virtual bool IsCoOp( void );
 
 // Client connection/disconnection
 	// If ClientConnected returns FALSE, the connection is rejected and the user is provided the reason specified in

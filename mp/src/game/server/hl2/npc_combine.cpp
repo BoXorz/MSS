@@ -363,7 +363,7 @@ bool CNPC_Combine::CreateBehaviors()
 	AddBehavior( &m_AssaultBehavior );
 	AddBehavior( &m_StandoffBehavior );
 	AddBehavior( &m_FollowBehavior );
-	AddBehavior( &m_FuncTankBehavior );
+//	AddBehavior( &m_FuncTankBehavior ); // BOXBOX removing stuff
 
 	return BaseClass::CreateBehaviors();
 }
@@ -1739,11 +1739,12 @@ int CNPC_Combine::SelectSchedule( void )
 		if ( HasCondition( COND_COMBINE_HIT_BY_BUGBAIT ) )
 		{
 			// Don't do this if we're mounting a func_tank
+/* BOXBOX removing stuff
 			if ( m_FuncTankBehavior.IsMounted() == true )
 			{
 				m_FuncTankBehavior.Dismount();
 			}
-
+*/
 			ClearCondition( COND_COMBINE_HIT_BY_BUGBAIT );
 			return SCHED_COMBINE_BUGBAIT_DISTRACTION;
 		}

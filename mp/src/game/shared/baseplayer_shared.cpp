@@ -705,7 +705,7 @@ void CBasePlayer::PlayStepSound( Vector &vecOrigin, surfacedata_t *psurface, flo
 		if ( !CBaseEntity::GetParametersForSound( pSoundName, params, NULL ) )
 			return;
 
-		// Only cache if there's one option.  Otherwise we'd never here any other sounds
+		// Only cache if there's one option.  Otherwise we'd never hear any other sounds
 		if ( params.count == 1 )
 		{
 			m_StepSoundCache[ nSide ].m_usSoundNameIndex = stepSoundName;

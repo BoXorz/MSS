@@ -1,8 +1,5 @@
-//========= Copyright Valve Corporation, All rights reserved. ============//
-//
-// Purpose:		Player for HL2.
-//
-//=============================================================================//
+
+// BOXBOX Player for MSS
 
 #include "cbase.h"
 #include "weapon_MSSbasecombatweapon.h"
@@ -15,39 +12,50 @@
 #include "in_buttons.h"
 #include "MSS_gamerules.h"
 #include "KeyValues.h"
-#include "team.h"
+//#include "team.h"
 #include "weapon_MSSbase.h"
 #include "grenade_satchel.h"
 #include "eventqueue.h"
 #include "gamestats.h"
+#include "viewport_panel_names.h" // BOXBOX added
 
 #include "engine/IEngineSound.h"
 #include "SoundEmitterSystem/isoundemittersystembase.h"
 
 #include "ilagcompensationmanager.h"
 
+/* BOXBOX removing stuff
 int g_iLastCitizenModel = 0;
 int g_iLastCombineModel = 0;
 
 CBaseEntity	 *g_pLastCombineSpawn = NULL;
 CBaseEntity	 *g_pLastRebelSpawn = NULL;
-extern CBaseEntity				*g_pLastSpawn;
+*/
 
-#define HL2MP_COMMAND_MAX_RATE 0.3
+extern CBaseEntity	*g_pLastSpawn;
 
-void DropPrimedFragGrenade( CMSS_Player *pPlayer, CBaseCombatWeapon *pGrenade );
+#define MSS_COMMAND_MAX_RATE 0.3 // Limit frequency of entering console commands
+
+// void DropPrimedFragGrenade( CMSS_Player *pPlayer, CBaseCombatWeapon *pGrenade ); // BOXBOX don't need this
 
 LINK_ENTITY_TO_CLASS( player, CMSS_Player );
 
 //LINK_ENTITY_TO_CLASS( info_player_combine, CPointEntity );
 //LINK_ENTITY_TO_CLASS( info_player_rebel, CPointEntity );
 
-IMPLEMENT_SERVERCLASS_ST(CMSS_Player, DT_HL2MP_Player)
+IMPLEMENT_SERVERCLASS_ST(CMSS_Player, DT_MSS_Player)
 	SendPropAngle( SENDINFO_VECTORELEM(m_angEyeAngles, 0), 11, SPROP_CHANGES_OFTEN ),
 	SendPropAngle( SENDINFO_VECTORELEM(m_angEyeAngles, 1), 11, SPROP_CHANGES_OFTEN ),
 	SendPropEHandle( SENDINFO( m_hRagdoll ) ),
 	SendPropInt( SENDINFO( m_iSpawnInterpCounter), 4 ),
-	SendPropInt( SENDINFO( m_iPlayerSoundType), 3 ),
+//	SendPropInt( SENDINFO( m_iPlayerSoundType), 3 ),
+
+// BOXBOXBOX MSS STUFF
+	//SendPropArray3( SENDINFO_ARRAY3( m_PreloadedCharInfo ), SendPropInt( SENDINFO_ARRAY(m_PreloadedCharInfo), 0, SendProxy_Preload ) ),
+	//SendPropArray3( SENDINFO_ARRAY3( m_PreloadedCharInfo ), SendPropInt( SENDINFO_ARRAY(m_PreloadedCharInfo), 0, SendProxy_Preload ) ),
+//	SendPropArray( SendPropString( SENDINFO_ARRAY( m_PreloadedCharInfo_Name ), 0, SendProxy_String_tToString ), m_PreloadedCharInfo_Name ),
+	SendPropArray( SendPropInt( SENDINFO_ARRAY( m_PreloadedCharInfo_Model ) ), m_PreloadedCharInfo_Model ),
+	SendPropBool( SENDINFO( m_PreloadedCharInfo_DoneSending ) ),
 	
 	SendPropExclude( "DT_BaseAnimating", "m_flPoseParameter" ),
 	SendPropExclude( "DT_BaseFlex", "m_viewtarget" ),
@@ -60,6 +68,7 @@ END_SEND_TABLE()
 BEGIN_DATADESC( CMSS_Player )
 END_DATADESC()
 
+/* BOXBOX removing stuff
 const char *g_ppszRandomCitizenModels[] = 
 {
 	"models/humans/group03/male_01.mdl",
@@ -87,10 +96,10 @@ const char *g_ppszRandomCombineModels[] =
 	"models/police.mdl",
 };
 
-
 #define MAX_COMBINE_MODELS 4
 #define MODEL_CHANGE_INTERVAL 5.0f
 #define TEAM_CHANGE_INTERVAL 5.0f
+*/
 
 #define HL2MPPLAYER_PHYSDAMAGE_SCALE 4.0f
 
@@ -108,9 +117,10 @@ CMSS_Player::CMSS_Player() : m_PlayerAnimState( this )
 	m_iSpawnInterpCounter = 0;
 
     m_bEnterObserver = false;
-	m_bReady = false;
+//	m_bReady = false;
+	m_bHasCharFile = false;
 
-	BaseClass::ChangeTeam( 0 );
+//	BaseClass::ChangeTeam( 0 );
 	
 //	UseClientSideAnimation();
 }
@@ -138,10 +148,12 @@ void CMSS_Player::Precache( void )
 	PrecacheModel ( "sprites/glow01.vmt" );
 
 	PrecacheModel("models/player/humanmale.mdl"); // BOXBOX precache player models
+//	PrecacheModel("models/player/humanfemale.mdl");
 
-	PrecacheModel("models/combine_soldier.mdl"); // TEMP doesn't prevent crash on 'npc_create npc_combine' command
+	PrecacheScriptSound( "Player_HumanMale.Die" );
+	PrecacheScriptSound( "Player_HumanFemale.Die" );
 
-	//Precache Citizen models
+/* BOXBOX removing stuff
 	int nHeads = ARRAYSIZE( g_ppszRandomCitizenModels );
 	int i;	
 
@@ -154,17 +166,22 @@ void CMSS_Player::Precache( void )
 	for ( i = 0; i < nHeads; ++i )
 	   	 PrecacheModel( g_ppszRandomCombineModels[i] );
 
-	PrecacheFootStepSounds();
-
 	PrecacheScriptSound( "NPC_MetroPolice.Die" );
 	PrecacheScriptSound( "NPC_CombineS.Die" );
 	PrecacheScriptSound( "NPC_Citizen.die" );
+*/
+//	PrecacheFootStepSounds();
 }
+
 
 void CMSS_Player::GiveAllItems( void )
 {
 	EquipSuit();
 
+	GiveNamedItem( "weapon_rustyshortsword" );
+	GiveNamedItem( "weapon_arozensword" );
+
+/* BOXBOX removing old weapons
 	CBasePlayer::GiveAmmo( 255,	"Pistol");
 	CBasePlayer::GiveAmmo( 255,	"AR2" );
 	CBasePlayer::GiveAmmo( 5,	"AR2AltFire" );
@@ -195,13 +212,14 @@ void CMSS_Player::GiveAllItems( void )
 	GiveNamedItem( "weapon_slam" );
 
 	GiveNamedItem( "weapon_physcannon" );
-	
+*/	
 }
 
-void CMSS_Player::GiveDefaultItems( void ) // BOXBOX nope
+/*  BOXBOX don't need this
+void CMSS_Player::GiveDefaultItems( void )
 {
 	EquipSuit();
-/*
+
 	CBasePlayer::GiveAmmo( 255,	"Pistol");
 	CBasePlayer::GiveAmmo( 45,	"SMG1");
 	CBasePlayer::GiveAmmo( 1,	"grenade" );
@@ -234,8 +252,9 @@ void CMSS_Player::GiveDefaultItems( void ) // BOXBOX nope
 	{
 		Weapon_Switch( Weapon_OwnsThisType( "weapon_physcannon" ) );
 	}
-*/
+
 }
+*/
 
 /* BOXBOX removing teams
 
@@ -292,6 +311,61 @@ void CMSS_Player::PickDefaultSpawnTeam( void )
 }
 */
 
+
+void CMSS_Player::MoveToIntroCamera() // BOXBOX here goes nothing
+{
+	EHANDLE hIntroCamera = gEntList.FindEntityByClassname( hIntroCamera, "info_player_start" );
+
+	// if hIntroCamera is NULL we just were at end of list, start searching from start again
+	if(!hIntroCamera)
+		hIntroCamera = gEntList.FindEntityByClassname( hIntroCamera, "info_player_start");
+
+	// BOXBOX remove target business
+/*
+	CBaseEntity *Target = NULL;
+	
+	if( hIntroCamera )
+	{
+		Target = gEntList.FindEntityByName( NULL, STRING(hIntroCamera->m_target) );
+	}
+*/
+	// if we still couldn't find a camera, goto T spawn
+//	if(!hIntroCamera)
+//		hIntroCamera = gEntList.FindEntityByClassname(hIntroCamera, "info_player_terrorist");
+
+	SetViewOffset( vec3_origin );	// no view offset
+	UTIL_SetSize( this, vec3_origin, vec3_origin ); // no bbox
+
+//	if( !Target ) //if there are no cameras(or the camera has no target, find a spawn point and black out the screen
+//	{
+
+//	if ( hIntroCamera.IsValid() )
+	
+	SetAbsOrigin( hIntroCamera->GetAbsOrigin() /*+ VEC_VIEW*/ );
+	SnapEyeAngles( hIntroCamera->GetAbsAngles() );
+
+//		SetAbsAngles( hIntroCamera->GetAbsAngles() );
+
+//		hIntroCamera = NULL;  // never update again
+//		return;
+//	}
+/*	
+	Vector vCamera = Target->GetAbsOrigin() - hIntroCamera->GetAbsOrigin();
+	Vector vIntroCamera = hIntroCamera->GetAbsOrigin();
+	
+	VectorNormalize( vCamera );
+		
+	QAngle CamAngles;
+	VectorAngles( vCamera, CamAngles );
+
+	SetAbsOrigin( vIntroCamera );
+	SetAbsAngles( CamAngles );
+	SnapEyeAngles( CamAngles );
+//	m_fIntroCamTime = gpGlobals->curtime + 6;
+*/
+}
+
+
 void CMSS_Player::Spawn(void)
 {
 //	m_flNextModelChangeTime = 0.0f;
@@ -308,7 +382,7 @@ void CMSS_Player::Spawn(void)
 
 		RemoveEffects( EF_NODRAW );
 		
-		GiveDefaultItems();
+//		GiveDefaultItems(); // BOXBOX don't need this
 	}
 
 	SetNumAnimOverlays( 3 );
@@ -338,7 +412,7 @@ void CMSS_Player::Spawn(void)
 
 	SetPlayerUnderwater(false);
 
-	m_bReady = false;
+//	m_bReady = false;
 }
 
 void CMSS_Player::PickupObject( CBaseEntity *pObject, bool bLimitMassAndSize )
@@ -346,6 +420,7 @@ void CMSS_Player::PickupObject( CBaseEntity *pObject, bool bLimitMassAndSize )
 	
 }
 
+/*
 bool CMSS_Player::ValidatePlayerModel( const char *pModel )
 {
 	int iModels = ARRAYSIZE( g_ppszRandomCitizenModels );
@@ -371,10 +446,12 @@ bool CMSS_Player::ValidatePlayerModel( const char *pModel )
 
 	return false;
 }
+*/
 
+/*
 void CMSS_Player::SetPlayerTeamModel( void ) // BOXBOX removing teams
 {
-/*
+
 	const char *szModelName = NULL;
 	szModelName = engine->GetClientConVarValue( engine->IndexOfEdict( edict() ), "cl_playermodel" );
 
@@ -420,12 +497,12 @@ void CMSS_Player::SetPlayerTeamModel( void ) // BOXBOX removing teams
 	SetupPlayerSoundsByModel( szModelName );
 
 	m_flNextModelChangeTime = gpGlobals->curtime + MODEL_CHANGE_INTERVAL;
-	*/
 }
+
 
 void CMSS_Player::SetPlayerModel( void ) // BOXBOX don't need this
 {
-/*
+
 	const char *szModelName = NULL;
 	const char *pszCurrentModelName = modelinfo->GetModelName( GetModel());
 
@@ -498,12 +575,13 @@ void CMSS_Player::SetPlayerModel( void ) // BOXBOX don't need this
 	SetupPlayerSoundsByModel( szModelName );
 
 	m_flNextModelChangeTime = gpGlobals->curtime + MODEL_CHANGE_INTERVAL;
-*/
 }
+*/
 
-void CMSS_Player::SetupPlayerSoundsByModel( const char *pModelName ) // BOXBOX disabling for now, may be useful in the future when multiple races come in to play
+/* // BOXBOX removing, may be useful in the future when multiple races come in to play
+void CMSS_Player::SetupPlayerSoundsByModel( const char *pModelName )
 {
-/*
+
 	if ( Q_stristr( pModelName, "models/human") )
 	{
 		m_iPlayerSoundType = (int)PLAYER_SOUNDS_CITIZEN;
@@ -516,8 +594,8 @@ void CMSS_Player::SetupPlayerSoundsByModel( const char *pModelName ) // BOXBOX d
 	{
 		m_iPlayerSoundType = (int)PLAYER_SOUNDS_COMBINESOLDIER;
 	}
-*/
 }
+*/
 
 void CMSS_Player::ResetAnimation( void )
 {
@@ -587,6 +665,35 @@ void CMSS_Player::PostThink( void )
 	QAngle angles = GetLocalAngles();
 	angles[PITCH] = 0;
 	SetLocalAngles( angles );
+
+
+// BOXBOXBOX MSS STUFF
+	//Send the characters to the client
+	//This code is in PostThink, because when you click "disconnect" and choose a new map,
+	//the game marks your steam id as "STEAM_ID_PENDING" for a few seconds (Spawn() is called during this time).
+	if( !m_PreloadedCharInfo_DoneSending )
+	{
+		//This is the check that should be running... but for some reason sv_lan is always true, even when running an internet game
+		//if( cvar->FindVar( "sv_lan" )->GetBool() || Q_strcmp(this->GetNetworkIDString( ),"STEAM_ID_PENDING") )
+
+		if( Q_strcmp(this->GetNetworkIDString( ),"STEAM_ID_PENDING") )
+		{
+			static char names[MAX_CHAR_SLOTS][100];		//It's absurd that I have to do this, but otherwise the m_PreloadedChar_Name won't store all three names
+			for( int i = 0; i < MAX_CHAR_SLOTS; i++ )
+			{
+				charloadstatus_e status = CMSS_Player::LoadChar( i );
+				if( status == CHARLOAD_STATUS_OK )
+				{
+					V_strncpy( names[i], ms_playerName.GetForModify(), sizeof(names[i]) );
+					int model = 32;
+					m_PreloadedCharInfo_Name.Set( i, MAKE_STRING(names[i]) );
+					m_PreloadedCharInfo_Model.Set( i, model );
+				}
+
+				m_PreloadedCharInfo_DoneSending = true;
+			}
+		}
+	}
 }
 
 void CMSS_Player::PlayerDeathThink()
@@ -666,9 +773,10 @@ bool CMSS_Player::WantsLagCompensationOnEntity( const CBasePlayer *pPlayer, cons
 	return true;
 }
 
-Activity CMSS_Player::TranslateTeamActivity( Activity ActToTranslate ) // BOXBOX removing teams
+/* // BOXBOX removing teams
+Activity CMSS_Player::TranslateTeamActivity( Activity ActToTranslate )
 {
-/*
+
 	if ( m_iModelType == TEAM_COMBINE )
 		 return ActToTranslate;
 	
@@ -680,9 +788,10 @@ Activity CMSS_Player::TranslateTeamActivity( Activity ActToTranslate ) // BOXBOX
 
 	if ( ActToTranslate == ACT_WALK )
 		 return ACT_WALK_AIM_AGITATED;
-*/
+
 	return ActToTranslate;
 }
+*/
 
 extern ConVar hl2_normspeed;
 
@@ -796,7 +905,7 @@ void CMSS_Player::SetAnimation( PLAYER_ANIM playerAnim )
 			}
 		}
 
-		idealActivity = TranslateTeamActivity( idealActivity );
+//		idealActivity = TranslateTeamActivity( idealActivity ); // BOXBOX not needed
 	}
 	
 	if ( idealActivity == ACT_HL2MP_GESTURE_RANGE_ATTACK )
@@ -903,9 +1012,10 @@ bool CMSS_Player::BumpWeapon( CBaseCombatWeapon *pWeapon )
 	return true;
 }
 
+/*
 void CMSS_Player::ChangeTeam( int iTeam )
 {
-/*	if ( GetNextTeamChangeTime() >= gpGlobals->curtime )
+	if ( GetNextTeamChangeTime() >= gpGlobals->curtime )
 	{
 		char szReturnString[128];
 		Q_snprintf( szReturnString, sizeof( szReturnString ), "Please wait %d more seconds before trying to switch teams again.\n", (int)(GetNextTeamChangeTime() - gpGlobals->curtime) );
@@ -955,12 +1065,14 @@ void CMSS_Player::ChangeTeam( int iTeam )
 	{
 		CommitSuicide();
 	}
-*/
 }
+*/
 
-bool CMSS_Player::HandleCommand_JoinTeam( int team ) // BOXBOX removing teams
+/*  BOXBOX replacing this function with one below to allow spectating without teams
+
+bool CMSS_Player::HandleCommand_JoinTeam( int team )
 {
-/*
+
 	if ( !GetGlobalTeam( team ) || team == 0 )
 	{
 		Warning( "HandleCommand_JoinTeam( %d ) - invalid team index.\n", team );
@@ -998,21 +1110,47 @@ bool CMSS_Player::HandleCommand_JoinTeam( int team ) // BOXBOX removing teams
 
 	// Switch their actual team...
 	ChangeTeam( team );
-*/
+
 	return true;
 }
+*/
+
 
 bool CMSS_Player::ClientCommand( const CCommand &args )
 {
 	if ( FStrEq( args[0], "spectate" ) )
 	{
-		if ( ShouldRunRateLimitedCommand( args ) )
+		if ( ShouldRunRateLimitedCommand( args ) ) // Stop players from spamming console commands
 		{
-			// instantly join spectators
-			HandleCommand_JoinTeam( TEAM_SPECTATOR );	
+//			HandleCommand_JoinTeam( TEAM_SPECTATOR ); // BOXBOX replacing this with line below
+			HandleCommand_Spectate(); // BOXBOX adding this function to keep spectating without teams
 		}
 		return true;
 	}
+
+	// BOXBOX adding this
+	else if ( !Q_stricmp( args[0], "dropweapon" ) )
+	{
+		CBaseCombatWeapon *pWeapon = GetActiveWeapon();
+		if( pWeapon )
+		{
+			Msg("Dropping %s\n", pWeapon->GetName() );
+		}
+		else
+		{
+			Msg("No weapon in hand!\n");
+		}
+		Weapon_Drop( GetActiveWeapon() );
+		return true;
+	}
+
+	// BOXBOX adding this
+	else if ( !Q_stricmp( args[0], "currentmap" ) )
+	{
+		Msg("Current map is: %s\n", STRING(gpGlobals->mapname) );
+		return true;
+	}
+
 /*	else if ( FStrEq( args[0], "jointeam" ) )  // BOXBOX removing teams
 	{
 		if ( args.ArgC() < 2 )
@@ -1031,6 +1169,99 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 	{
 		return true;
 	}
+
+	//BOXBOX MSS stuff
+	else if ( FStrEq( args[0], "choosechar" ) )
+	{
+		if ( args.ArgC() == 2 )
+		{
+			int charSlot = atoi( args[1] );
+			charSlot = min( charSlot, (MAX_CHAR_SLOTS-1) );
+			charSlot = max( charSlot, 0 );
+
+			Msg(UTIL_VarArgs("charSlot = %i\n",charSlot)); //So it's right so far...
+
+			charloadstatus_e LoadStatus = LoadChar( charSlot );
+			if( LoadStatus == CHARLOAD_STATUS_OK
+				|| LoadStatus == CHARLOAD_STATUS_FILE_NOT_FOUND )
+			{
+				m_HasChoosenChar = true;
+				m_SelectedChar = charSlot;
+
+				SetViewEntity( NULL );
+				ChangeTeam( TEAM_UNASSIGNED );
+
+				Spawn( );
+			}
+			else
+			{
+				const int userid = GetUserID();
+				const char *networkID = GetNetworkIDString();
+				const char *playerName = GetPlayerName(); 
+
+				char filePath[MAX_PATH];
+				CharacterSave::GetSaveFileNameForPlayer( this, charSlot, filePath );
+				UTIL_LogPrintf( "\"%s<%i><%s>\" Attempted to load hacked file! \"%s\"\n", playerName, userid, networkID, filePath );
+			}
+			StopSound("Music.Intro"); // BOXBOX added
+			return true;
+		}
+	}
+	else if ( FStrEq( args[0], "createchar" ) )
+	{
+		if( args.ArgC() == 3 )
+		{
+			//Check for open slot
+			int openSlot = -1;
+
+			for( int i = 0; i < MAX_CHAR_SLOTS; i++ )
+			{
+				charloadstatus_e status = CMSS_Player::LoadChar( i );
+				if( status == CHARLOAD_STATUS_FILE_NOT_FOUND )
+				{
+					openSlot = i;
+					break;
+				}
+			}
+
+			if( openSlot > -1 )
+			{
+				//Found open slot
+				m_HasChoosenChar = true;
+				m_SelectedChar = openSlot;
+
+				//Put New Character initial values here
+				V_strncpy( ms_playerName.GetForModify(), args[1], 32 );
+				ms_gender = atoi( args[2] );
+				//========================
+
+				SetViewEntity( NULL );
+	//			ChangeTeam( TEAM_UNASSIGNED );
+
+				Spawn( );
+				SetPlayerName( ms_playerName.Get( ) );
+
+				//Setting everything to 0 to avoid it saving former charachters stats - Brian
+				ms_warriorSkills = 0;
+				ms_martialArts = 0;
+				ms_smallArms = 0;
+				ms_archery = 0;
+				ms_spellCasting = 0;
+				ms_parry = 0;
+
+				SaveChar( );
+				StopSound("Music.Intro"); // BOXBOX added
+			}
+			else	
+				//No slots open!
+				ShowViewPortPanel( PANEL_CHARSELECT , true );
+		}
+
+		return true;
+	}
+
+
+
 
 	return BaseClass::ClientCommand( args );
 }
@@ -1061,7 +1292,7 @@ bool CMSS_Player::ShouldRunRateLimitedCommand( const CCommand &args )
 		m_RateLimitLastCommandTimes.Insert( args[0], gpGlobals->curtime );
 		return true;
 	}
-	else if ( (gpGlobals->curtime - m_RateLimitLastCommandTimes[i]) < HL2MP_COMMAND_MAX_RATE )
+	else if ( (gpGlobals->curtime - m_RateLimitLastCommandTimes[i]) < MSS_COMMAND_MAX_RATE )
 	{
 		// Too fast.
 		return false;
@@ -1292,8 +1523,8 @@ void CMSS_Player::Event_Killed( const CTakeDamageInfo &info )
 int CMSS_Player::OnTakeDamage( const CTakeDamageInfo &inputInfo )
 {
 	//return here if the player is in the respawn grace period vs. slams.
-	if ( gpGlobals->curtime < m_flSlamProtectTime &&  (inputInfo.GetDamageType() == DMG_BLAST ) )
-		return 0;
+//	if ( gpGlobals->curtime < m_flSlamProtectTime &&  (inputInfo.GetDamageType() == DMG_BLAST ) ) // BOXBOX don't need this
+//		return 0;
 
 	m_vecTotalBulletForce += inputInfo.GetDamageForce();
 	
@@ -1302,19 +1533,26 @@ int CMSS_Player::OnTakeDamage( const CTakeDamageInfo &inputInfo )
 	return BaseClass::OnTakeDamage( inputInfo );
 }
 
-void CMSS_Player::DeathSound( const CTakeDamageInfo &info )
+void CMSS_Player::DeathSound( const CTakeDamageInfo &info ) // BOXBOX redoing death sounds
 {
 	if ( m_hRagdoll && m_hRagdoll->GetBaseAnimating()->IsDissolving() )
 		 return;
 
-	char szStepSound[128];
-
-	Q_snprintf( szStepSound, sizeof( szStepSound ), "%s.Die", GetPlayerModelSoundPrefix() );
-
+	char szDeathSound[128];
 	const char *pModelName = STRING( GetModelName() );
 
+	if ( pModelName )
+		if ( !stricmp( pModelName, "models/player/humanmale.mdl" ) )
+		{
+			Q_snprintf( szDeathSound, sizeof( szDeathSound ), "Player_HumanMale.Die" );
+		}
+		else if ( !stricmp( pModelName, "models/player/humanfemale.mdl" ) )
+		{
+			Q_snprintf( szDeathSound, sizeof( szDeathSound ), "Player_HumanFemale.Die" );
+		}
+
 	CSoundParameters params;
-	if ( GetParametersForSound( szStepSound, params, pModelName ) == false )
+	if ( GetParametersForSound( szDeathSound, params, pModelName ) == false )
 		return;
 
 	Vector vecOrigin = GetAbsOrigin();
@@ -1482,7 +1720,7 @@ void CMSS_Player::Reset()
 	ResetDeathCount();
 	ResetFragCount();
 }
-
+/*
 bool CMSS_Player::IsReady()
 {
 	return m_bReady;
@@ -1492,7 +1730,7 @@ void CMSS_Player::SetReady( bool bReady )
 {
 	m_bReady = bReady;
 }
-
+*/
 void CMSS_Player::CheckChatText( char *p, int bufsize )
 {
 	//Look for escape sequences and replace
@@ -1520,14 +1758,14 @@ void CMSS_Player::CheckChatText( char *p, int bufsize )
 //	MSSRules()->CheckChatForReadySignal( this, pReadyCheck );
 }
 
-void CMSS_Player::State_Transition( HL2MPPlayerState newState )
+void CMSS_Player::State_Transition( MSSPlayerState newState )
 {
 	State_Leave();
 	State_Enter( newState );
 }
 
 
-void CMSS_Player::State_Enter( HL2MPPlayerState newState )
+void CMSS_Player::State_Enter( MSSPlayerState newState )
 {
 	m_iPlayerState = newState;
 	m_pCurStateInfo = State_LookupInfo( newState );
@@ -1556,10 +1794,10 @@ void CMSS_Player::State_PreThink()
 }
 
 
-CHL2MPPlayerStateInfo *CMSS_Player::State_LookupInfo( HL2MPPlayerState state )
+CMSSPlayerStateInfo *CMSS_Player::State_LookupInfo( MSSPlayerState state )
 {
 	// This table MUST match the 
-	static CHL2MPPlayerStateInfo playerStateInfos[] =
+	static CMSSPlayerStateInfo playerStateInfos[] =
 	{
 		{ STATE_ACTIVE,			"STATE_ACTIVE",			&CMSS_Player::State_Enter_ACTIVE, NULL, &CMSS_Player::State_PreThink_ACTIVE },
 		{ STATE_OBSERVER_MODE,	"STATE_OBSERVER_MODE",	&CMSS_Player::State_Enter_OBSERVER_MODE,	NULL, &CMSS_Player::State_PreThink_OBSERVER_MODE }
@@ -1652,4 +1890,68 @@ bool CMSS_Player::CanHearAndReadChatFrom( CBasePlayer *pPlayer )
 		return false;
 
 	return true;
+}
+
+
+
+///////////////////////////////////////////////////////////////////
+//
+// BOXBOX New MSS functions at bottom of file for finding easier
+//
+///////////////////////////////////////////////////////////////////
+
+void CMSS_Player::HandleCommand_Spectate( void ) // BOXBOX user has entered 'spectate' in console
+{
+	if ( !IsObserver() ) // BOXBOX If you're not already spectating, turn spectator mode on
+	{
+		if ( !mp_allowspectators.GetInt() ) // BOXBOX unless server doesn't allow spectators
+		{
+			ClientPrint( this, HUD_PRINTCENTER, "#Cannot_Be_Spectator" );
+			return;
+		}
+
+		State_Transition( STATE_OBSERVER_MODE ); // BOXBOX ok to enter spectator mode
+	}
+	else // BOXBOX if you are already spectating, toggle spectator mode off
+	{
+		StopObserverMode();
+		State_Transition(STATE_ACTIVE);
+	}
+}
+
+
+void CMSS_Player::UpdateStats( void )
+{
+	//Strength formula
+	ms_strength = 2 * ms_warriorSkills + ms_martialArts + .25 * ( ms_smallArms + ms_archery + ms_spellCasting );
+
+	if ( (ms_archery > ms_martialArts && ms_martialArts > ms_warriorSkills && ms_martialArts > ms_smallArms && ms_martialArts > ms_spellCasting ) || ( ms_martialArts > ms_archery && ms_archery > ms_warriorSkills && ms_archery > ms_smallArms && ms_archery > ms_spellCasting ) )
+		//Dexterity formula when the highest skills are Archery and Martial Arts
+		ms_dexterity = .5 * ( ms_martialArts +  ms_archery );
+	else
+		//Dexterity formula if archery and martial arts arn't the highest skills, (drkill wants to redo this, comment for now)
+		ms_dexterity = 2 * ms_smallArms + ms_martialArts + ms_archery + .25 * ( ms_smallArms + ms_spellCasting );
+
+	//Concentration formula
+	ms_concentration = 2 * ms_spellCasting + ms_archery + .25 * (ms_warriorSkills + ms_smallArms) + ms_martialArts;
+
+	//Fitness formula
+	ms_fitness = 1.25 * ms_warriorSkills + ms_martialArts + .75 * ms_smallArms + .5 * ms_archery + .25 * ms_spellCasting;
+
+	//Awareness formula
+	ms_awareness = .25 * ms_warriorSkills + .5 * ms_martialArts + .75 * ms_smallArms + ms_archery + 1.25 * ms_spellCasting;
+
+	//HP formula
+	ms_maxHealth = 5 * ms_fitness + 2 * ms_awareness + 29;
+
+	//Mana formula
+	ms_maxMana = 7 * ms_awareness + 29;
+
+	//Determine the two highest skill numbers
+	int skillArray[5] = { ms_warriorSkills, ms_martialArts, ms_smallArms, ms_archery, ms_spellCasting };
+//	std::sort( skillArray, skillArray+5 );
+
+	//Main Level formula
+	ms_level = (skillArray[3] + skillArray[4]) / 2;
+
 }

@@ -77,7 +77,7 @@ CON_COMMAND( showinfo, "Shows a info panel: <type> <title> <message> [<command n
 //-----------------------------------------------------------------------------
 // Purpose: Constructor
 //-----------------------------------------------------------------------------
-CTextWindow::CTextWindow(IViewPort *pViewPort) : Frame(NULL, PANEL_INFO	)
+CTextWindow::CTextWindow(IViewPort *pViewPort) : Frame(NULL, PANEL_INFO )
 {
 	// initialize dialog
 	m_pViewPort = pViewPort;
@@ -377,7 +377,7 @@ void CTextWindow::OnKeyCodePressed( vgui::KeyCode code )
 
 void CTextWindow::SetData(KeyValues *data)
 {
-	SetData( data->GetInt( "type" ), data->GetString( "title" ), data->GetString( "msg" ), data->GetString( "msg_fallback" ), data->GetInt( "cmd" ), data->GetBool( "unload" ) );
+	SetData( data->GetInt( "type" ), data->GetString( "title" ), data->GetString( "message" ), data->GetString( "msg_fallback" ), data->GetInt( "cmd" ), data->GetBool( "unload" ) );
 }
 
 void CTextWindow::SetData( int type, const char *title, const char *message, const char *message_fallback, int command, bool bUnload )

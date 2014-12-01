@@ -128,7 +128,9 @@ static ConVar r_mapextents( "r_mapextents", "16384", FCVAR_CHEAT,
 ConVar	gl_clear( "gl_clear", "0");
 ConVar	gl_clear_randomcolor( "gl_clear_randomcolor", "0", FCVAR_CHEAT, "Clear the back buffer to random colors every frame. Helps spot open seams in geometry." );
 
-static ConVar r_farz( "r_farz", "-1", FCVAR_CHEAT, "Override the far clipping plane. -1 means to use the value in env_fog_controller." );
+// BOXBOX replacing line below - console cleanup
+//static ConVar r_farz( "r_farz", "-1", FCVAR_CHEAT, "Override the far clipping plane. -1 means to use the value in env_fog_controller." );
+static ConVar r_farz( "r_farz", "-1", FCVAR_NONE, "Override the far clipping plane. -1 means to use the value in env_fog_controller." );
 static ConVar cl_demoviewoverride( "cl_demoviewoverride", "0", 0, "Override view during demo playback" );
 
 

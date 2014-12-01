@@ -18,15 +18,15 @@
 // Output : Returns true if the weapon was switched, false if there was no better
 //			weapon to switch to.
 //-----------------------------------------------------------------------------
-bool CBaseCombatCharacter::SwitchToNextBestWeapon(CBaseCombatWeapon *pCurrent) // BOXBOX TODO don't need this at all
+bool CBaseCombatCharacter::SwitchToNextBestWeapon(CBaseCombatWeapon *pCurrent)
 {
-/*	CBaseCombatWeapon *pNewWeapon = g_pGameRules->GetNextBestWeapon(this, pCurrent);
+	CBaseCombatWeapon *pNewWeapon = g_pGameRules->GetNextBestWeapon(this, pCurrent);
 	
 	if ( ( pNewWeapon != NULL ) && ( pNewWeapon != pCurrent ) )
 	{
 		return Weapon_Switch( pNewWeapon );
 	}
-*/
+
 	return false;
 }
 

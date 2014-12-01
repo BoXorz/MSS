@@ -1905,6 +1905,8 @@ void CBaseCombatCharacter::Weapon_Drop( CBaseCombatWeapon *pWeapon, const Vector
 	if ( !pWeapon )
 		return;
 
+/*	 BOXBOX don't need this
+
 	// If I'm an NPC, fill the weapon with ammo before I drop it.
 	if ( GetFlags() & FL_NPC )
 	{
@@ -1930,10 +1932,10 @@ void CBaseCombatCharacter::Weapon_Drop( CBaseCombatWeapon *pWeapon, const Vector
 			pWeapon->AddEffects( EF_ITEM_BLINK );
 		}
 	}
-
+*/
 	if ( IsPlayer() )
 	{
-//		UTIL_CenterPrintAll( "DROPPING WEAPON\n" ); // BOXBOX TODO BUG HUNT melee weapons don't drop!
+//		UTIL_CenterPrintAll( "Attempting Weapon Drop\n" ); // BOXBOX FIXED! (melee weapons wouldn't drop!)
 
 		Vector vThrowPos = Weapon_ShootPosition() - Vector(0,0,12);
 

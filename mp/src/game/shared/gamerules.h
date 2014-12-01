@@ -258,11 +258,11 @@ public:
 	virtual bool FAllowFlashlight( void ) = 0;// Are players allowed to switch on their flashlight?
 	virtual bool FShouldSwitchWeapon( CBasePlayer *pPlayer, CBaseCombatWeapon *pWeapon ) = 0;// should the player switch to this weapon?
 
-// Functions to verify the single/multiplayer status of a game
-	virtual bool IsDeathmatch( void ) = 0;//is this a deathmatch game?
-	virtual bool IsTeamplay( void ) { return FALSE; };// is this deathmatch game being played with team rules?
-	virtual bool IsCoOp( void ) = 0;// is this a coop game?
-	virtual const char *GetGameDescription( void ) { return "Half-Life 2"; }  // this is the game name that gets seen in the server browser
+// BOXBOX phasing these out
+//	virtual bool IsDeathmatch( void ) = 0;//is this a deathmatch game?
+//	virtual bool IsTeamplay( void ) { return FALSE; };// is this deathmatch game being played with team rules?
+//	virtual bool IsCoOp( void ) = 0;// is this a coop game?
+	virtual const char *GetGameDescription( void ) { return "gamerules"; }  // this is the game name that gets seen in the server browser
 	
 // Client connection/disconnection
 	virtual bool ClientConnected( edict_t *pEntity, const char *pszName, const char *pszAddress, char *reject, int maxrejectlen ) = 0;// a client just connected to the server (player hasn't spawned yet)

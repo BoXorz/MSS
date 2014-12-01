@@ -12,6 +12,7 @@
 class C_MSS_Player;
 #include "c_basehlplayer.h"
 #include "MSS_player_shared.h"
+#include "MSS_shareddefs.h"
 #include "beamdraw.h"
 
 //=============================================================================
@@ -58,7 +59,7 @@ public:
 	virtual void CreateLightEffects( void ) {}
 	virtual bool ShouldReceiveProjectedTextures( int flags );
 	virtual void PostDataUpdate( DataUpdateType_t updateType );
-	virtual void PlayStepSound( Vector &vecOrigin, surfacedata_t *psurface, float fvol, bool force );
+//	virtual void PlayStepSound( Vector &vecOrigin, surfacedata_t *psurface, float fvol, bool force ); // BOXBOX removing footstep override
 	virtual void PreThink( void );
 	virtual void DoImpactEffect( trace_t &tr, int nDamageType );
 	IRagdoll* GetRepresentativeRagdoll() const;
@@ -74,10 +75,10 @@ public:
 	void	Initialize( void );
 	int		GetIDTarget() const;
 	void	UpdateIDTarget( void );
-	void	PrecacheFootStepSounds( void );
-	const char	*GetPlayerModelSoundPrefix( void );
+//	void	PrecacheFootStepSounds( void );
+//	const char	*GetPlayerModelSoundPrefix( void );
 
-	HL2MPPlayerState State_Get() const;
+	MSSPlayerState State_Get() const;
 
 	// Walking
 	void StartWalking( void );
@@ -85,6 +86,18 @@ public:
 	bool IsWalking( void ) { return m_fIsWalking; }
 
 	virtual void PostThink( void );
+
+// BOXBOXBOX MSS STUFF
+	/*struct preloaded_char_info
+	{
+		char Name[64];
+		int model;
+	};
+	CNetworkArray( preloaded_char_info, m_PreloadedCharInfo, MAX_CHAR_SLOTS );*/
+	//int m_PreloadedCharInfo[MAX_CHAR_SLOTS];
+	char m_PreloadedCharInfo_Name[MAX_CHAR_SLOTS][256];
+	CNetworkArray( int, m_PreloadedCharInfo_Model, MAX_CHAR_SLOTS );
+	CNetworkVar( bool, m_PreloadedCharInfo_DoneSending );
 
 private:
 	
@@ -119,12 +132,12 @@ private:
 	int	  m_iSpawnInterpCounter;
 	int	  m_iSpawnInterpCounterCache;
 
-	int	  m_iPlayerSoundType;
+//	int	  m_iPlayerSoundType;
 
 	void ReleaseFlashlight( void );
 	Beam_t	*m_pFlashlightBeam;
 
-	CNetworkVar( HL2MPPlayerState, m_iPlayerState );	
+	CNetworkVar( MSSPlayerState, m_iPlayerState );	
 
 	bool m_fIsWalking;
 };

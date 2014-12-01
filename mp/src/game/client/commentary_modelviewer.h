@@ -48,7 +48,7 @@ public:
 
 	// IViewPortPanel
 public:
-	virtual const char *GetName( void ) { return PANEL_COMMENTARY_MODELVIEWER; }
+	virtual const char *GetName( void ) { return "PANEL_COMMENTARY_MODELVIEWER"; }
 	virtual void SetData(KeyValues *data) {};
 	virtual void Reset() {};
 	virtual void Update() {};

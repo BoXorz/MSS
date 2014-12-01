@@ -24,7 +24,7 @@ CCommentaryModelPanel::CCommentaryModelPanel( vgui::Panel *parent, const char *n
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-CCommentaryModelViewer::CCommentaryModelViewer(IViewPort *pViewPort) : Frame(NULL, PANEL_COMMENTARY_MODELVIEWER )
+CCommentaryModelViewer::CCommentaryModelViewer(IViewPort *pViewPort) : Frame(NULL, "PANEL_COMMENTARY_MODELVIEWER" )
 {
 	m_pViewPort = pViewPort;
 	m_pModelPanel = NULL;
@@ -258,10 +258,10 @@ void CommentaryShowModelViewer( const CCommand &args )
 	CBaseViewport *pViewport = dynamic_cast<CBaseViewport *>( g_pClientMode->GetViewport() );
 	if ( pViewport )
 	{
-		IViewPortPanel *pCommentaryPanel = pViewport->FindPanelByName( PANEL_COMMENTARY_MODELVIEWER );
+		IViewPortPanel *pCommentaryPanel = pViewport->FindPanelByName( "PANEL_COMMENTARY_MODELVIEWER" );
 		if ( !pCommentaryPanel )
 		{
-			pCommentaryPanel = pViewport->CreatePanelByName( PANEL_COMMENTARY_MODELVIEWER );
+			pCommentaryPanel = pViewport->CreatePanelByName( "PANEL_COMMENTARY_MODELVIEWER" );
 			pViewport->AddNewPanel( pCommentaryPanel, "PANEL_COMMENTARY_MODELVIEWER" );
 		}
 

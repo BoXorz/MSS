@@ -777,5 +777,4 @@ private:
 	base< type, NetworkVar_##name > name;
 
 
-
 #endif // NETWORKVAR_H

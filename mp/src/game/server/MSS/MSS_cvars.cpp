@@ -9,7 +9,7 @@
 #include "MSS_cvars.h"
 
 
-
+/*
 // Ready restart
 ConVar mp_readyrestart(
 							"mp_readyrestart", 
@@ -23,3 +23,4 @@ ConVar mp_ready_signal(
 							"ready",
 							FCVAR_GAMEDLL,
 							"Text that each player must speak for the match to begin" );
+*/
