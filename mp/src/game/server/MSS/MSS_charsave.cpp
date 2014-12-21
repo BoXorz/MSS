@@ -19,9 +19,10 @@ const char *CharacterSave::m_SavePath = "Characters";
 void CMSS_Player::GetCharacterSaveFileFields( CUtlVector<MSSaveProperty> &allPlayerData )
 {
 	//allPlayerData.AddToTail( MSSaveProperty( "Version", 1.0f, NULL, NULL ) );
-/*	allPlayerData.AddToTail( MSSaveProperty( "Character Name",	ms_playerName,		ms_playerName.GetForModify( ) ) );
-	allPlayerData.AddToTail( MSSaveProperty( "Gender",			ms_gender.Get( ),	&ms_gender, ms_gender.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "Race",			ms_race,			&ms_race, ms_race.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "Character Name",	m_szCharName,		m_szCharName.GetForModify( ) ) );
+
+	allPlayerData.AddToTail( MSSaveProperty( "Gender",			m_nGender.Get( ),	&m_nGender, m_nGender.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "Race",			m_nRace,			&m_nRace, m_nRace.Static_Set ) );
 	allPlayerData.AddToTail( MSSaveProperty( "PlayerKills",		ms_playerKills.Get( ), &ms_playerKills, ms_playerKills.Static_Set ) );
 	allPlayerData.AddToTail( MSSaveProperty( "Gold",			ms_gold.Get( ),		&ms_gold, ms_gold.Static_Set ) );
 	allPlayerData.AddToTail( MSSaveProperty( "MaxHealth",		ms_maxHealth.Get( ), &ms_maxHealth, ms_maxHealth.Static_Set ) );
@@ -36,7 +37,7 @@ void CMSS_Player::GetCharacterSaveFileFields( CUtlVector<MSSaveProperty> &allPla
 	allPlayerData.AddToTail( MSSaveProperty( "Archery Exp",		ms_archeryExpPercent.Get( ), &ms_archeryExpPercent, ms_archeryExpPercent.Static_Set ) );
 	allPlayerData.AddToTail( MSSaveProperty( "Spell Casting Exp", ms_spellCastingExpPercent.Get( ), &ms_spellCastingExpPercent, ms_spellCastingExpPercent.Static_Set ) );
 	allPlayerData.AddToTail( MSSaveProperty( "Parry Exp",		ms_parryExpPercent.Get( ), &ms_parryExpPercent, ms_parryExpPercent.Static_Set ) );
-*/
+
 }
 
 
@@ -179,7 +180,7 @@ charloadstatus_e CMSS_Player::LoadChar( int charSlot )
 
 	values->deleteThis();
 
-	UpdateStats( );	// BOXBOXBOX 
+	UpdateStats( );
 
 	return CHARLOAD_STATUS_OK;
 }

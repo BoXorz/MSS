@@ -52,6 +52,11 @@ CMSCharSelectMenu::CMSCharSelectMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_
 	m_pSlot2Label	= new Label( this, "Text_Slot2", "Slot 2 Text" );
 	m_pSlot3Label	= new Label( this, "Text_Slot3", "Slot 3 Text" );
 
+	m_pConfirmBgImage		= new vgui::ImagePanel( this, "ConfirmBGImg" );
+	m_pConfirmLabel			= new vgui::Label( this, "ConfirmLabel", "#MSS_DEL_CONFIRM" );
+	m_pConfirmYesButton		= new vgui::Button( this, "YesButton", "#MSS_YES", this, "confirmyes" );
+	m_pConfirmNoButton		= new vgui::Button( this, "NoButton", "#MSS_NO", this, "confirmno" );
+
 }
 
 //-----------------------------------------------------------------------------
@@ -78,6 +83,24 @@ void CMSCharSelectMenu::ApplySchemeSettings( IScheme *pScheme ) // BOXBOX added 
 	m_pSlot3Label->SetFont( pScheme->GetFont( "WritingFont" ) );
 	m_pSlot3Label->SetFgColor( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
 
+	m_pConfirmLabel->SetFont( pScheme->GetFont( "HeaderFontSmall" ) );
+	m_pConfirmLabel->SetFgColor( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
+
+/*	Button *pButton = (Button *)FindChildByName( "CharButton1" );
+	pButton->SetDisabledFgColor2( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
+	pButton = (Button *)FindChildByName( "CharButton2" );
+	pButton->SetDisabledFgColor2( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
+	pButton = (Button *)FindChildByName( "CharButton3" );
+	pButton->SetDisabledFgColor2( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
+	pButton = (Button *)FindChildByName( "DeleteCharButton1" );
+	pButton->SetDisabledFgColor2( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
+	pButton = (Button *)FindChildByName( "DeleteCharButton2" );
+	pButton->SetDisabledFgColor2( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
+	pButton = (Button *)FindChildByName( "DeleteCharButton3" );
+	pButton->SetDisabledFgColor2( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
+	pButton = (Button *)FindChildByName( "NewCharButton" );
+	pButton->SetDisabledFgColor2( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
+*/
 }
 
 
@@ -221,6 +244,7 @@ void CMSCharSelectMenu::ShowPanel(bool bShow)
 	// Open the window
 	if ( bShow )
 	{
+		vgui::surface()->PlaySound( "UI/scrollopen.wav" );
 		Reset();
 		Update();
 		Activate();
@@ -244,7 +268,7 @@ bool CMSCharSelectMenu::NeedsUpdate( void )
 //-----------------------------------------------------------------------------
 void CMSCharSelectMenu::Update( void )
 {
-	C_MSS_Player *pLocalPlayer = ToHL2MPPlayer( C_BasePlayer::GetLocalPlayer() );
+	C_MSS_Player *pLocalPlayer = ToMSSPlayer( C_BasePlayer::GetLocalPlayer() );
 	if( pLocalPlayer )
 	{
 		if( pLocalPlayer->m_PreloadedCharInfo_DoneSending && !m_DisplayedCharacters )
@@ -312,7 +336,7 @@ void CMSCharSelectMenu::Remove3DCharacters()
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CMSCharSelectMenu::OnCommand( const char *command ) // BOXBOX TODO should I change this to allow for arguments? or let ClientCmd handle it on server side?
+void CMSCharSelectMenu::OnCommand( const char *command )
 {
 	if( Q_strstr( command, "choosechar" ) )
 	{
@@ -328,14 +352,101 @@ void CMSCharSelectMenu::OnCommand( const char *command ) // BOXBOX TODO should I
 		vgui::surface()->PlaySound( "UI/pageturn.wav" ); // BOXBOX added
 		return;
 	}
-	else if( Q_strstr( command, "deletechar" ) )
+	else if( Q_strstr( command, "deletechar 0" ) )
 	{
-		Warning("DELETING CHARACTERS IS NOT INSTALLED YET!\n");
+		m_nCharToDelete = 0;
+		ShowConfirm();
+		return;
+	}
+	else if( Q_strstr( command, "deletechar 1" ) )
+	{
+		m_nCharToDelete = 1;
+		ShowConfirm();
+		return;
+	}
+	else if( Q_strstr( command, "deletechar 2" ) )
+	{
+		m_nCharToDelete = 2;
+		ShowConfirm();
+		return;
+	}
+	else if( Q_strstr( command, "confirmyes" ) )
+	{
+		if( m_nCharToDelete == 0 )
+		{
+			engine->ClientCmd( "deletechar 0" );
+		}
+		else if( m_nCharToDelete == 1 )
+		{
+			engine->ClientCmd( "deletechar 1" );
+		}
+		else if( m_nCharToDelete == 2 )
+		{
+			engine->ClientCmd( "deletechar 2" );
+		}
+
+		HideConfirm();
+		return;
+	}
+	else if( Q_strstr( command, "confirmno" ) )
+	{
+		HideConfirm();
 		return;
 	}
 	else
 		BaseClass::OnCommand( command );
 }
+
+void CMSCharSelectMenu::ShowConfirm( void )
+{
+	m_pConfirmBgImage->SetVisible( true );
+	m_pConfirmLabel->SetVisible( true );
+	m_pConfirmYesButton->SetVisible( true );
+	m_pConfirmYesButton->SetEnabled( true );
+	m_pConfirmNoButton->SetVisible( true );
+	m_pConfirmNoButton->SetEnabled( true );
+
+	Button *pButton = (Button *)FindChildByName( "CharButton1" );
+	pButton->SetEnabled( false );
+	pButton = (Button *)FindChildByName( "CharButton2" );
+	pButton->SetEnabled( false );
+	pButton = (Button *)FindChildByName( "CharButton3" );
+	pButton->SetEnabled( false );
+	pButton = (Button *)FindChildByName( "DeleteCharButton1" );
+	pButton->SetEnabled( false );
+	pButton = (Button *)FindChildByName( "DeleteCharButton2" );
+	pButton->SetEnabled( false );
+	pButton = (Button *)FindChildByName( "DeleteCharButton3" );
+	pButton->SetEnabled( false );
+	pButton = (Button *)FindChildByName( "NewCharButton" );
+	pButton->SetEnabled( false );
+}
+
+void CMSCharSelectMenu::HideConfirm( void )
+{
+	m_pConfirmBgImage->SetVisible( false );
+	m_pConfirmLabel->SetVisible( false );
+	m_pConfirmYesButton->SetVisible( false );
+	m_pConfirmYesButton->SetEnabled( false );
+	m_pConfirmNoButton->SetVisible( false );
+	m_pConfirmNoButton->SetEnabled( false );
+
+	Button *pButton = (Button *)FindChildByName( "CharButton1" );
+	pButton->SetEnabled( true );
+	pButton = (Button *)FindChildByName( "CharButton2" );
+	pButton->SetEnabled( true );
+	pButton = (Button *)FindChildByName( "CharButton3" );
+	pButton->SetEnabled( true );
+	pButton = (Button *)FindChildByName( "DeleteCharButton1" );
+	pButton->SetEnabled( true );
+	pButton = (Button *)FindChildByName( "DeleteCharButton2" );
+	pButton->SetEnabled( true );
+	pButton = (Button *)FindChildByName( "DeleteCharButton3" );
+	pButton->SetEnabled( true );
+	pButton = (Button *)FindChildByName( "NewCharButton" );
+	pButton->SetEnabled( true );
+}
+
 
 vgui::Panel *CMSCharSelectMenu::CreateControlByName(const char *controlName)
 {

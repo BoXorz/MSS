@@ -87,6 +87,15 @@ protected:
 	vgui::Label		*m_pSlot2Label;
 	vgui::Label		*m_pSlot3Label;
 
+	vgui::ImagePanel	*m_pConfirmBgImage; // BOXBOX child controls that pop up, asking if you are sure you want to delete a character
+	vgui::Label		*m_pConfirmLabel;	// the text
+	vgui::Button	*m_pConfirmYesButton;
+	vgui::Button	*m_pConfirmNoButton;
+
+	virtual void ShowConfirm( void );
+	virtual void HideConfirm( void );
+
+	int m_nCharToDelete;
 };
 
 

@@ -23,6 +23,11 @@
 #define PANEL_CHARSELECT		"charselect"
 #define PANEL_CHARCREATE		"charcreate"
 
+#define PANEL_MAINMENU			"mainmenu"
+#define PANEL_PLAYERSTATS		"playerstats"
+#define PANEL_INVENTORY			"inventory"
+
+
 //#define PANEL_OVERVIEW		"overview"	// BOXBOX TODO replace this with a PANEL_MAP?
 //#define PANEL_CLASS			"class"
 //#define PANEL_TEAM			"team"

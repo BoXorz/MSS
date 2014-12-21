@@ -113,7 +113,7 @@ void Bot_RunAll( void )
 {
 	for ( int i = 1; i <= gpGlobals->maxClients; i++ )
 	{
-		CMSS_Player *pPlayer = ToHL2MPPlayer( UTIL_PlayerByIndex( i ) );
+		CMSS_Player *pPlayer = ToMSSPlayer( UTIL_PlayerByIndex( i ) );
 
 		if ( pPlayer && (pPlayer->GetFlags() & FL_FAKECLIENT) )
 		{

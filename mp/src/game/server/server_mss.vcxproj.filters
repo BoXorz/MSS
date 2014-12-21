@@ -3523,6 +3523,9 @@
     <ClCompile Include="MSS\MSS_charsave.cpp">
       <Filter>Source Files\MSS</Filter>
     </ClCompile>
+    <ClCompile Include="..\shared\MSS\MSS_shareddefs.cpp">
+      <Filter>Source Files\MSS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

@@ -250,9 +250,9 @@ void CMSCharCreateMenu::OnCommand( const char *command )
 		RadioButton *pGenderMale = (RadioButton *)FindChildByName( "Button_GenderMale" );
 		RadioButton *pGenderFemale = (RadioButton *)FindChildByName( "Button_GenderFemale" );
 		if( pGenderMale->IsSelected() )
-			gender = 1;
-		else if( pGenderFemale->IsSelected() )
 			gender = 0;
+		else if( pGenderFemale->IsSelected() )
+			gender = 1;
 		else
 			dataIsValid = false;
 

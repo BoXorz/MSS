@@ -103,7 +103,7 @@ void CBaseMSSBludgeonWeapon::PrimaryAttack()
 {
 	
 #ifndef CLIENT_DLL
-	CMSS_Player *pPlayer = ToHL2MPPlayer( GetPlayerOwner() );
+	CMSS_Player *pPlayer = ToMSSPlayer( GetPlayerOwner() );
 	// Move other players back to history positions based on local player's lag
 	lagcompensation->StartLagCompensation( pPlayer, pPlayer->GetCurrentCommand() );
 #endif

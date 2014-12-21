@@ -1952,6 +1952,15 @@
     <ClInclude Include="MSS\ui\MSSJoinMarquis.h">
       <Filter>Source Files\MSS\UI</Filter>
     </ClInclude>
+    <ClInclude Include="MSS\ui\MSSInventoryMenu.h">
+      <Filter>Source Files\MSS\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="MSS\ui\MSSPlayerStatsMenu.h">
+      <Filter>Source Files\MSS\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="MSS\ui\MSSMainMenu.h">
+      <Filter>Source Files\MSS\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mp3player.cpp">
@@ -3501,6 +3510,18 @@
     </ClCompile>
     <ClCompile Include="MSS\ui\MSSJoinMarquis.cpp">
       <Filter>Source Files\MSS\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="MSS\ui\MSSInventoryMenu.cpp">
+      <Filter>Source Files\MSS\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="MSS\ui\MSSPlayerStatsMenu.cpp">
+      <Filter>Source Files\MSS\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="MSS\ui\MSSMainMenu.cpp">
+      <Filter>Source Files\MSS\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\MSS\MSS_shareddefs.cpp">
+      <Filter>Source Files\MSS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

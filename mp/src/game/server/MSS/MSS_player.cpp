@@ -24,6 +24,8 @@
 
 #include "ilagcompensationmanager.h"
 
+#include <filesystem.h> // BOXBOX added for deleting character files ( see ClientCommand() )
+
 /* BOXBOX removing stuff
 int g_iLastCitizenModel = 0;
 int g_iLastCombineModel = 0;
@@ -51,6 +53,11 @@ IMPLEMENT_SERVERCLASS_ST(CMSS_Player, DT_MSS_Player)
 //	SendPropInt( SENDINFO( m_iPlayerSoundType), 3 ),
 
 // BOXBOXBOX MSS STUFF
+	SendPropString( SENDINFO( m_szCharName ) ),
+	SendPropInt( SENDINFO( m_nGender ), 1 ),
+	SendPropInt( SENDINFO( m_nRace ), 2 ), // BOXBOXBOX remember, only sending 2 bits limits races to 4 (0-3) so if we ever add more races than 4, more bit(s) will be needed!
+	SendPropInt( SENDINFO( m_nTotalExp ), 20 ), // BOXBOX need 20 bits here because total exp. maxes out at 1 million
+
 	//SendPropArray3( SENDINFO_ARRAY3( m_PreloadedCharInfo ), SendPropInt( SENDINFO_ARRAY(m_PreloadedCharInfo), 0, SendProxy_Preload ) ),
 	//SendPropArray3( SENDINFO_ARRAY3( m_PreloadedCharInfo ), SendPropInt( SENDINFO_ARRAY(m_PreloadedCharInfo), 0, SendProxy_Preload ) ),
 //	SendPropArray( SendPropString( SENDINFO_ARRAY( m_PreloadedCharInfo_Name ), 0, SendProxy_String_tToString ), m_PreloadedCharInfo_Name ),
@@ -68,38 +75,6 @@ END_SEND_TABLE()
 BEGIN_DATADESC( CMSS_Player )
 END_DATADESC()
 
-/* BOXBOX removing stuff
-const char *g_ppszRandomCitizenModels[] = 
-{
-	"models/humans/group03/male_01.mdl",
-	"models/humans/group03/male_02.mdl",
-	"models/humans/group03/female_01.mdl",
-	"models/humans/group03/male_03.mdl",
-	"models/humans/group03/female_02.mdl",
-	"models/humans/group03/male_04.mdl",
-	"models/humans/group03/female_03.mdl",
-	"models/humans/group03/male_05.mdl",
-	"models/humans/group03/female_04.mdl",
-	"models/humans/group03/male_06.mdl",
-	"models/humans/group03/female_06.mdl",
-	"models/humans/group03/male_07.mdl",
-	"models/humans/group03/female_07.mdl",
-	"models/humans/group03/male_08.mdl",
-	"models/humans/group03/male_09.mdl",
-};
-
-const char *g_ppszRandomCombineModels[] =
-{
-	"models/combine_soldier.mdl",
-	"models/combine_soldier_prisonguard.mdl",
-	"models/combine_super_soldier.mdl",
-	"models/police.mdl",
-};
-
-#define MAX_COMBINE_MODELS 4
-#define MODEL_CHANGE_INTERVAL 5.0f
-#define TEAM_CHANGE_INTERVAL 5.0f
-*/
 
 #define HL2MPPLAYER_PHYSDAMAGE_SCALE 4.0f
 
@@ -118,7 +93,7 @@ CMSS_Player::CMSS_Player() : m_PlayerAnimState( this )
 
     m_bEnterObserver = false;
 //	m_bReady = false;
-	m_bHasCharFile = false;
+//	m_bHasCharFile = false;
 
 //	BaseClass::ChangeTeam( 0 );
 	
@@ -153,24 +128,6 @@ void CMSS_Player::Precache( void )
 	PrecacheScriptSound( "Player_HumanMale.Die" );
 	PrecacheScriptSound( "Player_HumanFemale.Die" );
 
-/* BOXBOX removing stuff
-	int nHeads = ARRAYSIZE( g_ppszRandomCitizenModels );
-	int i;	
-
-	for ( i = 0; i < nHeads; ++i )
-	   	 PrecacheModel( g_ppszRandomCitizenModels[i] );
-
-	//Precache Combine Models
-	nHeads = ARRAYSIZE( g_ppszRandomCombineModels );
-
-	for ( i = 0; i < nHeads; ++i )
-	   	 PrecacheModel( g_ppszRandomCombineModels[i] );
-
-	PrecacheScriptSound( "NPC_MetroPolice.Die" );
-	PrecacheScriptSound( "NPC_CombineS.Die" );
-	PrecacheScriptSound( "NPC_Citizen.die" );
-*/
-//	PrecacheFootStepSounds();
 }
 
 
@@ -684,7 +641,7 @@ void CMSS_Player::PostThink( void )
 				charloadstatus_e status = CMSS_Player::LoadChar( i );
 				if( status == CHARLOAD_STATUS_OK )
 				{
-					V_strncpy( names[i], ms_playerName.GetForModify(), sizeof(names[i]) );
+					V_strncpy( names[i], m_szCharName.GetForModify(), sizeof(names[i]) );
 					int model = 32;
 					m_PreloadedCharInfo_Name.Set( i, MAKE_STRING(names[i]) );
 					m_PreloadedCharInfo_Model.Set( i, model );
@@ -1211,6 +1168,8 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 	{
 		if( args.ArgC() == 3 )
 		{
+			Warning("Received command %s %s %i\n", args[0], args[1], atoi( args[2] ) );
+
 			//Check for open slot
 			int openSlot = -1;
 
@@ -1231,17 +1190,16 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 				m_SelectedChar = openSlot;
 
 				//Put New Character initial values here
-				V_strncpy( ms_playerName.GetForModify(), args[1], 32 );
-				ms_gender = atoi( args[2] );
-				//========================
+				V_strncpy( m_szCharName.GetForModify(), args[1], MAX_CHAR_NAME_LENGTH );
+				m_nGender = atoi( args[2] );
+				Warning("m_nGender is now %i\n", m_nGender );
 
 				SetViewEntity( NULL );
-	//			ChangeTeam( TEAM_UNASSIGNED );
 
 				Spawn( );
-				SetPlayerName( ms_playerName.Get( ) );
+	//			SetPlayerName( m_szCharName.Get( ) );
 
-				//Setting everything to 0 to avoid it saving former charachters stats - Brian
+				//Setting everything to 0 to avoid it saving former characters' stats
 				ms_warriorSkills = 0;
 				ms_martialArts = 0;
 				ms_smallArms = 0;
@@ -1259,9 +1217,45 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 
 		return true;
 	}
+	else if ( FStrEq( args[0], "deletechar" ) ) // BOXBOX added
+	{
+		if ( args.ArgC() == 2 )
+		{
+			int charSlot = atoi( args[1] );
+			charSlot = min( charSlot, (MAX_CHAR_SLOTS-1) );
+			charSlot = max( charSlot, 0 );
 
+			char filePath[MAX_PATH];
+			CharacterSave::GetSaveFileNameForPlayer( this, charSlot, filePath );
 
+/*
+	BOXBOX TODO Set this up so instead of deleting the file, it renames the file with "_deleted" at the end, in case a player changes their mind and wants the character back
+	in the future, in which case a server op will have to go into the characters folder on the server and remove the "_deleted" from the filename (which will override any
+	character currently in that slot, make sure the player is aware of this!)
+*/
+			g_pFullFileSystem->RemoveFile( filePath ); // feel the power
 
+//			Warning("Received command  deletechar %i\n", atoi( args[1] ));
+//			Warning( "*** Filepath received is: %s ***\n", filePath );
+			return true;
+		}
+	}
+	else if ( FStrEq( args[0], "charselect" ) ) // BOXBOX open the Character Selection menu in-game.
+	{
+		if( args.ArgC() == 1 )
+		{
+			ShowViewPortPanel( PANEL_CHARSELECT );
+			return true;
+		}
+	}
+	else if ( FStrEq( args[0], "mainmenu" ) ) // BOXBOX toggle the main MSS menu
+	{
+		if( args.ArgC() == 1 )
+		{
+			ShowViewPortPanel( PANEL_MAINMENU );
+			return true;
+		}
+	}
 
 	return BaseClass::ClientCommand( args );
 }
@@ -1676,7 +1670,7 @@ ReturnSpot:
 
 CON_COMMAND( timeleft, "prints the time remaining in the match" )
 {
-	CMSS_Player *pPlayer = ToHL2MPPlayer( UTIL_GetCommandClient() );
+	CMSS_Player *pPlayer = ToMSSPlayer( UTIL_GetCommandClient() );
 
 	int iTimeRemaining = (int)MSSRules()->GetMapRemainingTime();
     

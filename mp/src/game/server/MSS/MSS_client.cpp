@@ -127,7 +127,10 @@ void FinishClientPutInServer( CMSS_Player *pPlayer )
 // BOXBOX show the Join Marquis
 	pPlayer->ShowViewPortPanel( PANEL_JOIN, true, data );
 
-//	pPlayer->ShowViewPortPanel( PANEL_CHARSELECT );
+	pPlayer->ShowViewPortPanel( PANEL_MAINMENU, false ); // BOXBOX TODO why are these on by default?
+//	pPlayer->ShowViewPortPanel( PANEL_PLAYERSTATS, false );
+
+
 
 	data->deleteThis();
 }
@@ -149,7 +152,7 @@ void ClientActive( edict_t *pEdict, bool bLoadGame )
 	// Can't load games in CS!
 	Assert( !bLoadGame );
 
-	CMSS_Player *pPlayer = ToHL2MPPlayer( CBaseEntity::Instance( pEdict ) );
+	CMSS_Player *pPlayer = ToMSSPlayer( CBaseEntity::Instance( pEdict ) );
 	FinishClientPutInServer( pPlayer );
 }
 
@@ -206,7 +209,7 @@ void ClientGamePrecache( void ) // BOXBOX TODO redo all this
 // called by ClientKill and DeadThink
 void respawn( CBaseEntity *pEdict, bool fCopyCorpse )
 {
-	CMSS_Player *pPlayer = ToHL2MPPlayer( pEdict );
+	CMSS_Player *pPlayer = ToMSSPlayer( pEdict );
 
 	if ( pPlayer )
 	{

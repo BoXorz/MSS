@@ -769,7 +769,7 @@ void CMSSRules::ClientSettingsChanged( CBasePlayer *pPlayer )
 #ifndef CLIENT_DLL
  // BOXBOX don't need all this
 	
-	CMSS_Player *pMSSPlayer = ToHL2MPPlayer( pPlayer );
+	CMSS_Player *pMSSPlayer = ToMSSPlayer( pPlayer );
 /*
 	if ( pHL2Player == NULL )
 		return;

@@ -632,6 +632,82 @@ public:
 	bool  ShouldGoSouth( Vector vNPCForward, Vector vNPCRight ); //Such a bad name.
 
 	void SetOldPlayerZ( float flOld ) { m_flOldPlayerZ = flOld;	}
+
+
+// BOXBOX MSS STUFF
+//	virtual char* GetMSPlayerName() { return ms_playerName; };
+	virtual bool GetMSGender() const { return ms_gender; };
+	virtual unsigned int GetMSPlayerKills() const { return ms_playerKills; };
+	virtual unsigned int GetMSMana() const { return ms_mana; };
+	virtual unsigned int GetMSMaxMana() const { return ms_maxMana; };
+	virtual unsigned int GetMSMaxHealth() const { return ms_maxHealth; };
+	virtual unsigned int GetMSGold() const { return ms_gold; };
+	virtual unsigned int GetMSAlliance() const { return ms_alliance; };
+	virtual unsigned int GetMSRace() const { return ms_race; };
+	virtual unsigned int GetMSStrength() const { return ms_strength; };
+	virtual unsigned int GetMSDexterity() const { return ms_dexterity; };
+	virtual unsigned int GetMSConcentration() const { return ms_concentration; };
+	virtual unsigned int GetMSAwareness() const { return ms_awareness; };
+	virtual unsigned int GetMSFitness() const { return ms_fitness; };
+	virtual unsigned int GetMSLevel() const { return ms_level; };
+	virtual unsigned int GetMSWarriorSkills() const { return ms_warriorSkills; };
+	virtual unsigned int GetMSMartialArts() const { return ms_martialArts; };
+	virtual unsigned int GetMSSmallArms() const { return ms_smallArms; };
+	virtual unsigned int GetMSArchery() const { return ms_archery; };
+	virtual unsigned int GetMSSpellCasting() const { return ms_spellCasting; };
+	virtual unsigned int GetMSParry() const { return ms_parry; };
+	virtual unsigned int GetMSWarriorSkillsExpPercent() const { return ms_warriorSkillsExpPercent; };
+	virtual unsigned int GetMSMartialArtsExpPercent() const { return ms_martialArtsExpPercent; };
+	virtual unsigned int GetMSSmallArmsExpPercent() const { return ms_smallArmsExpPercent; };
+	virtual unsigned int GetMSArcheryExpPercent() const { return ms_archeryExpPercent; };
+	virtual unsigned int GetMSSpellCastingExpPercent() const { return ms_spellCastingExpPercent; };
+	virtual unsigned int GetMSParryExpPercent() const { return ms_parryExpPercent; };
+
+	char backpackSlots[20][32];
+	char sidepackSlots[15][32];
+	char beltSlots[10][32];
+	char handsSlots[6][32];
+	char equipSlots[6][32];
+
+private:
+
+//	char ms_playerName[32];
+	bool ms_gender;		// Male = true, Female = false;
+	unsigned int ms_playerKills;
+	unsigned int ms_mana;
+	unsigned int ms_maxMana;
+	unsigned int ms_maxHealth;
+	unsigned int ms_gold;
+	unsigned int ms_alliance;
+	unsigned int ms_race;
+
+	// Raw stats
+	unsigned int ms_strength;
+	unsigned int ms_dexterity;
+	unsigned int ms_concentration;
+	unsigned int ms_awareness;
+	unsigned int ms_fitness;
+
+	// Overall Level
+	unsigned int ms_level;
+
+	// Weapon skills
+	unsigned int ms_warriorSkills;
+	unsigned int ms_martialArts;
+	unsigned int ms_smallArms;
+	unsigned int ms_archery;
+	unsigned int ms_spellCasting;
+	unsigned int ms_parry;
+
+	// Experience
+	unsigned int ms_warriorSkillsExpPercent;
+	unsigned int ms_martialArtsExpPercent;
+	unsigned int ms_smallArmsExpPercent;
+	unsigned int ms_archeryExpPercent;
+	unsigned int ms_spellCastingExpPercent;
+	unsigned int ms_parryExpPercent;
+
+// BOXBOX END MSS STUFF
 };
 
 EXTERN_RECV_TABLE(DT_BasePlayer);

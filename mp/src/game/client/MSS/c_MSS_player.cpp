@@ -29,9 +29,15 @@ IMPLEMENT_CLIENTCLASS_DT(C_MSS_Player, DT_MSS_Player, CMSS_Player)
 	RecvPropInt( RECVINFO( m_iSpawnInterpCounter ) ),
 //	RecvPropInt( RECVINFO( m_iPlayerSoundType) ),
 
-	RecvPropBool( RECVINFO( m_fIsWalking ) ),
+//	RecvPropBool( RECVINFO( m_fIsWalking ) ), // BOXBOX the serverclass doesnt have this!?
 
 // BOXBOXBOX MSS STUFF
+	RecvPropString( RECVINFO( m_szCharName ) ),
+	RecvPropInt( RECVINFO( m_nGender ) ),
+	RecvPropInt( RECVINFO( m_nRace ) ),
+	RecvPropInt( RECVINFO( m_nTotalExp ) ),
+
+
 	//RecvPropArray( RecvPropString( RECVINFO( m_PreloadedCharInfo ) ), m_PreloadedCharInfo ),
 	//RecvPropArray3( RECVINFO_ARRAY( m_PreloadedCharInfo ), RecvPropString( RECVINFO( m_PreloadedCharInfo ), 0, RecvProxy_Preload ) ),
 	RecvPropArray( RecvPropString( RECVINFO( m_PreloadedCharInfo_Name[0]) ), m_PreloadedCharInfo_Name ),
@@ -66,6 +72,9 @@ C_MSS_Player::C_MSS_Player() : m_PlayerAnimState( this ), m_iv_angEyeAngles( "C_
 	m_blinkTimer.Invalidate();
 
 	m_pFlashlightBeam = NULL;
+
+	m_szCharName[0] = 0;
+	m_pszCharName = &m_szCharName[0];
 }
 
 C_MSS_Player::~C_MSS_Player( void )

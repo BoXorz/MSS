@@ -46,6 +46,11 @@
 #include "MSSJoinMarquis.h"
 #include "MSSCharacterSelect.h"
 #include "MSSCharacterCreate.h"
+#include "MSSMainMenu.h"
+#include "MSSPlayerStatsMenu.h"
+#include "MSSInventoryMenu.h"
+
+
 
 // our definition
 #include "baseviewport.h"
@@ -243,6 +248,11 @@ void CBaseViewport::CreateDefaultPanels( void )
 	AddNewPanel( CreatePanelByName( PANEL_CHARSELECT ), "PANEL_CHARSELECT" );
 	AddNewPanel( CreatePanelByName( PANEL_CHARCREATE ), "PANEL_CHARCREATE" );
 
+	AddNewPanel( CreatePanelByName( PANEL_MAINMENU ), "PANEL_MAINMENU" );
+//	AddNewPanel( CreatePanelByName( PANEL_PLAYERSTATS ), "PANEL_PLAYERSTATS" );
+//	AddNewPanel( CreatePanelByName( PANEL_INVENTORY ), "PANEL_INVENTORY" );
+
+
 	AddNewPanel( CreatePanelByName( PANEL_INFO ), "PANEL_INFO" );
 //	AddNewPanel( CreatePanelByName( PANEL_SPECGUI ), "PANEL_SPECGUI" );
 //	AddNewPanel( CreatePanelByName( PANEL_SPECMENU ), "PANEL_SPECMENU" );
@@ -283,6 +293,8 @@ IViewPortPanel* CBaseViewport::CreatePanelByName(const char *szPanelName)
 		newpanel = new CNavProgress( this );
 	}
 
+// BOXBOX MSS PANELS
+
 	else if ( Q_strcmp(PANEL_JOIN, szPanelName) == 0 )
 	{
 		newpanel = new CMSJoinMarquis( this );
@@ -295,11 +307,28 @@ IViewPortPanel* CBaseViewport::CreatePanelByName(const char *szPanelName)
 	{
 		newpanel = new CMSCharCreateMenu( this );
 	}
-
-	else if ( Q_strcmp(PANEL_INFO, szPanelName) == 0 )
+	else if ( Q_strcmp(PANEL_CHARSELECT, szPanelName) == 0 )
 	{
-		newpanel = new CTextWindow( this );
+		newpanel = new CMSCharSelectMenu( this );
 	}
+	else if ( Q_strcmp(PANEL_MAINMENU, szPanelName) == 0 )
+	{
+		newpanel = new CMSMainMenu( this );
+	}
+/*	else if ( Q_strcmp(PANEL_PLAYERSTATS, szPanelName) == 0 )
+	{
+		newpanel = new CMSPlayerStatsMenu( this );
+	}
+	else if ( Q_strcmp(PANEL_INVENTORY, szPanelName) == 0 )
+	{
+		newpanel = new CClientMSInventoryMenu( this );
+	}
+*/
+
+
+
+
+
 /*	else if ( Q_strcmp(PANEL_OVERVIEW, szPanelName) == 0 )
 	{
 		newpanel = new CMapOverview( this );

@@ -139,7 +139,7 @@ public:
 
 	void MoveToIntroCamera(); // BOXBOX rip/modifying this from old sdk code
 
-	bool m_bHasCharFile; // BOXBOX does this player have a character file?	
+//	bool m_bHasCharFile; // BOXBOX does this player have a character file?	
 
 // BOXBOX MSS STUFF FROM OLD DOGG/BRIAN CODE
 
@@ -158,15 +158,22 @@ public:
 	virtual void UpdateStats( void );
 
 protected:
-	CNetworkString(ms_playerName, 32);
-	CNetworkVar(unsigned int, ms_gender); // BOXBOX was bool
+	CNetworkString( m_szCharName, MAX_CHAR_NAME_LENGTH );
+	CNetworkVar(unsigned int, m_nGender);
+	CNetworkVar(unsigned int, m_nRace);
+	CNetworkVar(unsigned int, m_nTotalExp);
+
+
+//	CNetworkVar(bool, ms_gender);
+//	CNetworkVar(unsigned int, ms_race);
+
 	CNetworkVar(unsigned int, ms_playerKills);
 	CNetworkVar(unsigned int, ms_mana);
 	CNetworkVar(unsigned int, ms_maxMana);
 	CNetworkVar(unsigned int, ms_maxHealth);
 	CNetworkVar(unsigned int, ms_gold);
 	CNetworkVar(unsigned int, ms_alliance);
-	CNetworkVar(unsigned int, ms_race);
+
 	CNetworkVar(unsigned int, ms_strength);
 	CNetworkVar(unsigned int, ms_dexterity);
 	CNetworkVar(unsigned int, ms_concentration);
@@ -220,7 +227,7 @@ private:
 
 };
 
-inline CMSS_Player *ToHL2MPPlayer( CBaseEntity *pEntity )
+inline CMSS_Player *ToMSSPlayer( CBaseEntity *pEntity )
 {
 	if ( !pEntity || !pEntity->IsPlayer() )
 		return NULL;

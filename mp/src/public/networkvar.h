@@ -211,7 +211,14 @@ public:
 		}
 		return m_Value;
 	}
-	
+
+// BOXBOX added for MSS
+	static void Static_Set( void *pvMember, void *val )
+	{
+		((CNetworkVarBase< Type, Changer > *)pvMember)->Set( *(Type *)val );
+	}
+// BOXBOX END
+
 	Type& GetForModify()
 	{
 		NetworkStateChanged();

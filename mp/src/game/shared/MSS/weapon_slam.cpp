@@ -339,7 +339,7 @@ void CWeapon_SLAM::StartSatchelDetonate()
 //-----------------------------------------------------------------------------
 void CWeapon_SLAM::TripmineAttach( void )
 {
-	CMSS_Player *pOwner  = ToHL2MPPlayer( GetOwner() );
+	CMSS_Player *pOwner  = ToMSSPlayer( GetOwner() );
 	if (!pOwner)
 	{
 		return;
@@ -698,7 +698,7 @@ void CWeapon_SLAM::SLAMThink( void )
 //-----------------------------------------------------------------------------
 bool CWeapon_SLAM::CanAttachSLAM( void )
 {
-	CMSS_Player *pOwner = ToHL2MPPlayer( GetOwner() );
+	CMSS_Player *pOwner = ToMSSPlayer( GetOwner() );
 
 	if (!pOwner)
 	{

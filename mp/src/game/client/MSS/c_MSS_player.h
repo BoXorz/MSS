@@ -88,6 +88,13 @@ public:
 	virtual void PostThink( void );
 
 // BOXBOXBOX MSS STUFF
+
+	char			m_szCharName[ MAX_CHAR_NAME_LENGTH ];
+	const char		*m_pszCharName;
+	unsigned int	m_nGender;
+	unsigned int	m_nRace;
+	unsigned int	m_nTotalExp;
+
 	/*struct preloaded_char_info
 	{
 		char Name[64];
@@ -142,7 +149,7 @@ private:
 	bool m_fIsWalking;
 };
 
-inline C_MSS_Player *ToHL2MPPlayer( CBaseEntity *pEntity )
+inline C_MSS_Player *ToMSSPlayer( CBaseEntity *pEntity )
 {
 	if ( !pEntity || !pEntity->IsPlayer() )
 		return NULL;
