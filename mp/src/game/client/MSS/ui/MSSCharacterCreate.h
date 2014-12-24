@@ -1,6 +1,6 @@
 //========= Copyright © 2008, Mike Raineri, All rights reserved. ============//
 //
-// Purpose: Header file for the character menu
+// Purpose: Header file for the character creation menu
 //
 // $NoKeywords: $
 //=============================================================================//
@@ -22,11 +22,11 @@ class CMSCharCreateMenu : public vgui::Frame, public IViewPortPanel
 private:
 	DECLARE_CLASS_SIMPLE( CMSCharCreateMenu, vgui::Frame );
 
-protected:
-
 public:
 	CMSCharCreateMenu( IViewPort *pViewPort );
 	virtual ~CMSCharCreateMenu();
+
+	virtual void ApplySchemeSettings( vgui::IScheme *pScheme ); // BOXBOX added this
 
 	virtual void OnCommand(const char *command);
 
@@ -37,7 +37,7 @@ public:
 	virtual bool NeedsUpdate( void );
 	virtual bool HasInputElements( void ) { return true; }
 	virtual void ShowPanel( bool bShow );
-	virtual void Remove3DCharacters();
+//	virtual void Remove3DCharacters();
 	virtual void OnClose( ) override;
 
 	// both vgui::Frame and IViewPortPanel define these, so explicitly define them here as passthroughs to vgui
@@ -50,20 +50,20 @@ public:
 	static Vector g_ViewPos;
 	static QAngle g_ViewAng;
 
-	bool m_CharsFollowCam;
+//	bool m_CharsFollowCam;
 	static CMSCharCreateMenu *static_pCurrentMenu;
 
 	//Character positions
-	struct char_selection_spawnpoint_info_s
+/*	struct char_selection_spawnpoint_info_s
 	{
 		Vector Pos;
 		QAngle Rot;
 	};
+*/
+//	void GetCharPos( int charIdx, char_selection_spawnpoint_info_s &out_Pos );	//Get position of a ghost character
 
-	void GetCharPos( int charIdx, char_selection_spawnpoint_info_s &out_Pos );	//Get position of a ghost character
-
-	static CUtlVector<char_selection_spawnpoint_info_s> m_CharSelectSpots;
-	CUtlVector<CHandle<CClientSidePlayerModel>> m_SelectionCharacters;
+//	static CUtlVector<char_selection_spawnpoint_info_s> m_CharSelectSpots;
+//	CUtlVector<CHandle<CClientSidePlayerModel>> m_SelectionCharacters;
 
 	CPanelAnimationVar( float, m_DistFromCamera, "3dchar_dist_forward", "float" );
 	CPanelAnimationVar( float, m_DistFromCamera_Side, "3dchar_dist_side", "float" );
@@ -73,4 +73,11 @@ public:
 	CPanelAnimationVar( float, m_SlotY, "Slot_Y", "float" );
 	CPanelAnimationVar( float, m_SlotW, "Slot_W", "float" );
 	CPanelAnimationVar( float, m_SlotH, "Slot_H", "float" );
+
+protected:
+
+	vgui::Label		*m_pTitleLabel;
+
+	int m_nSelectedGender;
+	int m_nSelectedRace;
 };

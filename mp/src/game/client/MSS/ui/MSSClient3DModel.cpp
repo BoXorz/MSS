@@ -81,7 +81,7 @@ void CClientSidePlayerModel::UpdateEntity( CClientSidePlayerModel *pPlayerModel 
 
 	Vector origin = pLocalPlayer->EyePosition();
 	
-	CMSCharSelectMenu *pCurrentMenu = CMSCharSelectMenu::static_pCurrentMenu;
+/*	CMSCharSelectMenu *pCurrentMenu = CMSCharSelectMenu::static_pCurrentMenu;
 	if( pCurrentMenu && pCurrentMenu->m_CharsFollowCam )
 	{
 		//Chars always in front of camera
@@ -95,7 +95,7 @@ void CClientSidePlayerModel::UpdateEntity( CClientSidePlayerModel *pPlayerModel 
 	{
 		//Chars at static position in world
 	}
-
+*/
     Vector lightOrigin = origin;
 
     // find a spot inside the world for the dlight's origin, or it won't illuminate the model

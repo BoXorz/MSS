@@ -1,8 +1,6 @@
-#include "cbase.h"
-
 //========= Copyright © 2008, Mike Raineri, All rights reserved. ============//
 //
-// Purpose: Builds the character window
+// Purpose: Builds the character creation window
 //
 // $NoKeywords: $
 //=============================================================================//
@@ -24,148 +22,62 @@ using namespace std;
 #include <cdll_client_int.h>
 #include "clientmode_MSSnormal.h"
 
-CUtlVector<CMSCharCreateMenu::char_selection_spawnpoint_info_s> CMSCharCreateMenu::m_CharSelectSpots;
-
 Vector CMSCharCreateMenu::g_ViewPos;
 QAngle CMSCharCreateMenu::g_ViewAng;
 CMSCharCreateMenu *CMSCharCreateMenu::static_pCurrentMenu = NULL;
 
-//-----------------------------------------------------------------------------
-// Purpose: Constructor
-//-----------------------------------------------------------------------------
 CMSCharCreateMenu::CMSCharCreateMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_CHARCREATE )
 {
-	// set the scheme before any child control is created
-	SetScheme("ClientScheme");
+	vgui::HScheme scheme = vgui::scheme()->LoadSchemeFromFileEx( enginevgui->GetPanel( PANEL_CLIENTDLL ), "resource/MSScheme.res", "MSScheme"); // BOXBOX added
+	SetScheme(scheme);
 
 	SetMoveable( false );
 	SetSizeable( false );
 	SetProportional( true );
 	SetKeyBoardInputEnabled( true );
-
-	// hide the system buttons
 	SetTitleBarVisible( false );
-	m_CharsFollowCam = true;
+
+	m_pTitleLabel	= new Label( this, "TitleText", "Title Text" );
+
+	m_nSelectedGender = -1;
+	m_nSelectedRace = -1;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Destructor
-//-----------------------------------------------------------------------------
 CMSCharCreateMenu::~CMSCharCreateMenu()
 {
-	
 }
 
-void CMSCharCreateMenu::GetCharPos( int charIdx, CMSCharCreateMenu::char_selection_spawnpoint_info_s &out_Pos )
+void CMSCharCreateMenu::ApplySchemeSettings( IScheme *pScheme ) // BOXBOX added this
 {
-	if( m_CharsFollowCam )
-	{
-		Vector vForward, vRight, vUp;
-		AngleVectors( CMSCharCreateMenu::g_ViewAng, &vForward, &vRight, &vUp );
+	BaseClass::ApplySchemeSettings( pScheme );
 
-		out_Pos.Pos =  CMSCharCreateMenu::g_ViewPos 
-					+ vForward * m_DistFromCamera 
-					+ vRight * m_DistFromCamera_Side 
-					+ vRight * m_DistFromCamera_SideSpacing * (charIdx-1)
-					+ vUp * m_DistFromCamera_Up;
-
-		Vector vFacingPlayer = CMSCharCreateMenu::g_ViewPos - out_Pos.Pos;
-		vFacingPlayer.NormalizeInPlace( );
-		out_Pos.Rot = QAngle( 0, UTIL_VecToYaw(vFacingPlayer), 0 );
-	}
-}
-//-----------------------------------------------------------------------------
-// Purpose: Clears the screen before building it
-//-----------------------------------------------------------------------------
-void CMSCharCreateMenu::Reset( )
-{
 	LoadControlSettings("Resource/UI/MSCharacterCreate.res");
 
-	for( int i = 0; i < GetChildCount( ); i++ )
-	{
-		if( string( GetChild( i )->GetClassName( ) ) == "Label" )
-		{
-			Label *pLabel = (Label *)GetChild( i );
-			if( string( pLabel->GetName( ) ) != "TitleText" )
-				pLabel->SizeToContents( );
-		}
-		/*
-		if( string( GetChild( i )->GetClassName( ) ) == "ImagePanel" )
-		{
-			ImagePanel *pPanel = (ImagePanel *)GetChild( i );
-			if( pPanel->GetImage( ) )
-			{
-				int wide, tall;
-				pPanel->GetImage( )->GetContentSize( wide, tall );
-				pPanel->SetSize( wide, tall );
-			}
-		}
-		*/
-	}
+	m_pTitleLabel->SetFont( pScheme->GetFont( "HeaderFont" ) );
+	m_pTitleLabel->SetFgColor( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
 
-	for( int i = 0; i < 3; i++ )
-	{
-		char sName[16];
-		int slotidx = i + 1;
-		Q_snprintf( sName, sizeof(sName), "Text_Slot%i", slotidx );
-			
-		Label *pLabel = (Label *)FindChildByName( sName );
-		if( pLabel )
-		{
-			int x, y;
-			pLabel->GetPos( x, y );
-			pLabel->SetPos( x, scheme()->GetProportionalScaledValueEx(pLabel->GetScheme(), m_SlotTitleY ) );
-		}
-
-		Q_snprintf( sName, sizeof(sName), "Button_Slot%i", slotidx );
-
-		Button *pButton = (Button *)FindChildByName( sName );
-		if( pButton )
-		{
-			int x, y;
-			pButton->GetPos( x, y );
-			pButton->SetPos( x, scheme()->GetProportionalScaledValueEx(pButton->GetScheme(), m_SlotY) );
-			pButton->SetSize( scheme()->GetProportionalScaledValueEx(pButton->GetScheme(), m_SlotW) , scheme()->GetProportionalScaledValueEx(pButton->GetScheme(), m_SlotH) );
-			pButton->SetText( "" );
-		}
-	}
-
-
-	/*if( !m_SelectionCharacters.Count( ) )
-		for( int i = 0; i < m_CharSelectSpots.Count( ); i++ )
-		{
-			char_selection_spawnpoint_info_s &Point = m_CharSelectSpots[i];
-
-			CClientSidePlayerModel *pPlayerModel = new CClientSidePlayerModel( );
-			Q_strcpy( pPlayerModel->m_ModelName, "models/Combine_Soldier.mdl" );
-			pPlayerModel->AddEffects( EF_NODRAW ); // don't let the renderer draw the model normally
-			pPlayerModel->InitializeAsClientEntity( pPlayerModel->m_ModelName, RENDER_GROUP_OPAQUE_ENTITY );
-			pPlayerModel->SetAbsOrigin( Point.Pos );
-			pPlayerModel->SetAbsAngles( Point.Rot );
-			pPlayerModel->ToggleBBoxVisualization( CBaseEntity::VISUALIZE_SURROUNDING_BOUNDS );
-
-			if( i == 1 )
-				pPlayerModel->SetSequence( pPlayerModel->LookupSequence( "Run_Melee" ) );
-			else
-				pPlayerModel->SetSequence( pPlayerModel->LookupSequence( "Idle_Slam" ) );
-			pPlayerModel->SetPoseParameter( 0, 0.0f ); // move_yaw
-			pPlayerModel->SetPoseParameter( 1, 10.0f ); // body_pitch, look down a bit
-			pPlayerModel->SetPoseParameter( 2, 0.0f ); // body_yaw
-			pPlayerModel->SetPoseParameter( 3, 0.0f ); // move_y
-			pPlayerModel->SetPoseParameter( 4, 0.0f ); // move_x
-			pPlayerModel->m_SlotIndex = i;
-
-			CHandle<CClientSidePlayerModel> ehandlePlayerModel( pPlayerModel );
-			CClientSidePlayerModel::g_ClientSideModels.AddToTail( ehandlePlayerModel );
-			m_SelectionCharacters.AddToTail( pPlayerModel );
-		}*/
-
-		CMSCharCreateMenu::static_pCurrentMenu = this;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Displays the window
-//-----------------------------------------------------------------------------
+void CMSCharCreateMenu::Reset( )
+{
+	m_nSelectedGender = -1;
+	m_nSelectedRace = -1;
+
+	Button *pButton = (Button *)FindChildByName( "ButtonMale" );
+	pButton->SetEnabled( true );
+	pButton = (Button *)FindChildByName( "ButtonFemale" );
+	pButton->SetEnabled( true );
+	pButton = (Button *)FindChildByName( "ButtonHuman" );
+	pButton->SetEnabled( true );
+	pButton = (Button *)FindChildByName( "ButtonDwarf" );
+	pButton->SetEnabled( true );
+	pButton = (Button *)FindChildByName( "ButtonElf" );
+	pButton->SetEnabled( true );
+
+	TextEntry *pText = (TextEntry *)FindChildByName( "ChooseNameTextBox" );
+	pText->SetText( "" );
+}
+
 void CMSCharCreateMenu::ShowPanel(bool bShow)
 {
 	// If already open, do nothing
@@ -196,72 +108,92 @@ bool CMSCharCreateMenu::NeedsUpdate( void )
 	return false;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
 void CMSCharCreateMenu::Update( void )
 {
 }
 
 void CMSCharCreateMenu::OnClose( )
 {
-	//Remove3DCharacters( );
-
 	BaseClass::OnClose( );
 }
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-void CMSCharCreateMenu::Remove3DCharacters()
-{
-	/*static_pCurrentMenu = NULL;
 
-	int count = m_SelectionCharacters.Count( );
-	for( int i = 0; i < count; i++ )
-	{
-		if( m_SelectionCharacters[i].Get( ) )
-			(m_SelectionCharacters[i].Get( ))->Remove( );
-		CClientSidePlayerModel::g_ClientSideModels.Remove( i );
-	}
-
-	m_SelectionCharacters.RemoveAll( );
-	m_CharSelectSpots.RemoveAll( );*/
-}
-
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
 void CMSCharCreateMenu::OnCommand( const char *command )
 {
-	if( Q_strstr( command, "createchar" ) )
+	if( Q_strstr( command, "gendermale" ) )
+	{
+		Button *pButton = (Button *)FindChildByName( "ButtonMale" );
+		pButton->SetEnabled( false );
+		pButton = (Button *)FindChildByName( "ButtonFemale" );
+		pButton->SetEnabled( true );
+		m_nSelectedGender = GENDER_MALE;
+	}
+	else if( Q_strstr( command, "genderfemale" ) )
+	{
+		Button *pButton = (Button *)FindChildByName( "ButtonMale" );
+		pButton->SetEnabled( true );
+		pButton = (Button *)FindChildByName( "ButtonFemale" );
+		pButton->SetEnabled( false );
+		m_nSelectedGender = GENDER_FEMALE;
+	}
+	else if( Q_strstr( command, "racehuman" ) )
+	{
+		Button *pButton = (Button *)FindChildByName( "ButtonHuman" );
+		pButton->SetEnabled( false );
+		pButton = (Button *)FindChildByName( "ButtonDwarf" );
+		pButton->SetEnabled( true );
+		pButton = (Button *)FindChildByName( "ButtonElf" );
+		pButton->SetEnabled( true );
+		m_nSelectedRace = RACE_HUMAN;
+	}
+	else if( Q_strstr( command, "racedwarf" ) )
+	{
+		Button *pButton = (Button *)FindChildByName( "ButtonDwarf" );
+		pButton->SetEnabled( false );
+		pButton = (Button *)FindChildByName( "ButtonHuman" );
+		pButton->SetEnabled( true );
+		pButton = (Button *)FindChildByName( "ButtonElf" );
+		pButton->SetEnabled( true );
+		m_nSelectedRace = RACE_DWARF;
+	}
+	else if( Q_strstr( command, "raceelf" ) )
+	{
+		Button *pButton = (Button *)FindChildByName( "ButtonElf" );
+		pButton->SetEnabled( false );
+		pButton = (Button *)FindChildByName( "ButtonDwarf" );
+		pButton->SetEnabled( true );
+		pButton = (Button *)FindChildByName( "ButtonHuman" );
+		pButton->SetEnabled( true );
+		m_nSelectedRace = RACE_ELF;
+	}
+	else if( Q_strstr( command, "cancel" ) )
+	{
+		gViewPortInterface->ShowPanel( this, false );
+		gViewPortInterface->ShowPanel( PANEL_CHARSELECT, true );
+		vgui::surface()->PlaySound( "UI/pageturn.wav" );
+	}
+	else if( Q_strstr( command, "createnew" ) )
 	{
 		bool dataIsValid = true;
-		char charName[256] = "peon";
-		int gender = 0;
+		char charName[64] = "";
 
-
-		TextEntry *pCharName = (TextEntry *)FindChildByName( "Text_ChooseName_TextBox" );
-		pCharName->GetText( charName, 256 );
+		TextEntry *pCharName = (TextEntry *)FindChildByName( "ChooseNameTextBox" );
+		pCharName->GetText( charName, 64 );
 
 		if( !charName[0] )
 			dataIsValid = false;
 
-		RadioButton *pGenderMale = (RadioButton *)FindChildByName( "Button_GenderMale" );
-		RadioButton *pGenderFemale = (RadioButton *)FindChildByName( "Button_GenderFemale" );
-		if( pGenderMale->IsSelected() )
-			gender = 0;
-		else if( pGenderFemale->IsSelected() )
-			gender = 1;
-		else
+		if( m_nSelectedGender == -1)
+			dataIsValid = false;
+
+		if( m_nSelectedRace == -1 )
 			dataIsValid = false;
 
 		if( dataIsValid )
 		{
-			string sendCommand = VarArgs( "createchar \"%s\" %i", charName, gender );
+			string sendCommand = VarArgs( "createchar \"%s\" %i %i", charName, m_nSelectedGender, m_nSelectedRace );
 			engine->ClientCmd( sendCommand.c_str() );
 			gViewPortInterface->ShowPanel( this, false );
-			vgui::surface()->PlaySound( "UI/pageturn.wav" ); // BOXBOX added
+			vgui::surface()->PlaySound( "UI/pageturn.wav" );
 		}
 	}
 	else

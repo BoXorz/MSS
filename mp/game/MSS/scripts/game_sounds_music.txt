@@ -1,0 +1,11 @@
+
+"Music.Intro"
+{
+	"channel"	"CHAN_ITEM"
+	"volume"	"1"
+	"soundlevel"  "SNDLVL_75dB"
+
+	"wave"	"music/TitleScreenMusic.wav"
+}
+
+

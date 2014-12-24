@@ -121,14 +121,20 @@ void FinishClientPutInServer( CMSS_Player *pPlayer )
 	data->SetBool( "unload", sv_motd_unload_on_dismissal.GetBool() );
 	data->SetBool( "justjoined", true ); // BOXBOX added this, the player is just joining, so show the character select menu after this closes.
 
+// BOXBOX preload names and models of characters on the server for the Character Selection menu
+// BOXBOX also determines number of characters this player has on this server, and sends that info to the client, so the vgui panels will have their story straight
+	pPlayer->PreLoadChars();
+
+//	pPlayer->SetNumChars();
+
 // BOXBOX play music here?
 	pPlayer->EmitSound("Music.Intro");
 
 // BOXBOX show the Join Marquis
 	pPlayer->ShowViewPortPanel( PANEL_JOIN, true, data );
 
-	pPlayer->ShowViewPortPanel( PANEL_MAINMENU, false ); // BOXBOX TODO why are these on by default?
-//	pPlayer->ShowViewPortPanel( PANEL_PLAYERSTATS, false );
+	pPlayer->ShowViewPortPanel( PANEL_MAINMENU, false ); // BOXBOX TODO why is this on by default?
+
 
 
 

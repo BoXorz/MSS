@@ -13,6 +13,7 @@ const char *pszRaceNames[] =
 
 const char *pszPlayerModels[] =
 {
+	"",
 	"models/player/humanmale.mdl",
 	"models/player/humanfemale.mdl",
 	"models/player/dwarfmale.mdl",

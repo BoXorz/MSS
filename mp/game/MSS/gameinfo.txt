@@ -1,0 +1,31 @@
+"GameInfo"
+{
+	game	"Master Sword: Source"
+	title	"Master Sword"
+	title2	""
+	type multiplayer_only
+	nomodels 1
+	nohimodel 1
+	nocrosshair 1
+	GameData	"MSS.fgd"
+	icon 		"resource/MSS"
+
+	FileSystem
+	{
+		SteamAppId	243750
+		SearchPaths
+		{
+			game+mod+mod_write+default_write_path		|gameinfo_path|.
+			gamebin				|gameinfo_path|bin
+			game+mod			hl2mp/hl2mp_english.vpk
+			game+mod			hl2mp/hl2mp_pak.vpk
+			game				|all_source_engine_paths|hl2/hl2_english.vpk
+			game				|all_source_engine_paths|hl2/hl2_pak.vpk
+			game				|all_source_engine_paths|hl2/hl2_textures.vpk
+			game				|all_source_engine_paths|hl2/hl2_sound_vo_english.vpk
+			game				|all_source_engine_paths|hl2/hl2_sound_misc.vpk
+			game				|all_source_engine_paths|hl2/hl2_misc.vpk
+			platform			|all_source_engine_paths|platform/platform_misc.vpk
+		}
+	}
+}

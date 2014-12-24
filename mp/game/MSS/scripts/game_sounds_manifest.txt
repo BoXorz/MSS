@@ -1,0 +1,19 @@
+game_sounds_manifest
+{
+	"precache_file"		"scripts/game_sounds.txt"
+	"precache_file"		"scripts/game_sounds_ui.txt"
+	"precache_file"		"scripts/game_sounds_player.txt"
+	"precache_file"		"scripts/game_sounds_weapons.txt"
+
+	// Music (ADDED FOR MSS)
+	"precache_file"		"scripts/game_sounds_music.txt"
+	"precache_file"		"scripts/game_sounds_world.txt"
+	"precache_file"		"scripts/game_sounds_ambient_generic.txt"
+	"precache_file"		"scripts/game_sounds_items.txt"
+	"precache_file"		"scripts/game_sounds_physics.txt"
+	"precache_file"		"scripts/game_sounds_vehicles.txt"
+
+	// MONSTER Sounds // BOXBOX borrowing these 2 for now
+	"precache_file"		"scripts/npc_sounds_headcrab.txt"
+	"precache_file"		"scripts/npc_sounds_zombie.txt"
+}

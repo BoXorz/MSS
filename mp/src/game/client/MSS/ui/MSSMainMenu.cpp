@@ -73,7 +73,7 @@ void CMSMainMenu::ApplySchemeSettings( IScheme *pScheme )
 	m_pRightPageNumLabel->SetFont( pScheme->GetFont( "HeaderFont" ) );
 
 	m_pLeftPageTitleLabel->SetFont( pScheme->GetFont( "HeaderFontSmall" ) );
-	m_pRightPageTitleLabel->SetFont( pScheme->GetFont( "HeaderFontSmall" ) );
+	m_pRightPageTitleLabel->SetFont( pScheme->GetFont( "HeaderFontSmaller" ) );
 
 	m_pSexLabel->SetFgColor( pScheme->GetColor( "RedInk", Color(0, 0, 0, 0) ) );
 	m_pRaceLabel->SetFgColor( pScheme->GetColor( "RedInk", Color(0, 0, 0, 0) ) );

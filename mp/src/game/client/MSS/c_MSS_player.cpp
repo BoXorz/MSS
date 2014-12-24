@@ -32,6 +32,8 @@ IMPLEMENT_CLIENTCLASS_DT(C_MSS_Player, DT_MSS_Player, CMSS_Player)
 //	RecvPropBool( RECVINFO( m_fIsWalking ) ), // BOXBOX the serverclass doesnt have this!?
 
 // BOXBOXBOX MSS STUFF
+
+	RecvPropInt( RECVINFO( m_nNumChars ) ),
 	RecvPropString( RECVINFO( m_szCharName ) ),
 	RecvPropInt( RECVINFO( m_nGender ) ),
 	RecvPropInt( RECVINFO( m_nRace ) ),
@@ -40,7 +42,13 @@ IMPLEMENT_CLIENTCLASS_DT(C_MSS_Player, DT_MSS_Player, CMSS_Player)
 
 	//RecvPropArray( RecvPropString( RECVINFO( m_PreloadedCharInfo ) ), m_PreloadedCharInfo ),
 	//RecvPropArray3( RECVINFO_ARRAY( m_PreloadedCharInfo ), RecvPropString( RECVINFO( m_PreloadedCharInfo ), 0, RecvProxy_Preload ) ),
-	RecvPropArray( RecvPropString( RECVINFO( m_PreloadedCharInfo_Name[0]) ), m_PreloadedCharInfo_Name ),
+//	RecvPropArray( RecvPropString( RECVINFO( m_PreloadedCharInfo_Name[0]) ), m_PreloadedCharInfo_Name ),
+	RecvPropString( RECVINFO( m_szPreloadCharName0 ) ),
+	RecvPropString( RECVINFO( m_szPreloadCharName1 ) ),
+	RecvPropString( RECVINFO( m_szPreloadCharName2 ) ),
+
+
+
 	RecvPropArray( RecvPropInt( RECVINFO( m_PreloadedCharInfo_Model[0] ) ), m_PreloadedCharInfo_Model),
 	RecvPropBool( RECVINFO( m_PreloadedCharInfo_DoneSending ) ),
 

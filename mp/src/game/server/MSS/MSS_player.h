@@ -147,17 +147,26 @@ public:
 	int m_SelectedChar;				//Index of the character choosen
 
 	void SaveChar( );
+	void PreLoadChars( void ); // BOXBOX added this to get the character names and models for the Character Selection VGUI panel
+//	void SetNumChars( void ); // BOXBOX added this, to set the number of characters this player has on server
+
 	charloadstatus_e LoadChar( int charSlot );
 	void GetCharacterSaveFileFields( CUtlVector<MSSaveProperty> &allPlayerData );
 	float m_TimeLastSave;
 
-	CNetworkArray( string_t, m_PreloadedCharInfo_Name, MAX_CHAR_SLOTS );
+//	CNetworkArray( string_t, m_PreloadedCharInfo_Name, MAX_CHAR_SLOTS ); // BOXBOX trying this a different way...
+	CNetworkString( m_szPreloadCharName0, MAX_CHAR_NAME_LENGTH );
+	CNetworkString( m_szPreloadCharName1, MAX_CHAR_NAME_LENGTH );
+	CNetworkString( m_szPreloadCharName2, MAX_CHAR_NAME_LENGTH );
+
 	CNetworkArray( int, m_PreloadedCharInfo_Model, MAX_CHAR_SLOTS );
 	CNetworkVar( bool, m_PreloadedCharInfo_DoneSending );
 
 	virtual void UpdateStats( void );
 
 protected:
+	CNetworkVar( int, m_nNumChars ); // BOXBOX added this, so client side (panels mostly) will know how many chars this player has on server
+
 	CNetworkString( m_szCharName, MAX_CHAR_NAME_LENGTH );
 	CNetworkVar(unsigned int, m_nGender);
 	CNetworkVar(unsigned int, m_nRace);

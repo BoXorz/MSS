@@ -22,20 +22,22 @@ using namespace std;
 #include <cdll_client_int.h>
 #include "clientmode_MSSnormal.h"
 
-#define MSS_PLAYER_MODEL "models/player/humanmale.mdl"
+//#define MSS_PLAYER_MODEL "models/player/humanmale.mdl"
 
-CUtlVector<CMSCharSelectMenu::char_selection_spawnpoint_info_s> CMSCharSelectMenu::m_CharSelectSpots;
+extern const char *pszPlayerModels[];
 
-Vector CMSCharSelectMenu::g_ViewPos;
-QAngle CMSCharSelectMenu::g_ViewAng;
-CMSCharSelectMenu *CMSCharSelectMenu::static_pCurrentMenu = NULL;
+//CUtlVector<CMSCharSelectMenu::char_selection_spawnpoint_info_s> CMSCharSelectMenu::m_CharSelectSpots;
 
-LINK_ENTITY_TO_CLASS( ms_clientsidemodel, CClientSidePlayerModel );
+//Vector CMSCharSelectMenu::g_ViewPos;
+//QAngle CMSCharSelectMenu::g_ViewAng;
+//CMSCharSelectMenu *CMSCharSelectMenu::static_pCurrentMenu = NULL;
+
+//LINK_ENTITY_TO_CLASS( ms_clientsidemodel, CClientSidePlayerModel );
 //-----------------------------------------------------------------------------
 // Purpose: Constructor
 //-----------------------------------------------------------------------------
-CMSCharSelectMenu::CMSCharSelectMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_CHARSELECT ),
-	m_DisplayedCharacters( false ), m_CharsFollowCam( true )
+CMSCharSelectMenu::CMSCharSelectMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_CHARSELECT )/*,
+	m_DisplayedCharacters( false ), m_CharsFollowCam( true )*/
 {
 	vgui::HScheme scheme = vgui::scheme()->LoadSchemeFromFileEx( enginevgui->GetPanel( PANEL_CLIENTDLL ), "resource/MSScheme.res", "MSScheme");
 	SetScheme(scheme);
@@ -43,28 +45,39 @@ CMSCharSelectMenu::CMSCharSelectMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_
 	SetMoveable( false );
 	SetSizeable( false );
 	SetProportional( true );
-
-	// hide the system buttons
 	SetTitleBarVisible( false );
 
 	m_pTitleLabel	= new Label( this, "TitleText", "Title Text" );
-	m_pSlot1Label	= new Label( this, "Text_Slot1", "Slot 1 Text" );
-	m_pSlot2Label	= new Label( this, "Text_Slot2", "Slot 2 Text" );
-	m_pSlot3Label	= new Label( this, "Text_Slot3", "Slot 3 Text" );
+	m_pSlot1Label	= new Label( this, "CharText1", "" );
+	m_pSlot2Label	= new Label( this, "CharText2", "" );
+	m_pSlot3Label	= new Label( this, "CharText3", "" );
+
+//	m_pCharButton1		= new vgui::Button( this, "CharButton1", "#MSS_NOCHAR", this, "choosechar 0" );
+//	m_pCharButton2		= new vgui::Button( this, "CharButton2", "#MSS_NOCHAR", this, "choosechar 1" );
+//	m_pCharButton3		= new vgui::Button( this, "CharButton3", "#MSS_NOCHAR", this, "choosechar 2" );
+
+//	m_pCharModel1 = new CModelPanel( this, "charmodel1" );
+//	m_pCharModel2 = new CModelPanel( this, "charmodel2" );
+//	m_pCharModel3 = new CModelPanel( this, "charmodel3" );
+
 
 	m_pConfirmBgImage		= new vgui::ImagePanel( this, "ConfirmBGImg" );
 	m_pConfirmLabel			= new vgui::Label( this, "ConfirmLabel", "#MSS_DEL_CONFIRM" );
 	m_pConfirmYesButton		= new vgui::Button( this, "YesButton", "#MSS_YES", this, "confirmyes" );
 	m_pConfirmNoButton		= new vgui::Button( this, "NoButton", "#MSS_NO", this, "confirmno" );
 
+	m_pFullCharBgImage		= new vgui::ImagePanel( this, "FullCharBGImg" );
+	m_pFullCharLabel		= new vgui::Label( this, "FullCharLabel", "#MSS_FULL_CHAR" );
+	m_pFullCharButton		= new vgui::Button( this, "FullCharButton", "#MSS_OK", this, "fullcharok" );
+
+	m_bJustDeleted[0] = false;
+	m_bJustDeleted[1] = false;
+	m_bJustDeleted[2] = false;
+
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Destructor
-//-----------------------------------------------------------------------------
 CMSCharSelectMenu::~CMSCharSelectMenu()
 {
-	
 }
 
 void CMSCharSelectMenu::ApplySchemeSettings( IScheme *pScheme ) // BOXBOX added this
@@ -76,169 +89,29 @@ void CMSCharSelectMenu::ApplySchemeSettings( IScheme *pScheme ) // BOXBOX added 
 	m_pTitleLabel->SetFont( pScheme->GetFont( "HeaderFont" ) );
 	m_pTitleLabel->SetFgColor( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
 
-	m_pSlot1Label->SetFont( pScheme->GetFont( "HeaderFont" ) );
-	m_pSlot1Label->SetFgColor( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
+	m_pSlot1Label->SetFont( pScheme->GetFont( "WritingFont" ) );
+	m_pSlot1Label->SetFgColor( pScheme->GetColor( "RedInk", Color(0, 0, 0, 0) ) );
 	m_pSlot2Label->SetFont( pScheme->GetFont( "WritingFont" ) );
-	m_pSlot2Label->SetFgColor( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
+	m_pSlot2Label->SetFgColor( pScheme->GetColor( "RedInk", Color(0, 0, 0, 0) ) );
 	m_pSlot3Label->SetFont( pScheme->GetFont( "WritingFont" ) );
-	m_pSlot3Label->SetFgColor( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
+	m_pSlot3Label->SetFgColor( pScheme->GetColor( "RedInk", Color(0, 0, 0, 0) ) );
 
 	m_pConfirmLabel->SetFont( pScheme->GetFont( "HeaderFontSmall" ) );
 	m_pConfirmLabel->SetFgColor( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
 
-/*	Button *pButton = (Button *)FindChildByName( "CharButton1" );
-	pButton->SetDisabledFgColor2( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
-	pButton = (Button *)FindChildByName( "CharButton2" );
-	pButton->SetDisabledFgColor2( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
-	pButton = (Button *)FindChildByName( "CharButton3" );
-	pButton->SetDisabledFgColor2( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
-	pButton = (Button *)FindChildByName( "DeleteCharButton1" );
-	pButton->SetDisabledFgColor2( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
-	pButton = (Button *)FindChildByName( "DeleteCharButton2" );
-	pButton->SetDisabledFgColor2( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
-	pButton = (Button *)FindChildByName( "DeleteCharButton3" );
-	pButton->SetDisabledFgColor2( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
-	pButton = (Button *)FindChildByName( "NewCharButton" );
-	pButton->SetDisabledFgColor2( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
-*/
+	m_pFullCharLabel->SetFont( pScheme->GetFont( "HeaderFontSmall" ) );
+	m_pFullCharLabel->SetFgColor( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
+
 }
 
-
-void CMSCharSelectMenu::GetCharPos( int charIdx, CMSCharSelectMenu::char_selection_spawnpoint_info_s &out_Pos )
-{
-	if( m_CharsFollowCam )
-	{
-		Vector vForward, vRight, vUp;
-		AngleVectors( CMSCharSelectMenu::g_ViewAng, &vForward, &vRight, &vUp );
-
-		out_Pos.Pos =  CMSCharSelectMenu::g_ViewPos 
-					+ vForward * m_DistFromCamera 
-					+ vRight * m_DistFromCamera_Side 
-					+ vRight * m_DistFromCamera_SideSpacing * (charIdx-1)
-					+ vUp * m_DistFromCamera_Up;
-
-		Vector vFacingPlayer = CMSCharSelectMenu::g_ViewPos - out_Pos.Pos;
-		vFacingPlayer.NormalizeInPlace( );
-		out_Pos.Rot = QAngle( 0, UTIL_VecToYaw(vFacingPlayer), 0 );
-	}
-}
-//-----------------------------------------------------------------------------
-// Purpose: Clears the screen before building it
-//-----------------------------------------------------------------------------
-void CMSCharSelectMenu::Reset( )
-{
-//	LoadControlSettings("Resource/UI/MSCharacterSelect.res");
-	m_DisplayedCharacters = false;
-
-	//Setup the characters (If using static positions)
-	if( !CMSCharSelectMenu::m_CharSelectSpots.Count( ) )
-		for( int i = 0; i < 3; i++ )
-		{
-			CMSCharSelectMenu::char_selection_spawnpoint_info_s NewSpot;
-			GetCharPos( i, NewSpot );
-
-			CMSCharSelectMenu::m_CharSelectSpots.AddToTail( NewSpot );
-		}
-
-	for( int i = 0; i < GetChildCount( ); i++ )
-	{
-		if( string( GetChild( i )->GetClassName( ) ) == "Label" )
-		{
-			Label *pLabel = (Label *)GetChild( i );
-			if( string( pLabel->GetName( ) ) != "TitleText" )
-				pLabel->SizeToContents( );
-		}
-		/*
-		if( string( GetChild( i )->GetClassName( ) ) == "ImagePanel" )
-		{
-			ImagePanel *pPanel = (ImagePanel *)GetChild( i );
-			if( pPanel->GetImage( ) )
-			{
-				int wide, tall;
-				pPanel->GetImage( )->GetContentSize( wide, tall );
-				pPanel->SetSize( wide, tall );
-			}
-		}
-		*/
-	}
-
-	for( int i = 0; i < MAX_CHAR_SLOTS; i++ )
-	{
-		char sName[16];
-		int slotidx = i + 1;
-		Q_snprintf( sName, sizeof(sName), "Text_Slot%i", slotidx );
-			
-		Label *pLabel = (Label *)FindChildByName( sName );
-		if( pLabel )
-		{
-			int x, y;
-			pLabel->GetPos( x, y );
-			pLabel->SetPos( x, scheme()->GetProportionalScaledValueEx(pLabel->GetScheme(), m_SlotTitleY ) );
-			pLabel->SetVisible( false );
-		}
-
-		Q_snprintf( sName, sizeof(sName), "Button_Slot%i", slotidx );
-
-		Button *pButton = (Button *)FindChildByName( sName );
-		if( pButton )
-		{
-			int x, y;
-			pButton->GetPos( x, y );
-			pButton->SetPos( x, scheme()->GetProportionalScaledValueEx(pButton->GetScheme(), m_SlotY) );
-			pButton->SetSize( scheme()->GetProportionalScaledValueEx(pButton->GetScheme(), m_SlotW) , scheme()->GetProportionalScaledValueEx(pButton->GetScheme(), m_SlotH) );
-			pButton->SetText( "" );
-			pButton->SetEnabled( false );
-		}
-	}
-
-
-	if( !m_SelectionCharacters.Count( ) )
-		for( int i = 0; i < m_CharSelectSpots.Count( ); i++ )
-		{
-			const char_selection_spawnpoint_info_s &Point = m_CharSelectSpots[i];
-
-			CClientSidePlayerModel *pPlayerModel = dynamic_cast<CClientSidePlayerModel* >( CreateEntityByName( "ms_clientsidemodel" ) );
-			if( pPlayerModel )
-			{
-				Q_strcpy( pPlayerModel->m_ModelName, MSS_PLAYER_MODEL );
-				pPlayerModel->InitializeAsClientEntity( pPlayerModel->m_ModelName, RENDER_GROUP_OPAQUE_ENTITY );
-				pPlayerModel->AddEffects( EF_NODRAW ); // don't let the renderer draw the model normally
-				pPlayerModel->SetAbsOrigin( Point.Pos );
-				pPlayerModel->SetAbsAngles( Point.Rot );
-
-				pPlayerModel->SetSequence( pPlayerModel->SelectWeightedSequence( ACT_IDLE ) );
-				pPlayerModel->SetPlaybackRate( 1.0f );
-				pPlayerModel->SetPoseParameter( 0, 0.0f ); // move_yaw
-				pPlayerModel->SetPoseParameter( 1, 10.0f ); // body_pitch, look down a bit
-				pPlayerModel->SetPoseParameter( 2, 0.0f ); // body_yaw
-				pPlayerModel->SetPoseParameter( 3, 0.0f ); // move_y
-				pPlayerModel->SetPoseParameter( 4, 0.0f ); // move_x
-				pPlayerModel->m_SlotIndex = i;
-
-				pPlayerModel->m_Hidden = true;
-
-				CHandle<CClientSidePlayerModel> ehandlePlayerModel( pPlayerModel );
-				CClientSidePlayerModel::g_ClientSideModels.AddToTail( ehandlePlayerModel );
-				m_SelectionCharacters.AddToTail( pPlayerModel );
-			}
-		}
-
-		CMSCharSelectMenu::static_pCurrentMenu = this;
-}
-
-void CMSCharSelectMenu::OnClose( )
-{
-	Remove3DCharacters( );
-
-	BaseClass::OnClose( );
-}
-//-----------------------------------------------------------------------------
-// Purpose: Displays the window
-//-----------------------------------------------------------------------------
 void CMSCharSelectMenu::ShowPanel(bool bShow)
 {
 	// If already open, do nothing
 	if ( BaseClass::IsVisible() == bShow )
+		return;
+
+	IViewPortPanel *panel = gViewPortInterface->FindPanelByName( PANEL_MAINMENU ); // BOXBOX don't open if main menu is open
+	if( panel->IsVisible() )
 		return;
 
 	// Open the window
@@ -258,86 +131,88 @@ void CMSCharSelectMenu::ShowPanel(bool bShow)
 //		Msg("CHAR PANEL CLOSING\n");
 }
 
-bool CMSCharSelectMenu::NeedsUpdate( void )
-{
-	return true;
-}
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-void CMSCharSelectMenu::Update( void )
+void CMSCharSelectMenu::Reset( ) // BOXBOX redid entire function
 {
-	C_MSS_Player *pLocalPlayer = ToMSSPlayer( C_BasePlayer::GetLocalPlayer() );
-	if( pLocalPlayer )
+	C_MSS_Player *pPlayer = ToMSSPlayer( C_BasePlayer::GetLocalPlayer() );
+	if( !pPlayer ) return;
+
+	for( int i = 0; i< GetChildCount(); i++ ) 
 	{
-		if( pLocalPlayer->m_PreloadedCharInfo_DoneSending && !m_DisplayedCharacters )
+		CModelPanel *panel = dynamic_cast<CModelPanel *>( GetChild( i ) );
+
+		if ( panel )
 		{
-			for( int i = 0; i < pLocalPlayer->m_PreloadedCharInfo_Model.Count(); i++ )
+			if( !Q_stricmp( panel->GetName(), "charone" ) )
 			{
-				char sName[16];
-				int slotidx = i + 1;
-				Q_snprintf( sName, sizeof(sName), "Text_Slot%i", slotidx );
-				Label *pLabel = (Label *)FindChildByName( sName );
-				if( pLabel )
-				{
-					pLabel->SetText( pLocalPlayer->m_PreloadedCharInfo_Name[i] );
-					pLabel->SizeToContents( );
-				}
-
-				Q_snprintf( sName, sizeof(sName), "Button_Slot%i", slotidx );
-
-				Button *pButton = (Button *)FindChildByName( sName );
-
-
-				if( pLocalPlayer->m_PreloadedCharInfo_Model[i] == 0 )
-				{
-					if( m_SelectionCharacters.Count() > i && m_SelectionCharacters[i].Get( ) )
-						m_SelectionCharacters[i]->m_Hidden = true;
-					if( pButton )
-						pButton->SetEnabled( false );
-					pLabel->SetVisible( false );
-
-				}
-				else
-				{
-					if( m_SelectionCharacters.Count() > i && m_SelectionCharacters[i].Get( ) )
-						m_SelectionCharacters[i]->m_Hidden = false;
-					if( pButton )
-						pButton->SetEnabled( true );
-					pLabel->SetVisible( true );
-				}
+				panel->SetVisible( pPlayer->m_PreloadedCharInfo_Model.Get( 0 ) != MODEL_NOCHAR );
+				if( m_bJustDeleted[0] )
+					panel->SetVisible( false );
 			}
-
-			m_DisplayedCharacters = true;
+			else if( !Q_stricmp( panel->GetName(), "chartwo" ) )
+			{
+				panel->SetVisible( pPlayer->m_PreloadedCharInfo_Model.Get( 1 ) != MODEL_NOCHAR );
+				if( m_bJustDeleted[1] )
+					panel->SetVisible( false );
+			}			
+			else if( !Q_stricmp( panel->GetName(), "charthree" ) )
+			{
+				panel->SetVisible( pPlayer->m_PreloadedCharInfo_Model.Get( 2 ) != MODEL_NOCHAR );
+				if( m_bJustDeleted[2] )
+					panel->SetVisible( false );
+			}			
 		}
 	}
-}
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-void CMSCharSelectMenu::Remove3DCharacters()
-{
-	static_pCurrentMenu = NULL;
+	m_pSlot1Label->SetText( pPlayer->m_szPreloadCharName0 );
+	if( m_bJustDeleted[0] )
+		m_pSlot1Label->SetText( "" );
+	m_pSlot2Label->SetText( pPlayer->m_szPreloadCharName1 );
+	if( m_bJustDeleted[1] )
+		m_pSlot2Label->SetText( "" );
+	m_pSlot3Label->SetText( pPlayer->m_szPreloadCharName2 );
+	if( m_bJustDeleted[2] )
+		m_pSlot3Label->SetText( "" );
 
-	int count = m_SelectionCharacters.Count( );
-	for( int i = 0; i < count; i++ )
+	Button *pButton = (Button *)FindChildByName( "CharButton1" );
+	pButton->SetText( pPlayer->m_szPreloadCharName0[0] ? "" : "#MSS_NOCHAR" );
+	pButton->SetEnabled( pPlayer->m_szPreloadCharName0[0] ? true : false );
+	if( m_bJustDeleted[0] )
 	{
-		if( m_SelectionCharacters[i].Get( ) )
-			(m_SelectionCharacters[i].Get( ))->Remove( );
-		CClientSidePlayerModel::g_ClientSideModels.Remove( i );
+		pButton->SetText( "#MSS_NOCHAR" );
+		pButton->SetEnabled( false );
 	}
-
-	m_SelectionCharacters.RemoveAll( );
-	m_CharSelectSpots.RemoveAll( );
+	pButton = (Button *)FindChildByName( "CharButton2" );
+	pButton->SetText( pPlayer->m_szPreloadCharName1[0] ? "" : "#MSS_NOCHAR" );
+	pButton->SetEnabled( pPlayer->m_szPreloadCharName1[0] ? true : false );
+	if( m_bJustDeleted[1] )
+	{
+		pButton->SetText( "#MSS_NOCHAR" );
+		pButton->SetEnabled( false );
+	}
+	pButton = (Button *)FindChildByName( "CharButton3" );
+	pButton->SetText( pPlayer->m_szPreloadCharName2[0] ? "" : "#MSS_NOCHAR" );
+	pButton->SetEnabled( pPlayer->m_szPreloadCharName2[0] ? true : false );
+	if( m_bJustDeleted[2] )
+	{
+		pButton->SetText( "#MSS_NOCHAR" );
+		pButton->SetEnabled( false );
+	}
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
+void CMSCharSelectMenu::Update( void ) // BOXBOX don't need anything running constantly
+{
+
+}
+
+
+
+
 void CMSCharSelectMenu::OnCommand( const char *command )
 {
+	C_MSS_Player *pPlayer = ToMSSPlayer( C_BasePlayer::GetLocalPlayer() );
+	if( !pPlayer ) return;
+
 	if( Q_strstr( command, "choosechar" ) )
 	{
 		engine->ClientCmd( command );
@@ -347,6 +222,12 @@ void CMSCharSelectMenu::OnCommand( const char *command )
 	}
 	else if( Q_strstr( command, "createchar" ) )
 	{
+		if( pPlayer->m_nNumChars == MAX_CHAR_SLOTS )
+		{
+			ShowFullChar();
+			return;
+		}
+
 		gViewPortInterface->ShowPanel( this, false );
 		gViewPortInterface->ShowPanel( PANEL_CHARCREATE, true );
 		vgui::surface()->PlaySound( "UI/pageturn.wav" ); // BOXBOX added
@@ -354,18 +235,30 @@ void CMSCharSelectMenu::OnCommand( const char *command )
 	}
 	else if( Q_strstr( command, "deletechar 0" ) )
 	{
+		if( !pPlayer->m_PreloadedCharInfo_Model.Get( 0 ) )// BOXBOX no character to delete
+		{
+			return;
+		}
 		m_nCharToDelete = 0;
 		ShowConfirm();
 		return;
 	}
 	else if( Q_strstr( command, "deletechar 1" ) )
 	{
+		if( !pPlayer->m_PreloadedCharInfo_Model.Get( 1 ) )
+		{
+			return;
+		}
 		m_nCharToDelete = 1;
 		ShowConfirm();
 		return;
 	}
 	else if( Q_strstr( command, "deletechar 2" ) )
 	{
+		if( !pPlayer->m_PreloadedCharInfo_Model.Get( 2 ) )
+		{
+			return;
+		}
 		m_nCharToDelete = 2;
 		ShowConfirm();
 		return;
@@ -375,17 +268,20 @@ void CMSCharSelectMenu::OnCommand( const char *command )
 		if( m_nCharToDelete == 0 )
 		{
 			engine->ClientCmd( "deletechar 0" );
+			m_bJustDeleted[0] = true;
 		}
 		else if( m_nCharToDelete == 1 )
 		{
 			engine->ClientCmd( "deletechar 1" );
+			m_bJustDeleted[1] = true;
 		}
 		else if( m_nCharToDelete == 2 )
 		{
 			engine->ClientCmd( "deletechar 2" );
+			m_bJustDeleted[2] = true;
 		}
-
 		HideConfirm();
+		Reset(); // BOXBOX added here to update with prediction
 		return;
 	}
 	else if( Q_strstr( command, "confirmno" ) )
@@ -393,8 +289,23 @@ void CMSCharSelectMenu::OnCommand( const char *command )
 		HideConfirm();
 		return;
 	}
+	else if( Q_strstr( command, "fullcharok" ) )
+	{
+		HideFullChar();
+		return;
+	}
+
 	else
 		BaseClass::OnCommand( command );
+}
+
+void CMSCharSelectMenu::OnClose( )
+{
+	m_bJustDeleted[0] = false;
+	m_bJustDeleted[1] = false;
+	m_bJustDeleted[2] = false;
+
+	BaseClass::OnClose( );
 }
 
 void CMSCharSelectMenu::ShowConfirm( void )
@@ -408,10 +319,13 @@ void CMSCharSelectMenu::ShowConfirm( void )
 
 	Button *pButton = (Button *)FindChildByName( "CharButton1" );
 	pButton->SetEnabled( false );
+	pButton->SetVisible( false );
 	pButton = (Button *)FindChildByName( "CharButton2" );
 	pButton->SetEnabled( false );
+	pButton->SetVisible( false );
 	pButton = (Button *)FindChildByName( "CharButton3" );
 	pButton->SetEnabled( false );
+	pButton->SetVisible( false );
 	pButton = (Button *)FindChildByName( "DeleteCharButton1" );
 	pButton->SetEnabled( false );
 	pButton = (Button *)FindChildByName( "DeleteCharButton2" );
@@ -433,10 +347,66 @@ void CMSCharSelectMenu::HideConfirm( void )
 
 	Button *pButton = (Button *)FindChildByName( "CharButton1" );
 	pButton->SetEnabled( true );
+	pButton->SetVisible( true );
 	pButton = (Button *)FindChildByName( "CharButton2" );
 	pButton->SetEnabled( true );
+	pButton->SetVisible( true );
 	pButton = (Button *)FindChildByName( "CharButton3" );
 	pButton->SetEnabled( true );
+	pButton->SetVisible( true );
+	pButton = (Button *)FindChildByName( "DeleteCharButton1" );
+	pButton->SetEnabled( true );
+	pButton = (Button *)FindChildByName( "DeleteCharButton2" );
+	pButton->SetEnabled( true );
+	pButton = (Button *)FindChildByName( "DeleteCharButton3" );
+	pButton->SetEnabled( true );
+	pButton = (Button *)FindChildByName( "NewCharButton" );
+	pButton->SetEnabled( true );
+	Reset();
+}
+
+void CMSCharSelectMenu::ShowFullChar( void )
+{
+	m_pFullCharBgImage->SetVisible( true );
+	m_pFullCharLabel->SetVisible( true );
+	m_pFullCharButton->SetVisible( true );
+	m_pFullCharButton->SetEnabled( true );
+
+	Button *pButton = (Button *)FindChildByName( "CharButton1" );
+	pButton->SetEnabled( false );
+	pButton->SetVisible( false );
+	pButton = (Button *)FindChildByName( "CharButton2" );
+	pButton->SetEnabled( false );
+	pButton->SetVisible( false );
+	pButton = (Button *)FindChildByName( "CharButton3" );
+	pButton->SetEnabled( false );
+	pButton->SetVisible( false );
+	pButton = (Button *)FindChildByName( "DeleteCharButton1" );
+	pButton->SetEnabled( false );
+	pButton = (Button *)FindChildByName( "DeleteCharButton2" );
+	pButton->SetEnabled( false );
+	pButton = (Button *)FindChildByName( "DeleteCharButton3" );
+	pButton->SetEnabled( false );
+	pButton = (Button *)FindChildByName( "NewCharButton" );
+	pButton->SetEnabled( false );
+}
+
+void CMSCharSelectMenu::HideFullChar( void )
+{
+	m_pFullCharBgImage->SetVisible( false );
+	m_pFullCharLabel->SetVisible( false );
+	m_pFullCharButton->SetVisible( false );
+	m_pFullCharButton->SetEnabled( false );
+
+	Button *pButton = (Button *)FindChildByName( "CharButton1" );
+	pButton->SetEnabled( true );
+	pButton->SetVisible( true );
+	pButton = (Button *)FindChildByName( "CharButton2" );
+	pButton->SetEnabled( true );
+	pButton->SetVisible( true );
+	pButton = (Button *)FindChildByName( "CharButton3" );
+	pButton->SetEnabled( true );
+	pButton->SetVisible( true );
 	pButton = (Button *)FindChildByName( "DeleteCharButton1" );
 	pButton->SetEnabled( true );
 	pButton = (Button *)FindChildByName( "DeleteCharButton2" );
@@ -446,7 +416,6 @@ void CMSCharSelectMenu::HideConfirm( void )
 	pButton = (Button *)FindChildByName( "NewCharButton" );
 	pButton->SetEnabled( true );
 }
-
 
 vgui::Panel *CMSCharSelectMenu::CreateControlByName(const char *controlName)
 {
@@ -458,7 +427,29 @@ vgui::Panel *CMSCharSelectMenu::CreateControlByName(const char *controlName)
     return BaseClass::CreateControlByName( controlName );
 }
 
+/*
+void CMSCharSelectMenu::GetCharPos( int charIdx, CMSCharSelectMenu::char_selection_spawnpoint_info_s &out_Pos )
+{
+	if( m_CharsFollowCam )
+	{
+		Vector vForward, vRight, vUp;
+		AngleVectors( CMSCharSelectMenu::g_ViewAng, &vForward, &vRight, &vUp );
 
+		out_Pos.Pos =  CMSCharSelectMenu::g_ViewPos 
+					+ vForward * m_DistFromCamera 
+					+ vRight * m_DistFromCamera_Side 
+					+ vRight * m_DistFromCamera_SideSpacing * (charIdx-1)
+					+ vUp * m_DistFromCamera_Up;
+
+		Vector vFacingPlayer = CMSCharSelectMenu::g_ViewPos - out_Pos.Pos;
+		vFacingPlayer.NormalizeInPlace( );
+		out_Pos.Rot = QAngle( 0, UTIL_VecToYaw(vFacingPlayer), 0 );
+	}
+}
+*/
+
+
+/*
 class C_InfoPlayerSelect : public CBaseEntity
 {
 public:
@@ -536,3 +527,4 @@ RecvPropVector( RECVINFO_NAME( m_vecAbsOrigin, m_vecOrigin ) ),
 	//RecvPropInt( RECVINFO( m_Num ) ),
 	RecvPropBool( RECVINFO( m_Initialized ) ),
 END_RECV_TABLE()
+*/

@@ -20,9 +20,9 @@ void CMSS_Player::GetCharacterSaveFileFields( CUtlVector<MSSaveProperty> &allPla
 {
 	//allPlayerData.AddToTail( MSSaveProperty( "Version", 1.0f, NULL, NULL ) );
 	allPlayerData.AddToTail( MSSaveProperty( "Character Name",	m_szCharName,		m_szCharName.GetForModify( ) ) );
-
 	allPlayerData.AddToTail( MSSaveProperty( "Gender",			m_nGender.Get( ),	&m_nGender, m_nGender.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "Race",			m_nRace,			&m_nRace, m_nRace.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "Race",			m_nRace.Get( ),			&m_nRace, m_nRace.Static_Set ) );
+
 	allPlayerData.AddToTail( MSSaveProperty( "PlayerKills",		ms_playerKills.Get( ), &ms_playerKills, ms_playerKills.Static_Set ) );
 	allPlayerData.AddToTail( MSSaveProperty( "Gold",			ms_gold.Get( ),		&ms_gold, ms_gold.Static_Set ) );
 	allPlayerData.AddToTail( MSSaveProperty( "MaxHealth",		ms_maxHealth.Get( ), &ms_maxHealth, ms_maxHealth.Static_Set ) );

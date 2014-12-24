@@ -89,6 +89,7 @@ public:
 
 // BOXBOXBOX MSS STUFF
 
+	int				m_nNumChars;
 	char			m_szCharName[ MAX_CHAR_NAME_LENGTH ];
 	const char		*m_pszCharName;
 	unsigned int	m_nGender;
@@ -102,7 +103,11 @@ public:
 	};
 	CNetworkArray( preloaded_char_info, m_PreloadedCharInfo, MAX_CHAR_SLOTS );*/
 	//int m_PreloadedCharInfo[MAX_CHAR_SLOTS];
-	char m_PreloadedCharInfo_Name[MAX_CHAR_SLOTS][256];
+//	char m_PreloadedCharInfo_Name[MAX_CHAR_SLOTS][256];
+	char m_szPreloadCharName0[ MAX_CHAR_NAME_LENGTH ];
+	char m_szPreloadCharName1[ MAX_CHAR_NAME_LENGTH ];
+	char m_szPreloadCharName2[ MAX_CHAR_NAME_LENGTH ];
+
 	CNetworkArray( int, m_PreloadedCharInfo_Model, MAX_CHAR_SLOTS );
 	CNetworkVar( bool, m_PreloadedCharInfo_DoneSending );
 

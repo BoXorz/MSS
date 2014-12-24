@@ -1,0 +1,590 @@
+//-------------------------------------------------------------------------
+//
+// Game data for Mastersword: Source
+//
+//-------------------------------------------------------------------------
+
+@include "MSS_Base.fgd"
+
+
+@PointClass base(PlayerClass, Angles) studio("models/editor/playerstart.mdl") = mss_spawnpoint :
+	"The start position and facing direction for players"
+[
+]
+
+
+@PointClass base(prop_physics) studioprop() sphere(fademindist) sphere(fademaxdist) = prop_physics_respawnable :
+	"This class is the same as prop_physics, except it respawns after it breaks"
+[
+	RespawnTime(float) : "Respawn Time" : 60 : "Ammount in seconds this prop will respawn after it breaks."
+]
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// WEAPONS
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+@BaseClass color(0 0 200) base(Targetname, Angles) sphere(fademindist) sphere(fademaxdist) = Weapon
+[
+	spawnflags(Flags) =
+	[
+		1 : "Start constrained" : 0
+		2 : "Deny player pickup (reserve for NPC)" : 0
+		4 : "Not puntable by Telekenesis" : 0
+	]
+
+	output OnPlayerUse(void) : "Fires when the player +uses this weapon"
+	output OnPlayerPickup(void) : "Fires when the player picks up this weapon"
+	output OnNPCPickup(void) : "Fires when an NPC picks up this weapon"
+	output OnCacheInteraction(void) : "Fires when the player 'proves' they've found this weapon. Fires on: Player Touch, +USE pickup, Telekenesis pickup, Telekenesis punt."
+
+	fademindist(float) : "Start Fade Dist/Pixels" : -1 : "Distance at which the prop starts to fade (<0 = use fademaxdist). If 'Screen Space Fade' is selected, this represents the number of pixels wide covered by the prop when it starts to fade."
+	fademaxdist(float) : "End Fade Dist/Pixels" : 0 : "Maximum distance at which the prop is visible (0 = don't fade out). If 'Screen Space Fade' is selected, this represents the *minimum* number of pixels wide covered by the prop when it fades."
+	fadescale(float) : "Fade Scale" : 1 : "If you specify a fade in the worldspawn, or if the engine is running under dx7, then the engine will forcibly fade out props even if fademindist/fademaxdist isn't specified." +
+												 " This scale factor gives you some control over the fade. Using 0 here turns off the forcible fades." +
+]
+
+
+
+@PointClass base(Weapon) studio("models/weapons/w_arozensword.mdl") = weapon_arozensword : "Arozen Sword" []
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// NPCS
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+@BaseClass base(BaseNPC) = TalkNPC
+[
+	UseSentence(string) : "Use Sentence"
+	UnUseSentence(string) : "Un-Use Sentence"
+
+	DontUseSpeechSemaphore(choices) : "Don't Use Speech Semaphore" : 0 : "Friendly NPCs are not allowed to speak if another friendly NPC is speaking. In some cases we don't want speaking NPCs to prevent other NPCs from speaking (for instance, if there is a friendly NPC speaking for a long time on a monitor). To make this NPC not prevent other NPCs from talking, make it not grab the semaphore when it speaks." =
+	[
+		0 : "No (Use speech semaphore)"
+		1 : "Yes (Don't use speech semaphore)"
+	]
+
+	input SpeakResponseConcept(string) : "Speak the specified response concept."
+]
+
+@BaseClass base(BaseNPC) = PlayerCompanion
+[
+	input OutsideTransition(void) : "Use this input to teleport the NPC to a hintnode with the Player Squad Transition Point hint type."
+	input EnableAlwaysTransition(void) : "Enable the 'always transition' behavior"
+	input DisableAlwaysTransition(void) : "Disable the 'always transition' behavior"
+	
+	input EnableSpeakWhileScripting(void) : "Allow this NPC to speak responses while in a scripted sequence or while StartScripting is active."
+	input DisableSpeakWhileScripting(void) : "Cancels this NPC's ability to speak responses while in a scripted sequence or while StartScripting is active if it was previously enabled by EnableSpeakWhileScripting."
+	
+	AlwaysTransition(choices) : "Always transition" : "No" : "If yes, this NPC will always teleport to a Player Squad Transition Point if they're not within the trigger_transition volume." =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+
+	DontPickupWeapons(choices) : "Prevent picking up weapons?" : "No" : "If yes, this NPC will NOT be allowed to pick up weapons they find on the ground." =
+	[
+		0 : "No"
+		1 : "Yes"	
+	]
+
+	GameEndAlly(choices) : "Is this a vital ally?" : "No" : "If yes, this NPC will cause the game to end if killed." =
+	[
+		0 : "No"
+		1 : "Yes"	
+	]
+
+	input MakeGameEndAlly(void) : "Make this NPC a game end ally."
+	input MakeRegularAlly(void) : "Make this NPC a regular ally."
+
+	input EnableWeaponPickup(void) : "Enable Weapon Pickup"
+	input DisableWeaponPickup(void) : "Disable Weapon Pickup"
+
+	input GiveWeapon(string) : "Gives the NPC a weapon of the specified entity name."
+	
+	input SetReadinessPanic(void) : "Set readiness to panic state (Special)"
+	input SetReadinessLow(void) : "Set readiness to calmest state (Bored)"
+	input SetReadinessMedium(void) : "Set readiness to moderate (Alert)"
+	input SetReadinessHigh(void) : "Set readiness to highest. (Combat imminent)"
+	input LockReadiness(float) : "Lock readiness at current setting for x seconds -1 = forever, 0 = unlock now"
+	
+	input ClearAllOutputs(void) : "Obliterate every output that this NPC has."
+
+	output OnWeaponPickup(void) : "Fires when this NPC picks a weapon off the ground or a gun rack."
+]
+
+@BaseClass base(BaseNPC ) = RappelNPC
+[
+	waitingtorappel(choices) : "Waiting to Rappel?" : "No" : "If yes, this NPC spawns suspended in air and awaits a BeginRappel input. It will then spawn a zipline and slide down. When it hits the ground, NPC will cut away the line and try to move forward a few feet to make room for the next NPC. The NPC will not attempt to clear its landing space if it cannot do so by taking a few steps forward" =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+
+	// Inputs
+	input BeginRappel(void) : "BeginRappel"
+
+	// Outputs
+	output OnRappelTouchdown(void) : "Fires when done rappeling"
+]
+
+
+@NPCClass base(BaseNPC,Parentname, TalkNPC, PlayerCompanion ) studio() = npc_citizen : "Citizen"
+[
+
+	spawnflags(Flags) =
+	[
+		65536 : "Follow player on spawn" : 0
+		131072 : "Medic" : 0
+		262144 : "Random Head" : 1
+		524288 : "Ammo Resupplier" : 0
+		1048576 : "Not Commandable" : 0
+		2097152 : "Don't use Speech Semaphore - OBSOLETE" : 0
+		4194304 : "Random male head" : 0
+		8388608 : "Random female head" : 0
+		16777216 : "Use RenderBox in ActBusies" : 0
+	]
+
+	additionalequipment(choices) : "Weapons" : "0" =
+	[
+		"weapon_smg1" : "SMG1"
+		"weapon_ar2" : "AR2"
+		"weapon_stunstick" : "Stun Stick"
+		"weapon_crowbar" : "Crow Bar"
+		"weapon_shotgun" : "Shotgun"
+		"weapon_beerbottle" : "Beer Bottle"
+		"weapon_beerbottle2" : "Beer Bottle2"
+		"weapon_rpg" : "RPG"
+		"0"  : "Nothing"
+	]
+
+	ammosupply(choices) : "Ammo to Resupply (if spawnflag set)" : "SMG1" =
+	[
+		"Pistol" : "Pistol"
+		"SMG1" : "SMG1"
+		"SMG1_Grenade" : "SMG1 Grenade"
+		"AR2" : "AR2"
+		"Buckshot" : "Shotgun"
+		"RPG_Round" : "RPG"
+		"Grenade" : "Grenade"
+		"XBowBolt" : "Crossbow Bolt"
+	]
+	ammoamount(integer) : "Amount of ammo to give" : 1
+
+	citizentype(choices) : "Type" : "Default" =
+	[
+		0 : "Default"	 
+		1 : "Downtrodden"
+		2 : "Refugee"
+		3 : "Rebel"
+		4 : "Unique"
+	]
+
+	expressiontype(choices) : "Expression Type" : "Random" =
+	[
+		0 : "Random"
+		1 : "Scared"
+		2 : "Normal"
+		3 : "Angry"
+	]
+
+	//!!!BUGBUG - don't ship with these names
+	//!!!FIXME - don't ship with these names
+	model(choices) : "Model" : "models/humans/group01/male_01.mdl" =
+	[
+		"models/humans/group01/male_01.mdl" : "Male 1"
+		"models/humans/group01/male_02.mdl" : "Male 2"
+		"models/humans/group01/male_03.mdl" : "Male 3"
+		"models/humans/group01/male_04.mdl" : "Male 4"
+		"models/humans/group01/male_05.mdl" : "Male 5"
+		"models/humans/group01/male_06.mdl" : "Male 6"
+		"models/humans/group01/male_07.mdl" : "Male 7"
+		"models/humans/group01/male_08.mdl" : "Male 8"
+		"models/humans/group01/male_09.mdl" : "Male 9"
+		"models/humans/group01/female_01.mdl" : "Female 1"
+		"models/humans/group01/female_02.mdl" : "Female 2"
+		"models/humans/group01/female_03.mdl" : "Female 3"
+		"models/humans/group01/female_04.mdl" : "Female 4"
+		"models/humans/group01/female_06.mdl" : "Female 5"
+		"models/humans/group01/female_07.mdl" : "Female 6"
+		"models/humans/male_cheaple.mdl" : "Cheaple Male 1"
+		"models/odessa.mdl" : "Odessa. DO NOT USE."
+	]
+
+	ExpressionOverride(string) : "Facial expression override"
+
+	notifynavfailblocked(choices) : "Fire output when Nav is blocked?" : 0 =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+
+	neverleaveplayersquad(choices) : "Permanent squad member?" : 0 : "A permanent squad member cannot leave the player's squad unless killed or explicity removed by entity I/O. Only use this if you're sure you want to override the default AI." =
+	[
+		0 : "No. This is default behavior."
+		1 : "Yes, stay in squad until death."
+	]
+
+	denycommandconcept(string) : "Deny command speech concept" : "" : "If you want your citizens to squad with the player but not obey commands the player gives to move the squad, put a concept here and this citizen will speak the concept instead of obeying the order."
+
+    //Inputs
+	input RemoveFromPlayerSquad(void) : "Remove from player squad, instantly."
+	input SetExpressionOverride(string) : "Set facial expression override"
+
+	input StartPatrolling(void) : "Patrol whenever I'm idle or alert."
+	input StopPatrolling(void) : "Stop patrolling when I'm idle or alert."
+	input SetCommandable(void) : "Make a previously uncommandable citizen commandable"
+	input SetMedicOn(void) : "Set the medic flag on. Will not change the model or skin of the citizen."
+	input SetMedicOff(void) : "Set the medic flag off. Will not change the model or skin of the citizen."
+	input SetAmmoResupplierOn(void) : "Set the ammo-resupplier flag on. Will not change the model or skin of the citizen."
+	input SetAmmoResupplierOff(void) : "Set the ammo-resupplier flag off. Will not change the model or skin of the citizen."
+
+	// Outputs
+	output OnJoinedPlayerSquad(void) : "Fires when joins player squad"
+	output OnLeftPlayerSquad(void) : "Fires when leaves player squad"
+	output OnFollowOrder(void) : "Fires when ordered to follow player"
+	output OnStationOrder(void) : "Fires when ordered to a location by player"
+	output OnPlayerUse(void) : "Fires when a player +USEs the citizen"
+	output OnNavFailBlocked(void) : "Fires when this Citizen's movement fails because he/she is blocked."
+]
+
+
+@NPCClass base(TalkNPC) studio("models/Monk.mdl") = npc_monk : "Monk"
+[
+	additionalequipment(choices) : "Weapons" : "weapon_annabelle" =
+	[
+		"weapon_annabelle" : "Annabelle"
+		"weapon_smg1" : "SMG1"
+		"weapon_ar2" : "AR2"
+		"weapon_stunstick" : "Stun Stick"
+		"weapon_crowbar" : "Crow Bar"
+		"weapon_shotgun" : "Shotgun"
+		"weapon_beerbottle" : "Beer Bottle"
+		"weapon_beerbottle2" : "Beer Bottle2"
+		"weapon_rpg" : "RPG"
+		"0"  : "Nothing"
+	]
+
+	HasGun(choices) : "Has Gun" : 1 =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+
+	// Inputs
+	input PerfectAccuracyOn(void) : "Make every shot at a zombie a headshot"
+	input PerfectAccuracyOff(void) : "Return to normal accuracy"
+]
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// MONSTERS
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+@NPCClass base(BaseNPC) studio("models/crow.mdl") = npc_crow : "Crow"
+[
+	input FlyAway( string ) : "Forces the crow to fly to the nearest crow flyto hint node."
+
+	deaf(choices) : "Deaf?" : 0 =
+	[
+		0 : "No."
+		1 : "Yes. Ignore sounds."
+	]
+]
+
+@NPCClass base(BaseNPC) studio("models/seagull.mdl") = npc_seagull : "Seagull"
+[
+	input FlyAway( string ) : "Forces the seagull to fly to the nearest crow flyto hint node."
+
+	deaf(choices) : "Deaf?" : 0 =
+	[
+		0 : "No."
+		1 : "Yes. Ignore sounds."
+	]
+]
+
+@NPCClass base(BaseNPC) studio("models/pigeon.mdl") = npc_pigeon : "Pigeon"
+[
+	input FlyAway( string ) : "Forces the pigeon to fly to the nearest crow flyto hint node."
+
+	deaf(choices) : "Deaf?" : 0 =
+	[
+		0 : "No."
+		1 : "Yes. Ignore sounds."
+	]
+]
+
+
+@BaseClass base(BaseNPC) = BaseHeadcrab
+[
+	startburrowed(choices) : "Start burrowed" : "No" =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+	
+	spawnflags(flags) = 
+	[
+		65536  :  "Start hidden" : 0
+		131072 :  "Start hanging from ceiling" : 0
+	]
+
+
+	input StartHangingFromCeiling(void) : "Start hanging from ceiling."
+	input DropFromCeiling(void) : "Drop if hanging from ceiling."
+]
+
+@NPCClass base(BaseHeadcrab, Parentname) studio("models/Headcrabclassic.mdl") = npc_headcrab : "Headcrab"
+[
+]
+@NPCClass base(BaseHeadcrab) studio("models/Headcrab.mdl") = npc_headcrab_fast : "Fast Headcrab"
+[
+]
+@NPCClass base(BaseHeadcrab) studio("models/Headcrabblack.mdl") = npc_headcrab_black : "Black Headcrab"
+[
+]
+
+
+@NPCClass base(BaseNPC) studio("models/Zombie/fast.mdl") = npc_fastzombie : "Fast Zombie"
+[
+	input AttachToVehicle(string) : "Attach to a specified vehicle entity"
+]
+
+@NPCClass base(BaseNPC) studio("models/Zombie/Fast_torso.mdl") = npc_fastzombie_torso : "Fast Zombie Torso"
+[
+
+]
+
+@NPCClass base(BaseNPC) studio("models/Zombie/Classic.mdl") = npc_zombie : "Zombie"
+[
+]
+
+@NPCClass base(BaseNPC) studio("models/Zombie/Classic_torso.mdl") = npc_zombie_torso : "Zombie Torso"
+[
+]
+
+@NPCClass base(BaseNPC) studio("models/Zombie/zombie_soldier.mdl") = npc_zombine : "Combine Soldier Zombie"
+[
+	input StartSprint(void) : "Forces the zombine to sprint."
+	input PullGrenade(void) : "Forces the zombine to pull a grenade."
+]
+@NPCClass base(BaseNPC) studio("models/Zombie/Poison.mdl") = npc_poisonzombie :
+	"A bloated, disgusting, fluid-spurting zombie created by a poison headcrab."
+[
+	crabcount(choices) : "Crabs in nest" : 3 =
+	[
+		1 : "1 Crab"
+		2 : "2 Crabs"
+		3 : "3 Crabs"
+	]
+]
+
+
+@NPCClass base(BaseNPC) studio("models/antlion.mdl") sphere() = npc_antlion :
+	"Antlions will run away from ai_sound, type: Thumper."
+[
+	startburrowed(choices) : "Start Burrowed" : "No" =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+
+	spawnflags(Flags) =
+	[
+		65536 : "Burrow when eluded" : 0
+		131072 : "Use Ground Checks" : 0
+		262144 : "Worker Type" : 0
+	]
+
+	radius(integer) : "Alert Radius" : 256
+	eludedist(integer) : "Distance until eluded" : 1024 : "Only available when Burrow When Eluded is flagged"
+	
+	ignorebugbait(choices) : "Ignore Bugbait" : "No" =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+
+	unburroweffects(choices) : "Suppress unburrow effects" : "No" =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+
+	input Unburrow(void) : "Unburrow from the ground"
+	input Burrow(void) : "Burrow into the ground"
+	input BurrowAway(void) : "Burrow into the ground and remove the antlion"
+	input FightToPosition(string) : "Fight to position"
+	input EnableJump(void) : "Allow non-navigational jumping"
+	input DisableJump(void) : "Disallow non-navigational jumping"
+	input IgnoreBugbait(void) : "Ignore bugbait"
+	input HearBugbait(void) : "Hear bugbait"
+
+	output	OnReachedFightGoal(void) : "Fires when the antlion reaches his specified fight-to location"
+	output	OnUnBurrowed(void) : "Fires when the antlion unburrows"
+
+]
+
+@NPCClass base(BaseNPC) studio("models/antlion_guard.mdl") = npc_antlionguard : "Antlion Guard"
+[
+	spawnflags(Flags) =
+	[
+		65536 : "Create server-side ragdoll on death" : 0
+		131072 : "Use inside footsteps" : 0
+	]
+
+	startburrowed(choices) : "Start Burrowed" : "No" =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+
+	allowbark(choices) : "Allow Bark" : "No" =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+
+	cavernbreed(choices) : "Cavern Guard Model and Texture" : "No" =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+	
+	incavern(choices) : "Use inside-Cavern Behavior" : "No" =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+
+	shovetargets(string) : "Shove Targets" : ""
+
+	// Inputs
+	input Unburrow(void) : "Unburrow from the ground"
+	input SetShoveTarget(string) : "Sets a shove target to attack"
+	input SetChargeTarget(string) : "Sets a charge target to attack.  Parameters are the name of the entity to start at and the name of the entity to charge towards, separated by a space (i.e. start target)"
+	input ClearChargeTarget(void) : "Clear the charge target"
+	input SetCoverFromAttack(integer) : "Sets whether or not the creature will protect itself from attacks"
+	input Ragdoll(void) : "Causes the antlion guard to die, regardless of health"
+	input EnableBark(void) : "Allow the antlion guard to try and summon antlions"
+	input DisableBark(void) : "Stop the antlion guard from trying to summon antlions"
+	input InvestigateHint(string) : "Sniff around at a hint group until told otherwise"
+	input StopInvestigating(void) : "Stop trying to sniff out the player"
+
+	input EnablePreferPhysicsAttack(void) : "Prefer to use physics attacks if at all possible, even when inside a cavern."
+	input DisablePreferPhysicsAttack(void) : "Do not prefer to use physics attacks if at all possible, even when inside a cavern."
+
+		
+	// Outputs
+	output OnSeeHiddenPlayer(void) : "Fires when the current enemy is seen while trying to hide"
+	output OnSmellHiddenPlayer(void) : "Fires when the current enemy is smelled while trying to hide"
+	output OnSummon(void) : "Antlion guard is attempting to summon antlions"
+]
+
+
+@BaseClass base(BaseNPC, RappelNPC) = BaseCombine
+[
+	additionalequipment(choices) : "Weapons" : "weapon_smg1" =
+	[
+		"weapon_ar2" : "AR2"
+		"weapon_shotgun" : "Shotgun"
+		"weapon_smg1" : "SMG1"
+		"weapon_stunstick" : "Stun Stick"
+		"0" : "Nothing"
+	]
+
+	spawnflags(Flags) = 
+	[
+		65536 :  "Start LookOff" : 0
+		131072	: "Don't drop grenades" : 0
+		262144  : "Don't drop ar2 alt fire (elite only) " : 0
+	]
+
+	NumGrenades(choices) : "Number of Grenades" : "5" =
+	[
+		"0" : "None"
+		"1" : "1"
+		"2" : "2"
+		"3" : "3"
+		"4" : "4"
+		"5" : "5"
+		"999999" : "Unlimited"
+	]
+
+	// Inputs
+	input LookOn(void) : "Look normally"	
+	input LookOff(void) : "Don't look for myself, use other squad member's eyes"
+	input StartPatrolling(void) : "Patrol whenever I'm idle or alert."
+	input StopPatrolling(void) : "Stop patrolling when I'm idle or alert."
+	input ThrowGrenadeAtTarget(target_destination) : "Throw a grenade at the specified target."
+]
+
+
+@NPCClass base(BaseCombine) studio("models/Combine_Soldier.mdl") = npc_combine_s : "Combine Soldier"
+[
+	input Assault(string) : "Start an assault. Parameter passed in should be the name of the rally point."
+
+	model(choices) : "Model" : "models/combine_soldier.mdl" : "Regular Soldier" = 
+	[
+		"models/combine_soldier.mdl" : "Regular Soldier"
+		"models/combine_soldier_prisonguard.mdl" : "Nova Prospekt Soldier"
+		"models/combine_super_soldier.mdl" : "Elite Soldier"
+	]
+
+	tacticalvariant(choices) : "Tactical Variant" : "0" =
+	[
+		"0" : "Normal Tactics"
+		"1" : "Pressure the enemy (Keep advancing)"
+		"2" : "Pressure until within 30ft, then normal"
+	]
+	
+	usemarch(choices) : "Walk Easy" : "0" : "When true, will use a variety of more casual walking animations instead of the standard walk. For use in crowds. WARNING: this animation only has a north component. For use under very special circumstances only." =
+	[
+		"0" : "No"
+		"2" : "Yes"
+	]
+]
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// MISC
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+@PointClass base(Targetname, Angles) size(16 16 16) line(255 255 255, targetname, target) color(247 181 82) = path_corner : "Generic path point"
+[
+	spawnflags(Flags) =
+	[
+		1: "Wait for retrigger" : 0
+		2: "Teleport to THIS path_corner" : 0
+	]
+	target(target_destination) : "Next stop target"
+	wait(integer) : "Wait here (secs)" : 0
+	speed(integer) : "New Train Speed" : 0
+	yaw_speed(integer) : "New Train rot. Speed" : 0
+
+	// Inputs 
+	input SetNextPathCorner(string) : "Sets next pathcorner"
+
+	// Outputs
+	output OnPass(void) : "Fires when a path follower passes this point"
+]
+

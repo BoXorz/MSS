@@ -53,14 +53,19 @@ IMPLEMENT_SERVERCLASS_ST(CMSS_Player, DT_MSS_Player)
 //	SendPropInt( SENDINFO( m_iPlayerSoundType), 3 ),
 
 // BOXBOXBOX MSS STUFF
+	SendPropInt( SENDINFO( m_nNumChars ), 3 ), // BOXBOX need 3 bits here
 	SendPropString( SENDINFO( m_szCharName ) ),
-	SendPropInt( SENDINFO( m_nGender ), 1 ),
-	SendPropInt( SENDINFO( m_nRace ), 2 ), // BOXBOXBOX remember, only sending 2 bits limits races to 4 (0-3) so if we ever add more races than 4, more bit(s) will be needed!
-	SendPropInt( SENDINFO( m_nTotalExp ), 20 ), // BOXBOX need 20 bits here because total exp. maxes out at 1 million
+	SendPropInt( SENDINFO( m_nGender ), 2 ), // BOXBOX need 2 bits here
+	SendPropInt( SENDINFO( m_nRace ), 3 ), // BOXBOXBOX remember, only sending 3 bits limits races to 4 (0-3) so if we ever add more races than 4, more bit(s) will be needed!
+	SendPropInt( SENDINFO( m_nTotalExp ), 21 ), // BOXBOX need 21 bits here because total exp. maxes out at 1 million
 
 	//SendPropArray3( SENDINFO_ARRAY3( m_PreloadedCharInfo ), SendPropInt( SENDINFO_ARRAY(m_PreloadedCharInfo), 0, SendProxy_Preload ) ),
 	//SendPropArray3( SENDINFO_ARRAY3( m_PreloadedCharInfo ), SendPropInt( SENDINFO_ARRAY(m_PreloadedCharInfo), 0, SendProxy_Preload ) ),
 //	SendPropArray( SendPropString( SENDINFO_ARRAY( m_PreloadedCharInfo_Name ), 0, SendProxy_String_tToString ), m_PreloadedCharInfo_Name ),
+	SendPropString( SENDINFO( m_szPreloadCharName0 ) ),
+	SendPropString( SENDINFO( m_szPreloadCharName1 ) ),
+	SendPropString( SENDINFO( m_szPreloadCharName2 ) ),
+
 	SendPropArray( SendPropInt( SENDINFO_ARRAY( m_PreloadedCharInfo_Model ) ), m_PreloadedCharInfo_Model ),
 	SendPropBool( SENDINFO( m_PreloadedCharInfo_DoneSending ) ),
 	
@@ -628,12 +633,12 @@ void CMSS_Player::PostThink( void )
 	//Send the characters to the client
 	//This code is in PostThink, because when you click "disconnect" and choose a new map,
 	//the game marks your steam id as "STEAM_ID_PENDING" for a few seconds (Spawn() is called during this time).
-	if( !m_PreloadedCharInfo_DoneSending )
-	{
+//	if( !m_PreloadedCharInfo_DoneSending )
+//	{
 		//This is the check that should be running... but for some reason sv_lan is always true, even when running an internet game
 		//if( cvar->FindVar( "sv_lan" )->GetBool() || Q_strcmp(this->GetNetworkIDString( ),"STEAM_ID_PENDING") )
 
-		if( Q_strcmp(this->GetNetworkIDString( ),"STEAM_ID_PENDING") )
+/*		if( Q_strcmp(this->GetNetworkIDString( ),"STEAM_ID_PENDING") )
 		{
 			static char names[MAX_CHAR_SLOTS][100];		//It's absurd that I have to do this, but otherwise the m_PreloadedChar_Name won't store all three names
 			for( int i = 0; i < MAX_CHAR_SLOTS; i++ )
@@ -643,14 +648,15 @@ void CMSS_Player::PostThink( void )
 				{
 					V_strncpy( names[i], m_szCharName.GetForModify(), sizeof(names[i]) );
 					int model = 32;
-					m_PreloadedCharInfo_Name.Set( i, MAKE_STRING(names[i]) );
+//					m_PreloadedCharInfo_Name.Set( i, MAKE_STRING(names[i]) );
 					m_PreloadedCharInfo_Model.Set( i, model );
 				}
+*/
 
-				m_PreloadedCharInfo_DoneSending = true;
-			}
-		}
-	}
+//				m_PreloadedCharInfo_DoneSending = true;
+//			}
+//		}
+//	}
 }
 
 void CMSS_Player::PlayerDeathThink()
@@ -1107,27 +1113,19 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 		Msg("Current map is: %s\n", STRING(gpGlobals->mapname) );
 		return true;
 	}
-
-/*	else if ( FStrEq( args[0], "jointeam" ) )  // BOXBOX removing teams
-	{
-		if ( args.ArgC() < 2 )
-		{
-			Warning( "Player sent bad jointeam syntax\n" );
-		}
-
-		if ( ShouldRunRateLimitedCommand( args ) )
-		{
-			int iTeam = atoi( args[1] );
-			HandleCommand_JoinTeam( iTeam );
-		}
-		return true;
-	}
-*/	else if ( FStrEq( args[0], "joingame" ) )
+	else if ( FStrEq( args[0], "joingame" ) )
 	{
 		return true;
 	}
 
 	//BOXBOX MSS stuff
+	else if ( FStrEq( args[0], "getchars" ) )
+	{
+		if ( args.ArgC() == 1 )
+		{
+			PreLoadChars();
+		}
+	}
 	else if ( FStrEq( args[0], "choosechar" ) )
 	{
 		if ( args.ArgC() == 2 )
@@ -1140,7 +1138,7 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 
 			charloadstatus_e LoadStatus = LoadChar( charSlot );
 			if( LoadStatus == CHARLOAD_STATUS_OK
-				|| LoadStatus == CHARLOAD_STATUS_FILE_NOT_FOUND )
+				/*|| LoadStatus == CHARLOAD_STATUS_FILE_NOT_FOUND*/ )
 			{
 				m_HasChoosenChar = true;
 				m_SelectedChar = charSlot;
@@ -1166,9 +1164,9 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 	}
 	else if ( FStrEq( args[0], "createchar" ) )
 	{
-		if( args.ArgC() == 3 )
+		if( args.ArgC() == 4 )
 		{
-			Warning("Received command %s %s %i\n", args[0], args[1], atoi( args[2] ) );
+			Warning("Received command %s %s %i %i\n", args[0], args[1], atoi( args[2] ), atoi( args[3] ) );
 
 			//Check for open slot
 			int openSlot = -1;
@@ -1192,7 +1190,7 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 				//Put New Character initial values here
 				V_strncpy( m_szCharName.GetForModify(), args[1], MAX_CHAR_NAME_LENGTH );
 				m_nGender = atoi( args[2] );
-				Warning("m_nGender is now %i\n", m_nGender );
+				m_nRace = atoi( args[3] );
 
 				SetViewEntity( NULL );
 
@@ -1209,6 +1207,7 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 
 				SaveChar( );
 				StopSound("Music.Intro"); // BOXBOX added
+				PreLoadChars(); // BOXBOX number of characters just changed
 			}
 			else	
 				//No slots open!
@@ -1234,6 +1233,8 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 	character currently in that slot, make sure the player is aware of this!)
 */
 			g_pFullFileSystem->RemoveFile( filePath ); // feel the power
+
+			PreLoadChars(); // BOXBOX so character menus update on character deletion
 
 //			Warning("Received command  deletechar %i\n", atoi( args[1] ));
 //			Warning( "*** Filepath received is: %s ***\n", filePath );
@@ -1913,7 +1914,64 @@ void CMSS_Player::HandleCommand_Spectate( void ) // BOXBOX user has entered 'spe
 	}
 }
 
+void CMSS_Player::PreLoadChars( void )
+{
+	m_nNumChars = 0;
 
+	charloadstatus_e status = CMSS_Player::LoadChar( 0 );
+	if( status == CHARLOAD_STATUS_OK )
+	{
+		V_strncpy( m_szPreloadCharName0.GetForModify(), m_szCharName.GetForModify(), MAX_CHAR_NAME_LENGTH );
+		m_PreloadedCharInfo_Model.Set( 0, (m_nRace * 2) + m_nGender + 1 );
+		m_nNumChars++;
+	}
+	else
+	{
+		V_strncpy( m_szPreloadCharName0.GetForModify(), "", MAX_CHAR_NAME_LENGTH );
+		m_PreloadedCharInfo_Model.Set( 0, MODEL_NOCHAR );
+	}
+
+	status = CMSS_Player::LoadChar( 1 );
+	if( status == CHARLOAD_STATUS_OK )
+	{
+		V_strncpy( m_szPreloadCharName1.GetForModify(), m_szCharName.GetForModify(), MAX_CHAR_NAME_LENGTH );
+		m_PreloadedCharInfo_Model.Set( 1, (m_nRace * 2) + m_nGender + 1 );
+		m_nNumChars++;
+	}
+	else
+	{
+		V_strncpy( m_szPreloadCharName1.GetForModify(), "", MAX_CHAR_NAME_LENGTH );
+		m_PreloadedCharInfo_Model.Set( 1, MODEL_NOCHAR );
+	}
+
+	status = CMSS_Player::LoadChar( 2 );
+	if( status == CHARLOAD_STATUS_OK )
+	{
+		V_strncpy( m_szPreloadCharName2.GetForModify(), m_szCharName.GetForModify(), MAX_CHAR_NAME_LENGTH );
+		m_PreloadedCharInfo_Model.Set( 2, (m_nRace * 2) + m_nGender + 1 );
+		m_nNumChars++;
+	}
+	else
+	{
+		V_strncpy( m_szPreloadCharName2.GetForModify(), "", MAX_CHAR_NAME_LENGTH );
+		m_PreloadedCharInfo_Model.Set( 2, MODEL_NOCHAR );
+	}
+}
+
+/* BOXBOX obsoleted by incorporating into function above
+void CMSS_Player::SetNumChars( void )
+{
+	m_nNumChars = 0;
+
+	for( int i = 0; i < MAX_CHAR_SLOTS; i++ )
+	{
+		char filePath[MAX_PATH];
+		CharacterSave::GetSaveFileNameForPlayer( this, i, filePath );
+		if( g_pFullFileSystem->FileExists( filePath ) )
+			m_nNumChars++;
+	}
+}
+*/
 void CMSS_Player::UpdateStats( void )
 {
 	//Strength formula
