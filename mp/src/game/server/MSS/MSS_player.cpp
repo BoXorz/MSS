@@ -26,13 +26,7 @@
 
 #include <filesystem.h> // BOXBOX added for deleting character files ( see ClientCommand() )
 
-/* BOXBOX removing stuff
-int g_iLastCitizenModel = 0;
-int g_iLastCombineModel = 0;
-
-CBaseEntity	 *g_pLastCombineSpawn = NULL;
-CBaseEntity	 *g_pLastRebelSpawn = NULL;
-*/
+extern const char *pszPlayerModels[];
 
 extern CBaseEntity	*g_pLastSpawn;
 
@@ -42,8 +36,14 @@ extern CBaseEntity	*g_pLastSpawn;
 
 LINK_ENTITY_TO_CLASS( player, CMSS_Player );
 
-//LINK_ENTITY_TO_CLASS( info_player_combine, CPointEntity );
-//LINK_ENTITY_TO_CLASS( info_player_rebel, CPointEntity );
+// BOXBOX added this for preloaded character names array
+/*
+void SendProxy_String_tToString( const SendProp *pProp, const void *pStruct, const void *pData, DVariant *pOut, int iElement, int objectID )
+{
+	string_t *pString = (string_t*)pData;
+	pOut->m_pString = (char*)STRING( *pString );
+}
+*/
 
 IMPLEMENT_SERVERCLASS_ST(CMSS_Player, DT_MSS_Player)
 	SendPropAngle( SENDINFO_VECTORELEM(m_angEyeAngles, 0), 11, SPROP_CHANGES_OFTEN ),
@@ -53,21 +53,35 @@ IMPLEMENT_SERVERCLASS_ST(CMSS_Player, DT_MSS_Player)
 //	SendPropInt( SENDINFO( m_iPlayerSoundType), 3 ),
 
 // BOXBOXBOX MSS STUFF
-	SendPropInt( SENDINFO( m_nNumChars ), 3 ), // BOXBOX need 3 bits here
+//	SendPropInt( SENDINFO( m_nNumChars ), 3 ), // BOXBOX need 3 bits here
 	SendPropString( SENDINFO( m_szCharName ) ),
 	SendPropInt( SENDINFO( m_nGender ), 2 ), // BOXBOX need 2 bits here
 	SendPropInt( SENDINFO( m_nRace ), 3 ), // BOXBOXBOX remember, only sending 3 bits limits races to 4 (0-3) so if we ever add more races than 4, more bit(s) will be needed!
 	SendPropInt( SENDINFO( m_nTotalExp ), 21 ), // BOXBOX need 21 bits here because total exp. maxes out at 1 million
 
+	SendPropInt( SENDINFO( m_nUnarmed ), 15 ), // BOXBOX weapon skills need 15 bits because they max out at 100,000 hits!
+	SendPropInt( SENDINFO( m_nOneHandPiercing ), 15 ),
+	SendPropInt( SENDINFO( m_nOneHandSlashing ), 15 ),
+	SendPropInt( SENDINFO( m_nOneHandBashing ), 15 ),
+	SendPropInt( SENDINFO( m_nTwoHandPiercing ), 15 ),
+	SendPropInt( SENDINFO( m_nTwoHandSlashing ), 15 ),
+	SendPropInt( SENDINFO( m_nTwoHandBashing ), 15 ),
+	SendPropInt( SENDINFO( m_nArchery ), 15 ),
+	SendPropInt( SENDINFO( m_nThrowingWeapons ), 15 ),
+
 	//SendPropArray3( SENDINFO_ARRAY3( m_PreloadedCharInfo ), SendPropInt( SENDINFO_ARRAY(m_PreloadedCharInfo), 0, SendProxy_Preload ) ),
 	//SendPropArray3( SENDINFO_ARRAY3( m_PreloadedCharInfo ), SendPropInt( SENDINFO_ARRAY(m_PreloadedCharInfo), 0, SendProxy_Preload ) ),
 //	SendPropArray( SendPropString( SENDINFO_ARRAY( m_PreloadedCharInfo_Name ), 0, SendProxy_String_tToString ), m_PreloadedCharInfo_Name ),
-	SendPropString( SENDINFO( m_szPreloadCharName0 ) ),
 	SendPropString( SENDINFO( m_szPreloadCharName1 ) ),
 	SendPropString( SENDINFO( m_szPreloadCharName2 ) ),
+	SendPropString( SENDINFO( m_szPreloadCharName3 ) ),
 
-	SendPropArray( SendPropInt( SENDINFO_ARRAY( m_PreloadedCharInfo_Model ) ), m_PreloadedCharInfo_Model ),
-	SendPropBool( SENDINFO( m_PreloadedCharInfo_DoneSending ) ),
+//	SendPropArray( SendPropString( SENDINFO_ARRAY( m_szPreloadCharName ), 0, SendProxy_String_tToString ), m_szPreloadCharName ),
+	SendPropArray( SendPropInt( SENDINFO_ARRAY( m_nPreloadModelIndex ) ), m_nPreloadModelIndex ),
+	SendPropArray3( SENDINFO_ARRAY3( m_bHasCharInSlot ), SendPropBool( SENDINFO_ARRAY( m_bHasCharInSlot ) ) ),
+//	SendPropArray( SendPropBool( SENDINFO_ARRAY( m_bHasCharInSlot ) ), m_bHasCharInSlot ),
+
+//	SendPropBool( SENDINFO( m_PreloadedCharInfo_DoneSending ) ),
 	
 	SendPropExclude( "DT_BaseAnimating", "m_flPoseParameter" ),
 	SendPropExclude( "DT_BaseFlex", "m_viewtarget" ),
@@ -103,6 +117,14 @@ CMSS_Player::CMSS_Player() : m_PlayerAnimState( this )
 //	BaseClass::ChangeTeam( 0 );
 	
 //	UseClientSideAnimation();
+
+ // BOXBOX MSS Stuff
+	m_bJustJoining = true;
+	m_nCurrentChar = CHARSLOT_INVALID;
+	m_bHasCharInSlot.Set( CHARSLOT_ONE, false );
+	m_bHasCharInSlot.Set( CHARSLOT_TWO, false );
+	m_bHasCharInSlot.Set( CHARSLOT_THREE, false );
+	m_flLastSaveTime = 0.0f;
 }
 
 CMSS_Player::~CMSS_Player( void )
@@ -127,8 +149,13 @@ void CMSS_Player::Precache( void )
 
 	PrecacheModel ( "sprites/glow01.vmt" );
 
-	PrecacheModel("models/player/humanmale.mdl"); // BOXBOX precache player models
-//	PrecacheModel("models/player/humanfemale.mdl");
+// BOXBOX precache player models
+	PrecacheModel( pszPlayerModels[ MODEL_HUMANMALE ]);
+	PrecacheModel( pszPlayerModels[ MODEL_HUMANFEMALE ]);
+	PrecacheModel( pszPlayerModels[ MODEL_DWARFMALE ]);
+	PrecacheModel( pszPlayerModels[ MODEL_DWARFFEMALE ]);
+	PrecacheModel( pszPlayerModels[ MODEL_ELFMALE ]);
+	PrecacheModel( pszPlayerModels[ MODEL_ELFFEMALE ]);
 
 	PrecacheScriptSound( "Player_HumanMale.Die" );
 	PrecacheScriptSound( "Player_HumanFemale.Die" );
@@ -630,6 +657,13 @@ void CMSS_Player::PostThink( void )
 
 
 // BOXBOXBOX MSS STUFF
+
+	if( ( m_flLastSaveTime ) && ( gpGlobals->curtime - m_flLastSaveTime > 10.0f ) )
+	{
+		SaveChar( m_nCurrentChar );
+	}
+
+
 	//Send the characters to the client
 	//This code is in PostThink, because when you click "disconnect" and choose a new map,
 	//the game marks your steam id as "STEAM_ID_PENDING" for a few seconds (Spawn() is called during this time).
@@ -1119,33 +1153,43 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 	}
 
 	//BOXBOX MSS stuff
-	else if ( FStrEq( args[0], "getchars" ) )
+
+	else if ( FStrEq( args[0], "getchar" ) )
 	{
-		if ( args.ArgC() == 1 )
+		if ( args.ArgC() == 2 )
 		{
-			PreLoadChars();
+			PreLoadChar( atoi( args[1] ) );
 		}
 	}
 	else if ( FStrEq( args[0], "choosechar" ) )
 	{
 		if ( args.ArgC() == 2 )
 		{
-			int charSlot = atoi( args[1] );
-			charSlot = min( charSlot, (MAX_CHAR_SLOTS-1) );
-			charSlot = max( charSlot, 0 );
+			if( atoi( args[1] ) == m_nCurrentChar ) // BOXBOX we're already playing this character, do nothing
+				return true;
 
-			Msg(UTIL_VarArgs("charSlot = %i\n",charSlot)); //So it's right so far...
+			if( m_nCurrentChar != CHARSLOT_INVALID ) // BOXBOX if we currently are playing a character, save it
+			{
+				SaveChar( m_nCurrentChar );
+			}
+			
+			int charSlot = atoi( args[1] );
+			charSlot = min( charSlot, (MAX_CHAR_SLOTS) );
+			charSlot = max( charSlot, 1 );
+
+//			Msg(UTIL_VarArgs("charSlot = %i\n",charSlot)); //So it's right so far...
 
 			charloadstatus_e LoadStatus = LoadChar( charSlot );
 			if( LoadStatus == CHARLOAD_STATUS_OK
 				/*|| LoadStatus == CHARLOAD_STATUS_FILE_NOT_FOUND*/ )
 			{
-				m_HasChoosenChar = true;
-				m_SelectedChar = charSlot;
+//				m_bHasChoosenChar = true;
+				m_nCurrentChar = charSlot;
 
 				SetViewEntity( NULL );
-				ChangeTeam( TEAM_UNASSIGNED );
-
+//				ChangeTeam( TEAM_UNASSIGNED );
+				SetModel( pszPlayerModels[ m_nPreloadModelIndex.Get( m_nCurrentChar ) ] );
+				TabulateStats();
 				Spawn( );
 			}
 			else
@@ -1166,14 +1210,14 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 	{
 		if( args.ArgC() == 4 )
 		{
-			Warning("Received command %s %s %i %i\n", args[0], args[1], atoi( args[2] ), atoi( args[3] ) );
+//			Warning("Received command %s %s %i %i\n", args[0], args[1], atoi( args[2] ), atoi( args[3] ) );
 
 			//Check for open slot
 			int openSlot = -1;
 
-			for( int i = 0; i < MAX_CHAR_SLOTS; i++ )
+			for( int i = 1; i <= MAX_CHAR_SLOTS; i++ )
 			{
-				charloadstatus_e status = CMSS_Player::LoadChar( i );
+				charloadstatus_e status = LoadChar( i );
 				if( status == CHARLOAD_STATUS_FILE_NOT_FOUND )
 				{
 					openSlot = i;
@@ -1181,36 +1225,42 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 				}
 			}
 
-			if( openSlot > -1 )
+			if( openSlot > CHARSLOT_INVALID )
 			{
 				//Found open slot
-				m_HasChoosenChar = true;
-				m_SelectedChar = openSlot;
+//				m_bHasChoosenChar = true;
+				m_nCurrentChar = openSlot;
 
-				//Put New Character initial values here
+				//Set new character initial values
 				V_strncpy( m_szCharName.GetForModify(), args[1], MAX_CHAR_NAME_LENGTH );
 				m_nGender = atoi( args[2] );
 				m_nRace = atoi( args[3] );
 
+				m_nTotalExp = 0;
+
+				m_nUnarmed = 0;
+				m_nOneHandPiercing = 0;
+				m_nOneHandSlashing = 0;
+				m_nOneHandBashing = 0;
+				m_nTwoHandPiercing = 0;
+				m_nTwoHandSlashing = 0;
+				m_nTwoHandBashing = 0;
+				m_nArchery = 0;
+				m_nThrowingWeapons = 0;
+
+				TabulateStats();
+
 				SetViewEntity( NULL );
+				SetModel( pszPlayerModels[ (m_nRace * 2) + m_nGender -2 ] ); // BOXBOX hacky sack!
 
-				Spawn( );
-	//			SetPlayerName( m_szCharName.Get( ) );
 
-				//Setting everything to 0 to avoid it saving former characters' stats
-				ms_warriorSkills = 0;
-				ms_martialArts = 0;
-				ms_smallArms = 0;
-				ms_archery = 0;
-				ms_spellCasting = 0;
-				ms_parry = 0;
-
-				SaveChar( );
 				StopSound("Music.Intro"); // BOXBOX added
-				PreLoadChars(); // BOXBOX number of characters just changed
+				SaveChar( m_nCurrentChar );
+				PreLoadChar( m_nCurrentChar ); // BOXBOX reload so client will get updated info
+				Spawn();
 			}
 			else	
-				//No slots open!
+				// BOXBOX code should never get here!
 				ShowViewPortPanel( PANEL_CHARSELECT , true );
 		}
 
@@ -1221,8 +1271,8 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 		if ( args.ArgC() == 2 )
 		{
 			int charSlot = atoi( args[1] );
-			charSlot = min( charSlot, (MAX_CHAR_SLOTS-1) );
-			charSlot = max( charSlot, 0 );
+			charSlot = min( charSlot, ( MAX_CHAR_SLOTS ) );
+			charSlot = max( charSlot, 1 );
 
 			char filePath[MAX_PATH];
 			CharacterSave::GetSaveFileNameForPlayer( this, charSlot, filePath );
@@ -1234,7 +1284,7 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 */
 			g_pFullFileSystem->RemoveFile( filePath ); // feel the power
 
-			PreLoadChars(); // BOXBOX so character menus update on character deletion
+			PreLoadChar( charSlot ); // BOXBOX update client
 
 //			Warning("Received command  deletechar %i\n", atoi( args[1] ));
 //			Warning( "*** Filepath received is: %s ***\n", filePath );
@@ -1537,14 +1587,16 @@ void CMSS_Player::DeathSound( const CTakeDamageInfo &info ) // BOXBOX redoing de
 	const char *pModelName = STRING( GetModelName() );
 
 	if ( pModelName )
-		if ( !stricmp( pModelName, "models/player/humanmale.mdl" ) )
+		if ( !stricmp( pModelName, pszPlayerModels[ MODEL_HUMANMALE ] ) )
 		{
 			Q_snprintf( szDeathSound, sizeof( szDeathSound ), "Player_HumanMale.Die" );
 		}
-		else if ( !stricmp( pModelName, "models/player/humanfemale.mdl" ) )
+		else if ( !stricmp( pModelName, pszPlayerModels[ MODEL_HUMANFEMALE ] ) )
 		{
 			Q_snprintf( szDeathSound, sizeof( szDeathSound ), "Player_HumanFemale.Die" );
 		}
+		// BOXBOX TODO Add sounds for dwarves and elves!
+
 
 	CSoundParameters params;
 	if ( GetParametersForSound( szDeathSound, params, pModelName ) == false )
@@ -1914,49 +1966,8 @@ void CMSS_Player::HandleCommand_Spectate( void ) // BOXBOX user has entered 'spe
 	}
 }
 
-void CMSS_Player::PreLoadChars( void )
-{
-	m_nNumChars = 0;
 
-	charloadstatus_e status = CMSS_Player::LoadChar( 0 );
-	if( status == CHARLOAD_STATUS_OK )
-	{
-		V_strncpy( m_szPreloadCharName0.GetForModify(), m_szCharName.GetForModify(), MAX_CHAR_NAME_LENGTH );
-		m_PreloadedCharInfo_Model.Set( 0, (m_nRace * 2) + m_nGender + 1 );
-		m_nNumChars++;
-	}
-	else
-	{
-		V_strncpy( m_szPreloadCharName0.GetForModify(), "", MAX_CHAR_NAME_LENGTH );
-		m_PreloadedCharInfo_Model.Set( 0, MODEL_NOCHAR );
-	}
 
-	status = CMSS_Player::LoadChar( 1 );
-	if( status == CHARLOAD_STATUS_OK )
-	{
-		V_strncpy( m_szPreloadCharName1.GetForModify(), m_szCharName.GetForModify(), MAX_CHAR_NAME_LENGTH );
-		m_PreloadedCharInfo_Model.Set( 1, (m_nRace * 2) + m_nGender + 1 );
-		m_nNumChars++;
-	}
-	else
-	{
-		V_strncpy( m_szPreloadCharName1.GetForModify(), "", MAX_CHAR_NAME_LENGTH );
-		m_PreloadedCharInfo_Model.Set( 1, MODEL_NOCHAR );
-	}
-
-	status = CMSS_Player::LoadChar( 2 );
-	if( status == CHARLOAD_STATUS_OK )
-	{
-		V_strncpy( m_szPreloadCharName2.GetForModify(), m_szCharName.GetForModify(), MAX_CHAR_NAME_LENGTH );
-		m_PreloadedCharInfo_Model.Set( 2, (m_nRace * 2) + m_nGender + 1 );
-		m_nNumChars++;
-	}
-	else
-	{
-		V_strncpy( m_szPreloadCharName2.GetForModify(), "", MAX_CHAR_NAME_LENGTH );
-		m_PreloadedCharInfo_Model.Set( 2, MODEL_NOCHAR );
-	}
-}
 
 /* BOXBOX obsoleted by incorporating into function above
 void CMSS_Player::SetNumChars( void )
@@ -1972,6 +1983,74 @@ void CMSS_Player::SetNumChars( void )
 	}
 }
 */
+
+void CMSS_Player::IncrementWeaponSkill( int skill )
+{
+	switch( skill )
+	{
+		case WEAPONTYPE_UNARMED:
+			{
+				m_nUnarmed++;
+				break;
+			}
+		case WEAPONTYPE_ONEHANDPIERCING:
+			{
+				m_nOneHandPiercing++;
+				break;
+			}
+		case WEAPONTYPE_ONEHANDSLASHING:
+			{
+				m_nOneHandSlashing++;
+				break;
+			}
+		case WEAPONTYPE_ONEHANDBASHING:
+			{
+				m_nOneHandBashing++;
+				break;
+			}
+		case WEAPONTYPE_TWOHANDPIERCING:
+			{
+				m_nTwoHandPiercing++;
+				break;
+			}
+		case WEAPONTYPE_TWOHANDSLASHING:
+			{
+				m_nTwoHandSlashing++;
+				break;
+			}
+		case WEAPONTYPE_TWOHANDBASHING:
+			{
+				m_nTwoHandBashing++;
+				break;
+			}
+		case WEAPONTYPE_ARCHERY:
+			{
+				m_nArchery++;
+				break;
+			}
+	}
+}
+
+
+void CC_BumpSkills( void )
+{
+	CBasePlayer *pPlayer = UTIL_GetCommandClient();
+	if ( !pPlayer )
+		return;
+
+	CMSS_Player *pMSSPlayer = ToMSSPlayer( pPlayer );
+	if ( !pMSSPlayer )
+		return;
+
+	pMSSPlayer->CheatAddToWeaponSkill( 70000 );
+
+}
+
+static ConCommand mss_bumpskills("mss_bumpskills", CC_BumpSkills, "Bump Weapon skills for dev testing.", FCVAR_CHEAT);
+
+
+
+/*
 void CMSS_Player::UpdateStats( void )
 {
 	//Strength formula
@@ -2007,3 +2086,4 @@ void CMSS_Player::UpdateStats( void )
 	ms_level = (skillArray[3] + skillArray[4]) / 2;
 
 }
+*/

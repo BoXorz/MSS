@@ -572,3 +572,39 @@ void CPlayerAnimState::GetOuterAbsVelocity( Vector& vel )
 	vel = GetOuter()->GetAbsVelocity();
 #endif
 }
+
+///////////////////////////////////////////////////////////////////////////////
+// BOXBOX MSS STUFF
+///////////////////////////////////////////////////////////////////////////////
+
+int nSkillExpTable[SKILL_NUM_LEVELS] = { EXP_NOVICE, EXP_AWKWARD, EXP_ABLE, EXP_ADEPT, EXP_SKILLED, EXP_JOURNEYMAN, EXP_EXPERT, EXP_MASTER, EXP_GRANDMASTER, EXP_LUMINARY }; 
+
+void CMSS_Player::TabulateStats( void )
+{
+	for( int s = 0; s < MAX_WEAPON_SKILLS; s++ )
+	{
+		m_nWeaponSkills[s] = SKILL_NOVICE; // BOXBOX start everything at 1
+	}
+
+	for( int t = 1; t < SKILL_NUM_LEVELS; t++ )
+	{
+		if( m_nUnarmed >= nSkillExpTable[t] )
+			m_nWeaponSkills[WEAPONTYPE_UNARMED]++;
+		if( m_nOneHandPiercing >= nSkillExpTable[t] )
+			m_nWeaponSkills[WEAPONTYPE_ONEHANDPIERCING]++;
+		if( m_nOneHandSlashing >= nSkillExpTable[t] )
+			m_nWeaponSkills[WEAPONTYPE_ONEHANDSLASHING]++;
+		if( m_nOneHandBashing >= nSkillExpTable[t] )
+			m_nWeaponSkills[WEAPONTYPE_ONEHANDBASHING]++;
+		if( m_nTwoHandPiercing >= nSkillExpTable[t] )
+			m_nWeaponSkills[WEAPONTYPE_TWOHANDPIERCING]++;
+		if( m_nTwoHandSlashing >= nSkillExpTable[t] )
+			m_nWeaponSkills[WEAPONTYPE_TWOHANDSLASHING]++;
+		if( m_nTwoHandBashing >= nSkillExpTable[t] )
+			m_nWeaponSkills[WEAPONTYPE_TWOHANDBASHING]++;
+		if( m_nArchery >= nSkillExpTable[t] )
+			m_nWeaponSkills[WEAPONTYPE_ARCHERY]++;
+		if( m_nThrowingWeapons >= nSkillExpTable[t] )
+			m_nWeaponSkills[WEAPONTYPE_THROWN]++;
+	}
+}

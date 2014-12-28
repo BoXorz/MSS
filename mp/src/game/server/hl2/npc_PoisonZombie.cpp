@@ -16,13 +16,14 @@
 #include "ai_hull.h"
 #include "ai_motor.h"
 #include "game.h"
-#include "npc_headcrab.h"
 #include "npcevent.h"
 #include "entitylist.h"
 #include "ai_task.h"
 #include "activitylist.h"
 #include "engine/IEngineSound.h"
 #include "npc_BaseZombie.h"
+
+#include "monster_rat.h" // BOXBOX
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -674,7 +675,7 @@ void CNPC_PoisonZombie::HandleAnimEvent( animevent_t *pEvent )
 	{
 		SetBodygroup( ZOMBIE_BODYGROUP_THROW, 0 );
 
-		CBlackHeadcrab *pCrab = (CBlackHeadcrab *)CreateNoSpawn( GetHeadcrabClassname(), EyePosition(), vec3_angle, this );
+		CBossRat *pCrab = (CBossRat *)CreateNoSpawn( GetHeadcrabClassname(), EyePosition(), vec3_angle, this );
 		pCrab->AddSpawnFlags( SF_NPC_FALL_TO_GROUND );
 		
 		// Fade if our parent is supposed to
@@ -791,7 +792,7 @@ void CNPC_PoisonZombie::EvacuateNest( bool bExplosion, float flDamage, CBaseEnti
 			// Now slam the angles because the attachment point will have pitch and roll, which we can't use.
 			vecAngles = QAngle( 0, random->RandomFloat( 0, 360 ), 0 );
 
-			CBlackHeadcrab *pCrab = (CBlackHeadcrab *)CreateNoSpawn( GetHeadcrabClassname(), vecPosition, vecAngles, this );
+			CBossRat *pCrab = (CBossRat *)CreateNoSpawn( GetHeadcrabClassname(), vecPosition, vecAngles, this );
 			pCrab->Spawn();
 
 			if( !HeadcrabFits(pCrab) )

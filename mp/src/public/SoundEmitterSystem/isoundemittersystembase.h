@@ -17,7 +17,6 @@
 #include "mathlib/compressed_vector.h"
 #include "appframework/IAppSystem.h"
 
-
 #define SOUNDEMITTERSYSTEM_INTERFACE_VERSION	"VSoundEmitter002"
 
 #define SOUNDGENDER_MACRO "$gender"
@@ -70,14 +69,12 @@ const char *PitchToString( float pitch );
 soundlevel_t TextToSoundLevel( const char *key );
 int TextToChannel( const char *name );
 
-
 enum gender_t
 {
 	GENDER_NONE = 0,
 	GENDER_MALE,
 	GENDER_FEMALE,
 };
-
 
 #pragma pack(1)
 struct SoundFile

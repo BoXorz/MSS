@@ -14,8 +14,9 @@
 #include "SkyCamera.h"
 #include "smoke_trail.h"
 #include "ai_basenpc.h"
-#include "npc_headcrab.h"
 #include "ai_motor.h"
+
+#include "monster_rat.h" // BOXBOX
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -711,7 +712,7 @@ void CEnvHeadcrabCanister::HeadcrabCanisterSpawnHeadcrabThink()
 	if ( GetAttachment( nHeadCrabAttachment, vecSpawnPosition, vecSpawnAngles ) )
 	{
 		CBaseEntity *pEnt = CreateEntityByName( s_pHeadcrabClass[m_nHeadcrabType] );
-		CBaseHeadcrab *pHeadCrab = assert_cast<CBaseHeadcrab*>(pEnt);
+		CBaseRat *pHeadCrab = assert_cast<CBaseRat*>(pEnt);
 
 		// Necessary to get it to eject properly (don't allow the NPC
 		// to override the spawn position specified).

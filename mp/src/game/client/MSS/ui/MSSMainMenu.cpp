@@ -29,8 +29,9 @@ extern INetworkStringTable *g_pStringTableInfoPanel;
 
 //#define TEMP_HTML_FILE	"textwindow_temp.html"
 
+extern const char *pszGenderNames[];
 extern const char *pszRaceNames[];
-
+extern const char *pszSkillNames[];
 
 CMSMainMenu::CMSMainMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_MAINMENU )
 {
@@ -52,10 +53,20 @@ CMSMainMenu::CMSMainMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_MAINMENU )
 	m_pLeftPageTitleLabel = new Label( this, "LPageTitleLabel", "0" );
 	m_pRightPageTitleLabel = new Label( this, "RPageTitleLabel", "0" );
 
-	m_pSexLabel = new Label( this, "SexLabel", "0" );
-	m_pRaceLabel = new Label( this, "RaceLabel", "0" );
-	m_pTotalExpText = new Label( this, "TotalExpText", "0" );
-	m_pTotalExpLabel = new Label( this, "TotalExpLabel", "0" );
+	m_pSexLabel			= new Label( this, "SexLabel", "0" );
+	m_pRaceLabel		= new Label( this, "RaceLabel", "0" );
+	m_pTotalExpText		= new Label( this, "TotalExpText", "0" );
+	m_pTotalExpLabel	= new Label( this, "TotalExpLabel", "0" );
+
+	m_pUnarmedLabel		= new Label( this, "UnarmedLabel", "0" );
+	m_p1HPiercingLabel	= new Label( this, "OneHandPiercingLabel", "0" );
+	m_p1HSlashingLabel	= new Label( this, "OneHandSlashingLabel", "0" );
+	m_p1HBashingLabel	= new Label( this, "OneHandBashingLabel", "0" );
+	m_p2HPiercingLabel	= new Label( this, "TwoHandPiercingLabel", "0" );
+	m_p2HSlashingLabel	= new Label( this, "TwoHandSlashingLabel", "0" );
+	m_p2HBashingLabel	= new Label( this, "TwoHandBashingLabel", "0" );
+	m_pArcheryLabel		= new Label( this, "ArcheryLabel", "0" );
+	m_pThrowWeaponLabel	= new Label( this, "ThrownWeaponsLabel", "0" );
 
 	m_nCurPage = 1;
 }
@@ -106,6 +117,8 @@ void CMSMainMenu::Update( void )
 	C_MSS_Player *pPlayer = ToMSSPlayer( C_BasePlayer::GetLocalPlayer() );
 	if( !pPlayer ) return;
 
+	pPlayer->TabulateStats();
+
 	HideAllChildControls();
 
 	if( m_nCurPage == 1 )
@@ -118,12 +131,60 @@ void CMSMainMenu::Update( void )
 		m_pTotalExpText->SetVisible( true );
 		m_pTotalExpLabel->SetVisible( true );
 
-		m_pSexLabel->SetText( pPlayer->m_nGender ? "#MSS_FEMALE" : "#MSS_MALE" );
-
+		m_pSexLabel->SetText( pszGenderNames[ pPlayer->m_nGender ] );
 		m_pRaceLabel->SetText( pszRaceNames[ pPlayer->m_nRace ] );
-		char totalexp[8];
-		itoa( pPlayer->m_nTotalExp, totalexp, 10 );
-		m_pTotalExpLabel->SetText( totalexp );
+
+		char buf[8];
+		itoa( pPlayer->m_nTotalExp, buf, 10 );
+		m_pTotalExpLabel->SetText( buf );
+
+		m_pUnarmedLabel->SetText( pszSkillNames[ pPlayer->m_nWeaponSkills[ WEAPONTYPE_UNARMED ] ] );
+		m_p1HPiercingLabel->SetText( pszSkillNames[ pPlayer->m_nWeaponSkills[ WEAPONTYPE_ONEHANDPIERCING ] ] );
+		m_p1HSlashingLabel->SetText( pszSkillNames[ pPlayer->m_nWeaponSkills[ WEAPONTYPE_ONEHANDSLASHING ] ] );
+		m_p1HBashingLabel->SetText( pszSkillNames[ pPlayer->m_nWeaponSkills[ WEAPONTYPE_ONEHANDBASHING ] ] );
+		m_p2HPiercingLabel->SetText( pszSkillNames[ pPlayer->m_nWeaponSkills[ WEAPONTYPE_TWOHANDPIERCING ] ] );
+		m_p2HSlashingLabel->SetText( pszSkillNames[ pPlayer->m_nWeaponSkills[ WEAPONTYPE_TWOHANDSLASHING ] ] );
+		m_p2HBashingLabel->SetText( pszSkillNames[ pPlayer->m_nWeaponSkills[ WEAPONTYPE_TWOHANDBASHING ] ] );
+		m_pArcheryLabel->SetText( pszSkillNames[ pPlayer->m_nWeaponSkills[ WEAPONTYPE_ARCHERY ] ] );
+		m_pThrowWeaponLabel->SetText( pszSkillNames[ pPlayer->m_nWeaponSkills[ WEAPONTYPE_THROWN ] ] );
+
+/*
+//		char unarmed[16];
+		itoa( pPlayer->m_nUnarmed, buf, 10 );
+		m_pUnarmedLabel->SetText( buf );
+
+//		char onehandpiercing[8];
+		itoa( pPlayer->m_nOneHandPiercing, buf, 10 );
+		m_p1HPiercingLabel->SetText( buf );
+
+//		char onehandslashing[8];
+		itoa( pPlayer->m_nOneHandSlashing, buf, 10 );
+		m_p1HSlashingLabel->SetText( buf );
+
+//		char onehandbashing[8];
+		itoa( pPlayer->m_nOneHandBashing, buf, 10 );
+		m_p1HBashingLabel->SetText( buf );
+
+//		char twohandpiercing[8];
+		itoa( pPlayer->m_nTwoHandPiercing, buf, 10 );
+		m_p2HPiercingLabel->SetText( buf );
+
+//		char twohandslashing[8];
+		itoa( pPlayer->m_nTwoHandSlashing, buf, 10 );
+		m_p2HSlashingLabel->SetText( buf );
+
+//		char twohandbashing[8];
+		itoa( pPlayer->m_nTwoHandBashing, buf, 10 );
+		m_p2HBashingLabel->SetText( buf );
+
+//		char archery[8];
+		itoa( pPlayer->m_nArchery, buf, 10 );
+		m_pArcheryLabel->SetText( buf );
+
+//		char throwing[8];
+		itoa( pPlayer->m_nThrowingWeapons, buf, 10 );
+		m_pThrowWeaponLabel->SetText( buf );
+*/
 	}
 	else if( m_nCurPage == 3 )
 	{

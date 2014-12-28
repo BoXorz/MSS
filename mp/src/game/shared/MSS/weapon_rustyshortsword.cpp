@@ -100,6 +100,7 @@ IMPLEMENT_ACTTABLE(CWeaponRustyShortSword);
 
 CWeaponRustyShortSword::CWeaponRustyShortSword( void )
 {
+	m_nMSSWeaponType = WEAPONTYPE_ONEHANDSLASHING;
 }
 
 /* BOXBOX removing

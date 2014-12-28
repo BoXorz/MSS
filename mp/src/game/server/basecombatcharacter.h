@@ -120,6 +120,27 @@ public:
 	DECLARE_DATADESC();
 	DECLARE_PREDICTABLE();
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// BOXBOX MSS STUFF
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	int			GetBaseMSSLevel( void ) { return m_nMSSLevelBase; }
+	void		SetBaseMSSLevel( int lvl ) { m_nMSSLevelBase = lvl; }
+	int			GetMSSLevelModifier( void ) { return m_nMSSLevelModifier; }
+	void		SetMSSLevelModifier( int lvl ) { m_nMSSLevelModifier = lvl; }
+
+//	int			GetMSSWeaponType( void ) { return GetActiveWeapon()->GetMSSWeaponType(); } // BOXBOX Which type of weapon is currently in use? ( see MSSWeaponType_t )
+
+private:
+
+	int			m_nMSSLevelBase;		// BOXBOX Base Level of monster group.  For example all rats have base level 1
+	int			m_nMSSLevelModifier;	// BOXBOX Level modifier, large, huge, or boss rats will have a modifier to their base level
+										// Base Level PLUS Modifier determines their base power, and exp given for killing
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// BOXBOX END MSS STUFF
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 public:
 
 	virtual void		Spawn( void );
@@ -202,9 +223,9 @@ public:
 	virtual bool IsLineOfSightClear( CBaseEntity *entity, LineOfSightCheckType checkType = IGNORE_NOTHING ) const;// strictly LOS check with no other considerations
 	virtual bool IsLineOfSightClear( const Vector &pos, LineOfSightCheckType checkType = IGNORE_NOTHING, CBaseEntity *entityToIgnore = NULL ) const;
 
-	// -----------------------
-	// Ammo
-	// -----------------------
+
+	// BOXBOX TODO remove ammo? or keep just for arrows?
+
 	virtual int			GiveAmmo( int iCount, int iAmmoIndex, bool bSuppressSound = false );
 	int					GiveAmmo( int iCount, const char *szName, bool bSuppressSound = false );
 	virtual void		RemoveAmmo( int iCount, int iAmmoIndex );
@@ -237,7 +258,6 @@ public:
 	virtual bool		Weapon_SlotOccupied( CBaseCombatWeapon *pWeapon );
 	virtual CBaseCombatWeapon *Weapon_GetSlot( int slot ) const;
 	CBaseCombatWeapon	*Weapon_GetWpnForAmmo( int iAmmoIndex );
-
 
 	// For weapon strip
 	void				Weapon_DropAll( bool bDisallowWeaponPickup = false );

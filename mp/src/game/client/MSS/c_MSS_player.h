@@ -89,12 +89,7 @@ public:
 
 // BOXBOXBOX MSS STUFF
 
-	int				m_nNumChars;
-	char			m_szCharName[ MAX_CHAR_NAME_LENGTH ];
-	const char		*m_pszCharName;
-	unsigned int	m_nGender;
-	unsigned int	m_nRace;
-	unsigned int	m_nTotalExp;
+	int				GetNumChars( void ) { return m_bHasCharInSlot[1] + m_bHasCharInSlot[2] + m_bHasCharInSlot[3]; }
 
 	/*struct preloaded_char_info
 	{
@@ -104,12 +99,35 @@ public:
 	CNetworkArray( preloaded_char_info, m_PreloadedCharInfo, MAX_CHAR_SLOTS );*/
 	//int m_PreloadedCharInfo[MAX_CHAR_SLOTS];
 //	char m_PreloadedCharInfo_Name[MAX_CHAR_SLOTS][256];
-	char m_szPreloadCharName0[ MAX_CHAR_NAME_LENGTH ];
 	char m_szPreloadCharName1[ MAX_CHAR_NAME_LENGTH ];
 	char m_szPreloadCharName2[ MAX_CHAR_NAME_LENGTH ];
+	char m_szPreloadCharName3[ MAX_CHAR_NAME_LENGTH ];
 
-	CNetworkArray( int, m_PreloadedCharInfo_Model, MAX_CHAR_SLOTS );
-	CNetworkVar( bool, m_PreloadedCharInfo_DoneSending );
+//	char m_szPreloadCharName[ MAX_CHAR_SLOTS + 1 ][ MAX_CHAR_NAME_LENGTH ];
+	int m_nPreloadModelIndex[ MAX_CHAR_SLOTS + 1 ];
+	bool m_bHasCharInSlot[ MAX_CHAR_SLOTS + 1 ];
+
+	char			m_szCharName[ MAX_CHAR_NAME_LENGTH ];
+	const char		*m_pszCharName;
+	unsigned int	m_nGender;
+	unsigned int	m_nRace;
+	unsigned int	m_nTotalExp;
+
+	int		m_nUnarmed;			// BOXBOX these are the experience totals (0-100,000)
+	int		m_nOneHandPiercing;
+	int		m_nOneHandSlashing;
+	int		m_nOneHandBashing;
+	int		m_nTwoHandPiercing;
+	int		m_nTwoHandSlashing;
+	int		m_nTwoHandBashing;
+	int		m_nArchery;
+	int		m_nThrowingWeapons;
+
+	int		m_nWeaponSkills[ MAX_WEAPON_SKILLS ];	// BOXBOX and these are the levels(1-10)
+
+	void	TabulateStats( void ); // BOXBOX Here is where we calculate all the player stats that we don't need to save in the character files
+
+
 
 private:
 	

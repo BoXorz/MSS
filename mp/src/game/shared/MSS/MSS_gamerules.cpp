@@ -824,7 +824,7 @@ void CMSSRules::ClientSettingsChanged( CBasePlayer *pPlayer )
 	}
 */
 
-	pMSSPlayer->SetModel( "models/player/humanmale.mdl" ); // BOXBOX TODO change this when character selection done
+	pMSSPlayer->SetModel( "models/player/humanmale.mdl" ); // BOXBOX need a temporary model or mod will crash!
 
 	BaseClass::ClientSettingsChanged( pPlayer );
 #endif

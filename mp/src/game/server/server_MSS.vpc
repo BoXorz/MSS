@@ -15,7 +15,7 @@ $Configuration
 {
 	$Compiler
 	{
-		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\game\shared\hl2,.\hl2,.\MSS,$SRCDIR\game\shared\MSS"
+		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\game\shared\hl2,.\hl2,.\MSS,.\MSS\Monsters,$SRCDIR\game\shared\MSS"
 		$PreprocessorDefinitions		"$BASE;MSS;HL2_DLL"
 	}
 }
@@ -175,8 +175,8 @@ $Project "Server (MSS)"
 			$File	"hl2\npc_enemyfinder.cpp"
 			$File	"hl2\npc_fisherman.cpp"
 			$File	"hl2\npc_gman.cpp"
-			$File	"hl2\npc_headcrab.cpp"
-			$File	"hl2\npc_headcrab.h"
+//			$File	"hl2\npc_headcrab.cpp"
+//			$File	"hl2\npc_headcrab.h"
 			$File	"hl2\npc_ichthyosaur.cpp"
 			$File	"hl2\npc_kleiner.cpp"
 			$File	"hl2\npc_launcher.cpp"
@@ -264,6 +264,12 @@ $Project "Server (MSS)"
 			$File	"$SRCDIR\game\shared\MSS\MSS_player_shared.h"
 			$File	"$SRCDIR\game\shared\MSS\MSS_weapon_parse.cpp"
 			$File	"$SRCDIR\game\shared\MSS\MSS_weapon_parse.h"
+
+			$Folder	"Monsters"
+			{			
+				$File	"MSS\Monsters\monster_rat.cpp"
+				$File	"MSS\Monsters\monster_rat.h"
+			}
 			
 			$Folder	"Weapons"
 			{

@@ -28,7 +28,8 @@
 #include "ndebugoverlay.h"
 #include "weapon_physcannon.h"
 #include "SoundEmitterSystem/isoundemittersystembase.h"
-#include "npc_headcrab.h"
+
+#include "monster_rat.h" // BOXBOX
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -2987,7 +2988,7 @@ int CNPC_Combine::MeleeAttack1Conditions ( float flDot, float flDist )
 	if ( GetEnemy() && fabs(GetEnemy()->GetAbsOrigin().z - GetAbsOrigin().z) > 64 )
 		return COND_NONE;
 
-	if ( dynamic_cast<CBaseHeadcrab *>(GetEnemy()) != NULL )
+	if ( dynamic_cast<CBaseRat *>(GetEnemy()) != NULL )
 	{
 		return COND_NONE;
 	}

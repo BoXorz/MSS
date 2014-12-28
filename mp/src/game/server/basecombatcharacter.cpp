@@ -54,6 +54,8 @@
 	#include "portal_shareddefs.h"
 #endif
 
+#include "MSS_player.h" // BOXBOX
+
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
@@ -747,6 +749,9 @@ CBaseCombatCharacter::CBaseCombatCharacter( void )
 #ifdef GLOWS_ENABLE
 	m_bGlowEnabled.Set( false );
 #endif // GLOWS_ENABLE
+
+	m_nMSSLevelBase = 1; // BOXBOX for MSS
+	m_nMSSLevelModifier = 0;
 }
 
 //------------------------------------------------------------------------------
@@ -1680,6 +1685,15 @@ void CBaseCombatCharacter::Event_Killed( const CTakeDamageInfo &info )
 #ifdef GLOWS_ENABLE
 	RemoveGlowEffect();
 #endif // GLOWS_ENABLE
+
+
+// BOXBOX if attacker was MSS_Player, give exp!
+	CMSS_Player *pPlayer = ToMSSPlayer( info.GetAttacker() );
+	if( pPlayer )
+	{
+		pPlayer->AddToTotalExp( GetBaseMSSLevel() + GetMSSLevelModifier() );
+	}
+
 }
 
 void CBaseCombatCharacter::Event_Dying( const CTakeDamageInfo &info )
@@ -2498,6 +2512,18 @@ int CBaseCombatCharacter::OnTakeDamage_Alive( const CTakeDamageInfo &info )
 			return 0;
 
 		m_iHealth -= flIntegerDamage;
+	}
+
+
+// BOXBOX If attacker is a player, add skills for hitting!
+	CMSS_Player *pPlayer = ToMSSPlayer( info.GetInflictor() );
+	if( pPlayer )
+	{
+		CBaseCombatWeapon *pWeapon = pPlayer->GetActiveWeapon();
+		if( ( pWeapon ) )
+		{
+			pPlayer->IncrementWeaponSkill( pWeapon->GetMSSWeaponType() );
+		}
 	}
 
 	return 1;

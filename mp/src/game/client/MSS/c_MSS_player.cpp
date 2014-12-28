@@ -33,24 +33,33 @@ IMPLEMENT_CLIENTCLASS_DT(C_MSS_Player, DT_MSS_Player, CMSS_Player)
 
 // BOXBOXBOX MSS STUFF
 
-	RecvPropInt( RECVINFO( m_nNumChars ) ),
+//	RecvPropInt( RECVINFO( m_nNumChars ) ),
 	RecvPropString( RECVINFO( m_szCharName ) ),
 	RecvPropInt( RECVINFO( m_nGender ) ),
 	RecvPropInt( RECVINFO( m_nRace ) ),
 	RecvPropInt( RECVINFO( m_nTotalExp ) ),
 
+	RecvPropInt( RECVINFO( m_nUnarmed ) ),
+	RecvPropInt( RECVINFO( m_nOneHandPiercing ) ),
+	RecvPropInt( RECVINFO( m_nOneHandSlashing ) ),
+	RecvPropInt( RECVINFO( m_nOneHandBashing ) ),
+	RecvPropInt( RECVINFO( m_nTwoHandPiercing ) ),
+	RecvPropInt( RECVINFO( m_nTwoHandSlashing ) ),
+	RecvPropInt( RECVINFO( m_nTwoHandBashing ) ),
+	RecvPropInt( RECVINFO( m_nArchery ) ),
+	RecvPropInt( RECVINFO( m_nThrowingWeapons ) ),
 
 	//RecvPropArray( RecvPropString( RECVINFO( m_PreloadedCharInfo ) ), m_PreloadedCharInfo ),
 	//RecvPropArray3( RECVINFO_ARRAY( m_PreloadedCharInfo ), RecvPropString( RECVINFO( m_PreloadedCharInfo ), 0, RecvProxy_Preload ) ),
 //	RecvPropArray( RecvPropString( RECVINFO( m_PreloadedCharInfo_Name[0]) ), m_PreloadedCharInfo_Name ),
-	RecvPropString( RECVINFO( m_szPreloadCharName0 ) ),
 	RecvPropString( RECVINFO( m_szPreloadCharName1 ) ),
 	RecvPropString( RECVINFO( m_szPreloadCharName2 ) ),
+	RecvPropString( RECVINFO( m_szPreloadCharName3 ) ),
 
-
-
-	RecvPropArray( RecvPropInt( RECVINFO( m_PreloadedCharInfo_Model[0] ) ), m_PreloadedCharInfo_Model),
-	RecvPropBool( RECVINFO( m_PreloadedCharInfo_DoneSending ) ),
+//	RecvPropArray( RecvPropString( RECVINFO( m_szPreloadCharName[0]) ), m_szPreloadCharName ),
+	RecvPropArray( RecvPropInt( RECVINFO( m_nPreloadModelIndex[0] ) ), m_nPreloadModelIndex ),
+	RecvPropArray3( RECVINFO_ARRAY( m_bHasCharInSlot ),	RecvPropBool( RECVINFO( m_bHasCharInSlot[0]) ) ),
+//	RecvPropBool( RECVINFO( m_PreloadedCharInfo_DoneSending ) ),
 
 END_RECV_TABLE()
 

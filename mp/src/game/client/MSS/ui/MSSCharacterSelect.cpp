@@ -1,9 +1,5 @@
-//========= Copyright © 2008, Mike Raineri, All rights reserved. ============//
-//
-// Purpose: Builds the character window
-//
-// $NoKeywords: $
-//=============================================================================//
+
+// BOXBOX The Character Selection Menu
 
 #include "cbase.h"
 #include <stdio.h>
@@ -22,22 +18,9 @@ using namespace std;
 #include <cdll_client_int.h>
 #include "clientmode_MSSnormal.h"
 
-//#define MSS_PLAYER_MODEL "models/player/humanmale.mdl"
-
 extern const char *pszPlayerModels[];
 
-//CUtlVector<CMSCharSelectMenu::char_selection_spawnpoint_info_s> CMSCharSelectMenu::m_CharSelectSpots;
-
-//Vector CMSCharSelectMenu::g_ViewPos;
-//QAngle CMSCharSelectMenu::g_ViewAng;
-//CMSCharSelectMenu *CMSCharSelectMenu::static_pCurrentMenu = NULL;
-
-//LINK_ENTITY_TO_CLASS( ms_clientsidemodel, CClientSidePlayerModel );
-//-----------------------------------------------------------------------------
-// Purpose: Constructor
-//-----------------------------------------------------------------------------
-CMSCharSelectMenu::CMSCharSelectMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_CHARSELECT )/*,
-	m_DisplayedCharacters( false ), m_CharsFollowCam( true )*/
+CMSCharSelectMenu::CMSCharSelectMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_CHARSELECT )
 {
 	vgui::HScheme scheme = vgui::scheme()->LoadSchemeFromFileEx( enginevgui->GetPanel( PANEL_CLIENTDLL ), "resource/MSScheme.res", "MSScheme");
 	SetScheme(scheme);
@@ -52,15 +35,6 @@ CMSCharSelectMenu::CMSCharSelectMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_
 	m_pSlot2Label	= new Label( this, "CharText2", "" );
 	m_pSlot3Label	= new Label( this, "CharText3", "" );
 
-//	m_pCharButton1		= new vgui::Button( this, "CharButton1", "#MSS_NOCHAR", this, "choosechar 0" );
-//	m_pCharButton2		= new vgui::Button( this, "CharButton2", "#MSS_NOCHAR", this, "choosechar 1" );
-//	m_pCharButton3		= new vgui::Button( this, "CharButton3", "#MSS_NOCHAR", this, "choosechar 2" );
-
-//	m_pCharModel1 = new CModelPanel( this, "charmodel1" );
-//	m_pCharModel2 = new CModelPanel( this, "charmodel2" );
-//	m_pCharModel3 = new CModelPanel( this, "charmodel3" );
-
-
 	m_pConfirmBgImage		= new vgui::ImagePanel( this, "ConfirmBGImg" );
 	m_pConfirmLabel			= new vgui::Label( this, "ConfirmLabel", "#MSS_DEL_CONFIRM" );
 	m_pConfirmYesButton		= new vgui::Button( this, "YesButton", "#MSS_YES", this, "confirmyes" );
@@ -73,14 +47,13 @@ CMSCharSelectMenu::CMSCharSelectMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_
 	m_bJustDeleted[0] = false;
 	m_bJustDeleted[1] = false;
 	m_bJustDeleted[2] = false;
-
 }
 
 CMSCharSelectMenu::~CMSCharSelectMenu()
 {
 }
 
-void CMSCharSelectMenu::ApplySchemeSettings( IScheme *pScheme ) // BOXBOX added this
+void CMSCharSelectMenu::ApplySchemeSettings( IScheme *pScheme )
 {
 	BaseClass::ApplySchemeSettings( pScheme );
 
@@ -101,7 +74,6 @@ void CMSCharSelectMenu::ApplySchemeSettings( IScheme *pScheme ) // BOXBOX added 
 
 	m_pFullCharLabel->SetFont( pScheme->GetFont( "HeaderFontSmall" ) );
 	m_pFullCharLabel->SetFgColor( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
-
 }
 
 void CMSCharSelectMenu::ShowPanel(bool bShow)
@@ -122,13 +94,11 @@ void CMSCharSelectMenu::ShowPanel(bool bShow)
 		Update();
 		Activate();
 		SetMouseInputEnabled(true);
-//		Msg("CHAR PANEL OPENING\n");
 	}
 
-	// Closes the window
+	// Close the window
 	else
 		Close( );
-//		Msg("CHAR PANEL CLOSING\n");
 }
 
 
@@ -145,55 +115,56 @@ void CMSCharSelectMenu::Reset( ) // BOXBOX redid entire function
 		{
 			if( !Q_stricmp( panel->GetName(), "charone" ) )
 			{
-				panel->SetVisible( pPlayer->m_PreloadedCharInfo_Model.Get( 0 ) != MODEL_NOCHAR );
-				if( m_bJustDeleted[0] )
+				panel->SetVisible( pPlayer->m_bHasCharInSlot[ CHARSLOT_ONE ] );
+//				panel->m_hModel->SetModel( pszPlayerModels[pPlayer->m_PreloadedCharInfo_Model.Get( 0 )] ); // BOXBOX attempt to set model
+				if( m_bJustDeleted[ CHARSLOT_ONE ] )
 					panel->SetVisible( false );
 			}
 			else if( !Q_stricmp( panel->GetName(), "chartwo" ) )
 			{
-				panel->SetVisible( pPlayer->m_PreloadedCharInfo_Model.Get( 1 ) != MODEL_NOCHAR );
-				if( m_bJustDeleted[1] )
+				panel->SetVisible( pPlayer->m_bHasCharInSlot[ CHARSLOT_TWO ] );
+				if( m_bJustDeleted[ CHARSLOT_TWO ] )
 					panel->SetVisible( false );
 			}			
 			else if( !Q_stricmp( panel->GetName(), "charthree" ) )
 			{
-				panel->SetVisible( pPlayer->m_PreloadedCharInfo_Model.Get( 2 ) != MODEL_NOCHAR );
-				if( m_bJustDeleted[2] )
+				panel->SetVisible( pPlayer->m_bHasCharInSlot[ CHARSLOT_THREE ] );
+				if( m_bJustDeleted[ CHARSLOT_THREE ] )
 					panel->SetVisible( false );
 			}			
 		}
 	}
 
-	m_pSlot1Label->SetText( pPlayer->m_szPreloadCharName0 );
-	if( m_bJustDeleted[0] )
+	m_pSlot1Label->SetText( pPlayer->m_szPreloadCharName1 );
+	if( m_bJustDeleted[ CHARSLOT_ONE ] )
 		m_pSlot1Label->SetText( "" );
-	m_pSlot2Label->SetText( pPlayer->m_szPreloadCharName1 );
-	if( m_bJustDeleted[1] )
+	m_pSlot2Label->SetText( pPlayer->m_szPreloadCharName2 );
+	if( m_bJustDeleted[ CHARSLOT_TWO ] )
 		m_pSlot2Label->SetText( "" );
-	m_pSlot3Label->SetText( pPlayer->m_szPreloadCharName2 );
-	if( m_bJustDeleted[2] )
+	m_pSlot3Label->SetText( pPlayer->m_szPreloadCharName3 );
+	if( m_bJustDeleted[ CHARSLOT_THREE ] )
 		m_pSlot3Label->SetText( "" );
 
 	Button *pButton = (Button *)FindChildByName( "CharButton1" );
-	pButton->SetText( pPlayer->m_szPreloadCharName0[0] ? "" : "#MSS_NOCHAR" );
-	pButton->SetEnabled( pPlayer->m_szPreloadCharName0[0] ? true : false );
-	if( m_bJustDeleted[0] )
+	pButton->SetText( pPlayer->m_szPreloadCharName1[0] ? "" : "#MSS_NOCHAR" );
+	pButton->SetEnabled( pPlayer->m_szPreloadCharName1[0] ? true : false );
+	if( m_bJustDeleted[ CHARSLOT_ONE ] )
 	{
 		pButton->SetText( "#MSS_NOCHAR" );
 		pButton->SetEnabled( false );
 	}
 	pButton = (Button *)FindChildByName( "CharButton2" );
-	pButton->SetText( pPlayer->m_szPreloadCharName1[0] ? "" : "#MSS_NOCHAR" );
-	pButton->SetEnabled( pPlayer->m_szPreloadCharName1[0] ? true : false );
-	if( m_bJustDeleted[1] )
+	pButton->SetText( pPlayer->m_szPreloadCharName2[0] ? "" : "#MSS_NOCHAR" );
+	pButton->SetEnabled( pPlayer->m_szPreloadCharName2[0] ? true : false );
+	if( m_bJustDeleted[ CHARSLOT_TWO ] )
 	{
 		pButton->SetText( "#MSS_NOCHAR" );
 		pButton->SetEnabled( false );
 	}
 	pButton = (Button *)FindChildByName( "CharButton3" );
-	pButton->SetText( pPlayer->m_szPreloadCharName2[0] ? "" : "#MSS_NOCHAR" );
-	pButton->SetEnabled( pPlayer->m_szPreloadCharName2[0] ? true : false );
-	if( m_bJustDeleted[2] )
+	pButton->SetText( pPlayer->m_szPreloadCharName3[0] ? "" : "#MSS_NOCHAR" );
+	pButton->SetEnabled( pPlayer->m_szPreloadCharName3[0] ? true : false );
+	if( m_bJustDeleted[ CHARSLOT_THREE ] )
 	{
 		pButton->SetText( "#MSS_NOCHAR" );
 		pButton->SetEnabled( false );
@@ -202,11 +173,7 @@ void CMSCharSelectMenu::Reset( ) // BOXBOX redid entire function
 
 void CMSCharSelectMenu::Update( void ) // BOXBOX don't need anything running constantly
 {
-
 }
-
-
-
 
 void CMSCharSelectMenu::OnCommand( const char *command )
 {
@@ -217,12 +184,12 @@ void CMSCharSelectMenu::OnCommand( const char *command )
 	{
 		engine->ClientCmd( command );
 		gViewPortInterface->ShowPanel( this, false );
-		vgui::surface()->PlaySound( "UI/pageturn.wav" ); // BOXBOX added
+		vgui::surface()->PlaySound( "UI/pageturn.wav" );
 		return;
 	}
 	else if( Q_strstr( command, "createchar" ) )
 	{
-		if( pPlayer->m_nNumChars == MAX_CHAR_SLOTS )
+		if( pPlayer->GetNumChars() == MAX_CHAR_SLOTS )
 		{
 			ShowFullChar();
 			return;
@@ -230,22 +197,12 @@ void CMSCharSelectMenu::OnCommand( const char *command )
 
 		gViewPortInterface->ShowPanel( this, false );
 		gViewPortInterface->ShowPanel( PANEL_CHARCREATE, true );
-		vgui::surface()->PlaySound( "UI/pageturn.wav" ); // BOXBOX added
-		return;
-	}
-	else if( Q_strstr( command, "deletechar 0" ) )
-	{
-		if( !pPlayer->m_PreloadedCharInfo_Model.Get( 0 ) )// BOXBOX no character to delete
-		{
-			return;
-		}
-		m_nCharToDelete = 0;
-		ShowConfirm();
+		vgui::surface()->PlaySound( "UI/pageturn.wav" );
 		return;
 	}
 	else if( Q_strstr( command, "deletechar 1" ) )
 	{
-		if( !pPlayer->m_PreloadedCharInfo_Model.Get( 1 ) )
+		if( !pPlayer->m_nPreloadModelIndex[ CHARSLOT_ONE ] )// BOXBOX no character to delete
 		{
 			return;
 		}
@@ -255,7 +212,7 @@ void CMSCharSelectMenu::OnCommand( const char *command )
 	}
 	else if( Q_strstr( command, "deletechar 2" ) )
 	{
-		if( !pPlayer->m_PreloadedCharInfo_Model.Get( 2 ) )
+		if( !pPlayer->m_nPreloadModelIndex[ CHARSLOT_TWO ] )
 		{
 			return;
 		}
@@ -263,14 +220,19 @@ void CMSCharSelectMenu::OnCommand( const char *command )
 		ShowConfirm();
 		return;
 	}
+	else if( Q_strstr( command, "deletechar 3" ) )
+	{
+		if( !pPlayer->m_nPreloadModelIndex[ CHARSLOT_THREE ] )
+		{
+			return;
+		}
+		m_nCharToDelete = 3;
+		ShowConfirm();
+		return;
+	}
 	else if( Q_strstr( command, "confirmyes" ) )
 	{
-		if( m_nCharToDelete == 0 )
-		{
-			engine->ClientCmd( "deletechar 0" );
-			m_bJustDeleted[0] = true;
-		}
-		else if( m_nCharToDelete == 1 )
+		if( m_nCharToDelete == 1 )
 		{
 			engine->ClientCmd( "deletechar 1" );
 			m_bJustDeleted[1] = true;
@@ -279,6 +241,11 @@ void CMSCharSelectMenu::OnCommand( const char *command )
 		{
 			engine->ClientCmd( "deletechar 2" );
 			m_bJustDeleted[2] = true;
+		}
+		else if( m_nCharToDelete == 3 )
+		{
+			engine->ClientCmd( "deletechar 3" );
+			m_bJustDeleted[3] = true;
 		}
 		HideConfirm();
 		Reset(); // BOXBOX added here to update with prediction
@@ -419,112 +386,5 @@ void CMSCharSelectMenu::HideFullChar( void )
 
 vgui::Panel *CMSCharSelectMenu::CreateControlByName(const char *controlName)
 {
-    /*if ( Q_stricmp( controlName, "ClassImagePanel" ) == 0 )
-    {
-        return new CClassImagePanel( NULL, controlName );
-    }*/
-
-    return BaseClass::CreateControlByName( controlName );
+     return BaseClass::CreateControlByName( controlName );
 }
-
-/*
-void CMSCharSelectMenu::GetCharPos( int charIdx, CMSCharSelectMenu::char_selection_spawnpoint_info_s &out_Pos )
-{
-	if( m_CharsFollowCam )
-	{
-		Vector vForward, vRight, vUp;
-		AngleVectors( CMSCharSelectMenu::g_ViewAng, &vForward, &vRight, &vUp );
-
-		out_Pos.Pos =  CMSCharSelectMenu::g_ViewPos 
-					+ vForward * m_DistFromCamera 
-					+ vRight * m_DistFromCamera_Side 
-					+ vRight * m_DistFromCamera_SideSpacing * (charIdx-1)
-					+ vUp * m_DistFromCamera_Up;
-
-		Vector vFacingPlayer = CMSCharSelectMenu::g_ViewPos - out_Pos.Pos;
-		vFacingPlayer.NormalizeInPlace( );
-		out_Pos.Rot = QAngle( 0, UTIL_VecToYaw(vFacingPlayer), 0 );
-	}
-}
-*/
-
-
-/*
-class C_InfoPlayerSelect : public CBaseEntity
-{
-public:
-	DECLARE_CLASS( C_InfoPlayerSelect, CBaseEntity );
-	DECLARE_CLIENTCLASS();
-
-	CNetworkVar( int, m_Num );
-	CNetworkVar( int, m_Initialized );
-
-	void PostDataUpdate( DataUpdateType_t updateType )
-	{
-		if( m_Initialized )
-		{
-			//Position/Angles should be set by now
-			CMSCharSelectMenu::char_selection_spawnpoint_info_s NewSpot;
-			NewSpot.Pos = this->GetAbsOrigin( );
-			NewSpot.Rot = this->GetAbsAngles( );
-
-			CMSCharSelectMenu::m_CharSelectSpots.AddToTail( NewSpot );		
-		}
-
-		return BaseClass::PostDataUpdate( updateType );
-	}
-
-	void Spawn( )
-	{
-		//Position/Angles aren't set yet
-	}
-};
-
-LINK_ENTITY_TO_CLASS( info_player_select, C_InfoPlayerSelect );
-
-IMPLEMENT_CLIENTCLASS_DT( C_InfoPlayerSelect, DT_InfoPlayerSelect, CInfoPlayerSelect )
-RecvPropVector( RECVINFO_NAME( m_vecAbsOrigin, m_vecOrigin ) ),
-	RecvPropFloat( RECVINFO_NAME( m_angAbsRotation[0], m_angRotation[0] ) ),
-	RecvPropFloat( RECVINFO_NAME( m_angAbsRotation[1], m_angRotation[1] ) ),
-	RecvPropInt( RECVINFO( m_Num ) ),
-	RecvPropBool( RECVINFO( m_Initialized ) ),
-END_RECV_TABLE()
-
-
-class CInfoPlayerStartCam : public CBaseEntity
-{
-public:
-	DECLARE_CLASS( CInfoPlayerStartCam, CBaseEntity );
-	DECLARE_CLIENTCLASS();
-
-	//CNetworkVar( int, m_Num );
-	CNetworkVar( int, m_Initialized );
-
-	void PostDataUpdate( DataUpdateType_t updateType )
-	{
-		if( m_Initialized )
-		{
-			//Position/Angles should be set by now
-			CMSCharSelectMenu::g_ViewPos = this->GetAbsOrigin( );
-			CMSCharSelectMenu::g_ViewAng = this->GetAbsAngles( );
-		}
-
-		return BaseClass::PostDataUpdate( updateType );
-	}
-
-	void Spawn( )
-	{
-		//Position/Angles aren't set yet
-	}
-};
-
-LINK_ENTITY_TO_CLASS( info_player_start_cam, CInfoPlayerStartCam );
-
-IMPLEMENT_CLIENTCLASS_DT( CInfoPlayerStartCam, DT_InfoPlayerStart, CInfoPlayerStartCam )
-RecvPropVector( RECVINFO_NAME( m_vecAbsOrigin, m_vecOrigin ) ),
-	RecvPropFloat( RECVINFO_NAME( m_angAbsRotation[0], m_angRotation[0] ) ),
-	RecvPropFloat( RECVINFO_NAME( m_angAbsRotation[1], m_angRotation[1] ) ),
-	//RecvPropInt( RECVINFO( m_Num ) ),
-	RecvPropBool( RECVINFO( m_Initialized ) ),
-END_RECV_TABLE()
-*/

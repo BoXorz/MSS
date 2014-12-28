@@ -139,71 +139,87 @@ public:
 
 	void MoveToIntroCamera(); // BOXBOX rip/modifying this from old sdk code
 
-//	bool m_bHasCharFile; // BOXBOX does this player have a character file?	
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+// BOXBOX MSS STUFF
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// BOXBOX MSS STUFF FROM OLD DOGG/BRIAN CODE
+	bool m_bJustJoining; // BOXBOX is player just now joining the server?  Used for map transistions to omit startup menus
 
-	bool m_HasChoosenChar;			//True if the player has choosen a character
-	int m_SelectedChar;				//Index of the character choosen
+	int m_nCurrentChar;	// BOXBOX current character selected/in play
+//	bool m_bHasCharInSlot[4]; // Character files exist in each slot or no
+	float m_flLastSaveTime;
 
-	void SaveChar( );
-	void PreLoadChars( void ); // BOXBOX added this to get the character names and models for the Character Selection VGUI panel
-//	void SetNumChars( void ); // BOXBOX added this, to set the number of characters this player has on server
+	void GetCharFileFields( CUtlVector<MSSaveProperty> &allPlayerData );
+	void SaveChar( int slot );
+	charloadstatus_e LoadChar( int slot );
+	void PreLoadChar( int slot ); // BOXBOX preload character slots to send info to the Character Selection Menu
 
-	charloadstatus_e LoadChar( int charSlot );
-	void GetCharacterSaveFileFields( CUtlVector<MSSaveProperty> &allPlayerData );
-	float m_TimeLastSave;
-
-//	CNetworkArray( string_t, m_PreloadedCharInfo_Name, MAX_CHAR_SLOTS ); // BOXBOX trying this a different way...
-	CNetworkString( m_szPreloadCharName0, MAX_CHAR_NAME_LENGTH );
 	CNetworkString( m_szPreloadCharName1, MAX_CHAR_NAME_LENGTH );
 	CNetworkString( m_szPreloadCharName2, MAX_CHAR_NAME_LENGTH );
+	CNetworkString( m_szPreloadCharName3, MAX_CHAR_NAME_LENGTH );
 
-	CNetworkArray( int, m_PreloadedCharInfo_Model, MAX_CHAR_SLOTS );
-	CNetworkVar( bool, m_PreloadedCharInfo_DoneSending );
+//	CNetworkArray( string_t, m_szPreloadCharName, MAX_CHAR_SLOTS + 1 );
+	CNetworkArray( int, m_nPreloadModelIndex, MAX_CHAR_SLOTS + 1 );
+	CNetworkArray( bool, m_bHasCharInSlot, MAX_CHAR_SLOTS + 1 );
 
-	virtual void UpdateStats( void );
+//	CNetworkVar( bool, m_PreloadedCharInfo_DoneSending );
+//	virtual void UpdateStats( void );
 
+	void AddToTotalExp( int exp ) { m_nTotalExp += exp; }
+	void IncrementWeaponSkill( int skill );
+
+	void CheatAddToWeaponSkill( int amt ) { m_nOneHandSlashing += amt; 	Warning("ONE HAND SLASHING IS NOW: %i\n", m_nOneHandSlashing ); }
 protected:
-	CNetworkVar( int, m_nNumChars ); // BOXBOX added this, so client side (panels mostly) will know how many chars this player has on server
+//	CNetworkVar( int, m_nNumChars ); // BOXBOX obsoleted
 
 	CNetworkString( m_szCharName, MAX_CHAR_NAME_LENGTH );
-	CNetworkVar(unsigned int, m_nGender);
-	CNetworkVar(unsigned int, m_nRace);
-	CNetworkVar(unsigned int, m_nTotalExp);
+	CNetworkVar( unsigned int, m_nGender );
+	CNetworkVar( unsigned int, m_nRace );
+	CNetworkVar( unsigned int, m_nTotalExp );
 
+	CNetworkVar( int, m_nUnarmed );		// BOXBOX these are the experience totals (0-100,000)
+	CNetworkVar( int, m_nOneHandPiercing );
+	CNetworkVar( int, m_nOneHandSlashing );
+	CNetworkVar( int, m_nOneHandBashing );
+	CNetworkVar( int, m_nTwoHandPiercing );
+	CNetworkVar( int, m_nTwoHandSlashing );
+	CNetworkVar( int, m_nTwoHandBashing );
+	CNetworkVar( int, m_nArchery );
+	CNetworkVar( int, m_nThrowingWeapons );
 
-//	CNetworkVar(bool, ms_gender);
-//	CNetworkVar(unsigned int, ms_race);
+	int		m_nWeaponSkills[ MAX_WEAPON_SKILLS ];	// BOXBOX and these are the levels(1-10)
 
-	CNetworkVar(unsigned int, ms_playerKills);
-	CNetworkVar(unsigned int, ms_mana);
-	CNetworkVar(unsigned int, ms_maxMana);
-	CNetworkVar(unsigned int, ms_maxHealth);
-	CNetworkVar(unsigned int, ms_gold);
-	CNetworkVar(unsigned int, ms_alliance);
+	void	TabulateStats( void ); // BOXBOX Here is where we calculate all the player stats that we don't need to save in the character files
 
-	CNetworkVar(unsigned int, ms_strength);
-	CNetworkVar(unsigned int, ms_dexterity);
-	CNetworkVar(unsigned int, ms_concentration);
-	CNetworkVar(unsigned int, ms_awareness);
-	CNetworkVar(unsigned int, ms_fitness);
-	CNetworkVar(unsigned int, ms_level);
-	CNetworkVar(unsigned int, ms_warriorSkills);
-	CNetworkVar(unsigned int, ms_martialArts);
-	CNetworkVar(unsigned int, ms_smallArms);
-	CNetworkVar(unsigned int, ms_archery);
-	CNetworkVar(unsigned int, ms_spellCasting);
-	CNetworkVar(unsigned int, ms_parry);
-	CNetworkVar(unsigned int, ms_warriorSkillsExpPercent);
-	CNetworkVar(unsigned int, ms_martialArtsExpPercent);
-	CNetworkVar(unsigned int, ms_smallArmsExpPercent);
-	CNetworkVar(unsigned int, ms_archeryExpPercent);
-	CNetworkVar(unsigned int, ms_spellCastingExpPercent);
-	CNetworkVar(unsigned int, ms_parryExpPercent);
+//	CNetworkVar(unsigned int, ms_playerKills);
+//	CNetworkVar(unsigned int, ms_mana);
+//	CNetworkVar(unsigned int, ms_maxMana);
+//	CNetworkVar(unsigned int, ms_maxHealth);
+//	CNetworkVar(unsigned int, ms_gold);
+//	CNetworkVar(unsigned int, ms_alliance);
 
+//	CNetworkVar(unsigned int, ms_strength);
+//	CNetworkVar(unsigned int, ms_dexterity);
+//	CNetworkVar(unsigned int, ms_concentration);
+//	CNetworkVar(unsigned int, ms_awareness);
+//	CNetworkVar(unsigned int, ms_fitness);
+//	CNetworkVar(unsigned int, ms_level);
+//	CNetworkVar(unsigned int, ms_warriorSkills);
+//	CNetworkVar(unsigned int, ms_martialArts);
+//	CNetworkVar(unsigned int, ms_smallArms);
+//	CNetworkVar(unsigned int, ms_archery);
+//	CNetworkVar(unsigned int, ms_spellCasting);
+//	CNetworkVar(unsigned int, ms_parry);
+//	CNetworkVar(unsigned int, ms_warriorSkillsExpPercent);
+//	CNetworkVar(unsigned int, ms_martialArtsExpPercent);
+//	CNetworkVar(unsigned int, ms_smallArmsExpPercent);
+//	CNetworkVar(unsigned int, ms_archeryExpPercent);
+//	CNetworkVar(unsigned int, ms_spellCastingExpPercent);
+//	CNetworkVar(unsigned int, ms_parryExpPercent);
 
-// BOXBOX end old MSS code
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+// BOXBOX END MSS STUFF
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 private:
 

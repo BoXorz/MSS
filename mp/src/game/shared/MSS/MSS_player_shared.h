@@ -6,7 +6,7 @@
 //
 //=============================================================================//
 #ifndef MSS_PLAYER_SHARED_H
-#define HL2MP_PLAYER_SHARED_H
+#define MSS_PLAYER_SHARED_H
 #pragma once
 
 #define HL2MP_PUSHAWAY_THINK_INTERVAL		(1.0f / 20.0f)
@@ -93,4 +93,4 @@ private:
 	float				m_flTurnCorrectionTime;
 };
 
-#endif //HL2MP_PLAYER_SHARED_h
+#endif //MSS_PLAYER_SHARED_h

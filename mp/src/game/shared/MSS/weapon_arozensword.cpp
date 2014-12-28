@@ -100,6 +100,7 @@ IMPLEMENT_ACTTABLE(CWeaponArozenSword);
 
 CWeaponArozenSword::CWeaponArozenSword( void )
 {
+	m_nMSSWeaponType = WEAPONTYPE_ONEHANDSLASHING;
 }
 
 /* BOXBOX removing

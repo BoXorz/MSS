@@ -110,7 +110,7 @@ protected:
 	virtual void HideFullChar( void );
 
 	int		m_nCharToDelete;
-	bool	m_bJustDeleted[3]; // BOXBOX the server can't update characters and send info back fast enough, so use this as a makeshift 'prediction' so menu acts right.
+	bool	m_bJustDeleted[4]; // BOXBOX the server can't update characters and send info back fast enough, so use this as a makeshift 'prediction' so menu acts right.
 };
 
 

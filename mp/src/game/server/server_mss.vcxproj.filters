@@ -43,6 +43,9 @@
     <Filter Include="VPC Scripts">
       <UniqueIdentifier>{A40EE377-781A-C6B9-0C7C-B3BE118D248E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\MSS\Monsters">
+      <UniqueIdentifier>{8847d8bc-1894-4714-8014-d9175dc56036}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\lib\win32\release\VS2010\libprotobuf.lib">
@@ -1664,9 +1667,6 @@
     <ClInclude Include="hl2\npc_crow.h">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClInclude>
-    <ClInclude Include="hl2\npc_headcrab.h">
-      <Filter>Source Files\HL2 DLL</Filter>
-    </ClInclude>
     <ClInclude Include="hl2\npc_manhack.h">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClInclude>
@@ -1822,6 +1822,9 @@
     </ClInclude>
     <ClInclude Include="MSS\MSS_charsave.h">
       <Filter>Source Files\MSS</Filter>
+    </ClInclude>
+    <ClInclude Include="MSS\Monsters\monster_rat.h">
+      <Filter>Source Files\MSS\Monsters</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3130,9 +3133,6 @@
     <ClCompile Include="hl2\npc_gman.cpp">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClCompile>
-    <ClCompile Include="hl2\npc_headcrab.cpp">
-      <Filter>Source Files\HL2 DLL</Filter>
-    </ClCompile>
     <ClCompile Include="hl2\npc_ichthyosaur.cpp">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClCompile>
@@ -3525,6 +3525,9 @@
     </ClCompile>
     <ClCompile Include="..\shared\MSS\MSS_shareddefs.cpp">
       <Filter>Source Files\MSS</Filter>
+    </ClCompile>
+    <ClCompile Include="MSS\Monsters\monster_rat.cpp">
+      <Filter>Source Files\MSS\Monsters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

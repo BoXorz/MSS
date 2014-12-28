@@ -24,6 +24,8 @@
 #include "tf_shareddefs.h"
 #endif
 
+#include "MSS_shareddefs.h" // BOXBOX
+
 #if !defined( CLIENT_DLL )
 
 // Game DLL Headers
@@ -102,6 +104,8 @@ CBaseCombatWeapon::CBaseCombatWeapon()
 	m_nCritChecks = 1;
 	m_nCritSeedRequests = 0;
 #endif // TF
+
+	m_nMSSWeaponType = WEAPONTYPE_UNARMED; // BOXBOX for MSS
 }
 
 //-----------------------------------------------------------------------------

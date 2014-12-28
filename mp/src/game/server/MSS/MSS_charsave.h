@@ -92,9 +92,10 @@ public:
 
 	static void GetSaveFileNameForPlayer( class CMSS_Player *pPlayer, int slot, char filePath[MAX_PATH] );
 	static void GetCheckSum( KeyValues *values, char out_CheckSum[] );
-	static void Think( );
-	static float m_TimeLastSave;
-	static const char *m_SavePath;
+	static const char *m_pszSavePath;
+
+//	static void Think( );
+//	static float m_flLastSaveTime; // BOXBOX not using this, saving characters now in CMSS_Player::PostThink
 };
 
 //#define MAX_CHAR_SLOTS 3

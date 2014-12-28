@@ -29,116 +29,68 @@ extern CBaseEntity*	FindPickerEntityClass( CBasePlayer *pPlayer, char *classname
 extern bool			g_fGameOver;
 
 
-
-// BOXBOX check for charachter file
-/*
-void CheckForCharacterFile( CMSS_Player *pPlayer )
-{
-
-//	BOXBOX here's what needs to happen: First we already passed in a pointer to the joining player, so we have that.
-//	1)- Get the player's Steam ID
-//	2)- Check to see if there is a file on the server for that player based on Steam ID
-//	3a)- If NO,  signal that we need to open the create character panel after the server Info panel closes.
-//	3b)- If YES, signal that we want to open the character selection panel after the server info panel closes.
-
-
-	Msg( "\n**********MASTERSWORD INFORMATION**********\n");
-
-// STEP 1: Get SteamID
-	CSteamID steamID;
-	pPlayer->GetSteamID( &steamID );
-
-	int id = steamID.GetAccountID();
-
-// STEP 2: Convert file number to text
-	// get mod file path
-	char gamedir[256];
-	engine->GetGameDir( gamedir, 256 );
-	
-	char charfile[MAX_PATH];
-	Q_snprintf( charfile, sizeof( charfile ), "characters/%i.txt", id );	// BOXBOX This works!  So far, so good!
-
-	Msg( "Your Charachter file is: %s/%s\n", gamedir, charfile );
-
-// STEP 3: See if file exists
-
-	if( !g_pFullFileSystem->FileExists( charfile ) )
-	{
-			Msg( "No Charachter file found! (%s)\n", charfile );
-			pPlayer->m_bHasCharFile = false;
-			return;
-	}
-
-	Msg( "Charachter file was found! (%s)\n", charfile );
-	pPlayer->m_bHasCharFile = true;
-}
-*/
-
-
 void FinishClientPutInServer( CMSS_Player *pPlayer )
 {
 	pPlayer->InitialSpawn();
 	pPlayer->Spawn();
 
+	if( pPlayer->m_bJustJoining )// BOXBOX Don't do all this, if it's just a map change.
+	{
 // BOXBOX adding these to set up the initial camera
-	pPlayer->m_takedamage = DAMAGE_NO;
-	pPlayer->pl.deadflag = true;
-	pPlayer->m_lifeState = LIFE_DEAD;
-	pPlayer->AddEffects( EF_NODRAW );
-	pPlayer->SetThink( NULL );
-	pPlayer->MoveToIntroCamera();
-	pPlayer->SetMoveType( MOVETYPE_NONE );
+		pPlayer->m_takedamage = DAMAGE_NO;
+		pPlayer->pl.deadflag = true;
+		pPlayer->m_lifeState = LIFE_DEAD;
+		pPlayer->AddEffects( EF_NODRAW );
+		pPlayer->SetThink( NULL );
+		pPlayer->MoveToIntroCamera();
+		pPlayer->SetMoveType( MOVETYPE_NONE );
 // BOXBOX end
 
-	char sName[128];
-	Q_strncpy( sName, pPlayer->GetPlayerName(), sizeof( sName ) );
+		char sName[128];
+		Q_strncpy( sName, pPlayer->GetPlayerName(), sizeof( sName ) );
 	
 	// First parse the name and remove any %'s
-	for ( char *pApersand = sName; pApersand != NULL && *pApersand != 0; pApersand++ )
-	{
+		for ( char *pApersand = sName; pApersand != NULL && *pApersand != 0; pApersand++ )
+		{
 		// Replace it with a space
-		if ( *pApersand == '%' )
-				*pApersand = ' ';
-	}
+			if ( *pApersand == '%' )
+					*pApersand = ' ';
+		}
 
 	// notify other clients of player joining the game
-	UTIL_ClientPrintAll( HUD_PRINTNOTIFY, "#Game_connected", sName[0] != 0 ? sName : "<unconnected>" );
+		UTIL_ClientPrintAll( HUD_PRINTNOTIFY, "#Game_connected", sName[0] != 0 ? sName : "<unconnected>" );
 
-/* BOXBOX removing teams
-	if ( MSSRules()->IsTeamplay() == true )
-	{
-		ClientPrint( pPlayer, HUD_PRINTTALK, "You are on team %s1\n", pPlayer->GetTeam()->GetName() );
-	}
-*/
+		const ConVar *hostname = cvar->FindVar( "hostname" );
+		const char *title = (hostname) ? hostname->GetString() : "MESSAGE OF THE DAY";
 
-	const ConVar *hostname = cvar->FindVar( "hostname" );
-	const char *title = (hostname) ? hostname->GetString() : "MESSAGE OF THE DAY";
+		KeyValues *data = new KeyValues("data");
+		data->SetString( "title", title );		// info panel title
+		data->SetString( "type", "1" );			// BOXBOX type 0 is text, type 1 is INDEX, type 2 is URL, type 3 is FILE
+		data->SetString( "msg",	"motd_text" );		// BOXBOX use "motd_text" stringtable entry
+		data->SetBool( "unload", sv_motd_unload_on_dismissal.GetBool() );
+		data->SetBool( "justjoined", true ); // BOXBOX added this, the player is just joining, so show the character select menu after this closes.
 
-	KeyValues *data = new KeyValues("data");
-	data->SetString( "title", title );		// info panel title
-	data->SetString( "type", "1" );			// BOXBOX type 0 is text, type 1 is INDEX, type 2 is URL, type 3 is FILE
-	data->SetString( "msg",	"motd_text" );		// BOXBOX use "motd_text" stringtable entry
-	data->SetBool( "unload", sv_motd_unload_on_dismissal.GetBool() );
-	data->SetBool( "justjoined", true ); // BOXBOX added this, the player is just joining, so show the character select menu after this closes.
+	// BOXBOX preload all three character slots since we just joined
+		pPlayer->PreLoadChar( CHARSLOT_ONE );
+		pPlayer->PreLoadChar( CHARSLOT_TWO );
+		pPlayer->PreLoadChar( CHARSLOT_THREE );
 
-// BOXBOX preload names and models of characters on the server for the Character Selection menu
-// BOXBOX also determines number of characters this player has on this server, and sends that info to the client, so the vgui panels will have their story straight
-	pPlayer->PreLoadChars();
-
-//	pPlayer->SetNumChars();
-
-// BOXBOX play music here?
-	pPlayer->EmitSound("Music.Intro");
+// BOXBOX play music here
+		pPlayer->EmitSound("Music.Intro");
 
 // BOXBOX show the Join Marquis
-	pPlayer->ShowViewPortPanel( PANEL_JOIN, true, data );
+		pPlayer->ShowViewPortPanel( PANEL_JOIN, true, data );
+		data->deleteThis();
+		pPlayer->m_bJustJoining = false; // BOXBOX fingers crossed, this should prevent all this from happening at map change
+	}
+
 
 	pPlayer->ShowViewPortPanel( PANEL_MAINMENU, false ); // BOXBOX TODO why is this on by default?
 
 
 
 
-	data->deleteThis();
+
 }
 
 

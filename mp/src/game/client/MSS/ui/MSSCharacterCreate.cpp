@@ -125,7 +125,7 @@ void CMSCharCreateMenu::OnCommand( const char *command )
 		pButton->SetEnabled( false );
 		pButton = (Button *)FindChildByName( "ButtonFemale" );
 		pButton->SetEnabled( true );
-		m_nSelectedGender = GENDER_MALE;
+		m_nSelectedGender = MSS_GENDER_MALE;
 	}
 	else if( Q_strstr( command, "genderfemale" ) )
 	{
@@ -133,7 +133,7 @@ void CMSCharCreateMenu::OnCommand( const char *command )
 		pButton->SetEnabled( true );
 		pButton = (Button *)FindChildByName( "ButtonFemale" );
 		pButton->SetEnabled( false );
-		m_nSelectedGender = GENDER_FEMALE;
+		m_nSelectedGender = MSS_GENDER_FEMALE;
 	}
 	else if( Q_strstr( command, "racehuman" ) )
 	{
@@ -182,10 +182,10 @@ void CMSCharCreateMenu::OnCommand( const char *command )
 		if( !charName[0] )
 			dataIsValid = false;
 
-		if( m_nSelectedGender == -1)
+		if( m_nSelectedGender == MSS_GENDER_INVALID)
 			dataIsValid = false;
 
-		if( m_nSelectedRace == -1 )
+		if( m_nSelectedRace == RACE_INVALID )
 			dataIsValid = false;
 
 		if( dataIsValid )

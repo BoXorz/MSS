@@ -76,6 +76,17 @@ protected:
 	vgui::Label			*m_pTotalExpText;
 	vgui::Label			*m_pTotalExpLabel;
 
+	vgui::Label			*m_pUnarmedLabel;
+	vgui::Label			*m_p1HPiercingLabel;
+	vgui::Label			*m_p1HSlashingLabel;
+	vgui::Label			*m_p1HBashingLabel;
+	vgui::Label			*m_p2HPiercingLabel;
+	vgui::Label			*m_p2HSlashingLabel;
+	vgui::Label			*m_p2HBashingLabel;
+	vgui::Label			*m_pArcheryLabel;
+	vgui::Label			*m_pThrowWeaponLabel;
+
+
 };
 
 

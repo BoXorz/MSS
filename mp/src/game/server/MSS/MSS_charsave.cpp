@@ -9,59 +9,72 @@
 #include "variant_t.h"
 #include "checksum_md5.h"
 
-float CharacterSave::m_TimeLastSave = 0.0f;
-const char *CharacterSave::m_SavePath = "Characters";
+
+//float CharacterSave::m_flLastSaveTime = 0.0f;
+const char *CharacterSave::m_pszSavePath = "Characters";
 
 //#define ENCRYPTION_ENABLED
 	
 //All data that should be saved
 //=============================
-void CMSS_Player::GetCharacterSaveFileFields( CUtlVector<MSSaveProperty> &allPlayerData )
+void CMSS_Player::GetCharFileFields( CUtlVector<MSSaveProperty> &allPlayerData )
 {
 	//allPlayerData.AddToTail( MSSaveProperty( "Version", 1.0f, NULL, NULL ) );
 	allPlayerData.AddToTail( MSSaveProperty( "Character Name",	m_szCharName,		m_szCharName.GetForModify( ) ) );
 	allPlayerData.AddToTail( MSSaveProperty( "Gender",			m_nGender.Get( ),	&m_nGender, m_nGender.Static_Set ) );
 	allPlayerData.AddToTail( MSSaveProperty( "Race",			m_nRace.Get( ),			&m_nRace, m_nRace.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "TotalExp",		m_nTotalExp.Get( ),		&m_nTotalExp, m_nTotalExp.Static_Set ) );
 
-	allPlayerData.AddToTail( MSSaveProperty( "PlayerKills",		ms_playerKills.Get( ), &ms_playerKills, ms_playerKills.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "Gold",			ms_gold.Get( ),		&ms_gold, ms_gold.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "MaxHealth",		ms_maxHealth.Get( ), &ms_maxHealth, ms_maxHealth.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "Warrior Skills",	ms_warriorSkills.Get( ), &ms_warriorSkills, ms_warriorSkills.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "Martial Arts",	ms_martialArts.Get( ), &ms_martialArts, ms_martialArts.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "Archery",			ms_archery.Get( ),	&ms_archery, ms_archery.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "Spell Casting",	ms_spellCasting.Get( ), &ms_spellCasting, ms_spellCasting.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "Parry",			ms_parry.Get( ),	&ms_parry, ms_parry.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "Warrior Skills Exp", ms_warriorSkillsExpPercent.Get( ), &ms_warriorSkillsExpPercent, ms_warriorSkillsExpPercent.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "Martial Arts Exp", ms_martialArtsExpPercent.Get( ), &ms_martialArtsExpPercent, ms_martialArtsExpPercent.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "Small Arms Exp",	ms_smallArmsExpPercent.Get( ), &ms_smallArmsExpPercent, ms_smallArmsExpPercent.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "Archery Exp",		ms_archeryExpPercent.Get( ), &ms_archeryExpPercent, ms_archeryExpPercent.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "Spell Casting Exp", ms_spellCastingExpPercent.Get( ), &ms_spellCastingExpPercent, ms_spellCastingExpPercent.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "Parry Exp",		ms_parryExpPercent.Get( ), &ms_parryExpPercent, ms_parryExpPercent.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "Unarmed",				m_nUnarmed.Get( ),		&m_nUnarmed, m_nUnarmed.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "OneHandPiercing",		m_nOneHandPiercing.Get( ),		&m_nOneHandPiercing, m_nOneHandPiercing.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "OneHandSlashing",		m_nOneHandSlashing.Get( ),		&m_nOneHandSlashing, m_nOneHandSlashing.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "OneHandBashing",		m_nOneHandBashing.Get( ),		&m_nOneHandBashing, m_nOneHandBashing.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "TwoHandPiercing",		m_nTwoHandPiercing.Get( ),		&m_nTwoHandPiercing, m_nTwoHandPiercing.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "TwoHandSlashing",		m_nTwoHandSlashing.Get( ),		&m_nTwoHandSlashing, m_nTwoHandSlashing.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "TwoHandBashing",		m_nTwoHandBashing.Get( ),		&m_nTwoHandBashing, m_nTwoHandBashing.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "Archery",				m_nArchery.Get( ),				&m_nArchery, m_nArchery.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "ThrowingWeapons",		m_nThrowingWeapons.Get( ),		&m_nThrowingWeapons, m_nThrowingWeapons.Static_Set ) );
+
+
+
+//	allPlayerData.AddToTail( MSSaveProperty( "PlayerKills",		ms_playerKills.Get( ), &ms_playerKills, ms_playerKills.Static_Set ) );
+//	allPlayerData.AddToTail( MSSaveProperty( "Gold",			ms_gold.Get( ),		&ms_gold, ms_gold.Static_Set ) );
+//	allPlayerData.AddToTail( MSSaveProperty( "MaxHealth",		ms_maxHealth.Get( ), &ms_maxHealth, ms_maxHealth.Static_Set ) );
+//	allPlayerData.AddToTail( MSSaveProperty( "Warrior Skills",	ms_warriorSkills.Get( ), &ms_warriorSkills, ms_warriorSkills.Static_Set ) );
+//	allPlayerData.AddToTail( MSSaveProperty( "Martial Arts",	ms_martialArts.Get( ), &ms_martialArts, ms_martialArts.Static_Set ) );
+//	allPlayerData.AddToTail( MSSaveProperty( "Archery",			ms_archery.Get( ),	&ms_archery, ms_archery.Static_Set ) );
+//	allPlayerData.AddToTail( MSSaveProperty( "Spell Casting",	ms_spellCasting.Get( ), &ms_spellCasting, ms_spellCasting.Static_Set ) );
+//	allPlayerData.AddToTail( MSSaveProperty( "Parry",			ms_parry.Get( ),	&ms_parry, ms_parry.Static_Set ) );
+//	allPlayerData.AddToTail( MSSaveProperty( "Warrior Skills Exp", ms_warriorSkillsExpPercent.Get( ), &ms_warriorSkillsExpPercent, ms_warriorSkillsExpPercent.Static_Set ) );
+//	allPlayerData.AddToTail( MSSaveProperty( "Martial Arts Exp", ms_martialArtsExpPercent.Get( ), &ms_martialArtsExpPercent, ms_martialArtsExpPercent.Static_Set ) );
+//	allPlayerData.AddToTail( MSSaveProperty( "Small Arms Exp",	ms_smallArmsExpPercent.Get( ), &ms_smallArmsExpPercent, ms_smallArmsExpPercent.Static_Set ) );
+//	allPlayerData.AddToTail( MSSaveProperty( "Archery Exp",		ms_archeryExpPercent.Get( ), &ms_archeryExpPercent, ms_archeryExpPercent.Static_Set ) );
+//	allPlayerData.AddToTail( MSSaveProperty( "Spell Casting Exp", ms_spellCastingExpPercent.Get( ), &ms_spellCastingExpPercent, ms_spellCastingExpPercent.Static_Set ) );
+//	allPlayerData.AddToTail( MSSaveProperty( "Parry Exp",		ms_parryExpPercent.Get( ), &ms_parryExpPercent, ms_parryExpPercent.Static_Set ) );
 
 }
 
 
-void CMSS_Player::SaveChar( )
+void CMSS_Player::SaveChar( int slot )
 {
 	if( !IsReadyToPlay( ) )
 		return;
 
 	//Get the fields to save
 	CUtlVector<MSSaveProperty> allPlayerData;
-	GetCharacterSaveFileFields( allPlayerData );
+	GetCharFileFields( allPlayerData );
 
 	//Now save the data
 	char filePath[MAX_PATH];
-	CharacterSave::GetSaveFileNameForPlayer( this, m_SelectedChar, filePath );
+	CharacterSave::GetSaveFileNameForPlayer( this, slot, filePath );
 
 	Msg("SaveChar() called with filePath = ");
 	Msg( filePath );
 	Msg("\n");
 
-	m_TimeLastSave = gpGlobals->curtime;
+	m_flLastSaveTime = gpGlobals->curtime;
 
 	KeyValues *values = new KeyValues( "PlayerData" );
-
 	
 	int originalKey = -1;
 
@@ -106,29 +119,32 @@ void CMSS_Player::SaveChar( )
 	CharacterSave::GetCheckSum( values, checkSum );
 
 	values->SetString( "EncryptionString2", checkSum );
-	filesystem->CreateDirHierarchy( CharacterSave::m_SavePath, "MOD" );
+	filesystem->CreateDirHierarchy( CharacterSave::m_pszSavePath, "MOD" );
 
 	values->SaveToFile( filesystem, filePath, "MOD" );
 
 	values->deleteThis();
 }
 
-charloadstatus_e CMSS_Player::LoadChar( int charSlot )
+charloadstatus_e CMSS_Player::LoadChar( int slot )
 {
 	//Get the fields to load
 	CUtlVector<MSSaveProperty> allPlayerData;
-	GetCharacterSaveFileFields( allPlayerData );
+	GetCharFileFields( allPlayerData );
 
 	char filePath[MAX_PATH];
-	CharacterSave::GetSaveFileNameForPlayer( this, charSlot, filePath );
+	CharacterSave::GetSaveFileNameForPlayer( this, slot, filePath );
 	Msg("LoadChar called with Filepath = ");
 	Msg(filePath);
 	Msg("\n");
 
 	KeyValues *values = new KeyValues( "PlayerData" );
 
-	if( !values->LoadFromFile( filesystem, filePath, "MOD" ) )
+	if( !values->LoadFromFile( filesystem, filePath, "MOD" ) ) // BOXBOX No character file!
+	{
+		m_bHasCharInSlot.Set( slot, false );
 		return CHARLOAD_STATUS_FILE_NOT_FOUND;
+	}
 
 	const char *encryptString = values->GetString( "EncryptionString" );
 
@@ -178,28 +194,76 @@ charloadstatus_e CMSS_Player::LoadChar( int charSlot )
 		allPlayerData[i].SetValueFromEncryptedString( values->GetString( allPlayerData[i].m_Name ), encryptionKey );
 	}
 
+
+	m_bHasCharInSlot.Set( slot, true );
 	values->deleteThis();
 
-	UpdateStats( );
+//	UpdateStats( );
 
 	return CHARLOAD_STATUS_OK;
 }
 
+void CMSS_Player::PreLoadChar( int slot )
+{
+//	m_nNumChars = 0;
+
+//	CMSS_Player::LoadChar( slot );
+	LoadChar( slot );
+
+	if( m_bHasCharInSlot[ slot ] )
+	{
+		if( slot == CHARSLOT_ONE )
+		{
+			V_strncpy( m_szPreloadCharName1.GetForModify(), m_szCharName.GetForModify(), MAX_CHAR_NAME_LENGTH );
+		}
+		else if( slot == CHARSLOT_TWO )
+		{
+			V_strncpy( m_szPreloadCharName2.GetForModify(), m_szCharName.GetForModify(), MAX_CHAR_NAME_LENGTH );
+		}
+		else if( slot == CHARSLOT_THREE )
+		{
+			V_strncpy( m_szPreloadCharName3.GetForModify(), m_szCharName.GetForModify(), MAX_CHAR_NAME_LENGTH );
+		}
+
+		m_nPreloadModelIndex.Set( slot, (m_nRace * 2) + m_nGender - 2 );
+	}
+	else
+	{
+		if( slot == CHARSLOT_ONE )
+		{
+			V_strncpy( m_szPreloadCharName1.GetForModify(), "", MAX_CHAR_NAME_LENGTH );
+		}
+		else if( slot == CHARSLOT_TWO )
+		{
+			V_strncpy( m_szPreloadCharName2.GetForModify(), "", MAX_CHAR_NAME_LENGTH );
+		}
+		else if( slot == CHARSLOT_THREE )
+		{
+			V_strncpy( m_szPreloadCharName3.GetForModify(), "", MAX_CHAR_NAME_LENGTH );
+		}
+
+		m_nPreloadModelIndex.Set( slot, MODEL_INVALID );
+	}
+}
+
+
+/*
 void CharacterSave::Think( )
 {
-	if( gpGlobals->curtime - m_TimeLastSave > 10.0f )
+	if( ( m_flLastSaveTime ) && ( gpGlobals->curtime - m_flLastSaveTime > 10.0f ) )
 	{
 		for ( int i = 1; i <= gpGlobals->maxClients; i++ )
 		{
 			CMSS_Player *pPlayer = (CMSS_Player *)UTIL_PlayerByIndex( i );
 
 			if ( pPlayer && pPlayer->IsReadyToPlay( ) )
-				pPlayer->SaveChar( );
+				pPlayer->SaveChar();
 		}
 
-		m_TimeLastSave = gpGlobals->curtime;
+		m_flLastSaveTime = gpGlobals->curtime;
 	}
 }
+*/
 
 void CharacterSave::GetSaveFileNameForPlayer( CMSS_Player *pPlayer, int slot, char filePath[MAX_PATH] )
 {
@@ -210,7 +274,7 @@ void CharacterSave::GetSaveFileNameForPlayer( CMSS_Player *pPlayer, int slot, ch
 	while( strchr( convertedSteamID, ':' ) )
 		strchr( convertedSteamID, ':' )[0] = '_';
 
-	Q_strncpy( filePath, UTIL_VarArgs("%s/%s_%i.char", CharacterSave::m_SavePath, convertedSteamID, slot ), MAX_PATH );
+	Q_strncpy( filePath, UTIL_VarArgs("%s/%s_%i.char", CharacterSave::m_pszSavePath, convertedSteamID, slot ), MAX_PATH );
 }
 
 int MSSaveProperty::offsetTable[] = { 
