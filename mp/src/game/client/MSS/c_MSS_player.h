@@ -113,7 +113,10 @@ public:
 	unsigned int	m_nRace;
 	unsigned int	m_nTotalExp;
 
-	int		m_nUnarmed;			// BOXBOX these are the experience totals (0-100,000)
+//	int		m_nWeaponExp[ MAX_WEAPON_SKILLS ];		// BOXBOX these are the experience totals (0-100,000)
+	int		m_nWeaponSkills[ MAX_WEAPON_SKILLS ];	// BOXBOX and these are the levels(1-10)
+
+	int		m_nUnarmed;			
 	int		m_nOneHandPiercing;
 	int		m_nOneHandSlashing;
 	int		m_nOneHandBashing;
@@ -123,7 +126,6 @@ public:
 	int		m_nArchery;
 	int		m_nThrowingWeapons;
 
-	int		m_nWeaponSkills[ MAX_WEAPON_SKILLS ];	// BOXBOX and these are the levels(1-10)
 
 	void	TabulateStats( void ); // BOXBOX Here is where we calculate all the player stats that we don't need to save in the character files
 

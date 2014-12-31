@@ -83,7 +83,7 @@ public:
 */
 protected:
 
-	vgui::Label		*m_pTitleLabel;
+//	vgui::Label		*m_pTitleLabel;
 	vgui::Label		*m_pSlot1Label;
 	vgui::Label		*m_pSlot2Label;
 	vgui::Label		*m_pSlot3Label;

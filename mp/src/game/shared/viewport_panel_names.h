@@ -23,10 +23,10 @@
 #define PANEL_CHARSELECT		"charselect"
 #define PANEL_CHARCREATE		"charcreate"
 
-#define PANEL_MAINMENU			"mainmenu"
-#define PANEL_PLAYERSTATS		"playerstats"
-#define PANEL_INVENTORY			"inventory"
-
+//#define PANEL_MAINMENU			"mainmenu"	// BOXBOX The main menu will now consist of a series of panels
+#define PANEL_STATSMENU			"statsmenu"		// PAGE 1-2 of the main menu
+#define PANEL_INVENTORYMENU		"inventorymenu"	// PAGE 3-4
+#define PANEL_POWERUPMENU		"powerupmenu"	// PAGE 5-6
 
 //#define PANEL_OVERVIEW		"overview"	// BOXBOX TODO replace this with a PANEL_MAP?
 //#define PANEL_CLASS			"class"

@@ -1,6 +1,6 @@
 
-#ifndef MSSMAINMENU_H
-#define MSSMAINMENU_H
+#ifndef MSSSTATSMENU_H
+#define MSSSTATSMENU_H
 #ifdef _WIN32
 #pragma once
 #endif
@@ -9,30 +9,19 @@
 #include <vgui_controls/Button.h>
 //#include <vgui_controls/HTML.h>
 
-#include "MSSStatsMenu.h"
-
 #include <game/client/iviewport.h>
 #include "shareddefs.h"
 
-/*namespace vgui
-{
-	class TextEntry;
-}
-*/
-/*
-class CMSMainMenu : public vgui::Frame, public IViewPortPanel
+class CMSStatsMenu : public vgui::Frame, public IViewPortPanel
 {
 private:
-	DECLARE_CLASS_SIMPLE( CMSMainMenu, vgui::Frame );
-
-//	Color					 m_bgColor;
-//	Color					 m_borderColor;
+	DECLARE_CLASS_SIMPLE( CMSStatsMenu, vgui::Frame );
 
 public:
-	CMSMainMenu(IViewPort *pViewPort);
-	virtual ~CMSMainMenu();
+	CMSStatsMenu(IViewPort *pViewPort);
+	virtual ~CMSStatsMenu();
 
-	virtual const char *GetName( void ) { return PANEL_MAINMENU; }
+	virtual const char *GetName( void ) { return PANEL_STATSMENU; }
 	virtual void SetData(KeyValues *data) { return; }
 //	virtual void SetData( int type, const char *title, const char *message, const char *command);
 	virtual void Reset();
@@ -48,11 +37,6 @@ public:
   	virtual bool IsVisible() { return BaseClass::IsVisible(); }
   	virtual void SetParent( vgui::VPANEL parent ) { BaseClass::SetParent( parent ); }
 
-//	virtual void ShowFile( const char *filename);
-//	virtual void ShowText( const char *text);
-//	virtual void ShowURL( const char *URL);
-//	virtual void ShowIndex( const char *entry);
-
 	virtual void ApplySchemeSettings( vgui::IScheme *pScheme );
 
 protected:	
@@ -60,18 +44,18 @@ protected:
 	virtual void OnCommand( const char *command);
 
 	void PlayPageTurnSound( void );
-	void HideAllChildControls( void );
+//	void HideAllChildControls( void );
 
 	IViewPort	*m_pViewPort;
-	int m_nCurPage; // BOXBOX what page are we on now (1-2, 3-4, etc)
+//	int m_nCurPage; // BOXBOX what page are we on now (1-2, 3-4, etc)
 
-	vgui::Label			*m_pLeftPageNumLabel;
-	vgui::Label			*m_pRightPageNumLabel;
+//	vgui::Label			*m_pLeftPageNumLabel;
+//	vgui::Label			*m_pRightPageNumLabel;
 
-	vgui::Label			*m_pLeftPageTitleLabel;
+//	vgui::Label			*m_pLeftPageTitleLabel;
 	vgui::Label			*m_pRightPageTitleLabel;
 
-	vgui::Label			*m_pSexLabel;
+	vgui::Label			*m_pGenderLabel;
 	vgui::Label			*m_pRaceLabel;
 	vgui::Label			*m_pTotalExpText;
 	vgui::Label			*m_pTotalExpLabel;
@@ -88,6 +72,6 @@ protected:
 
 
 };
-*/
 
-#endif // MSSMAINMENU_H
+
+#endif // MSSSTATSMENU_H

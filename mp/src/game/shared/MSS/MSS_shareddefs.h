@@ -25,7 +25,6 @@ enum MSSGenderIndex_t
 	MSS_GENDER_MALE,
 	MSS_GENDER_FEMALE,
 };
-#define GENDER_NONE		GENDER_INVALID
 
 enum MSSRaceIndex_t
 {
@@ -58,9 +57,8 @@ enum MSSWeaponType_t
 	WEAPONTYPE_TWOHANDSLASHING,	// Two handed slashing weapons like greatswords/greataxes
 	WEAPONTYPE_TWOHANDBASHING,	// Two handed bashing weapons like warhammers/morning stars
 	WEAPONTYPE_ARCHERY,
+	WEAPONTYPE_THROWN,			// BOXBOX when a player throws a weapon, any weapon, this exp increases
 };
-
-#define WEAPONTYPE_THROWN	8 // BOXBOX when a player throws a weapon, any weapon, this exp increases
 
 
 enum MSSWeaponSkillLevels_t
@@ -92,7 +90,13 @@ enum MSSWeaponSkillLevels_t
 #define EXP_LUMINARY	100000	
 
 
-
+enum MSSMenuPages_t
+{
+	MENUPAGE_INVALID,		// 0
+	MENUPAGE_STATS,
+	MENUPAGE_INVENTORY,
+	MENUPAGE_POWERUP,
+};
 
 
 

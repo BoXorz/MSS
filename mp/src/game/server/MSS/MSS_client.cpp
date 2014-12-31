@@ -84,8 +84,11 @@ void FinishClientPutInServer( CMSS_Player *pPlayer )
 		pPlayer->m_bJustJoining = false; // BOXBOX fingers crossed, this should prevent all this from happening at map change
 	}
 
+//	pPlayer->ShowViewPortPanel( PANEL_MAINMENU, false ); // BOXBOX TODO why is this on by default?
 
-	pPlayer->ShowViewPortPanel( PANEL_MAINMENU, false ); // BOXBOX TODO why is this on by default?
+	pPlayer->ShowViewPortPanel( PANEL_STATSMENU, false ); // BOXBOX TODO why is this on by default?
+	pPlayer->ShowViewPortPanel( PANEL_INVENTORYMENU, false ); // BOXBOX TODO why is this on by default?
+	pPlayer->ShowViewPortPanel( PANEL_POWERUPMENU, false ); // BOXBOX TODO why is this on by default?
 
 
 
@@ -150,6 +153,11 @@ void ClientGamePrecache( void ) // BOXBOX TODO redo all this
 	CBaseEntity::PrecacheModel( "models/gibs/agibs.mdl" );
 	CBaseEntity::PrecacheModel ("models/weapons/v_hands.mdl");
 
+	CBaseEntity::PrecacheScriptSound( "Music.Intro" );
+	CBaseEntity::PrecacheScriptSound( "MenuBook.Open" );
+	CBaseEntity::PrecacheScriptSound( "MenuBook.Close" );
+
+/*
 	CBaseEntity::PrecacheScriptSound( "HUDQuickInfo.LowAmmo" );
 	CBaseEntity::PrecacheScriptSound( "HUDQuickInfo.LowHealth" );
 
@@ -161,6 +169,7 @@ void ClientGamePrecache( void ) // BOXBOX TODO redo all this
 	
 	CBaseEntity::PrecacheScriptSound( "Geiger.BeepHigh" );
 	CBaseEntity::PrecacheScriptSound( "Geiger.BeepLow" );
+*/
 }
 
 

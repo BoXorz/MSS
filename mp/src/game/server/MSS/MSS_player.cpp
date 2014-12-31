@@ -27,6 +27,7 @@
 #include <filesystem.h> // BOXBOX added for deleting character files ( see ClientCommand() )
 
 extern const char *pszPlayerModels[];
+extern const char *pszSkillNames[];
 
 extern CBaseEntity	*g_pLastSpawn;
 
@@ -58,16 +59,17 @@ IMPLEMENT_SERVERCLASS_ST(CMSS_Player, DT_MSS_Player)
 	SendPropInt( SENDINFO( m_nGender ), 2 ), // BOXBOX need 2 bits here
 	SendPropInt( SENDINFO( m_nRace ), 3 ), // BOXBOXBOX remember, only sending 3 bits limits races to 4 (0-3) so if we ever add more races than 4, more bit(s) will be needed!
 	SendPropInt( SENDINFO( m_nTotalExp ), 21 ), // BOXBOX need 21 bits here because total exp. maxes out at 1 million
+//	SendPropArray( SendPropInt( SENDINFO_ARRAY( m_nWeaponExp ) ), m_nWeaponExp ),
 
-	SendPropInt( SENDINFO( m_nUnarmed ), 15 ), // BOXBOX weapon skills need 15 bits because they max out at 100,000 hits!
-	SendPropInt( SENDINFO( m_nOneHandPiercing ), 15 ),
-	SendPropInt( SENDINFO( m_nOneHandSlashing ), 15 ),
-	SendPropInt( SENDINFO( m_nOneHandBashing ), 15 ),
-	SendPropInt( SENDINFO( m_nTwoHandPiercing ), 15 ),
-	SendPropInt( SENDINFO( m_nTwoHandSlashing ), 15 ),
-	SendPropInt( SENDINFO( m_nTwoHandBashing ), 15 ),
-	SendPropInt( SENDINFO( m_nArchery ), 15 ),
-	SendPropInt( SENDINFO( m_nThrowingWeapons ), 15 ),
+	SendPropInt( SENDINFO( m_nUnarmed ), 18 ), // BOXBOX weapon skills need 18 bits because they max out at 100,000 hits!
+	SendPropInt( SENDINFO( m_nOneHandPiercing ), 18 ),
+	SendPropInt( SENDINFO( m_nOneHandSlashing ), 18 ),
+	SendPropInt( SENDINFO( m_nOneHandBashing ), 18 ),
+	SendPropInt( SENDINFO( m_nTwoHandPiercing ), 18 ),
+	SendPropInt( SENDINFO( m_nTwoHandSlashing ), 18 ),
+	SendPropInt( SENDINFO( m_nTwoHandBashing ), 18 ),
+	SendPropInt( SENDINFO( m_nArchery ), 18 ),
+	SendPropInt( SENDINFO( m_nThrowingWeapons ), 18 ),
 
 	//SendPropArray3( SENDINFO_ARRAY3( m_PreloadedCharInfo ), SendPropInt( SENDINFO_ARRAY(m_PreloadedCharInfo), 0, SendProxy_Preload ) ),
 	//SendPropArray3( SENDINFO_ARRAY3( m_PreloadedCharInfo ), SendPropInt( SENDINFO_ARRAY(m_PreloadedCharInfo), 0, SendProxy_Preload ) ),
@@ -125,6 +127,9 @@ CMSS_Player::CMSS_Player() : m_PlayerAnimState( this )
 	m_bHasCharInSlot.Set( CHARSLOT_TWO, false );
 	m_bHasCharInSlot.Set( CHARSLOT_THREE, false );
 	m_flLastSaveTime = 0.0f;
+
+	m_bIsMainMenuOpen = false;
+	m_nCurMenuPage = MENUPAGE_STATS;
 }
 
 CMSS_Player::~CMSS_Player( void )
@@ -1213,7 +1218,7 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 //			Warning("Received command %s %s %i %i\n", args[0], args[1], atoi( args[2] ), atoi( args[3] ) );
 
 			//Check for open slot
-			int openSlot = -1;
+			int openSlot = CHARSLOT_INVALID;
 
 			for( int i = 1; i <= MAX_CHAR_SLOTS; i++ )
 			{
@@ -1237,7 +1242,18 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 				m_nRace = atoi( args[3] );
 
 				m_nTotalExp = 0;
-
+/*
+				m_nWeaponExp.Set( WEAPONTYPE_UNARMED, 0 );
+				m_nWeaponExp.Set( WEAPONTYPE_ONEHANDPIERCING, 0 );
+				m_nWeaponExp.Set( WEAPONTYPE_ONEHANDSLASHING, 0 );
+				m_nWeaponExp.Set( WEAPONTYPE_ONEHANDBASHING, 0 );
+				m_nWeaponExp.Set( WEAPONTYPE_TWOHANDPIERCING, 0 );
+				m_nWeaponExp.Set( WEAPONTYPE_TWOHANDSLASHING, 0 );
+				m_nWeaponExp.Set( WEAPONTYPE_TWOHANDBASHING, 0 );
+				m_nWeaponExp.Set( WEAPONTYPE_ARCHERY, 0 );
+				m_nWeaponExp.Set( WEAPONTYPE_THROWN, 0 );
+*/
+				
 				m_nUnarmed = 0;
 				m_nOneHandPiercing = 0;
 				m_nOneHandSlashing = 0;
@@ -1303,7 +1319,51 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 	{
 		if( args.ArgC() == 1 )
 		{
-			ShowViewPortPanel( PANEL_MAINMENU );
+			if( m_bIsMainMenuOpen )
+			{
+				ShowViewPortPanel( PANEL_STATSMENU, false );
+				ShowViewPortPanel( PANEL_INVENTORYMENU, false );
+				ShowViewPortPanel( PANEL_POWERUPMENU, false );
+				m_bIsMainMenuOpen = false;
+				EmitSound( "MenuBook.Close" );
+			}
+			else
+			{
+				if( m_nCurMenuPage == MENUPAGE_STATS )
+				{
+					ShowViewPortPanel( PANEL_STATSMENU, true );
+					ShowViewPortPanel( PANEL_INVENTORYMENU, false );
+					ShowViewPortPanel( PANEL_POWERUPMENU, false );
+				}
+				else if( m_nCurMenuPage == MENUPAGE_INVENTORY )
+				{
+					ShowViewPortPanel( PANEL_STATSMENU, false );
+					ShowViewPortPanel( PANEL_INVENTORYMENU, true );
+					ShowViewPortPanel( PANEL_POWERUPMENU, false );
+				}
+				else if( m_nCurMenuPage == MENUPAGE_POWERUP )
+				{
+					ShowViewPortPanel( PANEL_STATSMENU, false );
+					ShowViewPortPanel( PANEL_INVENTORYMENU, false );
+					ShowViewPortPanel( PANEL_POWERUPMENU, true );
+				}
+
+				EmitSound( "MenuBook.Open" );
+				m_bIsMainMenuOpen = true;
+			}
+
+			return true;
+		}
+	}
+	else if ( FStrEq( args[0], "turnpage" ) )
+	{
+		if ( args.ArgC() == 2 )
+		{
+			int page = atoi( args[1] );
+			page = min( page, ( MENUPAGE_POWERUP ) );
+			page = max( page, MENUPAGE_STATS );
+
+			m_nCurMenuPage = page;
 			return true;
 		}
 	}
@@ -1986,6 +2046,9 @@ void CMSS_Player::SetNumChars( void )
 
 void CMSS_Player::IncrementWeaponSkill( int skill )
 {
+//	m_nWeaponExp.Set( skill, m_nWeaponExp.Get( skill ) + 1 );
+
+
 	switch( skill )
 	{
 		case WEAPONTYPE_UNARMED:
@@ -2029,10 +2092,73 @@ void CMSS_Player::IncrementWeaponSkill( int skill )
 				break;
 			}
 	}
+
 }
 
+void CMSS_Player::CheatSetWeaponExp( int skill, int amt )
+{
+//	m_nWeaponExp.Set( skill, amt );
 
-void CC_BumpSkills( void )
+	switch( skill )
+	{
+		case WEAPONTYPE_UNARMED:
+			{
+				m_nUnarmed = amt;
+				Warning("%s IS NOW: %i\n", pszSkillNames[ skill ], m_nUnarmed.Get() );
+				break;
+			}
+		case WEAPONTYPE_ONEHANDPIERCING:
+			{
+				m_nOneHandPiercing = amt;
+				Warning("%s IS NOW: %i\n", pszSkillNames[ skill ], m_nOneHandPiercing.Get() );
+				break;
+			}
+		case WEAPONTYPE_ONEHANDSLASHING:
+			{
+				m_nOneHandSlashing = amt;
+				Warning("%s IS NOW: %i\n", pszSkillNames[ skill ], m_nOneHandSlashing.Get() );
+				break;
+			}
+		case WEAPONTYPE_ONEHANDBASHING:
+			{
+				m_nOneHandBashing = amt;
+				Warning("%s IS NOW: %i\n", pszSkillNames[ skill ], m_nOneHandBashing.Get() );
+				break;
+			}
+		case WEAPONTYPE_TWOHANDPIERCING:
+			{
+				m_nTwoHandPiercing = amt;
+				Warning("%s IS NOW: %i\n", pszSkillNames[ skill ], m_nTwoHandPiercing.Get() );
+				break;
+			}
+		case WEAPONTYPE_TWOHANDSLASHING:
+			{
+				m_nTwoHandSlashing = amt;
+				Warning("%s IS NOW: %i\n", pszSkillNames[ skill ], m_nTwoHandSlashing.Get() );
+				break;
+			}
+		case WEAPONTYPE_TWOHANDBASHING:
+			{
+				m_nTwoHandBashing = amt;
+				Warning("%s IS NOW: %i\n", pszSkillNames[ skill ], m_nTwoHandBashing.Get() );
+				break;
+			}
+		case WEAPONTYPE_ARCHERY:
+			{
+				m_nArchery = amt;
+				Warning("%s IS NOW: %i\n", pszSkillNames[ skill ], m_nArchery.Get() );
+				break;
+			}
+		case WEAPONTYPE_THROWN:
+			{
+				m_nThrowingWeapons = amt;
+				Warning("%s IS NOW: %i\n", pszSkillNames[ skill ], m_nThrowingWeapons.Get() );
+				break;
+			}
+	}
+}
+
+void CC_SetExp( const CCommand& args ) // BOXBOX arg1 is the skill to set, arg2 is the value to set it to
 {
 	CBasePlayer *pPlayer = UTIL_GetCommandClient();
 	if ( !pPlayer )
@@ -2042,11 +2168,25 @@ void CC_BumpSkills( void )
 	if ( !pMSSPlayer )
 		return;
 
-	pMSSPlayer->CheatAddToWeaponSkill( 70000 );
+		if ( args.ArgC() == 3 )
+		{
+			int skill = atoi( args[1] );
+			int amt = atoi( args[2] );
+
+			skill = Max(0, skill );
+			skill = Min(8, skill );
+
+			amt = Max(0, amt );
+			amt = Min(100000, amt );
+
+			pMSSPlayer->CheatSetWeaponExp( skill, amt );
+		}
+
+
 
 }
 
-static ConCommand mss_bumpskills("mss_bumpskills", CC_BumpSkills, "Bump Weapon skills for dev testing.", FCVAR_CHEAT);
+static ConCommand setexp("setexp", CC_SetExp, "Bump a weapon skill for dev testing.", FCVAR_CHEAT);
 
 
 

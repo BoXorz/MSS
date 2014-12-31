@@ -30,10 +30,10 @@
 	{
 		"ControlName"		"Label"
 		"fieldName"		"TitleText"
-		"xpos"		"c-170"
-		"ypos"		"c-170"
+		"xpos"		"c-180"
+		"ypos"		"70"
 		"zpos"		"1"
-		"wide"		"340"
+		"wide"		"360"
 		"tall"		"28"
 		"autoResize"		"0"
 		"pinCorner"		"0"
@@ -43,6 +43,7 @@
 		"disabledfgcolor2_override"	"InkWellLight"
 		"textAlignment"		"center"
 		"labelText"		"#MSS_CHARCREATE"
+		"font"			"HeaderFont34"		
 	}
 	"NameText"
 	{

@@ -168,7 +168,11 @@ public:
 	void AddToTotalExp( int exp ) { m_nTotalExp += exp; }
 	void IncrementWeaponSkill( int skill );
 
-	void CheatAddToWeaponSkill( int amt ) { m_nOneHandSlashing += amt; 	Warning("ONE HAND SLASHING IS NOW: %i\n", m_nOneHandSlashing ); }
+	void CheatSetWeaponExp( int skill, int amt );
+
+	bool	m_bIsMainMenuOpen;
+	int		m_nCurMenuPage; // BOXBOX the last open page of the main menu
+
 protected:
 //	CNetworkVar( int, m_nNumChars ); // BOXBOX obsoleted
 
@@ -177,7 +181,10 @@ protected:
 	CNetworkVar( unsigned int, m_nRace );
 	CNetworkVar( unsigned int, m_nTotalExp );
 
-	CNetworkVar( int, m_nUnarmed );		// BOXBOX these are the experience totals (0-100,000)
+//	CNetworkArray( int, m_nWeaponExp, MAX_WEAPON_SKILLS );	// BOXBOX these are the experience totals (0-100,000)
+	int		m_nWeaponSkills[ MAX_WEAPON_SKILLS ];			// BOXBOX and these are the levels(1-10)
+
+	CNetworkVar( int, m_nUnarmed );		
 	CNetworkVar( int, m_nOneHandPiercing );
 	CNetworkVar( int, m_nOneHandSlashing );
 	CNetworkVar( int, m_nOneHandBashing );
@@ -187,7 +194,7 @@ protected:
 	CNetworkVar( int, m_nArchery );
 	CNetworkVar( int, m_nThrowingWeapons );
 
-	int		m_nWeaponSkills[ MAX_WEAPON_SKILLS ];	// BOXBOX and these are the levels(1-10)
+
 
 	void	TabulateStats( void ); // BOXBOX Here is where we calculate all the player stats that we don't need to save in the character files
 

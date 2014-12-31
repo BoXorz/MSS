@@ -32,7 +32,7 @@ extern INetworkStringTable *g_pStringTableInfoPanel;
 extern const char *pszGenderNames[];
 extern const char *pszRaceNames[];
 extern const char *pszSkillNames[];
-
+/*
 CMSMainMenu::CMSMainMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_MAINMENU )
 {
 	m_pViewPort = pViewPort;
@@ -148,43 +148,7 @@ void CMSMainMenu::Update( void )
 		m_pArcheryLabel->SetText( pszSkillNames[ pPlayer->m_nWeaponSkills[ WEAPONTYPE_ARCHERY ] ] );
 		m_pThrowWeaponLabel->SetText( pszSkillNames[ pPlayer->m_nWeaponSkills[ WEAPONTYPE_THROWN ] ] );
 
-/*
-//		char unarmed[16];
-		itoa( pPlayer->m_nUnarmed, buf, 10 );
-		m_pUnarmedLabel->SetText( buf );
 
-//		char onehandpiercing[8];
-		itoa( pPlayer->m_nOneHandPiercing, buf, 10 );
-		m_p1HPiercingLabel->SetText( buf );
-
-//		char onehandslashing[8];
-		itoa( pPlayer->m_nOneHandSlashing, buf, 10 );
-		m_p1HSlashingLabel->SetText( buf );
-
-//		char onehandbashing[8];
-		itoa( pPlayer->m_nOneHandBashing, buf, 10 );
-		m_p1HBashingLabel->SetText( buf );
-
-//		char twohandpiercing[8];
-		itoa( pPlayer->m_nTwoHandPiercing, buf, 10 );
-		m_p2HPiercingLabel->SetText( buf );
-
-//		char twohandslashing[8];
-		itoa( pPlayer->m_nTwoHandSlashing, buf, 10 );
-		m_p2HSlashingLabel->SetText( buf );
-
-//		char twohandbashing[8];
-		itoa( pPlayer->m_nTwoHandBashing, buf, 10 );
-		m_p2HBashingLabel->SetText( buf );
-
-//		char archery[8];
-		itoa( pPlayer->m_nArchery, buf, 10 );
-		m_pArcheryLabel->SetText( buf );
-
-//		char throwing[8];
-		itoa( pPlayer->m_nThrowingWeapons, buf, 10 );
-		m_pThrowWeaponLabel->SetText( buf );
-*/
 	}
 	else if( m_nCurPage == 3 )
 	{
@@ -258,4 +222,4 @@ void CMSMainMenu::ShowPanel( bool bShow )
 		SetVisible( true );
 	}
 }
-
+*/

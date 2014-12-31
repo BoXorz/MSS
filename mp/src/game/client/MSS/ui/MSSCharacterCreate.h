@@ -76,7 +76,7 @@ public:
 
 protected:
 
-	vgui::Label		*m_pTitleLabel;
+//	vgui::Label		*m_pTitleLabel;
 
 	int m_nSelectedGender;
 	int m_nSelectedRace;

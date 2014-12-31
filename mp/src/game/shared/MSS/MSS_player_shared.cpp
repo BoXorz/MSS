@@ -577,6 +577,7 @@ void CPlayerAnimState::GetOuterAbsVelocity( Vector& vel )
 // BOXBOX MSS STUFF
 ///////////////////////////////////////////////////////////////////////////////
 
+
 int nSkillExpTable[SKILL_NUM_LEVELS] = { EXP_NOVICE, EXP_AWKWARD, EXP_ABLE, EXP_ADEPT, EXP_SKILLED, EXP_JOURNEYMAN, EXP_EXPERT, EXP_MASTER, EXP_GRANDMASTER, EXP_LUMINARY }; 
 
 void CMSS_Player::TabulateStats( void )
@@ -588,6 +589,17 @@ void CMSS_Player::TabulateStats( void )
 
 	for( int t = 1; t < SKILL_NUM_LEVELS; t++ )
 	{
+
+/*
+#ifdef CLIENT_DLL
+			if( m_nWeaponExp[ s ] >= nSkillExpTable[t] )
+#else
+			if( m_nWeaponExp.Get( s ) >= nSkillExpTable[t] )
+#endif
+				m_nWeaponSkills[s]++;
+*/
+
+
 		if( m_nUnarmed >= nSkillExpTable[t] )
 			m_nWeaponSkills[WEAPONTYPE_UNARMED]++;
 		if( m_nOneHandPiercing >= nSkillExpTable[t] )
@@ -606,5 +618,7 @@ void CMSS_Player::TabulateStats( void )
 			m_nWeaponSkills[WEAPONTYPE_ARCHERY]++;
 		if( m_nThrowingWeapons >= nSkillExpTable[t] )
 			m_nWeaponSkills[WEAPONTYPE_THROWN]++;
+
 	}
+
 }

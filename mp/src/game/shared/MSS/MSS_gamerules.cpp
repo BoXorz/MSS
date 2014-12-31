@@ -881,7 +881,7 @@ void CMSSRules::Precache( void )
 {
 //	CBaseEntity::PrecacheScriptSound( "AlyxEmp.Charge" ); // BOXBOX commenting out
 
-	CBaseEntity::PrecacheScriptSound( "Music.Intro" ); // BOXBOX see if this works here
+//	CBaseEntity::PrecacheScriptSound( "Music.Intro" );
 }
 
 bool CMSSRules::ShouldCollide( int collisionGroup0, int collisionGroup1 ) // BOXBOX TODO change this? looks like players don't collide with weapons

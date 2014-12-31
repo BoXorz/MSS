@@ -30,10 +30,10 @@
 	{
 		"ControlName"		"Label"
 		"fieldName"		"TitleText"
-		"xpos"		"c-170"
+		"xpos"		"c-180"
 		"ypos"		"70"
 		"zpos"		"1"
-		"wide"		"340"
+		"wide"		"360"
 		"tall"		"28"
 		"autoResize"		"0"
 		"pinCorner"		"0"
@@ -43,6 +43,7 @@
 		"disabledfgcolor2_override"	"InkWellLight"
 		"textAlignment"		"center"
 		"labelText"		"#MSS_CHARSELECT"
+		"font"			"HeaderFont34"	
 	}	
 	"CharText1"
 	{
@@ -121,7 +122,7 @@
 //		"armedBgColor_override"	"Blank"
 		"labelText"		"#MSS_NOCHAR"
 		"textAlignment"		"center"
-		"command"		"choosechar 0"
+		"command"		"choosechar 1"
 		"Default"		"1"
 		"border"			"NoBorder"		
 	}
@@ -144,7 +145,7 @@
 //		"armedBgColor_override"	"Blank"
 		"labelText"		"#MSS_NOCHAR"
 		"textAlignment"		"center"
-		"command"		"choosechar 1"
+		"command"		"choosechar 2"
 		"Default"		"1"
 		"border"			"NoBorder"		
 	}
@@ -167,7 +168,7 @@
 //		"armedBgColor_override"	"Blank"
 		"labelText"		"#MSS_NOCHAR"
 		"textAlignment"		"center"
-		"command"		"choosechar 2"
+		"command"		"choosechar 3"
 		"Default"		"1"
 		"border"			"NoBorder"		
 	}
@@ -189,7 +190,7 @@
 //		"armedBgColor_override"	"Blank"
 		"labelText"		"#MSS_DELETECHAR"
 		"textAlignment"		"center"
-		"command"		"deletechar 0"
+		"command"		"deletechar 1"
 		"Default"		"1"
 		"border"			"NoBorder"		
 	}
@@ -211,7 +212,7 @@
 //		"armedBgColor_override"	"Blank"
 		"labelText"		"#MSS_DELETECHAR"
 		"textAlignment"		"center"
-		"command"		"deletechar 1"
+		"command"		"deletechar 2"
 		"Default"		"1"
 		"border"			"NoBorder"		
 	}
@@ -233,7 +234,7 @@
 //		"armedBgColor_override"	"Blank"
 		"labelText"		"#MSS_DELETECHAR"
 		"textAlignment"		"center"
-		"command"		"deletechar 2"
+		"command"		"deletechar 3"
 		"Default"		"1"
 		"border"			"NoBorder"		
 	}
@@ -424,7 +425,7 @@
 
 			"animation"
 			{
-				"sequence"		"run_all"
+				"sequence"		"idle01"
 				"pose_parameters"
 				{
 					"move_x" "1.0"
@@ -463,7 +464,7 @@
 
 			"animation"
 			{
-				"sequence"		"run_all"
+				"sequence"		"idle01"
 				"pose_parameters"
 				{
 					"move_x" "1.0"
@@ -502,7 +503,7 @@
 
 			"animation"
 			{
-				"sequence"		"run_all"
+				"sequence"		"idle01"
 				"pose_parameters"
 				{
 					"move_x" "1.0"

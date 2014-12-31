@@ -1,5 +1,5 @@
 
-"Music.Intro"
+"MenuMusic.Intro"
 {
 	"channel"	"CHAN_ITEM"
 	"volume"	"1"

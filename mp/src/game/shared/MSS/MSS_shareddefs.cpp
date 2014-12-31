@@ -32,6 +32,19 @@ const char *pszPlayerModels[] =
 
 const char *pszSkillNames[] =
 {
+	"#MSS_UNARMED",
+	"#MSS_ONEHANDPIERCING",
+	"#MSS_ONEHANDSLASHING",
+	"#MSS_ONEHANDBASHING",
+	"#MSS_TWOHANDPIERCING",
+	"#MSS_TWOHANDSLASHING",
+	"#MSS_TWOHANDBASHING",
+	"#MSS_ARCHERY",
+	"#MSS_THROWN"	
+};
+
+const char *pszSkillLevelNames[] =
+{
 	"#INVALID",
 	"#MSS_NOVICE",
 	"#MSS_AWKWARD",

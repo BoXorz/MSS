@@ -37,10 +37,10 @@ CMSCharCreateMenu::CMSCharCreateMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_
 	SetKeyBoardInputEnabled( true );
 	SetTitleBarVisible( false );
 
-	m_pTitleLabel	= new Label( this, "TitleText", "Title Text" );
+//	m_pTitleLabel	= new Label( this, "TitleText", "Title Text" );
 
-	m_nSelectedGender = -1;
-	m_nSelectedRace = -1;
+	m_nSelectedGender = MSS_GENDER_INVALID;
+	m_nSelectedRace = RACE_INVALID;
 }
 
 CMSCharCreateMenu::~CMSCharCreateMenu()
@@ -53,15 +53,15 @@ void CMSCharCreateMenu::ApplySchemeSettings( IScheme *pScheme ) // BOXBOX added 
 
 	LoadControlSettings("Resource/UI/MSCharacterCreate.res");
 
-	m_pTitleLabel->SetFont( pScheme->GetFont( "HeaderFont" ) );
-	m_pTitleLabel->SetFgColor( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
+//	m_pTitleLabel->SetFont( pScheme->GetFont( "HeaderFont" ) );
+//	m_pTitleLabel->SetFgColor( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
 
 }
 
 void CMSCharCreateMenu::Reset( )
 {
-	m_nSelectedGender = -1;
-	m_nSelectedRace = -1;
+	m_nSelectedGender = MSS_GENDER_INVALID;
+	m_nSelectedRace = RACE_INVALID;
 
 	Button *pButton = (Button *)FindChildByName( "ButtonMale" );
 	pButton->SetEnabled( true );

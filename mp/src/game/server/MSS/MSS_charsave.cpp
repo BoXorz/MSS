@@ -21,19 +21,19 @@ void CMSS_Player::GetCharFileFields( CUtlVector<MSSaveProperty> &allPlayerData )
 {
 	//allPlayerData.AddToTail( MSSaveProperty( "Version", 1.0f, NULL, NULL ) );
 	allPlayerData.AddToTail( MSSaveProperty( "Character Name",	m_szCharName,		m_szCharName.GetForModify( ) ) );
-	allPlayerData.AddToTail( MSSaveProperty( "Gender",			m_nGender.Get( ),	&m_nGender, m_nGender.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "Race",			m_nRace.Get( ),			&m_nRace, m_nRace.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "TotalExp",		m_nTotalExp.Get( ),		&m_nTotalExp, m_nTotalExp.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "Gender",			m_nGender.Get(),	&m_nGender, m_nGender.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "Race",			m_nRace.Get(),			&m_nRace, m_nRace.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "TotalExp",		m_nTotalExp.Get(),		&m_nTotalExp, m_nTotalExp.Static_Set ) );
 
-	allPlayerData.AddToTail( MSSaveProperty( "Unarmed",				m_nUnarmed.Get( ),		&m_nUnarmed, m_nUnarmed.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "OneHandPiercing",		m_nOneHandPiercing.Get( ),		&m_nOneHandPiercing, m_nOneHandPiercing.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "OneHandSlashing",		m_nOneHandSlashing.Get( ),		&m_nOneHandSlashing, m_nOneHandSlashing.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "OneHandBashing",		m_nOneHandBashing.Get( ),		&m_nOneHandBashing, m_nOneHandBashing.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "TwoHandPiercing",		m_nTwoHandPiercing.Get( ),		&m_nTwoHandPiercing, m_nTwoHandPiercing.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "TwoHandSlashing",		m_nTwoHandSlashing.Get( ),		&m_nTwoHandSlashing, m_nTwoHandSlashing.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "TwoHandBashing",		m_nTwoHandBashing.Get( ),		&m_nTwoHandBashing, m_nTwoHandBashing.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "Archery",				m_nArchery.Get( ),				&m_nArchery, m_nArchery.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "ThrowingWeapons",		m_nThrowingWeapons.Get( ),		&m_nThrowingWeapons, m_nThrowingWeapons.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "Unarmed",				m_nUnarmed.Get(),			&m_nUnarmed, m_nUnarmed.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "OneHandPiercing",		m_nOneHandPiercing.Get(),	&m_nOneHandPiercing, m_nOneHandPiercing.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "OneHandSlashing",		m_nOneHandSlashing.Get(),	&m_nOneHandSlashing, m_nOneHandSlashing.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "OneHandBashing",		m_nOneHandBashing.Get(),			&m_nOneHandBashing, m_nOneHandBashing.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "TwoHandPiercing",		m_nTwoHandPiercing.Get(),			&m_nTwoHandPiercing, m_nTwoHandPiercing.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "TwoHandSlashing",		m_nTwoHandSlashing.Get(),			&m_nTwoHandSlashing, m_nTwoHandSlashing.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "TwoHandBashing",		m_nTwoHandBashing.Get(),			&m_nTwoHandBashing, m_nTwoHandBashing.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "Archery",				m_nArchery.Get(),			&m_nArchery, m_nArchery.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "ThrowingWeapons",		m_nThrowingWeapons.Get(),			&m_nThrowingWeapons, m_nThrowingWeapons.Static_Set ) );
 
 
 

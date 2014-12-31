@@ -30,7 +30,7 @@ CMSCharSelectMenu::CMSCharSelectMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_
 	SetProportional( true );
 	SetTitleBarVisible( false );
 
-	m_pTitleLabel	= new Label( this, "TitleText", "Title Text" );
+//	m_pTitleLabel	= new Label( this, "TitleText", "Title Text" );
 	m_pSlot1Label	= new Label( this, "CharText1", "" );
 	m_pSlot2Label	= new Label( this, "CharText2", "" );
 	m_pSlot3Label	= new Label( this, "CharText3", "" );
@@ -59,8 +59,8 @@ void CMSCharSelectMenu::ApplySchemeSettings( IScheme *pScheme )
 
 	LoadControlSettings("Resource/UI/MSCharacterSelect.res");
 
-	m_pTitleLabel->SetFont( pScheme->GetFont( "HeaderFont" ) );
-	m_pTitleLabel->SetFgColor( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
+//	m_pTitleLabel->SetFont( pScheme->GetFont( "HeaderFont" ) );
+//	m_pTitleLabel->SetFgColor( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
 
 	m_pSlot1Label->SetFont( pScheme->GetFont( "WritingFont" ) );
 	m_pSlot1Label->SetFgColor( pScheme->GetColor( "RedInk", Color(0, 0, 0, 0) ) );
@@ -82,7 +82,13 @@ void CMSCharSelectMenu::ShowPanel(bool bShow)
 	if ( BaseClass::IsVisible() == bShow )
 		return;
 
-	IViewPortPanel *panel = gViewPortInterface->FindPanelByName( PANEL_MAINMENU ); // BOXBOX don't open if main menu is open
+	IViewPortPanel *panel = gViewPortInterface->FindPanelByName( PANEL_STATSMENU );
+	if( panel->IsVisible() )
+		return;
+	panel = gViewPortInterface->FindPanelByName( PANEL_INVENTORYMENU );
+	if( panel->IsVisible() )
+		return;
+	panel = gViewPortInterface->FindPanelByName( PANEL_POWERUPMENU );
 	if( panel->IsVisible() )
 		return;
 

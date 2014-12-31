@@ -38,6 +38,7 @@ IMPLEMENT_CLIENTCLASS_DT(C_MSS_Player, DT_MSS_Player, CMSS_Player)
 	RecvPropInt( RECVINFO( m_nGender ) ),
 	RecvPropInt( RECVINFO( m_nRace ) ),
 	RecvPropInt( RECVINFO( m_nTotalExp ) ),
+//	RecvPropArray( RecvPropInt( RECVINFO( m_nWeaponExp[0] ) ), m_nWeaponExp ),
 
 	RecvPropInt( RECVINFO( m_nUnarmed ) ),
 	RecvPropInt( RECVINFO( m_nOneHandPiercing ) ),
@@ -90,8 +91,11 @@ C_MSS_Player::C_MSS_Player() : m_PlayerAnimState( this ), m_iv_angEyeAngles( "C_
 
 	m_pFlashlightBeam = NULL;
 
+// BOXBOX MSS Stuff
 	m_szCharName[0] = 0;
 	m_pszCharName = &m_szCharName[0];
+
+
 }
 
 C_MSS_Player::~C_MSS_Player( void )
