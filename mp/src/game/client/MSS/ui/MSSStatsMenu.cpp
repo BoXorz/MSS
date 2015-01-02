@@ -33,6 +33,7 @@ extern const char *pszGenderNames[];
 extern const char *pszRaceNames[];
 extern const char *pszSkillNames[];
 extern const char *pszSkillLevelNames[];
+extern const char *pszPlayerModels[];
 
 CMSStatsMenu::CMSStatsMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_STATSMENU )
 {
@@ -69,7 +70,21 @@ CMSStatsMenu::CMSStatsMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_STATSMENU 
 	m_pArcheryLabel		= new Label( this, "ArcheryLabel", "0" );
 	m_pThrowWeaponLabel	= new Label( this, "ThrownWeaponsLabel", "0" );
 
-//	m_nCurPage = 1;
+	m_pMightLabel		= new Label( this, "MightLabel", "0" );
+	m_pAgilityLabel		= new Label( this, "AgilityLabel", "0" );
+	m_pStaminaLabel		= new Label( this, "StaminaLabel", "0" );
+	m_pIntellectLabel	= new Label( this, "IntellectLabel", "0" );
+	m_pWitLabel			= new Label( this, "WitLabel", "0" );
+	m_pFortitudeLabel	= new Label( this, "FortitudeLabel", "0" );
+	m_pLuckLabel		= new Label( this, "LuckLabel", "0" );
+
+	m_pAlchemyLabel		= new Label( this, "AlchemyLabel", "0" );
+	m_pClothworkLabel	= new Label( this, "ClothworkLabel", "0" );
+	m_pWoodworkLabel	= new Label( this, "WoodworkLabel", "0" );
+	m_pStoneworkLabel	= new Label( this, "StoneworkLabel", "0" );
+	m_pMetalworkLabel	= new Label( this, "MetalworkLabel", "0" );
+
+	m_pCharModel = new CModelPanel( this, "charmodel" );
 }
 
 //-----------------------------------------------------------------------------
@@ -120,15 +135,7 @@ void CMSStatsMenu::Update( void )
 
 	pPlayer->TabulateStats();
 
-//	HideAllChildControls();
-
-//	m_pLeftPageTitleLabel->SetText( "#MSS_PLAYERSTATS" );
 	m_pRightPageTitleLabel->SetText( pPlayer->m_pszCharName );
-
-	m_pGenderLabel->SetVisible( true );
-	m_pRaceLabel->SetVisible( true );
-	m_pTotalExpText->SetVisible( true );
-	m_pTotalExpLabel->SetVisible( true );
 
 	m_pGenderLabel->SetText( pszGenderNames[ pPlayer->m_nGender ] );
 	m_pRaceLabel->SetText( pszRaceNames[ pPlayer->m_nRace ] );
@@ -146,6 +153,30 @@ void CMSStatsMenu::Update( void )
 	m_p2HBashingLabel->SetText( pszSkillLevelNames[ pPlayer->m_nWeaponSkills[ WEAPONTYPE_TWOHANDBASHING ] ] );
 	m_pArcheryLabel->SetText( pszSkillLevelNames[ pPlayer->m_nWeaponSkills[ WEAPONTYPE_ARCHERY ] ] );
 	m_pThrowWeaponLabel->SetText( pszSkillLevelNames[ pPlayer->m_nWeaponSkills[ WEAPONTYPE_THROWN ] ] );
+
+	itoa( pPlayer->m_nMight, buf, 10 );
+	m_pMightLabel->SetText( buf );
+	itoa( pPlayer->m_nAgility, buf, 10 );
+	m_pAgilityLabel->SetText( buf );
+	itoa( pPlayer->m_nStamina, buf, 10 );
+	m_pStaminaLabel->SetText( buf );
+	itoa( pPlayer->m_nIntellect, buf, 10 );
+	m_pIntellectLabel->SetText( buf );
+	itoa( pPlayer->m_nWit, buf, 10 );
+	m_pWitLabel->SetText( buf );
+	itoa( pPlayer->m_nFortitude, buf, 10 );
+	m_pFortitudeLabel->SetText( buf );
+	itoa( pPlayer->m_nLuck, buf, 10 );
+	m_pLuckLabel->SetText( buf );
+
+	m_pAlchemyLabel->SetText( pszSkillLevelNames[ pPlayer->m_nCraftSkills[ CRAFT_ALCHEMY ] ] );
+	m_pClothworkLabel->SetText( pszSkillLevelNames[ pPlayer->m_nCraftSkills[ CRAFT_CLOTHWORK ] ] );
+	m_pWoodworkLabel->SetText( pszSkillLevelNames[ pPlayer->m_nCraftSkills[ CRAFT_WOODWORK ] ] );
+	m_pStoneworkLabel->SetText( pszSkillLevelNames[ pPlayer->m_nCraftSkills[ CRAFT_STONEWORK ] ] );
+	m_pMetalworkLabel->SetText( pszSkillLevelNames[ pPlayer->m_nCraftSkills[ CRAFT_METALWORK ] ] );
+
+	m_pCharModel->SwapModel( pszPlayerModels[ pPlayer->m_nPlayerModelIndex ], NULL ); 
+	m_pCharModel->MoveToFront();
 }
 
 /*

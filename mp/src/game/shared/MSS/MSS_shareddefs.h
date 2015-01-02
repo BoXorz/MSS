@@ -34,7 +34,7 @@ enum MSSRaceIndex_t
 	RACE_ELF,
 };
 
-enum MSSModelIndex_t
+enum MSSPlayerModelIndex_t
 {
 	MODEL_INVALID,
 	MODEL_HUMANMALE,
@@ -45,7 +45,17 @@ enum MSSModelIndex_t
 	MODEL_ELFFEMALE,
 };
 
-#define	MAX_WEAPON_SKILLS	9
+enum MSSCoreStats_t
+{
+	STAT_INVALID,
+	STAT_MIGHT,		// Physical Strength
+	STAT_AGILITY,	// Physical Speed
+	STAT_STAMINA,	// Physical Endurance
+	STAT_INTELLECT,	// Mental Strength
+	STAT_WIT,		// Mental Speed
+	STAT_FORTITUDE,	// Mental Endurance
+	STAT_LUCK,
+};
 
 enum MSSWeaponType_t
 {
@@ -59,7 +69,7 @@ enum MSSWeaponType_t
 	WEAPONTYPE_ARCHERY,
 	WEAPONTYPE_THROWN,			// BOXBOX when a player throws a weapon, any weapon, this exp increases
 };
-
+#define	MAX_WEAPON_SKILLS	9
 
 enum MSSWeaponSkillLevels_t
 {
@@ -77,7 +87,7 @@ enum MSSWeaponSkillLevels_t
 };
 #define SKILL_NUM_LEVELS	10
 
-// BOXBOX how much exp is required for each skill level
+// BOXBOX how much exp is required for each SKILL level
 #define	EXP_NOVICE		0
 #define	EXP_AWKWARD		100
 #define	EXP_ABLE		500
@@ -89,6 +99,28 @@ enum MSSWeaponSkillLevels_t
 #define	EXP_GRANDMASTER	70000
 #define EXP_LUMINARY	100000	
 
+// BOXBOX how much exp is required for each CRAFT level
+#define	CRAFT_NOVICE		0
+#define	CRAFT_AWKWARD		10
+#define	CRAFT_ABLE			50
+#define	CRAFT_ADEPT			250
+#define	CRAFT_SKILLED		900
+#define	CRAFT_JOURNEYMAN	2100
+#define	CRAFT_EXPERT		3500
+#define	CRAFT_MASTER		5000
+#define	CRAFT_GRANDMASTER	7000
+#define CRAFT_LUMINARY		10000	
+
+enum MSSCraftSkills_t
+{
+	CRAFT_INVALID,
+	CRAFT_ALCHEMY,
+	CRAFT_CLOTHWORK,
+	CRAFT_WOODWORK,
+	CRAFT_STONEWORK,
+	CRAFT_METALWORK,
+};
+#define	MAX_CRAFT_SKILLS	6
 
 enum MSSMenuPages_t
 {

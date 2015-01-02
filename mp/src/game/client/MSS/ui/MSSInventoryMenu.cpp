@@ -48,28 +48,9 @@ CMSInventoryMenu::CMSInventoryMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_IN
 	SetKeyBoardInputEnabled( false );
 //	SetMenuButtonVisible( false );
 
-//	m_pLeftPageNumLabel = new Label( this, "LPageNumLabel", "0" );
-//	m_pRightPageNumLabel = new Label( this, "RPageNumLabel", "0" );
-
-//	m_pLeftPageTitleLabel = new Label( this, "LPageTitleLabel", "0" );
 	m_pRightPageTitleLabel = new Label( this, "RPageTitleLabel", "0" );
-/*
-	m_pGenderLabel		= new Label( this, "GenderLabel", "0" );
-	m_pRaceLabel		= new Label( this, "RaceLabel", "0" );
-	m_pTotalExpText		= new Label( this, "TotalExpText", "0" );
-	m_pTotalExpLabel	= new Label( this, "TotalExpLabel", "0" );
 
-	m_pUnarmedLabel		= new Label( this, "UnarmedLabel", "0" );
-	m_p1HPiercingLabel	= new Label( this, "OneHandPiercingLabel", "0" );
-	m_p1HSlashingLabel	= new Label( this, "OneHandSlashingLabel", "0" );
-	m_p1HBashingLabel	= new Label( this, "OneHandBashingLabel", "0" );
-	m_p2HPiercingLabel	= new Label( this, "TwoHandPiercingLabel", "0" );
-	m_p2HSlashingLabel	= new Label( this, "TwoHandSlashingLabel", "0" );
-	m_p2HBashingLabel	= new Label( this, "TwoHandBashingLabel", "0" );
-	m_pArcheryLabel		= new Label( this, "ArcheryLabel", "0" );
-	m_pThrowWeaponLabel	= new Label( this, "ThrownWeaponsLabel", "0" );
-*/
-//	m_nCurPage = 1;
+	m_pGoldLabel = new Label( this, "GoldLabel", "0" );
 }
 
 void CMSInventoryMenu::ApplySchemeSettings( IScheme *pScheme )
@@ -117,36 +98,11 @@ void CMSInventoryMenu::Update( void )
 
 	pPlayer->TabulateStats();
 
-//	HideAllChildControls();
+	m_pRightPageTitleLabel->SetText( pPlayer->m_pszCharName );
 
-//	if( m_nCurPage == 1 )
-//	{
-//		m_pLeftPageTitleLabel->SetText( "#MSS_PLAYERSTATS" );
-		m_pRightPageTitleLabel->SetText( pPlayer->m_pszCharName );
-
-//		m_pGenderLabel->SetVisible( true );
-//		m_pRaceLabel->SetVisible( true );
-//		m_pTotalExpText->SetVisible( true );
-//		m_pTotalExpLabel->SetVisible( true );
-/*
-		m_pGenderLabel->SetText( pszGenderNames[ pPlayer->m_nGender ] );
-		m_pRaceLabel->SetText( pszRaceNames[ pPlayer->m_nRace ] );
-
-		char buf[8];
-		itoa( pPlayer->m_nTotalExp, buf, 10 );
-		m_pTotalExpLabel->SetText( buf );
-
-		m_pUnarmedLabel->SetText( pszSkillLevelNames[ pPlayer->m_nWeaponSkills[ WEAPONTYPE_UNARMED ] ] );
-		m_p1HPiercingLabel->SetText( pszSkillLevelNames[ pPlayer->m_nWeaponSkills[ WEAPONTYPE_ONEHANDPIERCING ] ] );
-		m_p1HSlashingLabel->SetText( pszSkillLevelNames[ pPlayer->m_nWeaponSkills[ WEAPONTYPE_ONEHANDSLASHING ] ] );
-		m_p1HBashingLabel->SetText( pszSkillLevelNames[ pPlayer->m_nWeaponSkills[ WEAPONTYPE_ONEHANDBASHING ] ] );
-		m_p2HPiercingLabel->SetText( pszSkillLevelNames[ pPlayer->m_nWeaponSkills[ WEAPONTYPE_TWOHANDPIERCING ] ] );
-		m_p2HSlashingLabel->SetText( pszSkillLevelNames[ pPlayer->m_nWeaponSkills[ WEAPONTYPE_TWOHANDSLASHING ] ] );
-		m_p2HBashingLabel->SetText( pszSkillLevelNames[ pPlayer->m_nWeaponSkills[ WEAPONTYPE_TWOHANDBASHING ] ] );
-		m_pArcheryLabel->SetText( pszSkillLevelNames[ pPlayer->m_nWeaponSkills[ WEAPONTYPE_ARCHERY ] ] );
-		m_pThrowWeaponLabel->SetText( pszSkillLevelNames[ pPlayer->m_nWeaponSkills[ WEAPONTYPE_THROWN ] ] );
-*/
-
+	char buf[10];
+	itoa( pPlayer->m_nGold, buf, 10 );
+	m_pGoldLabel->SetText( buf );
 
 }
 

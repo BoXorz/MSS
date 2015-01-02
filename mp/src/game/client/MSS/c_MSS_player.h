@@ -103,7 +103,7 @@ public:
 	char m_szPreloadCharName2[ MAX_CHAR_NAME_LENGTH ];
 	char m_szPreloadCharName3[ MAX_CHAR_NAME_LENGTH ];
 
-//	char m_szPreloadCharName[ MAX_CHAR_SLOTS + 1 ][ MAX_CHAR_NAME_LENGTH ];
+	int m_nPlayerModelIndex;
 	int m_nPreloadModelIndex[ MAX_CHAR_SLOTS + 1 ];
 	bool m_bHasCharInSlot[ MAX_CHAR_SLOTS + 1 ];
 
@@ -113,9 +113,18 @@ public:
 	unsigned int	m_nRace;
 	unsigned int	m_nTotalExp;
 
+	unsigned int	m_nGold;
+
+	int m_nMight;
+	int m_nAgility;
+	int m_nStamina;
+	int m_nIntellect;
+	int m_nWit;
+	int m_nFortitude;
+	int m_nLuck;
+
 //	int		m_nWeaponExp[ MAX_WEAPON_SKILLS ];		// BOXBOX these are the experience totals (0-100,000)
 	int		m_nWeaponSkills[ MAX_WEAPON_SKILLS ];	// BOXBOX and these are the levels(1-10)
-
 	int		m_nUnarmed;			
 	int		m_nOneHandPiercing;
 	int		m_nOneHandSlashing;
@@ -126,6 +135,12 @@ public:
 	int		m_nArchery;
 	int		m_nThrowingWeapons;
 
+	int		m_nCraftSkills[ MAX_CRAFT_SKILLS ];
+	int		m_nAlchemy;
+	int		m_nClothwork;
+	int		m_nWoodwork;
+	int		m_nStonework;
+	int		m_nMetalwork;
 
 	void	TabulateStats( void ); // BOXBOX Here is where we calculate all the player stats that we don't need to save in the character files
 

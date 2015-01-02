@@ -92,9 +92,9 @@ protected:
 //	vgui::Button	*m_pCharButton2;
 //	vgui::Button	*m_pCharButton3;
 
-//	CModelPanel	*m_pCharModel1;
-//	CModelPanel	*m_pCharModel2;
-//	CModelPanel	*m_pCharModel3;
+	CModelPanel		*m_pCharOne;
+	CModelPanel		*m_pCharTwo;
+	CModelPanel		*m_pCharThree;
 
 	vgui::ImagePanel	*m_pConfirmBgImage; // BOXBOX child controls that pop up, asking if you are sure you want to delete a character
 	vgui::Label		*m_pConfirmLabel;	// the text

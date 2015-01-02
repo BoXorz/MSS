@@ -11,6 +11,7 @@
 
 #include <game/client/iviewport.h>
 #include "shareddefs.h"
+#include "basemodelpanel.h"
 
 class CMSStatsMenu : public vgui::Frame, public IViewPortPanel
 {
@@ -70,7 +71,21 @@ protected:
 	vgui::Label			*m_pArcheryLabel;
 	vgui::Label			*m_pThrowWeaponLabel;
 
+	vgui::Label			*m_pMightLabel;
+	vgui::Label			*m_pAgilityLabel;
+	vgui::Label			*m_pStaminaLabel;
+	vgui::Label			*m_pIntellectLabel;
+	vgui::Label			*m_pWitLabel;
+	vgui::Label			*m_pFortitudeLabel;
+	vgui::Label			*m_pLuckLabel;
 
+	vgui::Label			*m_pAlchemyLabel;
+	vgui::Label			*m_pClothworkLabel;
+	vgui::Label			*m_pWoodworkLabel;
+	vgui::Label			*m_pStoneworkLabel;
+	vgui::Label			*m_pMetalworkLabel;
+
+	CModelPanel			*m_pCharModel;
 };
 
 

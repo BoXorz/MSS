@@ -27,7 +27,9 @@
 #include <filesystem.h> // BOXBOX added for deleting character files ( see ClientCommand() )
 
 extern const char *pszPlayerModels[];
+extern const char *pszCoreStatNames[];
 extern const char *pszSkillNames[];
+extern const char *pszCraftSkillNames[];
 
 extern CBaseEntity	*g_pLastSpawn;
 
@@ -50,17 +52,26 @@ IMPLEMENT_SERVERCLASS_ST(CMSS_Player, DT_MSS_Player)
 	SendPropAngle( SENDINFO_VECTORELEM(m_angEyeAngles, 0), 11, SPROP_CHANGES_OFTEN ),
 	SendPropAngle( SENDINFO_VECTORELEM(m_angEyeAngles, 1), 11, SPROP_CHANGES_OFTEN ),
 	SendPropEHandle( SENDINFO( m_hRagdoll ) ),
-	SendPropInt( SENDINFO( m_iSpawnInterpCounter), 4 ),
+	SendPropInt( SENDINFO( m_iSpawnInterpCounter ), 4 ),
 //	SendPropInt( SENDINFO( m_iPlayerSoundType), 3 ),
 
 // BOXBOXBOX MSS STUFF
-//	SendPropInt( SENDINFO( m_nNumChars ), 3 ), // BOXBOX need 3 bits here
 	SendPropString( SENDINFO( m_szCharName ) ),
-	SendPropInt( SENDINFO( m_nGender ), 2 ), // BOXBOX need 2 bits here
+	SendPropInt( SENDINFO( m_nGender ), 3 ), // BOXBOX need 3 bits here
 	SendPropInt( SENDINFO( m_nRace ), 3 ), // BOXBOXBOX remember, only sending 3 bits limits races to 4 (0-3) so if we ever add more races than 4, more bit(s) will be needed!
 	SendPropInt( SENDINFO( m_nTotalExp ), 21 ), // BOXBOX need 21 bits here because total exp. maxes out at 1 million
-//	SendPropArray( SendPropInt( SENDINFO_ARRAY( m_nWeaponExp ) ), m_nWeaponExp ),
 
+	SendPropInt( SENDINFO( m_nGold ), 21 ), // BOXBOX Gold maxes out at a mill
+
+	SendPropInt( SENDINFO( m_nMight ), 6 ),	// BOXBOX core stats need 6 bits(max out at 30)
+	SendPropInt( SENDINFO( m_nAgility ), 6 ),
+	SendPropInt( SENDINFO( m_nStamina ), 6 ),
+	SendPropInt( SENDINFO( m_nIntellect ), 6 ),
+	SendPropInt( SENDINFO( m_nWit ), 6 ),
+	SendPropInt( SENDINFO( m_nFortitude ), 6 ),
+	SendPropInt( SENDINFO( m_nLuck ), 6 ),
+
+	//	SendPropArray( SendPropInt( SENDINFO_ARRAY( m_nWeaponExp ) ), m_nWeaponExp ),
 	SendPropInt( SENDINFO( m_nUnarmed ), 18 ), // BOXBOX weapon skills need 18 bits because they max out at 100,000 hits!
 	SendPropInt( SENDINFO( m_nOneHandPiercing ), 18 ),
 	SendPropInt( SENDINFO( m_nOneHandSlashing ), 18 ),
@@ -71,6 +82,12 @@ IMPLEMENT_SERVERCLASS_ST(CMSS_Player, DT_MSS_Player)
 	SendPropInt( SENDINFO( m_nArchery ), 18 ),
 	SendPropInt( SENDINFO( m_nThrowingWeapons ), 18 ),
 
+	SendPropInt( SENDINFO( m_nAlchemy ), 15 ), // BOXBOX 15 bits here, as crafting exps max out at 10K
+	SendPropInt( SENDINFO( m_nClothwork ), 15 ),
+	SendPropInt( SENDINFO( m_nWoodwork ), 15 ),
+	SendPropInt( SENDINFO( m_nStonework ), 15 ),
+	SendPropInt( SENDINFO( m_nMetalwork ), 15 ),
+
 	//SendPropArray3( SENDINFO_ARRAY3( m_PreloadedCharInfo ), SendPropInt( SENDINFO_ARRAY(m_PreloadedCharInfo), 0, SendProxy_Preload ) ),
 	//SendPropArray3( SENDINFO_ARRAY3( m_PreloadedCharInfo ), SendPropInt( SENDINFO_ARRAY(m_PreloadedCharInfo), 0, SendProxy_Preload ) ),
 //	SendPropArray( SendPropString( SENDINFO_ARRAY( m_PreloadedCharInfo_Name ), 0, SendProxy_String_tToString ), m_PreloadedCharInfo_Name ),
@@ -79,6 +96,7 @@ IMPLEMENT_SERVERCLASS_ST(CMSS_Player, DT_MSS_Player)
 	SendPropString( SENDINFO( m_szPreloadCharName3 ) ),
 
 //	SendPropArray( SendPropString( SENDINFO_ARRAY( m_szPreloadCharName ), 0, SendProxy_String_tToString ), m_szPreloadCharName ),
+	SendPropInt( SENDINFO( m_nPlayerModelIndex ), 4 ),
 	SendPropArray( SendPropInt( SENDINFO_ARRAY( m_nPreloadModelIndex ) ), m_nPreloadModelIndex ),
 	SendPropArray3( SENDINFO_ARRAY3( m_bHasCharInSlot ), SendPropBool( SENDINFO_ARRAY( m_bHasCharInSlot ) ) ),
 //	SendPropArray( SendPropBool( SENDINFO_ARRAY( m_bHasCharInSlot ) ), m_bHasCharInSlot ),
@@ -1188,14 +1206,14 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 			if( LoadStatus == CHARLOAD_STATUS_OK
 				/*|| LoadStatus == CHARLOAD_STATUS_FILE_NOT_FOUND*/ )
 			{
-//				m_bHasChoosenChar = true;
 				m_nCurrentChar = charSlot;
 
 				SetViewEntity( NULL );
-//				ChangeTeam( TEAM_UNASSIGNED );
-				SetModel( pszPlayerModels[ m_nPreloadModelIndex.Get( m_nCurrentChar ) ] );
+
+				m_nPlayerModelIndex = m_nPreloadModelIndex.Get( m_nCurrentChar );
+				SetModel( pszPlayerModels[ m_nPlayerModelIndex ] );
 				TabulateStats();
-				Spawn( );
+				Spawn();
 			}
 			else
 			{
@@ -1207,13 +1225,13 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 				CharacterSave::GetSaveFileNameForPlayer( this, charSlot, filePath );
 				UTIL_LogPrintf( "\"%s<%i><%s>\" Attempted to load hacked file! \"%s\"\n", playerName, userid, networkID, filePath );
 			}
-			StopSound("Music.Intro"); // BOXBOX added
+			StopSound("MenuMusic.Intro"); // BOXBOX added
 			return true;
 		}
 	}
 	else if ( FStrEq( args[0], "createchar" ) )
 	{
-		if( args.ArgC() == 4 )
+		if( args.ArgC() == 11 )
 		{
 //			Warning("Received command %s %s %i %i\n", args[0], args[1], atoi( args[2] ), atoi( args[3] ) );
 
@@ -1242,17 +1260,15 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 				m_nRace = atoi( args[3] );
 
 				m_nTotalExp = 0;
-/*
-				m_nWeaponExp.Set( WEAPONTYPE_UNARMED, 0 );
-				m_nWeaponExp.Set( WEAPONTYPE_ONEHANDPIERCING, 0 );
-				m_nWeaponExp.Set( WEAPONTYPE_ONEHANDSLASHING, 0 );
-				m_nWeaponExp.Set( WEAPONTYPE_ONEHANDBASHING, 0 );
-				m_nWeaponExp.Set( WEAPONTYPE_TWOHANDPIERCING, 0 );
-				m_nWeaponExp.Set( WEAPONTYPE_TWOHANDSLASHING, 0 );
-				m_nWeaponExp.Set( WEAPONTYPE_TWOHANDBASHING, 0 );
-				m_nWeaponExp.Set( WEAPONTYPE_ARCHERY, 0 );
-				m_nWeaponExp.Set( WEAPONTYPE_THROWN, 0 );
-*/
+				m_nGold = 0;
+
+				m_nMight = atoi( args[4] ); 
+				m_nAgility = atoi( args[5] ); 
+				m_nStamina = atoi( args[6] ); 
+				m_nIntellect = atoi( args[7] ); 
+				m_nWit = atoi( args[8] ); 
+				m_nFortitude = atoi( args[9] ); 
+				m_nLuck = atoi( args[10] ); 
 				
 				m_nUnarmed = 0;
 				m_nOneHandPiercing = 0;
@@ -1264,13 +1280,21 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 				m_nArchery = 0;
 				m_nThrowingWeapons = 0;
 
+				m_nAlchemy = 0;
+				m_nClothwork = 0;
+				m_nWoodwork = 0;
+				m_nStonework = 0;
+				m_nMetalwork = 0;
+
 				TabulateStats();
 
 				SetViewEntity( NULL );
-				SetModel( pszPlayerModels[ (m_nRace * 2) + m_nGender -2 ] ); // BOXBOX hacky sack!
+
+				m_nPlayerModelIndex = (m_nRace * 2) + m_nGender -2 ; // BOXBOX hacky sack!
+				SetModel( pszPlayerModels[ m_nPlayerModelIndex ] );
 
 
-				StopSound("Music.Intro"); // BOXBOX added
+				StopSound("MenuMusic.Intro"); // BOXBOX added
 				SaveChar( m_nCurrentChar );
 				PreLoadChar( m_nCurrentChar ); // BOXBOX reload so client will get updated info
 				Spawn();
@@ -2046,9 +2070,6 @@ void CMSS_Player::SetNumChars( void )
 
 void CMSS_Player::IncrementWeaponSkill( int skill )
 {
-//	m_nWeaponExp.Set( skill, m_nWeaponExp.Get( skill ) + 1 );
-
-
 	switch( skill )
 	{
 		case WEAPONTYPE_UNARMED:
@@ -2092,13 +2113,113 @@ void CMSS_Player::IncrementWeaponSkill( int skill )
 				break;
 			}
 	}
-
 }
+
+void CMSS_Player::CheatSetTotalExp( int amt )
+{
+	m_nTotalExp = amt;
+	Warning("TOTAL EXP. IS NOW: %i\n", m_nTotalExp.Get() );
+}
+
+void CC_SetTotalExp( const CCommand& args ) // BOXBOX arg1 is the value to set gold to
+{
+	CBasePlayer *pPlayer = UTIL_GetCommandClient();
+	if ( !pPlayer )
+		return;
+
+	CMSS_Player *pMSSPlayer = ToMSSPlayer( pPlayer );
+	if ( !pMSSPlayer )
+		return;
+
+		if ( args.ArgC() == 2 )
+		{
+			int amt = atoi( args[1] );
+
+			amt = Max(0, amt );
+			amt = Min(1000000, amt );
+
+			pMSSPlayer->CheatSetTotalExp( amt );
+		}
+}
+static ConCommand settotalexp("settotalexp", CC_SetTotalExp, "Bump total exp. for dev testing.", FCVAR_CHEAT);
+
+void CMSS_Player::CheatSetCoreStat( int stat, int amt )
+{
+	switch( stat )
+	{
+		case STAT_MIGHT:
+			{
+				m_nMight = amt;
+				Warning("%s IS NOW: %i\n", pszCoreStatNames[ stat ], m_nMight.Get() );
+				break;
+			}
+		case STAT_AGILITY:
+			{
+				m_nAgility = amt;
+				Warning("%s IS NOW: %i\n", pszCoreStatNames[ stat ], m_nAgility.Get() );
+				break;
+			}
+		case STAT_STAMINA:
+			{
+				m_nStamina = amt;
+				Warning("%s IS NOW: %i\n", pszCoreStatNames[ stat ], m_nStamina.Get() );
+				break;
+			}
+		case STAT_INTELLECT:
+			{
+				m_nIntellect = amt;
+				Warning("%s IS NOW: %i\n", pszCoreStatNames[ stat ], m_nIntellect.Get() );
+				break;
+			}
+		case STAT_WIT:
+			{
+				m_nWit = amt;
+				Warning("%s IS NOW: %i\n", pszCoreStatNames[ stat ], m_nWit.Get() );
+				break;
+			}
+		case STAT_FORTITUDE:
+			{
+				m_nFortitude = amt;
+				Warning("%s IS NOW: %i\n", pszCoreStatNames[ stat ], m_nFortitude.Get() );
+				break;
+			}
+		case STAT_LUCK:
+			{
+				m_nLuck = amt;
+				Warning("%s IS NOW: %i\n", pszCoreStatNames[ stat ], m_nLuck.Get() );
+				break;
+			}
+	}
+}
+
+void CC_SetStat( const CCommand& args ) // BOXBOX arg1 is the stat to set, arg2 is the value to set it to
+{
+	CBasePlayer *pPlayer = UTIL_GetCommandClient();
+	if ( !pPlayer )
+		return;
+
+	CMSS_Player *pMSSPlayer = ToMSSPlayer( pPlayer );
+	if ( !pMSSPlayer )
+		return;
+
+		if ( args.ArgC() == 3 )
+		{
+			int stat = atoi( args[1] );
+			int amt = atoi( args[2] );
+
+			stat = Max(1, stat );
+			stat = Min(7, stat );
+
+			amt = Max(1, amt );
+			amt = Min(30, amt );
+
+			pMSSPlayer->CheatSetCoreStat( stat, amt );
+		}
+}
+static ConCommand setstat("setstat", CC_SetStat, "Bump a core stat for dev testing.", FCVAR_CHEAT);
 
 void CMSS_Player::CheatSetWeaponExp( int skill, int amt )
 {
-//	m_nWeaponExp.Set( skill, amt );
-
 	switch( skill )
 	{
 		case WEAPONTYPE_UNARMED:
@@ -2181,15 +2302,99 @@ void CC_SetExp( const CCommand& args ) // BOXBOX arg1 is the skill to set, arg2 
 
 			pMSSPlayer->CheatSetWeaponExp( skill, amt );
 		}
-
-
-
 }
-
 static ConCommand setexp("setexp", CC_SetExp, "Bump a weapon skill for dev testing.", FCVAR_CHEAT);
 
+void CMSS_Player::CheatSetCraftExp( int craft, int amt )
+{
+	switch( craft )
+	{
+		case CRAFT_ALCHEMY:
+			{
+				m_nAlchemy = amt;
+				Warning("%s IS NOW: %i\n", pszCraftSkillNames[ craft ], m_nAlchemy.Get() );
+				break;
+			}
+		case CRAFT_CLOTHWORK:
+			{
+				m_nClothwork = amt;
+				Warning("%s IS NOW: %i\n", pszCraftSkillNames[ craft ], m_nClothwork.Get() );
+				break;
+			}
+		case CRAFT_WOODWORK:
+			{
+				m_nWoodwork = amt;
+				Warning("%s IS NOW: %i\n", pszCraftSkillNames[ craft ], m_nWoodwork.Get() );
+				break;
+			}
+		case CRAFT_STONEWORK:
+			{
+				m_nStonework = amt;
+				Warning("%s IS NOW: %i\n", pszCraftSkillNames[ craft ], m_nStonework.Get() );
+				break;
+			}
+		case CRAFT_METALWORK:
+			{
+				m_nMetalwork = amt;
+				Warning("%s IS NOW: %i\n", pszCraftSkillNames[ craft ], m_nMetalwork.Get() );
+				break;
+			}
+	}
+}
 
+void CC_SetCraft( const CCommand& args ) // BOXBOX arg1 is the craft to set, arg2 is the value to set it to
+{
+	CBasePlayer *pPlayer = UTIL_GetCommandClient();
+	if ( !pPlayer )
+		return;
 
+	CMSS_Player *pMSSPlayer = ToMSSPlayer( pPlayer );
+	if ( !pMSSPlayer )
+		return;
+
+		if ( args.ArgC() == 3 )
+		{
+			int craft = atoi( args[1] );
+			int amt = atoi( args[2] );
+
+			craft = Max(1, craft );
+			craft = Min(5, craft );
+
+			amt = Max(0, amt );
+			amt = Min(10000, amt );
+
+			pMSSPlayer->CheatSetCraftExp( craft, amt );
+		}
+}
+static ConCommand setcraft("setcraft", CC_SetCraft, "Bump a craft skill for dev testing.", FCVAR_CHEAT);
+
+void CMSS_Player::CheatSetGold( int amt )
+{
+	m_nGold = amt;
+	Warning("GOLD IS NOW: %i\n", m_nGold.Get() );
+}
+
+void CC_SetGold( const CCommand& args ) // BOXBOX arg1 is the value to set gold to
+{
+	CBasePlayer *pPlayer = UTIL_GetCommandClient();
+	if ( !pPlayer )
+		return;
+
+	CMSS_Player *pMSSPlayer = ToMSSPlayer( pPlayer );
+	if ( !pMSSPlayer )
+		return;
+
+		if ( args.ArgC() == 2 )
+		{
+			int amt = atoi( args[1] );
+
+			amt = Max(0, amt );
+			amt = Min(1000000, amt );
+
+			pMSSPlayer->CheatSetGold( amt );
+		}
+}
+static ConCommand setgold("setgold", CC_SetGold, "Bump gold pieces for dev testing.", FCVAR_CHEAT);
 /*
 void CMSS_Player::UpdateStats( void )
 {

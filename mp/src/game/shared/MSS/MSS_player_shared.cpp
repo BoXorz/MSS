@@ -579,6 +579,7 @@ void CPlayerAnimState::GetOuterAbsVelocity( Vector& vel )
 
 
 int nSkillExpTable[SKILL_NUM_LEVELS] = { EXP_NOVICE, EXP_AWKWARD, EXP_ABLE, EXP_ADEPT, EXP_SKILLED, EXP_JOURNEYMAN, EXP_EXPERT, EXP_MASTER, EXP_GRANDMASTER, EXP_LUMINARY }; 
+int nCraftExpTable[SKILL_NUM_LEVELS] = { CRAFT_NOVICE, CRAFT_AWKWARD, CRAFT_ABLE, CRAFT_ADEPT, CRAFT_SKILLED, CRAFT_JOURNEYMAN, CRAFT_EXPERT, CRAFT_MASTER, CRAFT_GRANDMASTER, CRAFT_LUMINARY };
 
 void CMSS_Player::TabulateStats( void )
 {
@@ -587,19 +588,13 @@ void CMSS_Player::TabulateStats( void )
 		m_nWeaponSkills[s] = SKILL_NOVICE; // BOXBOX start everything at 1
 	}
 
+	for( int c = 0; c < MAX_CRAFT_SKILLS; c++ )
+	{
+		m_nCraftSkills[c] = SKILL_NOVICE; // BOXBOX start everything at 1
+	}
+
 	for( int t = 1; t < SKILL_NUM_LEVELS; t++ )
 	{
-
-/*
-#ifdef CLIENT_DLL
-			if( m_nWeaponExp[ s ] >= nSkillExpTable[t] )
-#else
-			if( m_nWeaponExp.Get( s ) >= nSkillExpTable[t] )
-#endif
-				m_nWeaponSkills[s]++;
-*/
-
-
 		if( m_nUnarmed >= nSkillExpTable[t] )
 			m_nWeaponSkills[WEAPONTYPE_UNARMED]++;
 		if( m_nOneHandPiercing >= nSkillExpTable[t] )
@@ -619,6 +614,16 @@ void CMSS_Player::TabulateStats( void )
 		if( m_nThrowingWeapons >= nSkillExpTable[t] )
 			m_nWeaponSkills[WEAPONTYPE_THROWN]++;
 
+		if( m_nAlchemy >= nCraftExpTable[t] )
+			m_nCraftSkills[CRAFT_ALCHEMY]++;
+		if( m_nClothwork >= nCraftExpTable[t] )
+			m_nCraftSkills[CRAFT_CLOTHWORK]++;
+		if( m_nWoodwork >= nCraftExpTable[t] )
+			m_nCraftSkills[CRAFT_WOODWORK]++;
+		if( m_nStonework >= nCraftExpTable[t] )
+			m_nCraftSkills[CRAFT_STONEWORK]++;
+		if( m_nMetalwork >= nCraftExpTable[t] )
+			m_nCraftSkills[CRAFT_METALWORK]++;
 	}
 
 }

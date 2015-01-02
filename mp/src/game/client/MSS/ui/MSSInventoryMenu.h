@@ -55,30 +55,10 @@ protected:
 //	void HideAllChildControls( void );
 
 	IViewPort	*m_pViewPort;
-//	int m_nCurPage;
 
-//	vgui::Label			*m_pLeftPageNumLabel;
-//	vgui::Label			*m_pRightPageNumLabel;
-
-//	vgui::Label			*m_pLeftPageTitleLabel;
 	vgui::Label			*m_pRightPageTitleLabel;
-/*
-	vgui::Label			*m_pGenderLabel;
-	vgui::Label			*m_pRaceLabel;
-	vgui::Label			*m_pTotalExpText;
-	vgui::Label			*m_pTotalExpLabel;
 
-	vgui::Label			*m_pUnarmedLabel;
-	vgui::Label			*m_p1HPiercingLabel;
-	vgui::Label			*m_p1HSlashingLabel;
-	vgui::Label			*m_p1HBashingLabel;
-	vgui::Label			*m_p2HPiercingLabel;
-	vgui::Label			*m_p2HSlashingLabel;
-	vgui::Label			*m_p2HBashingLabel;
-	vgui::Label			*m_pArcheryLabel;
-	vgui::Label			*m_pThrowWeaponLabel;
-*/
-
+	vgui::Label			*m_pGoldLabel;
 };
 
 

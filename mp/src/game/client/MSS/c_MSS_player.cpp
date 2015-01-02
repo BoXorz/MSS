@@ -38,8 +38,18 @@ IMPLEMENT_CLIENTCLASS_DT(C_MSS_Player, DT_MSS_Player, CMSS_Player)
 	RecvPropInt( RECVINFO( m_nGender ) ),
 	RecvPropInt( RECVINFO( m_nRace ) ),
 	RecvPropInt( RECVINFO( m_nTotalExp ) ),
-//	RecvPropArray( RecvPropInt( RECVINFO( m_nWeaponExp[0] ) ), m_nWeaponExp ),
 
+	RecvPropInt( RECVINFO( m_nGold ) ),
+
+	RecvPropInt( RECVINFO( m_nMight ) ),
+	RecvPropInt( RECVINFO( m_nAgility ) ),
+	RecvPropInt( RECVINFO( m_nStamina ) ),
+	RecvPropInt( RECVINFO( m_nIntellect ) ),
+	RecvPropInt( RECVINFO( m_nWit ) ),
+	RecvPropInt( RECVINFO( m_nFortitude ) ),
+	RecvPropInt( RECVINFO( m_nLuck ) ),
+
+//	RecvPropArray( RecvPropInt( RECVINFO( m_nWeaponExp[0] ) ), m_nWeaponExp ),
 	RecvPropInt( RECVINFO( m_nUnarmed ) ),
 	RecvPropInt( RECVINFO( m_nOneHandPiercing ) ),
 	RecvPropInt( RECVINFO( m_nOneHandSlashing ) ),
@@ -50,6 +60,12 @@ IMPLEMENT_CLIENTCLASS_DT(C_MSS_Player, DT_MSS_Player, CMSS_Player)
 	RecvPropInt( RECVINFO( m_nArchery ) ),
 	RecvPropInt( RECVINFO( m_nThrowingWeapons ) ),
 
+	RecvPropInt( RECVINFO( m_nAlchemy ) ),
+	RecvPropInt( RECVINFO( m_nClothwork ) ),
+	RecvPropInt( RECVINFO( m_nWoodwork ) ),
+	RecvPropInt( RECVINFO( m_nStonework ) ),
+	RecvPropInt( RECVINFO( m_nMetalwork ) ),
+
 	//RecvPropArray( RecvPropString( RECVINFO( m_PreloadedCharInfo ) ), m_PreloadedCharInfo ),
 	//RecvPropArray3( RECVINFO_ARRAY( m_PreloadedCharInfo ), RecvPropString( RECVINFO( m_PreloadedCharInfo ), 0, RecvProxy_Preload ) ),
 //	RecvPropArray( RecvPropString( RECVINFO( m_PreloadedCharInfo_Name[0]) ), m_PreloadedCharInfo_Name ),
@@ -58,6 +74,8 @@ IMPLEMENT_CLIENTCLASS_DT(C_MSS_Player, DT_MSS_Player, CMSS_Player)
 	RecvPropString( RECVINFO( m_szPreloadCharName3 ) ),
 
 //	RecvPropArray( RecvPropString( RECVINFO( m_szPreloadCharName[0]) ), m_szPreloadCharName ),
+
+	RecvPropInt( RECVINFO( m_nPlayerModelIndex ) ),
 	RecvPropArray( RecvPropInt( RECVINFO( m_nPreloadModelIndex[0] ) ), m_nPreloadModelIndex ),
 	RecvPropArray3( RECVINFO_ARRAY( m_bHasCharInSlot ),	RecvPropBool( RECVINFO( m_bHasCharInSlot[0]) ) ),
 //	RecvPropBool( RECVINFO( m_PreloadedCharInfo_DoneSending ) ),

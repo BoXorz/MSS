@@ -20,20 +20,32 @@ const char *CharacterSave::m_pszSavePath = "Characters";
 void CMSS_Player::GetCharFileFields( CUtlVector<MSSaveProperty> &allPlayerData )
 {
 	//allPlayerData.AddToTail( MSSaveProperty( "Version", 1.0f, NULL, NULL ) );
-	allPlayerData.AddToTail( MSSaveProperty( "Character Name",	m_szCharName,		m_szCharName.GetForModify( ) ) );
-	allPlayerData.AddToTail( MSSaveProperty( "Gender",			m_nGender.Get(),	&m_nGender, m_nGender.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "Character Name",	m_szCharName,			m_szCharName.GetForModify( ) ) );
+	allPlayerData.AddToTail( MSSaveProperty( "Gender",			m_nGender.Get(),		&m_nGender, m_nGender.Static_Set ) );
 	allPlayerData.AddToTail( MSSaveProperty( "Race",			m_nRace.Get(),			&m_nRace, m_nRace.Static_Set ) );
 	allPlayerData.AddToTail( MSSaveProperty( "TotalExp",		m_nTotalExp.Get(),		&m_nTotalExp, m_nTotalExp.Static_Set ) );
-
+	allPlayerData.AddToTail( MSSaveProperty( "Gold",			m_nGold.Get(),			&m_nGold, m_nGold.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "Might",			m_nMight.Get(),			&m_nMight, m_nMight.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "Agility",			m_nAgility.Get(),		&m_nAgility, m_nAgility.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "Stamina",			m_nStamina.Get(),		&m_nStamina, m_nStamina.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "Intellect",		m_nIntellect.Get(),		&m_nIntellect, m_nIntellect.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "Wit",				m_nWit.Get(),			&m_nWit, m_nWit.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "Fortitude",		m_nFortitude.Get(),		&m_nFortitude, m_nFortitude.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "Luck",			m_nLuck.Get(),			&m_nLuck, m_nLuck.Static_Set ) );
 	allPlayerData.AddToTail( MSSaveProperty( "Unarmed",				m_nUnarmed.Get(),			&m_nUnarmed, m_nUnarmed.Static_Set ) );
 	allPlayerData.AddToTail( MSSaveProperty( "OneHandPiercing",		m_nOneHandPiercing.Get(),	&m_nOneHandPiercing, m_nOneHandPiercing.Static_Set ) );
 	allPlayerData.AddToTail( MSSaveProperty( "OneHandSlashing",		m_nOneHandSlashing.Get(),	&m_nOneHandSlashing, m_nOneHandSlashing.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "OneHandBashing",		m_nOneHandBashing.Get(),			&m_nOneHandBashing, m_nOneHandBashing.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "TwoHandPiercing",		m_nTwoHandPiercing.Get(),			&m_nTwoHandPiercing, m_nTwoHandPiercing.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "TwoHandSlashing",		m_nTwoHandSlashing.Get(),			&m_nTwoHandSlashing, m_nTwoHandSlashing.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "TwoHandBashing",		m_nTwoHandBashing.Get(),			&m_nTwoHandBashing, m_nTwoHandBashing.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "OneHandBashing",		m_nOneHandBashing.Get(),	&m_nOneHandBashing, m_nOneHandBashing.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "TwoHandPiercing",		m_nTwoHandPiercing.Get(),	&m_nTwoHandPiercing, m_nTwoHandPiercing.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "TwoHandSlashing",		m_nTwoHandSlashing.Get(),	&m_nTwoHandSlashing, m_nTwoHandSlashing.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "TwoHandBashing",		m_nTwoHandBashing.Get(),	&m_nTwoHandBashing, m_nTwoHandBashing.Static_Set ) );
 	allPlayerData.AddToTail( MSSaveProperty( "Archery",				m_nArchery.Get(),			&m_nArchery, m_nArchery.Static_Set ) );
-	allPlayerData.AddToTail( MSSaveProperty( "ThrowingWeapons",		m_nThrowingWeapons.Get(),			&m_nThrowingWeapons, m_nThrowingWeapons.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "ThrowingWeapons",		m_nThrowingWeapons.Get(),	&m_nThrowingWeapons, m_nThrowingWeapons.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "Alchemy",				m_nAlchemy.Get(),			&m_nAlchemy, m_nAlchemy.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "Clothwork",			m_nClothwork.Get(),			&m_nClothwork, m_nClothwork.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "Woodwork",			m_nWoodwork.Get(),			&m_nWoodwork, m_nWoodwork.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "Stonework",			m_nStonework.Get(),			&m_nStonework, m_nStonework.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "Metalwork",			m_nMetalwork.Get(),			&m_nMetalwork, m_nMetalwork.Static_Set ) );
 
 
 

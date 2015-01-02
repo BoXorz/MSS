@@ -1,9 +1,5 @@
-//========= Copyright © 2008, Mike Raineri, All rights reserved. ============//
-//
-// Purpose: Header file for the character creation menu
-//
-// $NoKeywords: $
-//=============================================================================//
+
+// BOXBOX Header file for the character creation menu
 
 #ifdef _WIN32
 #pragma once
@@ -13,6 +9,7 @@
 #include <game/client/iviewport.h>
 #include "MSSClient3DModel.h"
 #include "ienginevgui.h"
+#include "basemodelpanel.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: Character menu
@@ -76,8 +73,39 @@ public:
 
 protected:
 
-//	vgui::Label		*m_pTitleLabel;
+	vgui::Label		*m_pMightLabel;
+	vgui::Label		*m_pAgilityLabel;
+	vgui::Label		*m_pStaminaLabel;
+	vgui::Label		*m_pIntellectLabel;
+	vgui::Label		*m_pWitLabel;
+	vgui::Label		*m_pFortitudeLabel;
+	vgui::Label		*m_pLuckLabel;
+	vgui::Label		*m_pBonusLabel;
+
 
 	int m_nSelectedGender;
 	int m_nSelectedRace;
+
+	void ResetModel( void );
+	void ResetStats( void );
+
+	int m_nBaseMightValue;
+	int m_nBaseAgilityValue;
+	int m_nBaseStaminaValue;
+	int m_nBaseIntellectValue;
+	int m_nBaseWitValue;
+	int m_nBaseFortitudeValue;
+	int m_nBaseLuckValue;
+
+	int m_nMightValue;
+	int m_nAgilityValue;
+	int m_nStaminaValue;
+	int m_nIntellectValue;
+	int m_nWitValue;
+	int m_nFortitudeValue;
+	int m_nLuckValue;
+
+	int m_nPointsToSpread;
+
+	CModelPanel			*m_pCharModel;
 };

@@ -146,7 +146,7 @@ public:
 	bool m_bJustJoining; // BOXBOX is player just now joining the server?  Used for map transistions to omit startup menus
 
 	int m_nCurrentChar;	// BOXBOX current character selected/in play
-//	bool m_bHasCharInSlot[4]; // Character files exist in each slot or no
+
 	float m_flLastSaveTime;
 
 	void GetCharFileFields( CUtlVector<MSSaveProperty> &allPlayerData );
@@ -162,28 +162,39 @@ public:
 	CNetworkArray( int, m_nPreloadModelIndex, MAX_CHAR_SLOTS + 1 );
 	CNetworkArray( bool, m_bHasCharInSlot, MAX_CHAR_SLOTS + 1 );
 
-//	CNetworkVar( bool, m_PreloadedCharInfo_DoneSending );
-//	virtual void UpdateStats( void );
-
 	void AddToTotalExp( int exp ) { m_nTotalExp += exp; }
 	void IncrementWeaponSkill( int skill );
 
+	void CheatSetTotalExp( int amt );
+	void CheatSetCoreStat( int stat, int amt );
 	void CheatSetWeaponExp( int skill, int amt );
+	void CheatSetCraftExp( int craft, int amt );
+	void CheatSetGold( int amt );
 
 	bool	m_bIsMainMenuOpen;
 	int		m_nCurMenuPage; // BOXBOX the last open page of the main menu
 
 protected:
-//	CNetworkVar( int, m_nNumChars ); // BOXBOX obsoleted
+	CNetworkVar( int, m_nPlayerModelIndex ); // BOXBOX index into player's model, see MSSPlayerModelIndex_t
 
 	CNetworkString( m_szCharName, MAX_CHAR_NAME_LENGTH );
 	CNetworkVar( unsigned int, m_nGender );
 	CNetworkVar( unsigned int, m_nRace );
 	CNetworkVar( unsigned int, m_nTotalExp );
 
+	CNetworkVar( unsigned int, m_nGold );
+
+// BOXBOX the 7 core character stats
+	CNetworkVar( int, m_nMight );	
+	CNetworkVar( int, m_nAgility );	
+	CNetworkVar( int, m_nStamina );	
+	CNetworkVar( int, m_nIntellect );	
+	CNetworkVar( int, m_nWit );	
+	CNetworkVar( int, m_nFortitude );	
+	CNetworkVar( int, m_nLuck );	
+
 //	CNetworkArray( int, m_nWeaponExp, MAX_WEAPON_SKILLS );	// BOXBOX these are the experience totals (0-100,000)
 	int		m_nWeaponSkills[ MAX_WEAPON_SKILLS ];			// BOXBOX and these are the levels(1-10)
-
 	CNetworkVar( int, m_nUnarmed );		
 	CNetworkVar( int, m_nOneHandPiercing );
 	CNetworkVar( int, m_nOneHandSlashing );
@@ -194,7 +205,13 @@ protected:
 	CNetworkVar( int, m_nArchery );
 	CNetworkVar( int, m_nThrowingWeapons );
 
-
+// BOXBOX Crafting skills (experience totals, actuall skill level determined dynamically, like weapon skills)
+	int		m_nCraftSkills[ MAX_CRAFT_SKILLS ];	// BOXBOX craft levels(1-10)
+	CNetworkVar( int, m_nAlchemy );
+	CNetworkVar( int, m_nClothwork );
+	CNetworkVar( int, m_nWoodwork );
+	CNetworkVar( int, m_nStonework );
+	CNetworkVar( int, m_nMetalwork );
 
 	void	TabulateStats( void ); // BOXBOX Here is where we calculate all the player stats that we don't need to save in the character files
 

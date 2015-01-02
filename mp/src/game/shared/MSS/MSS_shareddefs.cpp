@@ -30,6 +30,17 @@ const char *pszPlayerModels[] =
 	"models/player/elffemale.mdl"
 };
 
+const char *pszCoreStatNames[] =
+{
+	"",
+	"#MSS_MIGHT",
+	"#MSS_AGILITY",
+	"#MSS_STAMINA",
+	"#MSS_INTELLECT",
+	"#MSS_WIT",
+	"#MSS_FORTITUDE"
+};
+
 const char *pszSkillNames[] =
 {
 	"#MSS_UNARMED",
@@ -58,7 +69,15 @@ const char *pszSkillLevelNames[] =
 	"#MSS_LUMINARY"
 };
 
-
+const char *pszCraftSkillNames[] =
+{
+	"",
+	"#MSS_CRAFT_ALCHEMY",
+	"#MSS_CRAFT_CLOTHWORK",
+	"#MSS_CRAFT_WOODWORK",
+	"#MSS_CRAFT_STONEWORK",
+	"#MSS_CRAFT_METALWORK"
+};
 
 
 

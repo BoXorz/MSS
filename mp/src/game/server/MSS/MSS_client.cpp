@@ -32,10 +32,8 @@ extern bool			g_fGameOver;
 void FinishClientPutInServer( CMSS_Player *pPlayer )
 {
 	pPlayer->InitialSpawn();
-	pPlayer->Spawn();
+//	pPlayer->Spawn();
 
-	if( pPlayer->m_bJustJoining )// BOXBOX Don't do all this, if it's just a map change.
-	{
 // BOXBOX adding these to set up the initial camera
 		pPlayer->m_takedamage = DAMAGE_NO;
 		pPlayer->pl.deadflag = true;
@@ -76,13 +74,13 @@ void FinishClientPutInServer( CMSS_Player *pPlayer )
 		pPlayer->PreLoadChar( CHARSLOT_THREE );
 
 // BOXBOX play music here
-		pPlayer->EmitSound("Music.Intro");
+		pPlayer->EmitSound("MenuMusic.Intro");
 
 // BOXBOX show the Join Marquis
 		pPlayer->ShowViewPortPanel( PANEL_JOIN, true, data );
 		data->deleteThis();
 		pPlayer->m_bJustJoining = false; // BOXBOX fingers crossed, this should prevent all this from happening at map change
-	}
+//	}
 
 //	pPlayer->ShowViewPortPanel( PANEL_MAINMENU, false ); // BOXBOX TODO why is this on by default?
 
@@ -153,7 +151,7 @@ void ClientGamePrecache( void ) // BOXBOX TODO redo all this
 	CBaseEntity::PrecacheModel( "models/gibs/agibs.mdl" );
 	CBaseEntity::PrecacheModel ("models/weapons/v_hands.mdl");
 
-	CBaseEntity::PrecacheScriptSound( "Music.Intro" );
+	CBaseEntity::PrecacheScriptSound( "MenuMusic.Intro" );
 	CBaseEntity::PrecacheScriptSound( "MenuBook.Open" );
 	CBaseEntity::PrecacheScriptSound( "MenuBook.Close" );
 

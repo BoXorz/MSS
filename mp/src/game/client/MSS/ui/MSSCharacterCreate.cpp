@@ -22,6 +22,8 @@ using namespace std;
 #include <cdll_client_int.h>
 #include "clientmode_MSSnormal.h"
 
+extern const char *pszPlayerModels[];
+
 Vector CMSCharCreateMenu::g_ViewPos;
 QAngle CMSCharCreateMenu::g_ViewAng;
 CMSCharCreateMenu *CMSCharCreateMenu::static_pCurrentMenu = NULL;
@@ -41,6 +43,28 @@ CMSCharCreateMenu::CMSCharCreateMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_
 
 	m_nSelectedGender = MSS_GENDER_INVALID;
 	m_nSelectedRace = RACE_INVALID;
+
+	m_pMightLabel		= new Label( this, "MightLabel", "0" );
+	m_pAgilityLabel		= new Label( this, "AgilityLabel", "0" );
+	m_pStaminaLabel		= new Label( this, "StaminaLabel", "0" );
+	m_pIntellectLabel	= new Label( this, "IntellectLabel", "0" );
+	m_pWitLabel			= new Label( this, "WitLabel", "0" );
+	m_pFortitudeLabel	= new Label( this, "FortitudeLabel", "0" );
+	m_pLuckLabel		= new Label( this, "LuckLabel", "0" );
+	m_pBonusLabel		= new Label( this, "BonusLabel", "0" );
+
+
+	m_nMightValue = m_nBaseMightValue = 3;
+	m_nAgilityValue = m_nBaseAgilityValue = 3;
+	m_nStaminaValue = m_nBaseStaminaValue = 3;
+	m_nIntellectValue = m_nBaseIntellectValue = 3;
+	m_nWitValue = m_nBaseWitValue = 3;
+	m_nFortitudeValue = m_nBaseFortitudeValue = 3;
+	m_nLuckValue = m_nBaseLuckValue = 3;
+
+	m_nPointsToSpread = 3;
+
+	m_pCharModel = new CModelPanel( this, "charmodel" );
 }
 
 CMSCharCreateMenu::~CMSCharCreateMenu()
@@ -110,6 +134,30 @@ bool CMSCharCreateMenu::NeedsUpdate( void )
 
 void CMSCharCreateMenu::Update( void )
 {
+	char buf[8];
+	itoa( m_nMightValue, buf, 10 );
+	m_pMightLabel->SetText( buf );
+
+	itoa( m_nAgilityValue, buf, 10 );
+	m_pAgilityLabel->SetText( buf );
+
+	itoa( m_nStaminaValue, buf, 10 );
+	m_pStaminaLabel->SetText( buf );
+
+	itoa( m_nIntellectValue, buf, 10 );
+	m_pIntellectLabel->SetText( buf );
+
+	itoa( m_nWitValue, buf, 10 );
+	m_pWitLabel->SetText( buf );
+
+	itoa( m_nFortitudeValue, buf, 10 );
+	m_pFortitudeLabel->SetText( buf );
+
+	itoa( m_nLuckValue, buf, 10 );
+	m_pLuckLabel->SetText( buf );
+
+	itoa( m_nPointsToSpread, buf, 10 );
+	m_pBonusLabel->SetText( buf );
 }
 
 void CMSCharCreateMenu::OnClose( )
@@ -126,6 +174,7 @@ void CMSCharCreateMenu::OnCommand( const char *command )
 		pButton = (Button *)FindChildByName( "ButtonFemale" );
 		pButton->SetEnabled( true );
 		m_nSelectedGender = MSS_GENDER_MALE;
+		ResetModel();
 	}
 	else if( Q_strstr( command, "genderfemale" ) )
 	{
@@ -134,6 +183,7 @@ void CMSCharCreateMenu::OnCommand( const char *command )
 		pButton = (Button *)FindChildByName( "ButtonFemale" );
 		pButton->SetEnabled( false );
 		m_nSelectedGender = MSS_GENDER_FEMALE;
+		ResetModel();
 	}
 	else if( Q_strstr( command, "racehuman" ) )
 	{
@@ -144,6 +194,7 @@ void CMSCharCreateMenu::OnCommand( const char *command )
 		pButton = (Button *)FindChildByName( "ButtonElf" );
 		pButton->SetEnabled( true );
 		m_nSelectedRace = RACE_HUMAN;
+		ResetStats();
 	}
 	else if( Q_strstr( command, "racedwarf" ) )
 	{
@@ -154,6 +205,7 @@ void CMSCharCreateMenu::OnCommand( const char *command )
 		pButton = (Button *)FindChildByName( "ButtonElf" );
 		pButton->SetEnabled( true );
 		m_nSelectedRace = RACE_DWARF;
+		ResetStats();
 	}
 	else if( Q_strstr( command, "raceelf" ) )
 	{
@@ -164,6 +216,119 @@ void CMSCharCreateMenu::OnCommand( const char *command )
 		pButton = (Button *)FindChildByName( "ButtonHuman" );
 		pButton->SetEnabled( true );
 		m_nSelectedRace = RACE_ELF;
+		ResetStats();
+	}
+	else if( Q_strstr( command, "minusmight" ) )
+	{
+		if( m_nMightValue < m_nBaseMightValue ) // BOXBOX You may only lower a stat one point under your racial base
+			return;
+		m_nMightValue--;
+		m_nPointsToSpread++;
+		Update();
+	}
+	else if( Q_strstr( command, "minusagility" ) )
+	{
+		if( m_nAgilityValue < m_nBaseAgilityValue )
+			return;
+		m_nAgilityValue--;
+		m_nPointsToSpread++;
+		Update();
+	}
+	else if( Q_strstr( command, "minusstamina" ) )
+	{
+		if( m_nStaminaValue < m_nBaseStaminaValue )
+			return;
+		m_nStaminaValue--;
+		m_nPointsToSpread++;
+		Update();
+	}
+	else if( Q_strstr( command, "minusintellect" ) )
+	{
+		if( m_nIntellectValue < m_nBaseIntellectValue )
+			return;
+		m_nIntellectValue--;
+		m_nPointsToSpread++;
+		Update();
+	}
+	else if( Q_strstr( command, "minuswit" ) )
+	{
+		if( m_nWitValue < m_nBaseWitValue )
+			return;
+		m_nWitValue--;
+		m_nPointsToSpread++;
+		Update();
+	}
+	else if( Q_strstr( command, "minusfortitude" ) )
+	{
+		if( m_nFortitudeValue < m_nBaseFortitudeValue )
+			return;
+		m_nFortitudeValue--;
+		m_nPointsToSpread++;
+		Update();
+	}
+	else if( Q_strstr( command, "minusluck" ) )
+	{
+		if( m_nLuckValue < m_nBaseLuckValue )
+			return;
+		m_nLuckValue--;
+		m_nPointsToSpread++;
+		Update();
+	}
+	else if( Q_strstr( command, "plusmight" ) )
+	{
+		if( !m_nPointsToSpread )
+			return;
+		m_nMightValue++;
+		m_nPointsToSpread--;
+		Update();
+	}
+	else if( Q_strstr( command, "plusagility" ) )
+	{
+		if( !m_nPointsToSpread )
+			return;
+		m_nAgilityValue++;
+		m_nPointsToSpread--;
+		Update();
+	}
+	else if( Q_strstr( command, "plusstamina" ) )
+	{
+		if( !m_nPointsToSpread )
+			return;
+		m_nStaminaValue++;
+		m_nPointsToSpread--;
+		Update();
+	}
+	else if( Q_strstr( command, "plusintellect" ) )
+	{
+		if( !m_nPointsToSpread )
+			return;
+		m_nIntellectValue++;
+		m_nPointsToSpread--;
+		Update();
+	}
+	else if( Q_strstr( command, "pluswit" ) )
+	{
+		if( !m_nPointsToSpread )
+			return;
+		m_nWitValue++;
+		m_nPointsToSpread--;
+		Update();
+	}
+	else if( Q_strstr( command, "plusfortitude" ) )
+	{
+		if( !m_nPointsToSpread )
+			return;
+		m_nFortitudeValue++;
+		m_nPointsToSpread--;
+		Update();
+	}
+	else if( Q_strstr( command, "plusluck" ) )
+	{
+		if( !m_nPointsToSpread )
+			return;
+		m_nLuckValue++;
+		m_nPointsToSpread--;
+		Update();
 	}
 	else if( Q_strstr( command, "cancel" ) )
 	{
@@ -188,9 +353,12 @@ void CMSCharCreateMenu::OnCommand( const char *command )
 		if( m_nSelectedRace == RACE_INVALID )
 			dataIsValid = false;
 
+		if( m_nPointsToSpread )
+			dataIsValid = false;
+
 		if( dataIsValid )
 		{
-			string sendCommand = VarArgs( "createchar \"%s\" %i %i", charName, m_nSelectedGender, m_nSelectedRace );
+			string sendCommand = VarArgs( "createchar \"%s\" %i %i %i %i %i %i %i %i %i", charName, m_nSelectedGender, m_nSelectedRace, m_nMightValue, m_nAgilityValue, m_nStaminaValue, m_nIntellectValue, m_nWitValue, m_nFortitudeValue, m_nLuckValue );
 			engine->ClientCmd( sendCommand.c_str() );
 			gViewPortInterface->ShowPanel( this, false );
 			vgui::surface()->PlaySound( "UI/pageturn.wav" );
@@ -210,3 +378,48 @@ vgui::Panel *CMSCharCreateMenu::CreateControlByName(const char *controlName)
     return BaseClass::CreateControlByName( controlName );
 }
 
+void CMSCharCreateMenu::ResetModel( void )
+{
+	if( ( m_nSelectedGender > MSS_GENDER_INVALID ) && ( m_nSelectedRace > RACE_INVALID ) )
+	{
+		m_pCharModel->SwapModel( pszPlayerModels[ (m_nSelectedRace * 2) + m_nSelectedGender -2 ], NULL ); 
+		m_pCharModel->MoveToFront();
+	}
+}
+
+void CMSCharCreateMenu::ResetStats( void )
+{
+	if( m_nSelectedRace == RACE_HUMAN )
+	{
+		m_nMightValue = m_nBaseMightValue = 3;
+		m_nAgilityValue = m_nBaseAgilityValue = 3;
+		m_nStaminaValue = m_nBaseStaminaValue = 3;
+		m_nIntellectValue = m_nBaseIntellectValue = 3;
+		m_nWitValue = m_nBaseWitValue = 3;
+		m_nFortitudeValue = m_nBaseFortitudeValue = 3;
+		m_nLuckValue = m_nBaseLuckValue = 3;
+	}
+	else if( m_nSelectedRace == RACE_DWARF )
+	{
+		m_nMightValue = m_nBaseMightValue = 4;
+		m_nAgilityValue = m_nBaseAgilityValue = 2;
+		m_nStaminaValue = m_nBaseStaminaValue = 4;
+		m_nIntellectValue = m_nBaseIntellectValue = 2;
+		m_nWitValue = m_nBaseWitValue = 2;
+		m_nFortitudeValue = m_nBaseFortitudeValue = 4;
+		m_nLuckValue = m_nBaseLuckValue = 3;
+	}
+	else if( m_nSelectedRace == RACE_ELF )
+	{
+		m_nMightValue = m_nBaseMightValue = 2;
+		m_nAgilityValue = m_nBaseAgilityValue = 4;
+		m_nStaminaValue = m_nBaseStaminaValue = 2;
+		m_nIntellectValue = m_nBaseIntellectValue = 4;
+		m_nWitValue = m_nBaseWitValue = 4;
+		m_nFortitudeValue = m_nBaseFortitudeValue = 2;
+		m_nLuckValue = m_nBaseLuckValue = 3;
+	}
+	m_nPointsToSpread = 3;
+	ResetModel();
+	Update();
+}

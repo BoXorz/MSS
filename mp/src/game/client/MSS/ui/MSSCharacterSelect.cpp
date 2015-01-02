@@ -44,6 +44,10 @@ CMSCharSelectMenu::CMSCharSelectMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_
 	m_pFullCharLabel		= new vgui::Label( this, "FullCharLabel", "#MSS_FULL_CHAR" );
 	m_pFullCharButton		= new vgui::Button( this, "FullCharButton", "#MSS_OK", this, "fullcharok" );
 
+	m_pCharOne = new CModelPanel( this, "charone" );
+	m_pCharTwo = new CModelPanel( this, "chartwo" );
+	m_pCharThree = new CModelPanel( this, "charthree" );
+
 	m_bJustDeleted[0] = false;
 	m_bJustDeleted[1] = false;
 	m_bJustDeleted[2] = false;
@@ -113,6 +117,38 @@ void CMSCharSelectMenu::Reset( ) // BOXBOX redid entire function
 	C_MSS_Player *pPlayer = ToMSSPlayer( C_BasePlayer::GetLocalPlayer() );
 	if( !pPlayer ) return;
 
+	if( pPlayer->m_bHasCharInSlot[ CHARSLOT_ONE ] )
+	{
+		m_pCharOne->SwapModel( pszPlayerModels[ pPlayer->m_nPreloadModelIndex[ CHARSLOT_ONE ] ], NULL ); 
+		m_pCharOne->MoveToFront();
+	}
+
+	if( pPlayer->m_bHasCharInSlot[ CHARSLOT_TWO ] )
+	{
+		m_pCharTwo->SwapModel( pszPlayerModels[ pPlayer->m_nPreloadModelIndex[ CHARSLOT_TWO ] ], NULL ); 
+		m_pCharTwo->MoveToFront();
+	}
+
+	if( pPlayer->m_bHasCharInSlot[ CHARSLOT_THREE ] )
+	{
+		m_pCharThree->SwapModel( pszPlayerModels[ pPlayer->m_nPreloadModelIndex[ CHARSLOT_THREE ] ], NULL ); 
+		m_pCharThree->MoveToFront();
+	}
+
+	m_pCharOne->SetVisible( pPlayer->m_bHasCharInSlot[ CHARSLOT_ONE ] );
+	if( m_bJustDeleted[ CHARSLOT_ONE ] )
+	m_pCharOne->SetVisible( false );
+
+	m_pCharTwo->SetVisible( pPlayer->m_bHasCharInSlot[ CHARSLOT_TWO ] );
+	if( m_bJustDeleted[ CHARSLOT_TWO ] )
+	m_pCharTwo->SetVisible( false );
+
+	m_pCharThree->SetVisible( pPlayer->m_bHasCharInSlot[ CHARSLOT_THREE ] );
+	if( m_bJustDeleted[ CHARSLOT_THREE ] )
+	m_pCharThree->SetVisible( false );
+
+
+/*
 	for( int i = 0; i< GetChildCount(); i++ ) 
 	{
 		CModelPanel *panel = dynamic_cast<CModelPanel *>( GetChild( i ) );
@@ -140,6 +176,7 @@ void CMSCharSelectMenu::Reset( ) // BOXBOX redid entire function
 			}			
 		}
 	}
+*/
 
 	m_pSlot1Label->SetText( pPlayer->m_szPreloadCharName1 );
 	if( m_bJustDeleted[ CHARSLOT_ONE ] )
