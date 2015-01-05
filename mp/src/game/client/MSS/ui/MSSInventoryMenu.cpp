@@ -20,6 +20,7 @@
 #include <vgui_controls/TextEntry.h>
 #include <vgui_controls/Button.h>
 #include <game/client/iviewport.h>
+#include <vgui/IInput.h>
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -27,12 +28,11 @@
 using namespace vgui;
 extern INetworkStringTable *g_pStringTableInfoPanel;
 
-//#define TEMP_HTML_FILE	"textwindow_temp.html"
 
-extern const char *pszGenderNames[];
-extern const char *pszRaceNames[];
-extern const char *pszSkillNames[];
-extern const char *pszSkillLevelNames[];
+//extern const char *pszGenderNames[];
+//extern const char *pszRaceNames[];
+//extern const char *pszSkillNames[];
+//extern const char *pszSkillLevelNames[];
 
 CMSInventoryMenu::CMSInventoryMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_INVENTORYMENU )
 {
@@ -46,11 +46,31 @@ CMSInventoryMenu::CMSInventoryMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_IN
 	SetProportional( true );
 	SetTitleBarVisible( false );
 	SetKeyBoardInputEnabled( false );
-//	SetMenuButtonVisible( false );
 
 	m_pRightPageTitleLabel = new Label( this, "RPageTitleLabel", "0" );
 
 	m_pGoldLabel = new Label( this, "GoldLabel", "0" );
+
+	m_pDragTest = new CDraggableImage( this, "DragTest" );
+
+	for( int y = 0 ; y < BACKPACK_SLOTS_Y ; y++ )
+	{
+		for( int x = 0 ; x < BACKPACK_SLOTS_X ; x++ )
+		{
+//			m_pBackpackDropSlots[x][y] = new CDroppableLabel( this, "BackpackSlot" );
+			m_pBackpackDropSlots[x][y] = new CDroppableLabel( this, VarArgs( "BackpackSlot %i %i", x, y ) );
+		}
+//		m_pBeltSlots[y] = new CDroppableLabel( this, "BeltSlot" );
+		m_pBeltSlots[y] = new CDroppableLabel( this, VarArgs( "BeltSlot %i", y ) );
+	}
+
+	m_pLeftHandSlot		= new CDroppableLabel( this, "LeftHandSlot" );
+	m_pRightHandSlot	= new CDroppableLabel( this, "RightHandSlot" );
+	m_pArmorSlot		= new CDroppableLabel( this, "ArmorSlot" );
+	m_pHelmetSlot		= new CDroppableLabel( this, "HelmetSlot" );
+	m_pGlovesSlot		= new CDroppableLabel( this, "GlovesSlot" );
+	m_pBootsSlot		= new CDroppableLabel( this, "BootsSlot" );
+
 }
 
 void CMSInventoryMenu::ApplySchemeSettings( IScheme *pScheme )
@@ -59,17 +79,25 @@ void CMSInventoryMenu::ApplySchemeSettings( IScheme *pScheme )
 
 	LoadControlSettings("Resource/UI/MSInventoryMenu.res");
 
-//	m_pLeftPageNumLabel->SetFont( pScheme->GetFont( "HeaderFont" ) );
-//	m_pRightPageNumLabel->SetFont( pScheme->GetFont( "HeaderFont" ) );
+	int xpos = 284;
+	int ypos = 164;
 
-//	m_pLeftPageTitleLabel->SetFont( pScheme->GetFont( "HeaderFontSmall" ) );
-//	m_pRightPageTitleLabel->SetFont( pScheme->GetFont( "HeaderFontSmaller" ) );
+	for( int y = 0 ; y < BACKPACK_SLOTS_Y ; y++ )
+	{
+		for( int x = 0 ; x < BACKPACK_SLOTS_X ; x++ )
+		{
+			m_pBackpackDropSlots[x][y]->SetPos( xpos + (x*64), ypos +(y*64) );
+		}
+		m_pBeltSlots[y]->SetPos( xpos + (y*64), 888 );
+	}
 
-//	m_pGenderLabel->SetFgColor( pScheme->GetColor( "RedInk", Color(0, 0, 0, 0) ) );
-//	m_pRaceLabel->SetFgColor( pScheme->GetColor( "RedInk", Color(0, 0, 0, 0) ) );
-//	m_pTotalExpLabel->SetFgColor( pScheme->GetColor( "InkWellLight", Color(0, 0, 0, 0) ) );
+	m_pLeftHandSlot->SetPos( 1084, 500 );
+	m_pRightHandSlot->SetPos( 1600, 500 );
+	m_pArmorSlot->SetPos( 1345, 400 );
+	m_pHelmetSlot->SetPos( 1345, 180 );
+	m_pGlovesSlot->SetPos( 1140, 400 );
+	m_pBootsSlot->SetPos( 1345, 780 );
 
-	Reset();
 }
 
 CMSInventoryMenu::~CMSInventoryMenu()
@@ -79,30 +107,22 @@ CMSInventoryMenu::~CMSInventoryMenu()
 
 void CMSInventoryMenu::Reset( void )
 {
-//	m_nCurPage = 1;
-	Update();
+
+//	Update();
 }
 
 
 void CMSInventoryMenu::Update( void )
 {
-//	char lpg[4];
-//	char rpg[4];
-//	Q_snprintf( lpg, sizeof( lpg ), "%i", m_nCurPage );
-//	Q_snprintf( rpg, sizeof( rpg ), "%i", m_nCurPage + 1 );
-//	m_pLeftPageNumLabel->SetText( lpg );
-//	m_pRightPageNumLabel->SetText( rpg );
-
 	C_MSS_Player *pPlayer = ToMSSPlayer( C_BasePlayer::GetLocalPlayer() );
 	if( !pPlayer ) return;
-
-	pPlayer->TabulateStats();
 
 	m_pRightPageTitleLabel->SetText( pPlayer->m_pszCharName );
 
 	char buf[10];
 	itoa( pPlayer->m_nGold, buf, 10 );
 	m_pGoldLabel->SetText( buf );
+
 
 }
 
@@ -141,22 +161,114 @@ void CMSInventoryMenu::ShowPanel( bool bShow )
 	if ( BaseClass::IsVisible() == bShow )
 		return;
 
-//	m_pViewPort->ShowBackGround( bShow );
-
 	if ( bShow )
 	{
 		SetVisible( true );
-//		Activate();
-//		SetMouseInputEnabled( true );
 	}
 	else
 	{
 		SetVisible( false );
-//		SetMouseInputEnabled( false );
 	}
 }
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////  BOXBOX DRAGGABLE IMAGE  ///////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+
+CDraggableImage::CDraggableImage( Panel *pParent, const char *name ) : ImagePanel( pParent, name )
+{
+	SetDragEnabled( true );
+	SetZPos( 3 );
+}
+
+void CDraggableImage::OnDraggablePanelPaint( )
+{
+	IImage *pImage = GetImage();
+	if( pImage )
+	{
+		int x = 0, y = 0;
+		input()->GetCursorPos(x, y);
+
+		int w = 0, h = 0;
+		pImage->GetSize( w, h );
+
+		pImage->SetPos(x - (w * 0.5f), y - (h * 0.5f));
+
+		pImage->Paint();
+	}
+}
+
+void CDraggableImage::OnDroppablePanelPaint( CUtlVector< KeyValues * >& msglist, CUtlVector< Panel * >& dragPanels )
+{
+	IImage *pImage = GetImage();
+	if( pImage )
+	{
+		int x = 0, y = 0;
+		input()->GetCursorPos(x, y);
+
+		int w = 0, h = 0;
+		pImage->GetSize( w, h );
+
+		pImage->SetPos(x - (w * 0.5f), y - (h * 0.5f));
+
+		pImage->Paint();
+	}
+
+/*
+#if defined( VGUI_USEDRAGDROP )
+	if ( !dragPanels.Count() )
+		return;
+
+	// Convert this panel's bounds to screen space
+	int w, h;
+	GetSize( w, h );
+
+	int x, y;
+	x = y = 0;
+	LocalToScreen( x, y );
+
+	surface()->DrawSetColor( m_clrDropFrame );
+	// Draw 2 pixel frame
+	surface()->DrawOutlinedRect( x, y, x + w, y + h );
+	surface()->DrawOutlinedRect( x+1, y+1, x + w-1, y + h-1 );
+#endif
+	*/
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////  BOXBOX DROPPABLE LABEL  ///////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+
+CDroppableLabel::CDroppableLabel( Panel *parent, const char *name ) : Label( parent, name, "" )
+{
+	SetVisible( true );
+	SetDropEnabled( true );
+	SetZPos( 2 );
+	SetSize( 64, 64 );
+	SetBgColor( Color( 0, 0, 0, 255 ) );
+}
+
+void CDroppableLabel::ApplySchemeSettings( IScheme *pScheme )
+{
+	SetBorder(pScheme->GetBorder("MSBorder"));
+}
+
+void CDroppableLabel::OnPanelDropped( CUtlVector< KeyValues * >& msglist )
+{
+	Panel *pDrag = (Panel *)msglist.Head()->GetFirstSubKey()->GetPtr(); // BOXBOX get pointer to dragged image!
+	if( !pDrag ) return;
+
+	int x, y;
+	GetPos(x, y);
+	pDrag->SetPos(x, y);
+
+	Warning("*** DROPPED %s ON %s ***\n", pDrag->GetName(), GetName() );
+
+// BOXBOX use this code below if we want to access the Inventory Menu
+//	CMSInventoryMenu *pParentMenu = (CMSInventoryMenu *)GetParent( );
+//	pParentMenu->OnDraggedItem( pDragPanel, this );
+}
 
 
 /*

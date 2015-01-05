@@ -106,6 +106,7 @@ public:
 	int m_nPlayerModelIndex;
 	int m_nPreloadModelIndex[ MAX_CHAR_SLOTS + 1 ];
 	bool m_bHasCharInSlot[ MAX_CHAR_SLOTS + 1 ];
+	int m_nCharSlotToCreate; // BOXBOX needed so char create menu knows which slot to create character for
 
 	char			m_szCharName[ MAX_CHAR_NAME_LENGTH ];
 	const char		*m_pszCharName;

@@ -13,7 +13,7 @@
 
 #include <vgui_controls/Frame.h>
 #include <game/client/iviewport.h>
-#include "MSSClient3DModel.h"
+//#include "MSSClient3DModel.h"
 #include "ienginevgui.h"
 #include "clientmode_MSSnormal.h"
 #include "basemodelpanel.h" // BOXBOX added for models
@@ -103,11 +103,11 @@ protected:
 	virtual void ShowConfirm( void );
 	virtual void HideConfirm( void );
 
-	vgui::ImagePanel	*m_pFullCharBgImage; // BOXBOX child controls that pop up if you try to create a character, and you already have 3
-	vgui::Label		*m_pFullCharLabel;	// the text
-	vgui::Button	*m_pFullCharButton;
-	virtual void ShowFullChar( void );
-	virtual void HideFullChar( void );
+//	vgui::ImagePanel	*m_pFullCharBgImage; // BOXBOX child controls that pop up if you try to create a character, and you already have 3
+//	vgui::Label		*m_pFullCharLabel;	// the text
+//	vgui::Button	*m_pFullCharButton;
+//	virtual void ShowFullChar( void );
+//	virtual void HideFullChar( void );
 
 	int		m_nCharToDelete;
 	bool	m_bJustDeleted[4]; // BOXBOX the server can't update characters and send info back fast enough, so use this as a makeshift 'prediction' so menu acts right.

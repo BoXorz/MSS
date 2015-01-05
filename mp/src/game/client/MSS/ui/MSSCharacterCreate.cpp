@@ -358,7 +358,10 @@ void CMSCharCreateMenu::OnCommand( const char *command )
 
 		if( dataIsValid )
 		{
-			string sendCommand = VarArgs( "createchar \"%s\" %i %i %i %i %i %i %i %i %i", charName, m_nSelectedGender, m_nSelectedRace, m_nMightValue, m_nAgilityValue, m_nStaminaValue, m_nIntellectValue, m_nWitValue, m_nFortitudeValue, m_nLuckValue );
+			C_MSS_Player *pPlayer = ToMSSPlayer( C_BasePlayer::GetLocalPlayer() );
+			if( !pPlayer ) return;
+
+			string sendCommand = VarArgs( "createchar %i \"%s\" %i %i %i %i %i %i %i %i %i", pPlayer->m_nCharSlotToCreate, charName, m_nSelectedGender, m_nSelectedRace, m_nMightValue, m_nAgilityValue, m_nStaminaValue, m_nIntellectValue, m_nWitValue, m_nFortitudeValue, m_nLuckValue );
 			engine->ClientCmd( sendCommand.c_str() );
 			gViewPortInterface->ShowPanel( this, false );
 			vgui::surface()->PlaySound( "UI/pageturn.wav" );

@@ -7,10 +7,51 @@
 
 #include <vgui_controls/Frame.h>
 #include <vgui_controls/Button.h>
-//#include <vgui_controls/HTML.h>
-
+#include "vgui_controls/ImagePanel.h"
 #include <game/client/iviewport.h>
 #include "shareddefs.h"
+#include "MSS_shareddefs.h"
+
+using namespace vgui;
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////  BOXBOX DRAGGABLE IMAGE  ///////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+
+class CDraggableImage : public vgui::ImagePanel
+{
+public:
+//	DECLARE_CLASS_SIMPLE( CDraggableImage, ImagePanel ); // BOXBOX do I need this?
+
+	CDraggableImage( Panel *pParent, const char *name );
+	virtual void OnDraggablePanelPaint();
+	virtual void OnDroppablePanelPaint( CUtlVector< KeyValues * >& msglist, CUtlVector< Panel * >& dragPanels );
+};
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////  BOXBOX DROPPABLE LABEL  ///////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+
+class CDroppableLabel : public Label
+{
+	DECLARE_CLASS_SIMPLE( CDroppableLabel, Label );
+
+public:
+
+	CDroppableLabel( Panel *parent, const char *name );
+//	CDroppableLabel( Panel *pParent, const char *name, const char *text ) : Label( pParent, name, text ) { SetDropEnabled( true ); }
+
+	virtual void ApplySchemeSettings( vgui::IScheme *pScheme );
+	virtual bool IsDroppable( CUtlVector< KeyValues * >& msglist ) { return true; }
+	virtual void OnPanelDropped(  CUtlVector< KeyValues * >& msglist );
+//	void OnPanelEnteredDroppablePanel( CUtlVector< KeyValues * >& msglist );
+//	void OnPanelExitedDroppablePanel ( CUtlVector< KeyValues * >& msglist );
+};
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////  BOXBOX INVENTORY MENU  ////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
 
 class CMSInventoryMenu : public vgui::Frame, public IViewPortPanel
 {
@@ -26,24 +67,16 @@ public:
 
 	virtual const char *GetName( void ) { return PANEL_INVENTORYMENU; }
 	virtual void SetData(KeyValues *data) { return; }
-//	virtual void SetData( int type, const char *title, const char *message, const char *command);
 	virtual void Reset();
 	virtual void Update();
-//	virtual void MoveToCenterOfScreen();
 
 	virtual bool NeedsUpdate( void ) { return false; }
-	virtual bool HasInputElements( void ) { return false; }	// BOXBOX someof the child panels will though
+	virtual bool HasInputElements( void ) { return false; }	// BOXBOX do I need to change this?
 	virtual void ShowPanel( bool bShow );
 
-	// both vgui::Frame and IViewPortPanel define these, so explicitly define them here as passthroughs to vgui
 	vgui::VPANEL GetVPanel( void ) { return BaseClass::GetVPanel(); }
   	virtual bool IsVisible() { return BaseClass::IsVisible(); }
   	virtual void SetParent( vgui::VPANEL parent ) { BaseClass::SetParent( parent ); }
-
-//	virtual void ShowFile( const char *filename);
-//	virtual void ShowText( const char *text);
-//	virtual void ShowURL( const char *URL);
-//	virtual void ShowIndex( const char *entry);
 
 	virtual void ApplySchemeSettings( vgui::IScheme *pScheme );
 
@@ -52,14 +85,30 @@ protected:
 	virtual void OnCommand( const char *command);
 
 	void PlayPageTurnSound( void );
-//	void HideAllChildControls( void );
 
 	IViewPort	*m_pViewPort;
 
 	vgui::Label			*m_pRightPageTitleLabel;
 
 	vgui::Label			*m_pGoldLabel;
+
+	CDraggableImage		*m_pDragTest;
+
+ // BOXBOX TODO Should we start with a smaller backpack and create bigger backpacks later in game?
+	CDroppableLabel		*m_pBackpackDropSlots[ BACKPACK_SLOTS_X ][ BACKPACK_SLOTS_Y ];
+	CDroppableLabel		*m_pBeltSlots[10]; // BOXBOX Apply Quick Slot to these (1 through 0 keys on keyboard)
+
+	CDroppableLabel		*m_pLeftHandSlot;
+	CDroppableLabel		*m_pRightHandSlot;
+	CDroppableLabel		*m_pArmorSlot;
+	CDroppableLabel		*m_pHelmetSlot;
+	CDroppableLabel		*m_pGlovesSlot;
+	CDroppableLabel		*m_pBootsSlot;
+
 };
+
+
+
 
 
 #endif // MSSINVENTORYMENU_H

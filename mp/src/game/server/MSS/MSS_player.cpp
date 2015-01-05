@@ -1231,14 +1231,11 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 	}
 	else if ( FStrEq( args[0], "createchar" ) )
 	{
-		if( args.ArgC() == 11 )
+		if( args.ArgC() == 12 )
 		{
-//			Warning("Received command %s %s %i %i\n", args[0], args[1], atoi( args[2] ), atoi( args[3] ) );
+			int slot = atoi( args[1] );
 
-			//Check for open slot
-			int openSlot = CHARSLOT_INVALID;
-
-			for( int i = 1; i <= MAX_CHAR_SLOTS; i++ )
+/*			for( int i = 1; i <= MAX_CHAR_SLOTS; i++ )
 			{
 				charloadstatus_e status = LoadChar( i );
 				if( status == CHARLOAD_STATUS_FILE_NOT_FOUND )
@@ -1247,28 +1244,28 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 					break;
 				}
 			}
-
-			if( openSlot > CHARSLOT_INVALID )
-			{
+*/
+//			if( openSlot > CHARSLOT_INVALID )
+//			{
 				//Found open slot
 //				m_bHasChoosenChar = true;
-				m_nCurrentChar = openSlot;
+				m_nCurrentChar = slot;
 
 				//Set new character initial values
-				V_strncpy( m_szCharName.GetForModify(), args[1], MAX_CHAR_NAME_LENGTH );
-				m_nGender = atoi( args[2] );
-				m_nRace = atoi( args[3] );
+				V_strncpy( m_szCharName.GetForModify(), args[2], MAX_CHAR_NAME_LENGTH );
+				m_nGender = atoi( args[3] );
+				m_nRace = atoi( args[4] );
 
 				m_nTotalExp = 0;
 				m_nGold = 0;
 
-				m_nMight = atoi( args[4] ); 
-				m_nAgility = atoi( args[5] ); 
-				m_nStamina = atoi( args[6] ); 
-				m_nIntellect = atoi( args[7] ); 
-				m_nWit = atoi( args[8] ); 
-				m_nFortitude = atoi( args[9] ); 
-				m_nLuck = atoi( args[10] ); 
+				m_nMight = atoi( args[5] ); 
+				m_nAgility = atoi( args[6] ); 
+				m_nStamina = atoi( args[7] ); 
+				m_nIntellect = atoi( args[8] ); 
+				m_nWit = atoi( args[9] ); 
+				m_nFortitude = atoi( args[10] ); 
+				m_nLuck = atoi( args[11] ); 
 				
 				m_nUnarmed = 0;
 				m_nOneHandPiercing = 0;
@@ -1293,15 +1290,14 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 				m_nPlayerModelIndex = (m_nRace * 2) + m_nGender -2 ; // BOXBOX hacky sack!
 				SetModel( pszPlayerModels[ m_nPlayerModelIndex ] );
 
-
-				StopSound("MenuMusic.Intro"); // BOXBOX added
+				StopSound("MenuMusic.Intro"); // BOXBOX "Cut the music!", says Ravishing Rick Rude
 				SaveChar( m_nCurrentChar );
 				PreLoadChar( m_nCurrentChar ); // BOXBOX reload so client will get updated info
 				Spawn();
-			}
-			else	
+//			}
+//			else	
 				// BOXBOX code should never get here!
-				ShowViewPortPanel( PANEL_CHARSELECT , true );
+//				ShowViewPortPanel( PANEL_CHARSELECT , true );
 		}
 
 		return true;

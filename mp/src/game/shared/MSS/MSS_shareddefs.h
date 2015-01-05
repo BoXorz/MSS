@@ -130,7 +130,8 @@ enum MSSMenuPages_t
 	MENUPAGE_POWERUP,
 };
 
-
+#define BACKPACK_SLOTS_X	10
+#define BACKPACK_SLOTS_Y	10
 
 
 

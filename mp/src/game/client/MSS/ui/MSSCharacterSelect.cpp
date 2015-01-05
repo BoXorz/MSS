@@ -1,22 +1,22 @@
 
 // BOXBOX The Character Selection Menu
 
-#include "cbase.h"
-#include <stdio.h>
-#include <string>
-
-#include "MSS_shareddefs.h"
-#include "MSSCharacterSelect.h"
-#include "usermessages.h"
-
 using namespace vgui;
 using namespace std;
 
+#include "cbase.h"
+#include <stdio.h>
+#include <string>
 #include <vgui_controls/Label.h>
 #include <vgui_controls/Button.h>
 #include <vgui/ISurface.h>
 #include <cdll_client_int.h>
+#include "usermessages.h"
+
 #include "clientmode_MSSnormal.h"
+#include "MSS_shareddefs.h"
+#include "MSSCharacterSelect.h"
+#include "c_MSS_player.h"
 
 extern const char *pszPlayerModels[];
 
@@ -40,17 +40,17 @@ CMSCharSelectMenu::CMSCharSelectMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_
 	m_pConfirmYesButton		= new vgui::Button( this, "YesButton", "#MSS_YES", this, "confirmyes" );
 	m_pConfirmNoButton		= new vgui::Button( this, "NoButton", "#MSS_NO", this, "confirmno" );
 
-	m_pFullCharBgImage		= new vgui::ImagePanel( this, "FullCharBGImg" );
-	m_pFullCharLabel		= new vgui::Label( this, "FullCharLabel", "#MSS_FULL_CHAR" );
-	m_pFullCharButton		= new vgui::Button( this, "FullCharButton", "#MSS_OK", this, "fullcharok" );
+//	m_pFullCharBgImage		= new vgui::ImagePanel( this, "FullCharBGImg" );
+//	m_pFullCharLabel		= new vgui::Label( this, "FullCharLabel", "#MSS_FULL_CHAR" );
+//	m_pFullCharButton		= new vgui::Button( this, "FullCharButton", "#MSS_OK", this, "fullcharok" );
 
 	m_pCharOne = new CModelPanel( this, "charone" );
 	m_pCharTwo = new CModelPanel( this, "chartwo" );
 	m_pCharThree = new CModelPanel( this, "charthree" );
 
-	m_bJustDeleted[0] = false;
-	m_bJustDeleted[1] = false;
-	m_bJustDeleted[2] = false;
+	m_bJustDeleted[ CHARSLOT_ONE ] = false;
+	m_bJustDeleted[ CHARSLOT_TWO ] = false;
+	m_bJustDeleted[ CHARSLOT_THREE ] = false;
 }
 
 CMSCharSelectMenu::~CMSCharSelectMenu()
@@ -76,8 +76,8 @@ void CMSCharSelectMenu::ApplySchemeSettings( IScheme *pScheme )
 	m_pConfirmLabel->SetFont( pScheme->GetFont( "HeaderFontSmall" ) );
 	m_pConfirmLabel->SetFgColor( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
 
-	m_pFullCharLabel->SetFont( pScheme->GetFont( "HeaderFontSmall" ) );
-	m_pFullCharLabel->SetFgColor( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
+//	m_pFullCharLabel->SetFont( pScheme->GetFont( "HeaderFontSmall" ) );
+//	m_pFullCharLabel->SetFgColor( pScheme->GetColor( "InkWell", Color(0, 0, 0, 0) ) );
 }
 
 void CMSCharSelectMenu::ShowPanel(bool bShow)
@@ -86,6 +86,7 @@ void CMSCharSelectMenu::ShowPanel(bool bShow)
 	if ( BaseClass::IsVisible() == bShow )
 		return;
 
+// BOXBOX if any main menu panels are open, don't open
 	IViewPortPanel *panel = gViewPortInterface->FindPanelByName( PANEL_STATSMENU );
 	if( panel->IsVisible() )
 		return;
@@ -147,37 +148,6 @@ void CMSCharSelectMenu::Reset( ) // BOXBOX redid entire function
 	if( m_bJustDeleted[ CHARSLOT_THREE ] )
 	m_pCharThree->SetVisible( false );
 
-
-/*
-	for( int i = 0; i< GetChildCount(); i++ ) 
-	{
-		CModelPanel *panel = dynamic_cast<CModelPanel *>( GetChild( i ) );
-
-		if ( panel )
-		{
-			if( !Q_stricmp( panel->GetName(), "charone" ) )
-			{
-				panel->SetVisible( pPlayer->m_bHasCharInSlot[ CHARSLOT_ONE ] );
-//				panel->m_hModel->SetModel( pszPlayerModels[pPlayer->m_PreloadedCharInfo_Model.Get( 0 )] ); // BOXBOX attempt to set model
-				if( m_bJustDeleted[ CHARSLOT_ONE ] )
-					panel->SetVisible( false );
-			}
-			else if( !Q_stricmp( panel->GetName(), "chartwo" ) )
-			{
-				panel->SetVisible( pPlayer->m_bHasCharInSlot[ CHARSLOT_TWO ] );
-				if( m_bJustDeleted[ CHARSLOT_TWO ] )
-					panel->SetVisible( false );
-			}			
-			else if( !Q_stricmp( panel->GetName(), "charthree" ) )
-			{
-				panel->SetVisible( pPlayer->m_bHasCharInSlot[ CHARSLOT_THREE ] );
-				if( m_bJustDeleted[ CHARSLOT_THREE ] )
-					panel->SetVisible( false );
-			}			
-		}
-	}
-*/
-
 	m_pSlot1Label->SetText( pPlayer->m_szPreloadCharName1 );
 	if( m_bJustDeleted[ CHARSLOT_ONE ] )
 		m_pSlot1Label->SetText( "" );
@@ -189,28 +159,28 @@ void CMSCharSelectMenu::Reset( ) // BOXBOX redid entire function
 		m_pSlot3Label->SetText( "" );
 
 	Button *pButton = (Button *)FindChildByName( "CharButton1" );
-	pButton->SetText( pPlayer->m_szPreloadCharName1[0] ? "" : "#MSS_NOCHAR" );
-	pButton->SetEnabled( pPlayer->m_szPreloadCharName1[0] ? true : false );
+	pButton->SetText( pPlayer->m_bHasCharInSlot[ CHARSLOT_ONE ] ? "" : "#MSS_NOCHAR" );
+//	pButton->SetEnabled( pPlayer->m_bHasCharInSlot[ CHARSLOT_ONE ] ? true : false );
 	if( m_bJustDeleted[ CHARSLOT_ONE ] )
 	{
 		pButton->SetText( "#MSS_NOCHAR" );
-		pButton->SetEnabled( false );
+//		pButton->SetEnabled( false );
 	}
 	pButton = (Button *)FindChildByName( "CharButton2" );
-	pButton->SetText( pPlayer->m_szPreloadCharName2[0] ? "" : "#MSS_NOCHAR" );
-	pButton->SetEnabled( pPlayer->m_szPreloadCharName2[0] ? true : false );
+	pButton->SetText( pPlayer->m_bHasCharInSlot[ CHARSLOT_TWO ] ? "" : "#MSS_NOCHAR" );
+//	pButton->SetEnabled( pPlayer->m_bHasCharInSlot[ CHARSLOT_TWO ] ? true : false );
 	if( m_bJustDeleted[ CHARSLOT_TWO ] )
 	{
 		pButton->SetText( "#MSS_NOCHAR" );
-		pButton->SetEnabled( false );
+//		pButton->SetEnabled( false );
 	}
 	pButton = (Button *)FindChildByName( "CharButton3" );
-	pButton->SetText( pPlayer->m_szPreloadCharName3[0] ? "" : "#MSS_NOCHAR" );
-	pButton->SetEnabled( pPlayer->m_szPreloadCharName3[0] ? true : false );
+	pButton->SetText( pPlayer->m_bHasCharInSlot[ CHARSLOT_THREE ] ? "" : "#MSS_NOCHAR" );
+//	pButton->SetEnabled( pPlayer->m_bHasCharInSlot[ CHARSLOT_THREE ] ? true : false );
 	if( m_bJustDeleted[ CHARSLOT_THREE ] )
 	{
 		pButton->SetText( "#MSS_NOCHAR" );
-		pButton->SetEnabled( false );
+//		pButton->SetEnabled( false );
 	}
 }
 
@@ -223,29 +193,63 @@ void CMSCharSelectMenu::OnCommand( const char *command )
 	C_MSS_Player *pPlayer = ToMSSPlayer( C_BasePlayer::GetLocalPlayer() );
 	if( !pPlayer ) return;
 
-	if( Q_strstr( command, "choosechar" ) )
+	if( Q_strstr( command, "choosechar 1" ) )
 	{
-		engine->ClientCmd( command );
-		gViewPortInterface->ShowPanel( this, false );
-		vgui::surface()->PlaySound( "UI/pageturn.wav" );
-		return;
-	}
-	else if( Q_strstr( command, "createchar" ) )
-	{
-		if( pPlayer->GetNumChars() == MAX_CHAR_SLOTS )
+		if( pPlayer->m_bHasCharInSlot[ CHARSLOT_ONE ] )
 		{
-			ShowFullChar();
+			engine->ClientCmd( command );
+			gViewPortInterface->ShowPanel( this, false );
+			vgui::surface()->PlaySound( "UI/pageturn.wav" );
 			return;
 		}
-
-		gViewPortInterface->ShowPanel( this, false );
-		gViewPortInterface->ShowPanel( PANEL_CHARCREATE, true );
-		vgui::surface()->PlaySound( "UI/pageturn.wav" );
-		return;
+		else
+		{
+			pPlayer->m_nCharSlotToCreate = CHARSLOT_ONE; // BOXBOX tell char creation menu which slot to put new char in
+			gViewPortInterface->ShowPanel( this, false );
+			gViewPortInterface->ShowPanel( PANEL_CHARCREATE, true );
+			vgui::surface()->PlaySound( "UI/pageturn.wav" );
+			return;
+		}
+	}
+	else if( Q_strstr( command, "choosechar 2" ) )
+	{
+		if( pPlayer->m_bHasCharInSlot[ CHARSLOT_TWO ] )
+		{
+			engine->ClientCmd( command );
+			gViewPortInterface->ShowPanel( this, false );
+			vgui::surface()->PlaySound( "UI/pageturn.wav" );
+			return;
+		}
+		else
+		{
+			pPlayer->m_nCharSlotToCreate = CHARSLOT_TWO;
+			gViewPortInterface->ShowPanel( this, false );
+			gViewPortInterface->ShowPanel( PANEL_CHARCREATE, true );
+			vgui::surface()->PlaySound( "UI/pageturn.wav" );
+			return;
+		}
+	}
+	else if( Q_strstr( command, "choosechar 3" ) )
+	{
+		if( pPlayer->m_bHasCharInSlot[ CHARSLOT_THREE ] )
+		{
+			engine->ClientCmd( command );
+			gViewPortInterface->ShowPanel( this, false );
+			vgui::surface()->PlaySound( "UI/pageturn.wav" );
+			return;
+		}
+		else
+		{
+			pPlayer->m_nCharSlotToCreate = CHARSLOT_THREE;
+			gViewPortInterface->ShowPanel( this, false );
+			gViewPortInterface->ShowPanel( PANEL_CHARCREATE, true );
+			vgui::surface()->PlaySound( "UI/pageturn.wav" );
+			return;
+		}
 	}
 	else if( Q_strstr( command, "deletechar 1" ) )
 	{
-		if( !pPlayer->m_nPreloadModelIndex[ CHARSLOT_ONE ] )// BOXBOX no character to delete
+		if( !pPlayer->m_bHasCharInSlot[ CHARSLOT_ONE ] )// BOXBOX no character to delete
 		{
 			return;
 		}
@@ -255,7 +259,7 @@ void CMSCharSelectMenu::OnCommand( const char *command )
 	}
 	else if( Q_strstr( command, "deletechar 2" ) )
 	{
-		if( !pPlayer->m_nPreloadModelIndex[ CHARSLOT_TWO ] )
+		if( !pPlayer->m_bHasCharInSlot[ CHARSLOT_TWO ] )
 		{
 			return;
 		}
@@ -265,7 +269,7 @@ void CMSCharSelectMenu::OnCommand( const char *command )
 	}
 	else if( Q_strstr( command, "deletechar 3" ) )
 	{
-		if( !pPlayer->m_nPreloadModelIndex[ CHARSLOT_THREE ] )
+		if( !pPlayer->m_bHasCharInSlot[ CHARSLOT_THREE ] )
 		{
 			return;
 		}
@@ -275,17 +279,17 @@ void CMSCharSelectMenu::OnCommand( const char *command )
 	}
 	else if( Q_strstr( command, "confirmyes" ) )
 	{
-		if( m_nCharToDelete == 1 )
+		if( m_nCharToDelete == CHARSLOT_ONE )
 		{
 			engine->ClientCmd( "deletechar 1" );
 			m_bJustDeleted[1] = true;
 		}
-		else if( m_nCharToDelete == 2 )
+		else if( m_nCharToDelete == CHARSLOT_TWO )
 		{
 			engine->ClientCmd( "deletechar 2" );
 			m_bJustDeleted[2] = true;
 		}
-		else if( m_nCharToDelete == 3 )
+		else if( m_nCharToDelete == CHARSLOT_THREE )
 		{
 			engine->ClientCmd( "deletechar 3" );
 			m_bJustDeleted[3] = true;
@@ -299,11 +303,11 @@ void CMSCharSelectMenu::OnCommand( const char *command )
 		HideConfirm();
 		return;
 	}
-	else if( Q_strstr( command, "fullcharok" ) )
-	{
-		HideFullChar();
-		return;
-	}
+//	else if( Q_strstr( command, "fullcharok" ) )
+//	{
+//		HideFullChar();
+//		return;
+//	}
 
 	else
 		BaseClass::OnCommand( command );
@@ -311,9 +315,9 @@ void CMSCharSelectMenu::OnCommand( const char *command )
 
 void CMSCharSelectMenu::OnClose( )
 {
-	m_bJustDeleted[0] = false;
-	m_bJustDeleted[1] = false;
-	m_bJustDeleted[2] = false;
+	m_bJustDeleted[ CHARSLOT_ONE ] = false;
+	m_bJustDeleted[ CHARSLOT_TWO ] = false;
+	m_bJustDeleted[ CHARSLOT_THREE ] = false;
 
 	BaseClass::OnClose( );
 }
@@ -342,8 +346,8 @@ void CMSCharSelectMenu::ShowConfirm( void )
 	pButton->SetEnabled( false );
 	pButton = (Button *)FindChildByName( "DeleteCharButton3" );
 	pButton->SetEnabled( false );
-	pButton = (Button *)FindChildByName( "NewCharButton" );
-	pButton->SetEnabled( false );
+//	pButton = (Button *)FindChildByName( "NewCharButton" );
+//	pButton->SetEnabled( false );
 }
 
 void CMSCharSelectMenu::HideConfirm( void )
@@ -370,11 +374,11 @@ void CMSCharSelectMenu::HideConfirm( void )
 	pButton->SetEnabled( true );
 	pButton = (Button *)FindChildByName( "DeleteCharButton3" );
 	pButton->SetEnabled( true );
-	pButton = (Button *)FindChildByName( "NewCharButton" );
-	pButton->SetEnabled( true );
+//	pButton = (Button *)FindChildByName( "NewCharButton" );
+//	pButton->SetEnabled( true );
 	Reset();
 }
-
+/*
 void CMSCharSelectMenu::ShowFullChar( void )
 {
 	m_pFullCharBgImage->SetVisible( true );
@@ -426,7 +430,7 @@ void CMSCharSelectMenu::HideFullChar( void )
 	pButton = (Button *)FindChildByName( "NewCharButton" );
 	pButton->SetEnabled( true );
 }
-
+*/
 vgui::Panel *CMSCharSelectMenu::CreateControlByName(const char *controlName)
 {
      return BaseClass::CreateControlByName( controlName );
