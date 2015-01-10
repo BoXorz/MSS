@@ -133,6 +133,46 @@ enum MSSMenuPages_t
 #define BACKPACK_SLOTS_X	10
 #define BACKPACK_SLOTS_Y	10
 
+enum MSSBackpacks_t
+{
+	BACKPACK_INVALID,
+	BACKPACK_TINY,		// 10 slots
+	BACKPACK_MEAGER,	// 20 slots
+	BACKPACK_SMALL,		// 30 slots
+	BACKPACK_MEDIUM,	// 40
+	BACKPACK_NORMAL,	// 50
+	BACKPACK_TRAVELERS,	// 60
+	BACKPACK_LARGE,		// 70
+	BACKPACK_HUGE,		// 80
+	BACKPACK_GIANT,		// 90
+	BACKPACK_COLOSSAL,	// 100 slots
+};
+
+enum MSSItemTypes_t
+{
+	ITEMTYPE_ANY,			// BOXBOX for slots that accept any type of item (backpack, belt)
+	ITEMTYPE_WEAPON,		// red
+	ITEMTYPE_METALWORK,		// orange
+	ITEMTYPE_ALCHEMY,		// green
+	ITEMTYPE_MAGICWORK,		// blue
+	ITEMTYPE_CLOTHWORK,		// purple
+	ITEMTYPE_WOODWORK,		// brown
+	ITEMTYPE_STONEWORK,		// gray
+	ITEMTYPE_ARMOR,			// yellow from here down
+	ITEMTYPE_HELMET,
+	ITEMTYPE_GLOVES,
+	ITEMTYPE_BOOTS,
+};
+
+
+
+
+
+
+
+
+
+
 
 
 #endif // MSS_SHAREDDEFS_H

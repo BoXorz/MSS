@@ -33,6 +33,8 @@ extern INetworkStringTable *g_pStringTableInfoPanel;
 //extern const char *pszRaceNames[];
 //extern const char *pszSkillNames[];
 //extern const char *pszSkillLevelNames[];
+extern const char *pszPlayerModels[];
+extern const char *pszBackpackNames[];
 
 CMSInventoryMenu::CMSInventoryMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_INVENTORYMENU )
 {
@@ -48,19 +50,21 @@ CMSInventoryMenu::CMSInventoryMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_IN
 	SetKeyBoardInputEnabled( false );
 
 	m_pRightPageTitleLabel = new Label( this, "RPageTitleLabel", "0" );
-
+	m_pBackpackLabel = new Label( this, "BackpackLabel", "0" );
 	m_pGoldLabel = new Label( this, "GoldLabel", "0" );
 
-	m_pDragTest = new CDraggableImage( this, "DragTest" );
+	m_pDragTest = new CDraggableImage( this, "DragTest", ITEMTYPE_WEAPON );
+	m_pDragTest->SetImage("icons/RustyShortSword");
+
+	m_pDragTest2 = new CDraggableImage( this, "DragTest2", ITEMTYPE_WEAPON );
+	m_pDragTest2->SetImage("icons/RustyShortSword");
 
 	for( int y = 0 ; y < BACKPACK_SLOTS_Y ; y++ )
 	{
 		for( int x = 0 ; x < BACKPACK_SLOTS_X ; x++ )
 		{
-//			m_pBackpackDropSlots[x][y] = new CDroppableLabel( this, "BackpackSlot" );
 			m_pBackpackDropSlots[x][y] = new CDroppableLabel( this, VarArgs( "BackpackSlot %i %i", x, y ) );
 		}
-//		m_pBeltSlots[y] = new CDroppableLabel( this, "BeltSlot" );
 		m_pBeltSlots[y] = new CDroppableLabel( this, VarArgs( "BeltSlot %i", y ) );
 	}
 
@@ -71,6 +75,7 @@ CMSInventoryMenu::CMSInventoryMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_IN
 	m_pGlovesSlot		= new CDroppableLabel( this, "GlovesSlot" );
 	m_pBootsSlot		= new CDroppableLabel( this, "BootsSlot" );
 
+	m_pCharModel = new CModelPanel( this, "charmodel" );
 }
 
 void CMSInventoryMenu::ApplySchemeSettings( IScheme *pScheme )
@@ -79,25 +84,33 @@ void CMSInventoryMenu::ApplySchemeSettings( IScheme *pScheme )
 
 	LoadControlSettings("Resource/UI/MSInventoryMenu.res");
 
-	int xpos = 284;
-	int ypos = 164;
+	int xpos = 279;
+	int ypos = 159;
 
 	for( int y = 0 ; y < BACKPACK_SLOTS_Y ; y++ )
 	{
 		for( int x = 0 ; x < BACKPACK_SLOTS_X ; x++ )
 		{
-			m_pBackpackDropSlots[x][y]->SetPos( xpos + (x*64), ypos +(y*64) );
+			m_pBackpackDropSlots[x][y]->SetPos( xpos + (x*65), ypos +(y*65) );
 		}
-		m_pBeltSlots[y]->SetPos( xpos + (y*64), 888 );
+		m_pBeltSlots[y]->SetPos( xpos + (y*65), 888 );
 	}
 
 	m_pLeftHandSlot->SetPos( 1084, 500 );
+	m_pLeftHandSlot->SetItemType( ITEMTYPE_WEAPON ) ;
 	m_pRightHandSlot->SetPos( 1600, 500 );
+	m_pRightHandSlot->SetItemType( ITEMTYPE_WEAPON );
 	m_pArmorSlot->SetPos( 1345, 400 );
+	m_pArmorSlot->SetItemType( ITEMTYPE_ARMOR );
 	m_pHelmetSlot->SetPos( 1345, 180 );
+	m_pHelmetSlot->SetItemType( ITEMTYPE_HELMET );
 	m_pGlovesSlot->SetPos( 1140, 400 );
+	m_pGlovesSlot->SetItemType( ITEMTYPE_GLOVES );
 	m_pBootsSlot->SetPos( 1345, 780 );
+	m_pBootsSlot->SetItemType( ITEMTYPE_BOOTS );
 
+	m_pDragTest->SetPos( 1000, 600 );
+	m_pDragTest2->SetPos( 1065, 600 );
 }
 
 CMSInventoryMenu::~CMSInventoryMenu()
@@ -107,6 +120,7 @@ CMSInventoryMenu::~CMSInventoryMenu()
 
 void CMSInventoryMenu::Reset( void )
 {
+
 
 //	Update();
 }
@@ -118,12 +132,22 @@ void CMSInventoryMenu::Update( void )
 	if( !pPlayer ) return;
 
 	m_pRightPageTitleLabel->SetText( pPlayer->m_pszCharName );
+	m_pBackpackLabel->SetText( pszBackpackNames[ pPlayer->m_nBackpackSize ] );
 
 	char buf[10];
 	itoa( pPlayer->m_nGold, buf, 10 );
 	m_pGoldLabel->SetText( buf );
 
+	for( int y = 0 ; y < BACKPACK_SLOTS_Y ; y++ )
+	{
+		for( int x = 0 ; x < BACKPACK_SLOTS_X ; x++ )
+		{
+			m_pBackpackDropSlots[x][y]->SetVisible( pPlayer->m_nBackpackSize > y );
+		}
+	}
 
+	m_pCharModel->SwapModel( pszPlayerModels[ pPlayer->m_nPlayerModelIndex ], NULL ); 
+	m_pCharModel->MoveToFront();
 }
 
 
@@ -170,17 +194,89 @@ void CMSInventoryMenu::ShowPanel( bool bShow )
 		SetVisible( false );
 	}
 }
+/*
+void CMSInventoryMenu::NewItem( KeyValues itemData ) // BOXBOX TODO do keyvalues and finish this 
+{
+	CDraggableImage *pNewItem = new CDraggableImage( this, itemData.GetString( "ItemName" ), itemData.GetInt( "ItemType" ) );
+	pNewItem->SetImage( itemData.GetString( "Icon" ) );
+
+	if( !PutItemInBackpack( pNewItem ) ) // BOXBOX TODO this will probably all be server side here on
+	{
+		if( !PutItemOnBelt( pNewItem ) )
+			DropItemOnGround();
+	}
+}
+*/
+bool CMSInventoryMenu::PutItemInBackpack( CDraggableImage *item )
+{
+	for( int y = 0 ; y < BACKPACK_SLOTS_Y ; y++ )
+	{
+		for( int x = 0 ; x < BACKPACK_SLOTS_X ; x++ )
+		{
+			if( !m_pBackpackDropSlots[x][y]->HasItem() ) // BOXBOX if we found an empty slot
+			{
+				m_pBackpackDropSlots[x][y]->SetItem( item );
+				return true;
+			}
+		}
+	}
+
+	return false; // BOXBOX backpack full!
+}
+
+bool CMSInventoryMenu::PutItemOnBelt( CDraggableImage *item )
+{
+	for( int x = 0 ; x < 10 ; x++ )
+	{
+		if( !m_pBeltSlots[x]->HasItem() ) // BOXBOX if we found an empty slot
+		{
+			m_pBeltSlots[x]->SetItem( item );
+			return true;
+		}
+	}
+
+	return false; // BOXBOX belt full!
+}
+
+void CMSInventoryMenu::DropItemOnGround( void )
+{
+
+}
+
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////  BOXBOX DRAGGABLE IMAGE  ///////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-CDraggableImage::CDraggableImage( Panel *pParent, const char *name ) : ImagePanel( pParent, name )
+CDraggableImage::CDraggableImage( Panel *pParent, const char *name, int itemtype ) : ImagePanel( pParent, name )
 {
 	SetDragEnabled( true );
 	SetZPos( 3 );
+	SetSize( 64, 64 );
+	m_nItemType = itemtype;
+//	m_pPreviousSlot = NULL;
 }
+
+/*
+void CDraggableImage::OnStartDragging() // BOXBOX this is BS I gotta do all this...
+{
+//	IViewPortPanel *panel = gViewPortInterface->FindPanelByName( PANEL_INVENTORYMENU );
+
+	Panel *panel = GetParent();
+	if( !panel ) return;
+
+	for (int i = 0; i < panel->GetChildCount(); i++)
+	{
+		CDroppableLabel *child = dynamic_cast<CDroppableLabel *>(panel->GetChild(i));
+		if( child )
+			child->SetZPos( 4 );
+	}
+
+	BaseClass::OnStartDragging();
+}
+*/
 
 void CDraggableImage::OnDraggablePanelPaint( )
 {
@@ -199,9 +295,53 @@ void CDraggableImage::OnDraggablePanelPaint( )
 	}
 }
 
-void CDraggableImage::OnDroppablePanelPaint( CUtlVector< KeyValues * >& msglist, CUtlVector< Panel * >& dragPanels )
+/*
+void CDraggableImage::OnCreateDragData( KeyValues *msg )
 {
-	IImage *pImage = GetImage();
+	Warning("*** CREATING DRAG DATA ***\n" );
+
+	BaseClass::OnCreateDragData( msg );
+}
+*/
+
+/*
+void CDraggableImage::OnMoveAway()
+{
+	m_pPreviousSlot->SetItem( NULL );
+}
+*/
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////  BOXBOX DROPPABLE LABEL  ///////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+
+CDroppableLabel::CDroppableLabel( Panel *parent, const char *name ) : Label( parent, name, "" )
+{
+	SetVisible( true );
+	SetDropEnabled( true );
+	SetZPos( 2 );
+	SetSize( 66, 66 );
+	SetBgColor( Color( 0, 0, 0, 255 ) );
+
+	m_pItem = NULL;
+	m_nItemType = ITEMTYPE_ANY;
+}
+
+void CDroppableLabel::ApplySchemeSettings( IScheme *pScheme )
+{
+	SetBorder(pScheme->GetBorder("MSBorder"));
+}
+
+void CDroppableLabel::OnDroppablePanelPaint( CUtlVector< KeyValues * >& msglist, CUtlVector< Panel * >& dragPanels ) // BOXBOX damn this actually works
+{
+	Panel *pDrag = (Panel *)msglist.Head()->GetFirstSubKey()->GetPtr(); // BOXBOX get pointer to dragged image!
+	if( !pDrag ) return;
+
+	CDraggableImage	*pItem = (CDraggableImage*)pDrag;
+
+	IImage *pImage = pItem->GetImage();
 	if( pImage )
 	{
 		int x = 0, y = 0;
@@ -214,54 +354,100 @@ void CDraggableImage::OnDroppablePanelPaint( CUtlVector< KeyValues * >& msglist,
 
 		pImage->Paint();
 	}
+}
 
+void CDroppableLabel::OnPanelEnteredDroppablePanel( CUtlVector< KeyValues * >& msglist )
+{
+//	SetZPos( 4 );
+	
+	//	Warning("*** PANEL ENTERED %s ***\n", GetName() );
 /*
-#if defined( VGUI_USEDRAGDROP )
-	if ( !dragPanels.Count() )
-		return;
+	if( HasItem() )
+	{
+		Warning("*** HAS ITEM ***\n" );
+	}
+	else
+	{
+		Warning("*** NO ITEM ***\n" );
+	}
+*/
+	SetBgColor( Color( 0, 0, 0, 150 ) );
 
-	// Convert this panel's bounds to screen space
-	int w, h;
-	GetSize( w, h );
+	if( m_nItemType == ITEMTYPE_ANY ) return; // BOXBOX any type of item can be dropped here (backpack, belt)
 
-	int x, y;
-	x = y = 0;
-	LocalToScreen( x, y );
-
-	surface()->DrawSetColor( m_clrDropFrame );
-	// Draw 2 pixel frame
-	surface()->DrawOutlinedRect( x, y, x + w, y + h );
-	surface()->DrawOutlinedRect( x+1, y+1, x + w-1, y + h-1 );
-#endif
-	*/
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////  BOXBOX DROPPABLE LABEL  ///////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////
-
-CDroppableLabel::CDroppableLabel( Panel *parent, const char *name ) : Label( parent, name, "" )
-{
-	SetVisible( true );
-	SetDropEnabled( true );
-	SetZPos( 2 );
-	SetSize( 64, 64 );
-	SetBgColor( Color( 0, 0, 0, 255 ) );
-}
-
-void CDroppableLabel::ApplySchemeSettings( IScheme *pScheme )
-{
-	SetBorder(pScheme->GetBorder("MSBorder"));
-}
-
-void CDroppableLabel::OnPanelDropped( CUtlVector< KeyValues * >& msglist )
-{
 	Panel *pDrag = (Panel *)msglist.Head()->GetFirstSubKey()->GetPtr(); // BOXBOX get pointer to dragged image!
 	if( !pDrag ) return;
 
+	CDraggableImage *pItem = dynamic_cast<CDraggableImage *>(pDrag); // BOXBOX cast it to our draggable class
+	if( !pItem ) return;
+
+	if( m_nItemType != pItem->m_nItemType )
+	{
+		SetDropEnabled( false );
+	}
+}
+
+void CDroppableLabel::OnPanelExitedDroppablePanel( CUtlVector< KeyValues * >& msglist )
+{
+	SetBgColor( Color( 0, 0, 0, 255 ) );
+	SetDropEnabled( true );
+	
+	//	SetZPos( 2 );
+	
+	//	Warning("*** PANEL EXITED %s ***\n", GetName() );
+}
+
+void CDroppableLabel::OnPanelDropped( CUtlVector< KeyValues * >& msglist ) // BOXBOX an item has been dropped on me!
+{
+/*
+	Panel *panel = GetParent();
+	if( !panel ) return;
+
+	for (int i = 0; i < panel->GetChildCount(); i++)
+	{
+		CDroppableLabel *child = dynamic_cast<CDroppableLabel *>(panel->GetChild(i));
+		if( child )
+			child->SetZPos( 2 );
+	}
+*/
+	SetBgColor( Color( 0, 0, 0, 255 ) );
+	Panel *pDrag = (Panel *)msglist.Head()->GetFirstSubKey()->GetPtr(); // BOXBOX get pointer to dragged image!
+	if( !pDrag ) return;
+
+	CDraggableImage *pItem = dynamic_cast<CDraggableImage *>(pDrag);
+	if( !pItem ) return;
+
+	if( m_nItemType != ITEMTYPE_ANY )
+	{
+		if( m_nItemType != pItem->m_nItemType )
+			return;
+	}
+
+
+/*
+	if( m_pItem != NULL ) // BOXBOX if I already have an item, send current one to backpack!
+	{
+		CMSInventoryMenu *pInventory = (CMSInventoryMenu *)GetParent();
+		if( !pInventory ) return;
+
+		if ( !pInventory->PutItemInBackpack( m_pItem ) ) return;
+	}
+*/
+
+//	if( pItem->m_pPreviousSlot )
+//	{
+//		pItem->m_pPreviousSlot->SetItem( NULL ); // BOXBOX tell the slot we just dragged from that there is no item in that slot now
+//	}
+
+
+
+
+	m_pItem = pItem; // BOXBOX now set the item in this one
+//	m_pItem->m_pPreviousSlot = this;
+
 	int x, y;
 	GetPos(x, y);
-	pDrag->SetPos(x, y);
+	m_pItem->SetPos(x+1, y+1);
 
 	Warning("*** DROPPED %s ON %s ***\n", pDrag->GetName(), GetName() );
 
@@ -269,6 +455,39 @@ void CDroppableLabel::OnPanelDropped( CUtlVector< KeyValues * >& msglist )
 //	CMSInventoryMenu *pParentMenu = (CMSInventoryMenu *)GetParent( );
 //	pParentMenu->OnDraggedItem( pDragPanel, this );
 }
+
+
+void CDroppableLabel::SetItem( CDraggableImage *item )
+{
+	m_pItem = item;
+	int x, y;
+	GetPos(x, y);
+	m_pItem->SetPos(x, y);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*

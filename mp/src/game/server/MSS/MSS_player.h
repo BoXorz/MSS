@@ -88,8 +88,8 @@ public:
 
 	void CheatImpulseCommands( int iImpulse );
 	void CreateRagdollEntity( void );
-	void GiveAllItems( void ); // BOXBOX TODO impulse 101, keeping for now - for development testing
-//	void GiveDefaultItems( void ); // BOXBOX don't need this
+
+	virtual CBaseEntity		*GiveNamedItem( const char *szName, int iSubType = 0 );
 
 	void NoteWeaponFired( void );
 
@@ -212,6 +212,8 @@ protected:
 	CNetworkVar( int, m_nWoodwork );
 	CNetworkVar( int, m_nStonework );
 	CNetworkVar( int, m_nMetalwork );
+
+	CNetworkVar( int, m_nBackpackSize );
 
 	void	TabulateStats( void ); // BOXBOX Here is where we calculate all the player stats that we don't need to save in the character files
 

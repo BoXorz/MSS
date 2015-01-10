@@ -6,6 +6,7 @@
 
 #include "cbase.h"
 #include "vcollide_parse.h"
+
 #include "c_MSS_player.h"
 #include "view.h"
 #include "takedamageinfo.h"
@@ -65,6 +66,8 @@ IMPLEMENT_CLIENTCLASS_DT(C_MSS_Player, DT_MSS_Player, CMSS_Player)
 	RecvPropInt( RECVINFO( m_nWoodwork ) ),
 	RecvPropInt( RECVINFO( m_nStonework ) ),
 	RecvPropInt( RECVINFO( m_nMetalwork ) ),
+
+	RecvPropInt( RECVINFO( m_nBackpackSize ) ),
 
 	//RecvPropArray( RecvPropString( RECVINFO( m_PreloadedCharInfo ) ), m_PreloadedCharInfo ),
 	//RecvPropArray3( RECVINFO_ARRAY( m_PreloadedCharInfo ), RecvPropString( RECVINFO( m_PreloadedCharInfo ), 0, RecvProxy_Preload ) ),

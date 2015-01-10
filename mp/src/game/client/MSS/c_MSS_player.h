@@ -143,6 +143,8 @@ public:
 	int		m_nStonework;
 	int		m_nMetalwork;
 
+	int		m_nBackpackSize;
+
 	void	TabulateStats( void ); // BOXBOX Here is where we calculate all the player stats that we don't need to save in the character files
 
 

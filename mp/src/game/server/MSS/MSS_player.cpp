@@ -88,6 +88,8 @@ IMPLEMENT_SERVERCLASS_ST(CMSS_Player, DT_MSS_Player)
 	SendPropInt( SENDINFO( m_nStonework ), 15 ),
 	SendPropInt( SENDINFO( m_nMetalwork ), 15 ),
 
+	SendPropInt( SENDINFO( m_nBackpackSize ), 5 ),
+
 	//SendPropArray3( SENDINFO_ARRAY3( m_PreloadedCharInfo ), SendPropInt( SENDINFO_ARRAY(m_PreloadedCharInfo), 0, SendProxy_Preload ) ),
 	//SendPropArray3( SENDINFO_ARRAY3( m_PreloadedCharInfo ), SendPropInt( SENDINFO_ARRAY(m_PreloadedCharInfo), 0, SendProxy_Preload ) ),
 //	SendPropArray( SendPropString( SENDINFO_ARRAY( m_PreloadedCharInfo_Name ), 0, SendProxy_String_tToString ), m_PreloadedCharInfo_Name ),
@@ -148,6 +150,8 @@ CMSS_Player::CMSS_Player() : m_PlayerAnimState( this )
 
 	m_bIsMainMenuOpen = false;
 	m_nCurMenuPage = MENUPAGE_STATS;
+
+	m_nBackpackSize = BACKPACK_TINY;
 }
 
 CMSS_Player::~CMSS_Player( void )
@@ -186,6 +190,12 @@ void CMSS_Player::Precache( void )
 }
 
 
+CBaseEntity	CMSS_Player::*GiveNamedItem( const char *szName, int iSubType = 0 )
+{
+	// BOXBOX TODO this is where I'm at, use keyvalues to find item from item script file
+}
+
+/*
 void CMSS_Player::GiveAllItems( void )
 {
 	EquipSuit();
@@ -193,40 +203,9 @@ void CMSS_Player::GiveAllItems( void )
 	GiveNamedItem( "weapon_rustyshortsword" );
 	GiveNamedItem( "weapon_arozensword" );
 
-/* BOXBOX removing old weapons
-	CBasePlayer::GiveAmmo( 255,	"Pistol");
-	CBasePlayer::GiveAmmo( 255,	"AR2" );
-	CBasePlayer::GiveAmmo( 5,	"AR2AltFire" );
-	CBasePlayer::GiveAmmo( 255,	"SMG1");
-	CBasePlayer::GiveAmmo( 1,	"smg1_grenade");
-	CBasePlayer::GiveAmmo( 255,	"Buckshot");
-	CBasePlayer::GiveAmmo( 32,	"357" );
-	CBasePlayer::GiveAmmo( 3,	"rpg_round");
 
-	CBasePlayer::GiveAmmo( 1,	"grenade" );
-	CBasePlayer::GiveAmmo( 2,	"slam" );
-
-	GiveNamedItem( "weapon_crowbar" );
-	GiveNamedItem( "weapon_stunstick" );
-	GiveNamedItem( "weapon_pistol" );
-	GiveNamedItem( "weapon_357" );
-
-	GiveNamedItem( "weapon_smg1" );
-	GiveNamedItem( "weapon_ar2" );
-	
-	GiveNamedItem( "weapon_shotgun" );
-	GiveNamedItem( "weapon_frag" );
-	
-	GiveNamedItem( "weapon_crossbow" );
-	
-	GiveNamedItem( "weapon_rpg" );
-
-	GiveNamedItem( "weapon_slam" );
-
-	GiveNamedItem( "weapon_physcannon" );
-*/	
 }
-
+*/
 /*  BOXBOX don't need this
 void CMSS_Player::GiveDefaultItems( void )
 {
@@ -1399,7 +1378,7 @@ void CMSS_Player::CheatImpulseCommands( int iImpulse )
 			{
 				if( sv_cheats->GetBool() )
 				{
-					GiveAllItems();
+//					GiveAllItems();
 				}
 			}
 			break;

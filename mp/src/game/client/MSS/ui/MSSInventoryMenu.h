@@ -7,13 +7,15 @@
 
 #include <vgui_controls/Frame.h>
 #include <vgui_controls/Button.h>
-#include "vgui_controls/ImagePanel.h"
 #include <game/client/iviewport.h>
+#include "vgui_controls/ImagePanel.h"
+#include "basemodelpanel.h"
 #include "shareddefs.h"
 #include "MSS_shareddefs.h"
 
 using namespace vgui;
 
+class CDroppableLabel;
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////  BOXBOX DRAGGABLE IMAGE  ///////////////////////////////////
@@ -22,11 +24,17 @@ using namespace vgui;
 class CDraggableImage : public vgui::ImagePanel
 {
 public:
-//	DECLARE_CLASS_SIMPLE( CDraggableImage, ImagePanel ); // BOXBOX do I need this?
+	DECLARE_CLASS_SIMPLE( CDraggableImage, ImagePanel );
 
-	CDraggableImage( Panel *pParent, const char *name );
+	CDraggableImage( Panel *pParent, const char *name, int itemtype );
+//	virtual void OnStartDragging();
 	virtual void OnDraggablePanelPaint();
-	virtual void OnDroppablePanelPaint( CUtlVector< KeyValues * >& msglist, CUtlVector< Panel * >& dragPanels );
+//	virtual void OnCreateDragData( KeyValues *msg );
+	//	void OnMoveAway();
+
+//	CDroppableLabel	*m_pPreviousSlot; // BOXBOX use this to set a slot's item to NULL when dragged away
+
+	int m_nItemType;
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,9 +52,22 @@ public:
 
 	virtual void ApplySchemeSettings( vgui::IScheme *pScheme );
 	virtual bool IsDroppable( CUtlVector< KeyValues * >& msglist ) { return true; }
+	virtual void OnDroppablePanelPaint( CUtlVector< KeyValues * >& msglist, CUtlVector< Panel * >& dragPanels );
+
 	virtual void OnPanelDropped(  CUtlVector< KeyValues * >& msglist );
-//	void OnPanelEnteredDroppablePanel( CUtlVector< KeyValues * >& msglist );
-//	void OnPanelExitedDroppablePanel ( CUtlVector< KeyValues * >& msglist );
+	void OnPanelEnteredDroppablePanel( CUtlVector< KeyValues * >& msglist );
+	void OnPanelExitedDroppablePanel ( CUtlVector< KeyValues * >& msglist );
+
+	void			SetItem( CDraggableImage *item );
+	CDraggableImage	*GetItem( void ) { return m_pItem; }
+	bool			HasItem( void ) { return m_pItem != NULL; }
+
+	int				GetItemType( void ) { return m_nItemType; }
+	void			SetItemType( int type ) { m_nItemType = type; }
+private:
+
+	CDraggableImage	*m_pItem; // BOXBOX what item is currently dropped in this slot ( NULL if nothing )
+	int m_nItemType;
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,21 +85,22 @@ private:
 public:
 	CMSInventoryMenu(IViewPort *pViewPort);
 	virtual ~CMSInventoryMenu();
-
+	virtual void ApplySchemeSettings( vgui::IScheme *pScheme );
 	virtual const char *GetName( void ) { return PANEL_INVENTORYMENU; }
 	virtual void SetData(KeyValues *data) { return; }
 	virtual void Reset();
 	virtual void Update();
-
 	virtual bool NeedsUpdate( void ) { return false; }
 	virtual bool HasInputElements( void ) { return false; }	// BOXBOX do I need to change this?
 	virtual void ShowPanel( bool bShow );
-
 	vgui::VPANEL GetVPanel( void ) { return BaseClass::GetVPanel(); }
   	virtual bool IsVisible() { return BaseClass::IsVisible(); }
   	virtual void SetParent( vgui::VPANEL parent ) { BaseClass::SetParent( parent ); }
 
-	virtual void ApplySchemeSettings( vgui::IScheme *pScheme );
+	void	NewItem( KeyValues itemData ); // BOXBOX we just got a new item( picked up, or from a treasure chest, etc.)
+	bool	PutItemInBackpack( CDraggableImage *item ); // BOXBOX returns false if backpack is full, otherwise places item in an empty slot and returns true
+	bool	PutItemOnBelt( CDraggableImage *item ); // BOXBOX returns false if belt is full, otherwise places item in an empty slot and returns true
+	void	DropItemOnGround( void ); // BOXBOX no space for item, drop it.
 
 protected:	
 
@@ -89,10 +111,11 @@ protected:
 	IViewPort	*m_pViewPort;
 
 	vgui::Label			*m_pRightPageTitleLabel;
-
+	vgui::Label			*m_pBackpackLabel;
 	vgui::Label			*m_pGoldLabel;
 
 	CDraggableImage		*m_pDragTest;
+	CDraggableImage		*m_pDragTest2;
 
  // BOXBOX TODO Should we start with a smaller backpack and create bigger backpacks later in game?
 	CDroppableLabel		*m_pBackpackDropSlots[ BACKPACK_SLOTS_X ][ BACKPACK_SLOTS_Y ];
@@ -105,6 +128,7 @@ protected:
 	CDroppableLabel		*m_pGlovesSlot;
 	CDroppableLabel		*m_pBootsSlot;
 
+	CModelPanel			*m_pCharModel;
 };
 
 

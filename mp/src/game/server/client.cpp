@@ -36,10 +36,8 @@
 #include "basemultiplayerplayer.h"
 #include "voice_gamemgr.h"
 
-#ifdef TF_DLL
-#include "tf_player.h"
-#include "tf_gamerules.h"
-#endif
+#include "MSS_player.h"
+
 
 #ifdef HL2_DLL
 #include "weapon_physcannon.h"
@@ -786,10 +784,22 @@ CON_COMMAND( say_team, "Display player message to team" )
 }
 */
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
+//BOXBOX redoing this
 CON_COMMAND( give, "Give item to player.\n\tArguments: <item_name>" )
 {
+	CMSS_Player *pPlayer = ToMSSPlayer( UTIL_GetCommandClient() );
+
+	if( ( pPlayer ) && ( args.ArgC() == 2 ) && ( sv_cheats->GetBool() ) )
+	{
+		char item_to_give[ 256 ];
+		Q_strncpy( item_to_give, args[1], sizeof( item_to_give ) );
+		Q_strlower( item_to_give );
+
+		string_t iszItem = AllocPooledString( item_to_give );	// Make a copy of the classname
+		pPlayer->GiveNamedItem( STRING(iszItem) );
+	}
+
+/*
 	CBasePlayer *pPlayer = ToBasePlayer( UTIL_GetCommandClient() ); 
 	if ( pPlayer 
 		&& (gpGlobals->maxClients == 1 || sv_cheats->GetBool()) 
@@ -799,16 +809,10 @@ CON_COMMAND( give, "Give item to player.\n\tArguments: <item_name>" )
 		Q_strncpy( item_to_give, args[1], sizeof( item_to_give ) );
 		Q_strlower( item_to_give );
 
-		// Dirty hack to avoid suit playing it's pickup sound
-		if ( !Q_stricmp( item_to_give, "item_suit" ) )
-		{
-			pPlayer->EquipSuit( false );
-			return;
-		}
-
 		string_t iszItem = AllocPooledString( item_to_give );	// Make a copy of the classname
 		pPlayer->GiveNamedItem( STRING(iszItem) );
 	}
+*/
 }
 
 

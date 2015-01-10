@@ -46,6 +46,7 @@ void CMSS_Player::GetCharFileFields( CUtlVector<MSSaveProperty> &allPlayerData )
 	allPlayerData.AddToTail( MSSaveProperty( "Woodwork",			m_nWoodwork.Get(),			&m_nWoodwork, m_nWoodwork.Static_Set ) );
 	allPlayerData.AddToTail( MSSaveProperty( "Stonework",			m_nStonework.Get(),			&m_nStonework, m_nStonework.Static_Set ) );
 	allPlayerData.AddToTail( MSSaveProperty( "Metalwork",			m_nMetalwork.Get(),			&m_nMetalwork, m_nMetalwork.Static_Set ) );
+	allPlayerData.AddToTail( MSSaveProperty( "BackpackSize",		m_nBackpackSize.Get(),		&m_nBackpackSize, m_nBackpackSize.Static_Set ) );
 
 
 

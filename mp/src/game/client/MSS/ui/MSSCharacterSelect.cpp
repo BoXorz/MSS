@@ -378,59 +378,7 @@ void CMSCharSelectMenu::HideConfirm( void )
 //	pButton->SetEnabled( true );
 	Reset();
 }
-/*
-void CMSCharSelectMenu::ShowFullChar( void )
-{
-	m_pFullCharBgImage->SetVisible( true );
-	m_pFullCharLabel->SetVisible( true );
-	m_pFullCharButton->SetVisible( true );
-	m_pFullCharButton->SetEnabled( true );
 
-	Button *pButton = (Button *)FindChildByName( "CharButton1" );
-	pButton->SetEnabled( false );
-	pButton->SetVisible( false );
-	pButton = (Button *)FindChildByName( "CharButton2" );
-	pButton->SetEnabled( false );
-	pButton->SetVisible( false );
-	pButton = (Button *)FindChildByName( "CharButton3" );
-	pButton->SetEnabled( false );
-	pButton->SetVisible( false );
-	pButton = (Button *)FindChildByName( "DeleteCharButton1" );
-	pButton->SetEnabled( false );
-	pButton = (Button *)FindChildByName( "DeleteCharButton2" );
-	pButton->SetEnabled( false );
-	pButton = (Button *)FindChildByName( "DeleteCharButton3" );
-	pButton->SetEnabled( false );
-	pButton = (Button *)FindChildByName( "NewCharButton" );
-	pButton->SetEnabled( false );
-}
-
-void CMSCharSelectMenu::HideFullChar( void )
-{
-	m_pFullCharBgImage->SetVisible( false );
-	m_pFullCharLabel->SetVisible( false );
-	m_pFullCharButton->SetVisible( false );
-	m_pFullCharButton->SetEnabled( false );
-
-	Button *pButton = (Button *)FindChildByName( "CharButton1" );
-	pButton->SetEnabled( true );
-	pButton->SetVisible( true );
-	pButton = (Button *)FindChildByName( "CharButton2" );
-	pButton->SetEnabled( true );
-	pButton->SetVisible( true );
-	pButton = (Button *)FindChildByName( "CharButton3" );
-	pButton->SetEnabled( true );
-	pButton->SetVisible( true );
-	pButton = (Button *)FindChildByName( "DeleteCharButton1" );
-	pButton->SetEnabled( true );
-	pButton = (Button *)FindChildByName( "DeleteCharButton2" );
-	pButton->SetEnabled( true );
-	pButton = (Button *)FindChildByName( "DeleteCharButton3" );
-	pButton->SetEnabled( true );
-	pButton = (Button *)FindChildByName( "NewCharButton" );
-	pButton->SetEnabled( true );
-}
-*/
 vgui::Panel *CMSCharSelectMenu::CreateControlByName(const char *controlName)
 {
      return BaseClass::CreateControlByName( controlName );
