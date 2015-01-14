@@ -332,7 +332,7 @@ void CBaseMSSBludgeonWeapon::Swing( int bIsSecondary )
 		}
 	}
 
-	WeaponSound( SINGLE );
+//	WeaponSound( SINGLE );
 
 	// -------------------------
 	//	Miss

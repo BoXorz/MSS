@@ -93,7 +93,7 @@ CBaseCombatWeapon::CBaseCombatWeapon()
 	OnBaseCombatWeaponCreated( this );
 #endif
 
-	m_hWeaponFileInfo = GetInvalidWeaponInfoHandle();
+	m_hItemFileInfo = GetInvalidItemInfoHandle();
 
 #if defined( TF_DLL )
 	UseClientSideAnimation();
@@ -238,13 +238,13 @@ void CBaseCombatWeapon::Precache( void )
 	Assert( Q_strlen( GetClassname() ) > 0 );
 	// Msg( "Client got %s\n", GetClassname() );
 #endif
-	m_iPrimaryAmmoType = m_iSecondaryAmmoType = -1;
+//	m_iPrimaryAmmoType = m_iSecondaryAmmoType = -1;
 
 	// Add this weapon to the weapon registry, and get our index into it
 	// Get weapon data from script file
-	if ( ReadWeaponDataFromFileForSlot( filesystem, GetClassname(), &m_hWeaponFileInfo, GetEncryptionKey() ) )
+	if ( ReadItemDataFromFile( filesystem, GetClassname(), &m_hItemFileInfo, GetEncryptionKey() ) )
 	{
-		// Get the ammo indexes for the ammo's specified in the data file
+/*
 		if ( GetWpnData().szAmmo1[0] )
 		{
 			m_iPrimaryAmmoType = GetAmmoDef()->Index( GetWpnData().szAmmo1 );
@@ -269,11 +269,12 @@ void CBaseCombatWeapon::Precache( void )
 			{
 				Msg("ERROR: Weapon (%s) using undefined secondary ammo type (%s)\n",GetClassname(),GetWpnData().szAmmo2);
 			}
-
 		}
+
 #if defined( CLIENT_DLL )
-		gWR.LoadWeaponSprites( GetWeaponFileInfoHandle() );
+		gWR.LoadWeaponSprites( GetItemFileInfoHandle() );
 #endif
+*/
 		// Precache models (preload to avoid hitch)
 		m_iViewModelIndex = 0;
 		m_iWorldModelIndex = 0;
@@ -287,19 +288,19 @@ void CBaseCombatWeapon::Precache( void )
 		}
 
 		// Precache sounds, too
-		for ( int i = 0; i < NUM_SHOOT_SOUND_TYPES; ++i )
+		for ( int i = 0; i < NUM_WPN_SOUND_TYPES; ++i )
 		{
-			const char *shootsound = GetShootSound( i );
-			if ( shootsound && shootsound[0] )
+			const char *wpnsound = GetWpnSound( i );
+			if ( wpnsound && wpnsound[0] )
 			{
-				CBaseEntity::PrecacheScriptSound( shootsound );
+				CBaseEntity::PrecacheScriptSound( wpnsound );
 			}
 		}
 	}
 	else
 	{
 		// Couldn't read data file, remove myself
-		Warning( "Error reading weapon data file for: %s\n", GetClassname() );
+		Warning( "Error reading item data file for: %s\n", GetClassname() );
 	//	Remove( );	//don't remove, this gets released soon!
 	}
 }
@@ -307,165 +308,105 @@ void CBaseCombatWeapon::Precache( void )
 //-----------------------------------------------------------------------------
 // Purpose: Get my data in the file weapon info array
 //-----------------------------------------------------------------------------
-const FileWeaponInfo_t &CBaseCombatWeapon::GetWpnData( void ) const
+const FileItemInfo_t &CBaseCombatWeapon::GetItemData( void ) const
 {
-	return *GetFileWeaponInfoFromHandle( m_hWeaponFileInfo );
+	return *GetFileItemInfoFromHandle( m_hItemFileInfo );
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-const char *CBaseCombatWeapon::GetViewModel( int /*viewmodelindex = 0 -- this is ignored in the base class here*/ ) const
+const char *CBaseCombatWeapon::GetName( void ) const
 {
-	return GetWpnData().szViewModel;
+	return GetItemData().szClassName;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-const char *CBaseCombatWeapon::GetWorldModel( void ) const
-{
-	return GetWpnData().szWorldModel;
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-const char *CBaseCombatWeapon::GetAnimPrefix( void ) const
-{
-	return GetWpnData().szAnimationPrefix;
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-// Output : char const
-//-----------------------------------------------------------------------------
 const char *CBaseCombatWeapon::GetPrintName( void ) const
 {
-	return GetWpnData().szPrintName;
+	return GetItemData().szPrintName;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
+const char *CBaseCombatWeapon::GetWorldModel( void ) const
+{
+	return GetItemData().szWorldModel;
+}
+
+// BOXBOX TODO add MSS stuff here
+
+const char *CBaseCombatWeapon::GetViewModel( int /*viewmodelindex = 0 -- this is ignored in the base class here*/ ) const
+{
+	return GetItemData().szViewModel;
+}
+
+const char *CBaseCombatWeapon::GetAnimPrefix( void ) const
+{
+	return GetItemData().szAnimationPrefix;
+}
+
 int CBaseCombatWeapon::GetMaxClip1( void ) const
 {
-#if defined ( TF_DLL ) || defined ( TF_CLIENT_DLL )
-	int iModMaxClipOverride = 0;
-	CALL_ATTRIB_HOOK_INT( iModMaxClipOverride, mod_max_primary_clip_override );
-	if ( iModMaxClipOverride != 0 )
-		return iModMaxClipOverride;
-#endif
-
-	return GetWpnData().iMaxClip1;
+	return 0;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
 int CBaseCombatWeapon::GetMaxClip2( void ) const
 {
-	return GetWpnData().iMaxClip2;
+	return 0;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
 int CBaseCombatWeapon::GetDefaultClip1( void ) const
 {
-	return GetWpnData().iDefaultClip1;
+	return 0;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
 int CBaseCombatWeapon::GetDefaultClip2( void ) const
 {
-	return GetWpnData().iDefaultClip2;
+	return 0;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
 bool CBaseCombatWeapon::UsesClipsForAmmo1( void ) const
 {
-	return ( GetMaxClip1() != WEAPON_NOCLIP );
+	return false;
 }
 
 bool CBaseCombatWeapon::IsMeleeWeapon() const
 {
-	return GetWpnData().m_bMeleeWeapon;
+	return true;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
 bool CBaseCombatWeapon::UsesClipsForAmmo2( void ) const
 {
-	return ( GetMaxClip2() != WEAPON_NOCLIP );
+	return false;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
 int CBaseCombatWeapon::GetWeight( void ) const
 {
-	return GetWpnData().iWeight;
+	return 0;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Whether this weapon can be autoswitched to when the player runs out
-//			of ammo in their current weapon or they pick this weapon up.
-//-----------------------------------------------------------------------------
 bool CBaseCombatWeapon::AllowsAutoSwitchTo( void ) const
 {
-	return GetWpnData().bAutoSwitchTo;
+	return 0;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Whether this weapon can be autoswitched away from when the player
-//			runs out of ammo in this weapon or picks up another weapon or ammo.
-//-----------------------------------------------------------------------------
 bool CBaseCombatWeapon::AllowsAutoSwitchFrom( void ) const
 {
-	return GetWpnData().bAutoSwitchFrom;
+	return 0;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
 int CBaseCombatWeapon::GetWeaponFlags( void ) const
 {
-	return GetWpnData().iFlags;
+	return 0;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
 int CBaseCombatWeapon::GetSlot( void ) const
 {
-	return GetWpnData().iSlot;
+	return 0;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
 int CBaseCombatWeapon::GetPosition( void ) const
 {
-	return GetWpnData().iPosition;
+	return 0;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-const char *CBaseCombatWeapon::GetName( void ) const
-{
-	return GetWpnData().szClassName;
-}
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
+/*
 CHudTexture const *CBaseCombatWeapon::GetSpriteActive( void ) const
 {
 	return GetWpnData().iconActive;
@@ -526,22 +467,20 @@ CHudTexture const *CBaseCombatWeapon::GetSpriteZoomedAutoaim( void ) const
 {
 	return GetWpnData().iconZoomedAutoaim;
 }
+*/
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-const char *CBaseCombatWeapon::GetShootSound( int iIndex ) const
+
+const char *CBaseCombatWeapon::GetWpnSound( int iIndex ) const
 {
-	return GetWpnData().aShootSounds[ iIndex ];
+	return GetItemData().aWpnSounds[ iIndex ];
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
+/*
 int CBaseCombatWeapon::GetRumbleEffect() const
 {
-	return GetWpnData().iRumbleEffect;
+	return GetItemData().iRumbleEffect;
 }
+*/
 
 //-----------------------------------------------------------------------------
 // Purpose: 
@@ -1657,11 +1596,12 @@ void CBaseCombatWeapon::ItemPreFrame( void )
 //====================================================================================
 void CBaseCombatWeapon::ItemPostFrame( void )
 {
+/*
 	CBasePlayer *pOwner = ToBasePlayer( GetOwner() );
 	if (!pOwner)
 		return;
 
-	UpdateAutoFire();
+//	UpdateAutoFire();
 
 	//Track the duration of the fire
 	//FIXME: Check for IN_ATTACK2 as well?
@@ -1784,11 +1724,12 @@ void CBaseCombatWeapon::ItemPostFrame( void )
 			WeaponIdle();
 		}
 	}
+*/
 }
 
 void CBaseCombatWeapon::HandleFireOnEmpty()
 {
-	// If we're already firing on empty, reload if we can
+/*
 	if ( m_bFireOnEmpty )
 	{
 		ReloadOrSwitchWeapons();
@@ -1803,6 +1744,7 @@ void CBaseCombatWeapon::HandleFireOnEmpty()
 		}
 		m_bFireOnEmpty = true;
 	}
+*/
 }
 
 //-----------------------------------------------------------------------------
@@ -1810,14 +1752,10 @@ void CBaseCombatWeapon::HandleFireOnEmpty()
 //-----------------------------------------------------------------------------
 void CBaseCombatWeapon::ItemBusyFrame( void )
 {
-	UpdateAutoFire();
+//	UpdateAutoFire();
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Base class default for getting bullet type
-// Input  :
-// Output :
-//-----------------------------------------------------------------------------
+
 int CBaseCombatWeapon::GetBulletType( void )
 {
 	return 0;
@@ -1868,13 +1806,13 @@ float CBaseCombatWeapon::GetFireRate( void )
 void CBaseCombatWeapon::WeaponSound( WeaponSound_t sound_type, float soundtime /* = 0.0f */ )
 {
 	// If we have some sounds from the weapon classname.txt file, play a random one of them
-	const char *shootsound = GetShootSound( sound_type );
-	if ( !shootsound || !shootsound[0] )
+	const char *wpnsound = GetWpnSound( sound_type );
+	if ( !wpnsound || !wpnsound[0] )
 		return;
 
 	CSoundParameters params;
 	
-	if ( !GetParametersForSound( shootsound, params, NULL ) )
+	if ( !GetParametersForSound( wpnsound, params, NULL ) )
 		return;
 
 	if ( params.play_to_owner_only )
@@ -1887,7 +1825,7 @@ void CBaseCombatWeapon::WeaponSound( WeaponSound_t sound_type, float soundtime /
 			{
 				filter.UsePredictionRules();
 			}
-			EmitSound( filter, GetOwner()->entindex(), shootsound, NULL, soundtime );
+			EmitSound( filter, GetOwner()->entindex(), wpnsound, NULL, soundtime );
 		}
 	}
 	else
@@ -1900,10 +1838,10 @@ void CBaseCombatWeapon::WeaponSound( WeaponSound_t sound_type, float soundtime /
 			{
 				filter.UsePredictionRules();
 			}
-			EmitSound( filter, GetOwner()->entindex(), shootsound, NULL, soundtime ); 
+			EmitSound( filter, GetOwner()->entindex(), wpnsound, NULL, soundtime ); 
 
 #if !defined( CLIENT_DLL )
-			if( sound_type == EMPTY )
+			if( sound_type == 0 )
 			{
 				CSoundEnt::InsertSound( SOUND_COMBAT, GetOwner()->GetAbsOrigin(), SOUNDENT_VOLUME_EMPTY, 0.2, GetOwner() );
 			}
@@ -1917,7 +1855,7 @@ void CBaseCombatWeapon::WeaponSound( WeaponSound_t sound_type, float soundtime /
 			{
 				filter.UsePredictionRules();
 			}
-			EmitSound( filter, entindex(), shootsound, NULL, soundtime ); 
+			EmitSound( filter, entindex(), wpnsound, NULL, soundtime ); 
 		}
 	}
 }
@@ -1931,12 +1869,12 @@ void CBaseCombatWeapon::StopWeaponSound( WeaponSound_t sound_type )
 	//	return;
 
 	// If we have some sounds from the weapon classname.txt file, play a random one of them
-	const char *shootsound = GetShootSound( sound_type );
-	if ( !shootsound || !shootsound[0] )
+	const char *wpnsound = GetWpnSound( sound_type );
+	if ( !wpnsound || !wpnsound[0] )
 		return;
 	
 	CSoundParameters params;
-	if ( !GetParametersForSound( shootsound, params, NULL ) )
+	if ( !GetParametersForSound( wpnsound, params, NULL ) )
 		return;
 
 	// Am I only to play to my owner?
@@ -1944,7 +1882,7 @@ void CBaseCombatWeapon::StopWeaponSound( WeaponSound_t sound_type )
 	{
 		if ( GetOwner() )
 		{
-			StopSound( GetOwner()->entindex(), shootsound );
+			StopSound( GetOwner()->entindex(), wpnsound );
 		}
 	}
 	else
@@ -1952,12 +1890,12 @@ void CBaseCombatWeapon::StopWeaponSound( WeaponSound_t sound_type )
 		// Play weapon sound from the owner
 		if ( GetOwner() )
 		{
-			StopSound( GetOwner()->entindex(), shootsound );
+			StopSound( GetOwner()->entindex(), wpnsound );
 		}
 		// If no owner play from the weapon (this is used for thrown items)
 		else
 		{
-			StopSound( entindex(), shootsound );
+			StopSound( entindex(), wpnsound );
 		}
 	}
 }
@@ -1967,6 +1905,7 @@ void CBaseCombatWeapon::StopWeaponSound( WeaponSound_t sound_type )
 //-----------------------------------------------------------------------------
 bool CBaseCombatWeapon::DefaultReload( int iClipSize1, int iClipSize2, int iActivity )
 {
+/*
 	CBaseCombatCharacter *pOwner = GetOwner();
 	if (!pOwner)
 		return false;
@@ -2019,12 +1958,13 @@ bool CBaseCombatWeapon::DefaultReload( int iClipSize1, int iClipSize2, int iActi
 	m_flNextPrimaryAttack = m_flNextSecondaryAttack = flSequenceEndTime;
 
 	m_bInReload = true;
-
+*/
 	return true;
 }
 
 bool CBaseCombatWeapon::ReloadsSingly( void ) const
 {
+/*
 #if defined ( TF_DLL ) || defined ( TF_CLIENT_DLL )
 	float fHasReload = 1.0f;
 	CALL_ATTRIB_HOOK_FLOAT( fHasReload, mod_no_reload_display_only );
@@ -2040,7 +1980,7 @@ bool CBaseCombatWeapon::ReloadsSingly( void ) const
 		return false;
 	}
 #endif // TF_DLL || TF_CLIENT_DLL
-
+*/
 	return m_bReloadsSingly;
 }
 
@@ -2189,14 +2129,17 @@ void CBaseCombatWeapon::FinishReload( void )
 //-----------------------------------------------------------------------------
 void CBaseCombatWeapon::AbortReload( void )
 {
+/*
 #ifdef CLIENT_DLL
 	StopWeaponSound( RELOAD ); 
 #endif
+*/
 	m_bInReload = false;
 }
 
 void CBaseCombatWeapon::UpdateAutoFire( void )
 {
+/*
 	if ( !AutoFiresFullClip() )
 		return;
 
@@ -2241,6 +2184,7 @@ void CBaseCombatWeapon::UpdateAutoFire( void )
 		// Fake the attack key
 		pOwner->m_nButtons |= IN_ATTACK;
 	}
+*/
 }
 
 //-----------------------------------------------------------------------------
@@ -2283,7 +2227,7 @@ void CBaseCombatWeapon::PrimaryAttack( void )
 	while ( m_flNextPrimaryAttack <= gpGlobals->curtime )
 	{
 		// MUST call sound before removing a round from the clip of a CMachineGun
-		WeaponSound(SINGLE, m_flNextPrimaryAttack);
+		WeaponSound(MELEE_MISS, m_flNextPrimaryAttack);
 		m_flNextPrimaryAttack = m_flNextPrimaryAttack + fireRate;
 		info.m_iShots++;
 		if ( !fireRate )
@@ -2530,7 +2474,7 @@ BEGIN_PREDICTION_DATA( CBaseCombatWeapon )
 	DEFINE_PRED_FIELD( m_nNextThinkTick, FIELD_INTEGER, FTYPEDESC_INSENDTABLE ),
 	// Networked
 	DEFINE_PRED_FIELD( m_hOwner, FIELD_EHANDLE, FTYPEDESC_INSENDTABLE ),
-	// DEFINE_FIELD( m_hWeaponFileInfo, FIELD_SHORT ),
+	// DEFINE_FIELD( m_hItemFileInfo, FIELD_SHORT ),
 	DEFINE_PRED_FIELD( m_iState, FIELD_INTEGER, FTYPEDESC_INSENDTABLE ),			 
 	DEFINE_PRED_FIELD( m_iViewModelIndex, FIELD_INTEGER, FTYPEDESC_INSENDTABLE | FTYPEDESC_MODELINDEX ),
 	DEFINE_PRED_FIELD( m_iWorldModelIndex, FIELD_INTEGER, FTYPEDESC_INSENDTABLE | FTYPEDESC_MODELINDEX ),
@@ -2630,7 +2574,7 @@ BEGIN_DATADESC( CBaseCombatWeapon )
 
 	//	DEFINE_FIELD( m_iViewModelIndex, FIELD_INTEGER ),
 	//	DEFINE_FIELD( m_iWorldModelIndex, FIELD_INTEGER ),
-	//  DEFINE_FIELD( m_hWeaponFileInfo, ???? ),
+	//  DEFINE_FIELD( m_hItemFileInfo, ???? ),
 
 	DEFINE_PHYSPTR( m_pConstraint ),
 

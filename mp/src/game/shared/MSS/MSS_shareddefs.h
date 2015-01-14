@@ -150,18 +150,19 @@ enum MSSBackpacks_t
 
 enum MSSItemTypes_t
 {
+	ITEMTYPE_WEAPON = -1,	// red
 	ITEMTYPE_ANY,			// BOXBOX for slots that accept any type of item (backpack, belt)
-	ITEMTYPE_WEAPON,		// red
-	ITEMTYPE_METALWORK,		// orange
 	ITEMTYPE_ALCHEMY,		// green
 	ITEMTYPE_MAGICWORK,		// blue
 	ITEMTYPE_CLOTHWORK,		// purple
 	ITEMTYPE_WOODWORK,		// brown
 	ITEMTYPE_STONEWORK,		// gray
+	ITEMTYPE_METALWORK,		// orange
 	ITEMTYPE_ARMOR,			// yellow from here down
 	ITEMTYPE_HELMET,
 	ITEMTYPE_GLOVES,
 	ITEMTYPE_BOOTS,
+	ITEMTYPE_SHIELD,
 };
 
 

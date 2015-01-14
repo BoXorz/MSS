@@ -15,7 +15,7 @@
 #include "baseviewmodel.h"
 #include "in_buttons.h"
 #include "soundent.h"
-#include "weapon_parse.h"
+#include "MSS_item_parse.h"
 #include "game.h"
 #include "engine/IEngineSound.h"
 #include "sendproxy.h"
@@ -58,7 +58,7 @@ extern ConVar ai_debug_shoot_positions;
 //-----------------------------------------------------------------------------
 void W_Precache(void)
 {
-	PrecacheFileWeaponInfoDatabase( filesystem, g_pGameRules->GetEncryptionKey() );
+	PrecacheFileItemInfoDatabase( filesystem, g_pGameRules->GetEncryptionKey() );
 
 
 

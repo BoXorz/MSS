@@ -1,8 +1,5 @@
-//========= Copyright Valve Corporation, All rights reserved. ============//
-//
-// Purpose:		Player for HL2.
-//
-//=============================================================================//
+
+// Client side MSS player
 
 #include "cbase.h"
 #include "vcollide_parse.h"
@@ -116,7 +113,7 @@ C_MSS_Player::C_MSS_Player() : m_PlayerAnimState( this ), m_iv_angEyeAngles( "C_
 	m_szCharName[0] = 0;
 	m_pszCharName = &m_szCharName[0];
 
-
+//	m_nBackpackSize = BACKPACK_TINY;
 }
 
 C_MSS_Player::~C_MSS_Player( void )

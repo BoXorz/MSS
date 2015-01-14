@@ -1,18 +1,13 @@
-//========= Copyright Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-//=============================================================================//
 
-#ifndef WEAPON_HL2MPBASE_H
-#define WEAPON_HL2MPBASE_H
+#ifndef WEAPON_MSSBASE_H
+#define WEAPON_MSSBASE_H
 #ifdef _WIN32
 #pragma once
 #endif
 
 #include "MSS_player_shared.h"
 #include "basecombatweapon_shared.h"
-#include "MSS_weapon_parse.h"
+#include "MSS_item_parse.h"
 
 #if defined( CLIENT_DLL )
 	#define CWeaponMSSBase C_WeaponMSSBase
@@ -21,13 +16,7 @@
 
 class CMSS_Player;
 
-// These are the names of the ammo types that go in the CAmmoDefs and that the 
-// weapon script files reference.
-
-// Given an ammo type (like from a weapon's GetPrimaryAmmoType()), this compares it
-// against the ammo name you specify.
-// MIKETODO: this should use indexing instead of searching and strcmp()'ing all the time.
-bool IsAmmoType( int iAmmoType, const char *pAmmoName );
+// bool IsAmmoType( int iAmmoType, const char *pAmmoName ); // BOXBOX removing ammo
 
 class CWeaponMSSBase : public CBaseCombatWeapon
 {
@@ -41,9 +30,9 @@ public:
 	#ifdef GAME_DLL
 		DECLARE_DATADESC();
 	
-		void SendReloadSoundEvent( void );
+//		void SendReloadSoundEvent( void );
 
-		void Materialize( void );
+//		void Materialize( void );
 		virtual	int	ObjectCaps( void );
 	#endif
 
@@ -51,12 +40,12 @@ public:
 	virtual bool	IsPredicted() const;
 
 	CBasePlayer* GetPlayerOwner() const;
-	CMSS_Player* GetHL2MPPlayerOwner() const;
+	CMSS_Player* GetMSSPlayerOwner() const;
 
 	void WeaponSound( WeaponSound_t sound_type, float soundtime = 0.0f );
 	
-	CHL2MPSWeaponInfo const	&GetHL2MPWpnData() const;
-
+//	CHL2MPSWeaponInfo const	&GetHL2MPWpnData() const;
+//	FileItemInfo_t const &GetWpnData() const;
 
 	virtual void FireBullets( const FireBulletsInfo_t &info );
 	virtual void FallInit( void );
@@ -90,4 +79,4 @@ private:
 };
 
 
-#endif // WEAPON_HL2MPBASE_H
+#endif // WEAPON_MSSBASE_H

@@ -1,9 +1,3 @@
-//========= Copyright Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================//
 
 #include "cbase.h"
 #include "in_buttons.h"
@@ -11,13 +5,11 @@
 #include "ammodef.h"
 #include "MSS_gamerules.h"
 
-
 #ifdef CLIENT_DLL
 extern IVModelInfoClient* modelinfo;
 #else
 extern IVModelInfo* modelinfo;
 #endif
-
 
 #if defined( CLIENT_DLL )
 
@@ -35,16 +27,14 @@ extern IVModelInfo* modelinfo;
 
 #include "weapon_MSSbase.h"
 
-
-// ----------------------------------------------------------------------------- //
-// Global functions.
-// ----------------------------------------------------------------------------- //
-
+/*
 bool IsAmmoType( int iAmmoType, const char *pAmmoName )
 {
 	return GetAmmoDef()->Index( pAmmoName ) == iAmmoType;
 }
+*/
 
+/*
 static const char * s_WeaponAliasInfo[] = 
 {
 	"none",	//	WEAPON_NONE = 0,
@@ -54,7 +44,7 @@ static const char * s_WeaponAliasInfo[] =
 	
 	NULL,		// end of list marker
 };
-
+*/
 
 // ----------------------------------------------------------------------------- //
 // CWeaponMSSBase tables.
@@ -111,15 +101,15 @@ void CWeaponMSSBase::WeaponSound( WeaponSound_t sound_type, float soundtime /* =
 #ifdef CLIENT_DLL
 
 		// If we have some sounds from the weapon classname.txt file, play a random one of them
-		const char *shootsound = GetWpnData().aShootSounds[ sound_type ]; 
-		if ( !shootsound || !shootsound[0] )
+		const char *wpnsound = GetItemData().aWpnSounds[ sound_type ]; 
+		if ( !wpnsound || !wpnsound[0] )
 			return;
 
 		CBroadcastRecipientFilter filter; // this is client side only
 		if ( !te->CanPredict() )
 			return;
 				
-		CBaseEntity::EmitSound( filter, GetPlayerOwner()->entindex(), shootsound, &GetPlayerOwner()->GetAbsOrigin() ); 
+		CBaseEntity::EmitSound( filter, GetPlayerOwner()->entindex(), wpnsound, &GetPlayerOwner()->GetAbsOrigin() ); 
 #else
 		BaseClass::WeaponSound( sound_type, soundtime );
 #endif
@@ -131,7 +121,7 @@ CBasePlayer* CWeaponMSSBase::GetPlayerOwner() const
 	return dynamic_cast< CBasePlayer* >( GetOwner() );
 }
 
-CMSS_Player* CWeaponMSSBase::GetHL2MPPlayerOwner() const
+CMSS_Player* CWeaponMSSBase::GetMSSPlayerOwner() const
 {
 	return dynamic_cast< CMSS_Player* >( GetOwner() );
 }
@@ -166,6 +156,7 @@ void CWeaponMSSBase::Spawn()
 	SetCollisionGroup( COLLISION_GROUP_WEAPON );
 }
 
+/*
 void CWeaponMSSBase::Materialize( void ) // BOXBOX TODO get rid of this
 {
 	if ( IsEffectActive( EF_NODRAW ) )
@@ -198,6 +189,7 @@ void CWeaponMSSBase::Materialize( void ) // BOXBOX TODO get rid of this
 
 	SetThink (NULL);
 }
+*/
 
 int CWeaponMSSBase::ObjectCaps()
 {
@@ -269,9 +261,10 @@ void CWeaponMSSBase::FallInit( void )
 #endif
 }
 
+/*
 const CHL2MPSWeaponInfo &CWeaponMSSBase::GetHL2MPWpnData() const
 {
-	const FileWeaponInfo_t *pWeaponInfo = &GetWpnData();
+	const FileItemInfo_t *pWeaponInfo = &GetWpnData();
 	const CHL2MPSWeaponInfo *pHL2MPInfo;
 
 	#ifdef _DEBUG
@@ -283,11 +276,13 @@ const CHL2MPSWeaponInfo &CWeaponMSSBase::GetHL2MPWpnData() const
 
 	return *pHL2MPInfo;
 }
-void CWeaponMSSBase::FireBullets( const FireBulletsInfo_t &info )
+*/
+
+void CWeaponMSSBase::FireBullets( const FireBulletsInfo_t &info ) // BOXBOX TODO get rid of all this
 {
 	FireBulletsInfo_t modinfo = info;
 
-	modinfo.m_iPlayerDamage = GetHL2MPWpnData().m_iPlayerDamage;
+	modinfo.m_iPlayerDamage = 0;
 
 	BaseClass::FireBullets( modinfo );
 }

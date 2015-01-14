@@ -89,8 +89,6 @@ public:
 	void CheatImpulseCommands( int iImpulse );
 	void CreateRagdollEntity( void );
 
-	virtual CBaseEntity		*GiveNamedItem( const char *szName, int iSubType = 0 );
-
 	void NoteWeaponFired( void );
 
 	void ResetAnimation( void );

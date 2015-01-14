@@ -257,7 +257,7 @@ void C_BaseCombatWeapon::DrawCrosshair()
 		}
 	}		 
 */
-
+/*
 	CHudCrosshair *crosshair = GET_HUDELEMENT( CHudCrosshair );
 	if ( !crosshair )
 		return;
@@ -296,6 +296,7 @@ void C_BaseCombatWeapon::DrawCrosshair()
 		else
 			crosshair->ResetCrosshair();
 	}
+*/
 }
 
 //-----------------------------------------------------------------------------

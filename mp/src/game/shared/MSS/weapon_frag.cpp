@@ -452,14 +452,14 @@ void CWeaponFrag::ThrowGrenade( CBasePlayer *pPlayer )
 			}
 		}
 		
-		pGrenade->SetDamage( GetHL2MPWpnData().m_iPlayerDamage );
+		pGrenade->SetDamage( 0 );
 		pGrenade->SetDamageRadius( GRENADE_DAMAGE_RADIUS );
 	}
 #endif
 
 	m_bRedraw = true;
 
-	WeaponSound( SINGLE );
+//	WeaponSound( SINGLE );
 	
 	// player "shoot" animation
 	pPlayer->SetAnimation( PLAYER_ATTACK1 );
@@ -486,12 +486,12 @@ void CWeaponFrag::LobGrenade( CBasePlayer *pPlayer )
 
 	if ( pGrenade )
 	{
-		pGrenade->SetDamage( GetHL2MPWpnData().m_iPlayerDamage );
+		pGrenade->SetDamage( 0 );
 		pGrenade->SetDamageRadius( GRENADE_DAMAGE_RADIUS );
 	}
 #endif
 
-	WeaponSound( WPN_DOUBLE );
+//	WeaponSound( WPN_DOUBLE );
 
 	// player "shoot" animation
 	pPlayer->SetAnimation( PLAYER_ATTACK1 );
@@ -538,13 +538,13 @@ void CWeaponFrag::RollGrenade( CBasePlayer *pPlayer )
 
 	if ( pGrenade )
 	{
-		pGrenade->SetDamage( GetHL2MPWpnData().m_iPlayerDamage );
+		pGrenade->SetDamage( 0 );
 		pGrenade->SetDamageRadius( GRENADE_DAMAGE_RADIUS );
 	}
 
 #endif
 
-	WeaponSound( SPECIAL1 );
+//	WeaponSound( SPECIAL1 );
 
 	// player "shoot" animation
 	pPlayer->SetAnimation( PLAYER_ATTACK1 );

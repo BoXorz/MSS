@@ -1606,7 +1606,7 @@ void CBaseEntity::FireBullets( const FireBulletsInfo_t &info )
 #if defined( MSS ) && defined( GAME_DLL )
 	bDoServerEffects = false;
 #endif
-
+/*
 #if defined( GAME_DLL )
 	if( IsPlayer() )
 	{
@@ -1628,8 +1628,9 @@ void CBaseEntity::FireBullets( const FireBulletsInfo_t &info )
 			pPlayer->RumbleEffect( rumbleEffect, 0, RUMBLE_FLAG_RESTART );
 		}
 	}
-#endif// GAME_DLL
 
+#endif// GAME_DLL
+*/
 	int iPlayerDamage = info.m_iPlayerDamage;
 	if ( iPlayerDamage == 0 )
 	{

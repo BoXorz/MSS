@@ -47,12 +47,13 @@ bool CBaseCombatCharacter::Weapon_Switch( CBaseCombatWeapon *pWeapon, int viewmo
 			return m_hActiveWeapon->Deploy( );
 		return false;
 	}
-
+/*
 	if (!Weapon_CanSwitchTo(pWeapon))
 	{
 		return false;
 	}
-
+*/
+	Warning("ATTEMPTING WEAPON SWITCH!\n");
 	if ( m_hActiveWeapon )
 	{
 		if ( !m_hActiveWeapon->Holster( pWeapon ) )
@@ -84,6 +85,7 @@ bool CBaseCombatCharacter::Weapon_CanSwitchTo( CBaseCombatWeapon *pWeapon )
 
 //	if ( !pWeapon->HasAnyAmmo() && !GetAmmoCount( pWeapon->m_iPrimaryAmmoType ) ) // BOBXOX removing ammo
 //		return false;
+
 
 	if ( !pWeapon->CanDeploy() )
 		return false;

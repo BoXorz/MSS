@@ -1,12 +1,6 @@
-//========= Copyright Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//
-//=============================================================================//
+
 #ifndef MSS_PLAYER_H
-#define HL2MP_PLAYER_H
+#define MSS_PLAYER_H
 #pragma once
 
 class C_MSS_Player;
@@ -233,4 +227,4 @@ private:
 	CNetworkVector( m_vecRagdollOrigin );
 };
 
-#endif //HL2MP_PLAYER_H
+#endif //MSS_PLAYER_H

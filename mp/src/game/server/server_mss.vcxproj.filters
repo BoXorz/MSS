@@ -1535,9 +1535,6 @@
     <ClInclude Include="wcedit.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\game\shared\weapon_parse.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\game\shared\weapon_proficiency.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -1739,9 +1736,6 @@
     <ClInclude Include="..\..\game\shared\MSS\MSS_player_shared.h">
       <Filter>Source Files\MSS</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\game\shared\MSS\MSS_weapon_parse.h">
-      <Filter>Source Files\MSS</Filter>
-    </ClInclude>
     <ClInclude Include="MSS\grenade_satchel.h">
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClInclude>
@@ -1825,6 +1819,9 @@
     </ClInclude>
     <ClInclude Include="MSS\Monsters\monster_rat.h">
       <Filter>Source Files\MSS\Monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\MSS\MSS_item_parse.h">
+      <Filter>Source Files\MSS</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2926,9 +2923,6 @@
     <ClCompile Include="wcedit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\game\shared\weapon_parse.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\game\shared\weapon_proficiency.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -3271,9 +3265,6 @@
     <ClCompile Include="..\..\game\shared\MSS\MSS_player_shared.cpp">
       <Filter>Source Files\MSS</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\game\shared\MSS\MSS_weapon_parse.cpp">
-      <Filter>Source Files\MSS</Filter>
-    </ClCompile>
     <ClCompile Include="MSS\grenade_satchel.cpp">
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClCompile>
@@ -3528,6 +3519,9 @@
     </ClCompile>
     <ClCompile Include="MSS\Monsters\monster_rat.cpp">
       <Filter>Source Files\MSS\Monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\MSS\MSS_item_parse.cpp">
+      <Filter>Source Files\MSS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

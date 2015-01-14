@@ -746,7 +746,7 @@ void CHudWeaponSelection::DrawLargeWeaponBox( C_BaseCombatWeapon *pWeapon, bool 
 
 			// draw icon
 			col[3] *= (alpha / 255.0f);
-			if ( pWeapon->GetSpriteActive() )
+/*			if ( pWeapon->GetSpriteActive() )
 			{
 				// find the center of the box to draw in
 				int iconWidth = pWeapon->GetSpriteActive()->Width();
@@ -782,6 +782,7 @@ void CHudWeaponSelection::DrawLargeWeaponBox( C_BaseCombatWeapon *pWeapon, bool 
 				// draw the inactive version
 				pWeapon->GetSpriteInactive()->DrawSelf( xpos + x_offs, ypos + y_offs, col );
 			}
+*/
 		}
 		break;
 
@@ -805,15 +806,15 @@ void CHudWeaponSelection::DrawLargeWeaponBox( C_BaseCombatWeapon *pWeapon, bool 
 				DrawBox( xpos, ypos, boxWide, boxTall, selectedColor, alpha, number );
 			}
 
-			int iconWidth;
-			int	iconHeight;
-			int	x_offs;
-			int	y_offs;
+//			int iconWidth;
+//			int	iconHeight;
+//			int	x_offs;
+//			int	y_offs;
 
 			// draw icon
 			col[3] *= (alpha / 255.0f);
 
-			if ( pWeapon->GetSpriteInactive() )
+/*			if ( pWeapon->GetSpriteInactive() )
 			{
 				iconWidth = pWeapon->GetSpriteInactive()->Width();
 				iconHeight = pWeapon->GetSpriteInactive()->Height();
@@ -871,6 +872,7 @@ void CHudWeaponSelection::DrawLargeWeaponBox( C_BaseCombatWeapon *pWeapon, bool 
 					}
 				}
 			}
+*/
 		}
 		break;
 
@@ -889,7 +891,7 @@ void CHudWeaponSelection::DrawLargeWeaponBox( C_BaseCombatWeapon *pWeapon, bool 
 
 	// draw text
 	col = m_TextColor;
-	const FileWeaponInfo_t &weaponInfo = pWeapon->GetWpnData();
+	const FileItemInfo_t &weaponInfo = pWeapon->GetItemData();
 
 	if ( bSelected )
 	{

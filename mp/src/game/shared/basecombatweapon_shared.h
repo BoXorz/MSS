@@ -14,7 +14,7 @@
 #include "vphysics_interface.h"
 #include "predictable_entity.h"
 #include "soundflags.h"
-#include "weapon_parse.h"
+#include "MSS_item_parse.h"
 #include "baseviewmodel_shared.h"
 #include "weapon_proficiency.h"
 #include "utlmap.h"
@@ -352,7 +352,7 @@ public:
 public:
 
 	// Weapon info accessors for data in the weapon's data file
-	const FileWeaponInfo_t	&GetWpnData( void ) const;
+	const FileItemInfo_t	&GetItemData( void ) const;
 	virtual const char		*GetViewModel( int viewmodelindex = 0 ) const;
 	virtual const char		*GetWorldModel( void ) const;
 	virtual const char		*GetAnimPrefix( void ) const;
@@ -368,8 +368,8 @@ public:
 	virtual int				GetPosition( void ) const;
 	virtual char const		*GetName( void ) const;
 	virtual char const		*GetPrintName( void ) const;
-	virtual char const		*GetShootSound( int iIndex ) const;
-	virtual int				GetRumbleEffect() const;
+	virtual char const		*GetWpnSound( int iIndex ) const;
+//	virtual int				GetRumbleEffect() const;
 	virtual bool			UsesClipsForAmmo1( void ) const;
 	virtual bool			UsesClipsForAmmo2( void ) const;
 	bool					IsMeleeWeapon() const;
@@ -390,7 +390,7 @@ public:
 
 	int GetSecondaryAmmoCount() { return m_iSecondaryAmmoCount; }
 	void SetSecondaryAmmoCount( int count ) { m_iSecondaryAmmoCount = count; }
-
+/*
 	virtual CHudTexture const	*GetSpriteActive( void ) const;
 	virtual CHudTexture const	*GetSpriteInactive( void ) const;
 	virtual CHudTexture const	*GetSpriteAmmo( void ) const;
@@ -399,7 +399,7 @@ public:
 	virtual CHudTexture const	*GetSpriteAutoaim( void ) const;
 	virtual CHudTexture const	*GetSpriteZoomedCrosshair( void ) const;
 	virtual CHudTexture const	*GetSpriteZoomedAutoaim( void ) const;
-
+*/
 	virtual Activity		ActivityOverride( Activity baseAct, bool *pRequired );
 	virtual	acttable_t*		ActivityList( void ) { return NULL; }
 	virtual	int				ActivityListCount( void ) { return 0; }
@@ -510,7 +510,7 @@ public:
 	virtual void			GetViewmodelBoneControllers(C_BaseViewModel *pViewModel, float controllers[MAXSTUDIOBONECTRLS]) { return; }
 
 	virtual void			NotifyShouldTransmit( ShouldTransmitState_t state );
-	WEAPON_FILE_INFO_HANDLE	GetWeaponFileInfoHandle() { return m_hWeaponFileInfo; }
+	ITEM_FILE_INFO_HANDLE	GetItemFileInfoHandle() { return m_hItemFileInfo; }
 
 	virtual int				GetWorldModelIndex( void );
 
@@ -618,7 +618,7 @@ public:
 	IPhysicsConstraint		*GetConstraint() { return m_pConstraint; }
 
 private:
-	WEAPON_FILE_INFO_HANDLE	m_hWeaponFileInfo;
+	ITEM_FILE_INFO_HANDLE	m_hItemFileInfo;
 	IPhysicsConstraint		*m_pConstraint;
 
 	int						m_iAltFireHudHintCount;		// How many times has this weapon displayed its alt-fire HUD hint?
@@ -641,7 +641,7 @@ protected:
 #else // Client .dll only
 	bool					m_bJustRestored;
 
-	// Allow weapons resource to access m_hWeaponFileInfo directly
+	// Allow weapons resource to access m_hItemFileInfo directly
 	friend class			WeaponsResource;
 
 protected:	

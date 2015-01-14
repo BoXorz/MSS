@@ -151,7 +151,7 @@ CMSS_Player::CMSS_Player() : m_PlayerAnimState( this )
 	m_bIsMainMenuOpen = false;
 	m_nCurMenuPage = MENUPAGE_STATS;
 
-	m_nBackpackSize = BACKPACK_TINY;
+//	m_nBackpackSize = BACKPACK_TINY;
 }
 
 CMSS_Player::~CMSS_Player( void )
@@ -189,11 +189,6 @@ void CMSS_Player::Precache( void )
 
 }
 
-
-CBaseEntity	CMSS_Player::*GiveNamedItem( const char *szName, int iSubType = 0 )
-{
-	// BOXBOX TODO this is where I'm at, use keyvalues to find item from item script file
-}
 
 /*
 void CMSS_Player::GiveAllItems( void )
@@ -714,7 +709,7 @@ void CMSS_Player::FireBullets ( const FireBulletsInfo_t &info )
 
 	if ( pWeapon )
 	{
-		modinfo.m_iPlayerDamage = modinfo.m_flDamage = pWeapon->GetHL2MPWpnData().m_iPlayerDamage;
+		modinfo.m_iPlayerDamage = modinfo.m_flDamage = 0; // BOXBOX was pWeapon->GetHL2MPWpnData().m_iPlayerDamage;
 	}
 
 	NoteWeaponFired();
@@ -1261,6 +1256,8 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 				m_nWoodwork = 0;
 				m_nStonework = 0;
 				m_nMetalwork = 0;
+
+				m_nBackpackSize = BACKPACK_TINY;
 
 				TabulateStats();
 

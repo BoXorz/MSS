@@ -70,7 +70,7 @@ void CHLMachineGun::PrimaryAttack( void )
 	// MUST call sound before removing a round from the clip of a CHLMachineGun
 	while ( m_flNextPrimaryAttack <= gpGlobals->curtime )
 	{
-		WeaponSound(SINGLE, m_flNextPrimaryAttack);
+		WeaponSound(MELEE_MISS, m_flNextPrimaryAttack);
 		m_flNextPrimaryAttack = m_flNextPrimaryAttack + fireRate;
 		iBulletsToFire++;
 	}
@@ -230,13 +230,13 @@ int CHLMachineGun::WeaponSoundRealtime( WeaponSound_t shoot_type )
 	float dt = clamp( m_flAnimTime - m_flPrevAnimTime, 0, 0.2 );
 	if (m_flNextSoundTime < gpGlobals->curtime + dt)
 	{
-		WeaponSound( SINGLE_NPC, m_flNextSoundTime );
+		WeaponSound( MELEE_MISS, m_flNextSoundTime );
 		m_flNextSoundTime += GetFireRate();
 		numBullets++;
 	}
 	if (m_flNextSoundTime < gpGlobals->curtime + dt)
 	{
-		WeaponSound( SINGLE_NPC, m_flNextSoundTime );
+		WeaponSound( MELEE_MISS, m_flNextSoundTime );
 		m_flNextSoundTime += GetFireRate();
 		numBullets++;
 	}
@@ -375,13 +375,13 @@ void CHLSelectFireMachineGun::SecondaryAttack( void )
 	case FIREMODE_FULLAUTO:
 		//Msg( "Burst\n" );
 		m_iFireMode = FIREMODE_3RNDBURST;
-		WeaponSound(SPECIAL2);
+//		WeaponSound(SPECIAL2);
 		break;
 
 	case FIREMODE_3RNDBURST:
 		//Msg( "Auto\n" );
 		m_iFireMode = FIREMODE_FULLAUTO;
-		WeaponSound(SPECIAL1);
+//		WeaponSound(SPECIAL1);
 		break;
 	}
 	
@@ -428,6 +428,7 @@ void CHLSelectFireMachineGun::BurstThink( void )
 //-----------------------------------------------------------------------------
 void CHLSelectFireMachineGun::WeaponSound( WeaponSound_t shoot_type, float soundtime /*= 0.0f*/ )
 {
+/*
 	if (shoot_type == SINGLE)
 	{
 		switch( m_iFireMode )
@@ -453,7 +454,7 @@ void CHLSelectFireMachineGun::WeaponSound( WeaponSound_t shoot_type, float sound
 		}
 		return;
 	}
-
+*/
 	BaseClass::WeaponSound( shoot_type, soundtime );
 }
 

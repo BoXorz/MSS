@@ -1551,7 +1551,7 @@ void CWeaponPhysCannon::DryFire( void )
 {
 	SendWeaponAnim( ACT_VM_PRIMARYATTACK );
 
-	WeaponSound( EMPTY );
+//	WeaponSound( EMPTY );
 }
 
 //-----------------------------------------------------------------------------
@@ -1571,7 +1571,7 @@ void CWeaponPhysCannon::PrimaryFireEffect( void )
 	UTIL_ScreenFade( pOwner, white, 0.1f, 0.0f, FFADE_IN );
 #endif
 
-	WeaponSound( SINGLE );
+//	WeaponSound( SINGLE );
 }
 
 #define	MAX_KNOCKBACK_FORCE	128
@@ -1948,7 +1948,7 @@ void CWeaponPhysCannon::SecondaryAttack( void )
 		switch ( result )
 		{
 		case OBJECT_FOUND:
-			WeaponSound( SPECIAL1 );
+//			WeaponSound( SPECIAL1 );
 			SendWeaponAnim( ACT_VM_PRIMARYATTACK );
 			m_flNextSecondaryAttack = gpGlobals->curtime + 0.5f;
 
@@ -2141,7 +2141,7 @@ CWeaponPhysCannon::FindObjectResult_t CWeaponPhysCannon::FindObject( void )
 		if ( !m_flLastDenySoundPlayed )
 		{
 			m_flLastDenySoundPlayed = true;
-			WeaponSound( SPECIAL3 );
+//			WeaponSound( SPECIAL3 );
 		}
 
 		return OBJECT_NOT_FOUND;
@@ -2818,7 +2818,7 @@ void CWeaponPhysCannon::OpenElements( void )
 	if ( m_bOpen )
 		return;
 
-	WeaponSound( SPECIAL2 );
+//	WeaponSound( SPECIAL2 );
 
 	CBasePlayer *pOwner = ToBasePlayer( GetOwner() );
 
@@ -3379,7 +3379,7 @@ void CWeaponPhysCannon::DoEffect( int effectType, Vector *pos )
 //-----------------------------------------------------------------------------
 const char *CWeaponPhysCannon::GetShootSound( int iIndex ) const
 {
-	return BaseClass::GetShootSound( iIndex );
+	return BaseClass::GetWpnSound( iIndex );
 }
 
 #ifdef CLIENT_DLL

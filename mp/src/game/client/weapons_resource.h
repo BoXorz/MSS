@@ -10,7 +10,7 @@
 #pragma once
 
 #include "shareddefs.h"
-#include "weapon_parse.h"
+#include "MSS_item_parse.h"
 #include "utldict.h"
 #include "hud.h"
 
@@ -31,12 +31,12 @@ public:
 	void Reset( void );
 
 	// Sprite handling
-	void LoadWeaponSprites( WEAPON_FILE_INFO_HANDLE hWeaponFileInfo );
+	void LoadWeaponSprites( ITEM_FILE_INFO_HANDLE hWeaponFileInfo );
 	void LoadAllWeaponSprites( void );
 
 	// Ammo Handling
 	CHudTexture					*GetAmmoIconFromWeapon( int iAmmoId );
-	const FileWeaponInfo_t		*GetWeaponFromAmmo( int iAmmoId );
+	const FileItemInfo_t		*GetWeaponFromAmmo( int iAmmoId );
 };
 
 extern WeaponsResource gWR;
