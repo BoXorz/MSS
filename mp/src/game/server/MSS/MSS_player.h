@@ -172,6 +172,10 @@ public:
 	bool	m_bIsMainMenuOpen;
 	int		m_nCurMenuPage; // BOXBOX the last open page of the main menu
 
+	bool	PutItemInBackpack( int item ); // BOXBOX returns false if backpack is full, otherwise places item in an empty slot and returns true
+	bool	PutItemOnBelt( int item ); // BOXBOX returns false if belt is full, otherwise places item in an empty slot and returns true
+	void	DropItemOnGround( int item ); // BOXBOX no space for item, drop it.
+
 protected:
 	CNetworkVar( int, m_nPlayerModelIndex ); // BOXBOX index into player's model, see MSSPlayerModelIndex_t
 
@@ -212,6 +216,15 @@ protected:
 	CNetworkVar( int, m_nMetalwork );
 
 	CNetworkVar( int, m_nBackpackSize );
+
+	CNetworkVar( int, m_nLeftHandItem );
+	CNetworkVar( int, m_nRightHandItem );
+	CNetworkVar( int, m_nArmorItem );
+	CNetworkVar( int, m_nHelmetItem );
+	CNetworkVar( int, m_nGlovesItem );
+	CNetworkVar( int, m_nBootsItem );
+	CNetworkArray( int, m_nBeltItems, 10 );
+	CNetworkArray( int, m_nBackpackItems, 100 );
 
 	void	TabulateStats( void ); // BOXBOX Here is where we calculate all the player stats that we don't need to save in the character files
 

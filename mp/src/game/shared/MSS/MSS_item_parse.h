@@ -52,6 +52,7 @@ int GetWeaponSoundFromString( const char *pszString );
 class CHudTexture;
 class KeyValues;
 
+
 //-----------------------------------------------------------------------------
 // Purpose: Contains the data read from the item's script file. 
 // It's cached so we only read each item's script file once.
@@ -73,16 +74,17 @@ public:
 	char			szClassName[MAX_ITEM_STRING];		// use classname to create items (LinkEntityToClass)
 	char			szPrintName[MAX_ITEM_STRING];		//	Name for showing in GUI
 	char			szDescription[MAX_DESCRIPTION_STRING]; // The text that describes the item (like when you hold mouse over icon for a second, etc.)
-	int				nItemType;							//	What type of item is this? ( see MSSItemTypes_t )
-	int				nItemLevel;							//	This will have different effects depending on Item Type.  For weapons, determines base damage
+	char			szIconFileName[MAX_ITEM_STRING];	// The path/filename for the vgui icon
 	char			szWorldModel[MAX_ITEM_STRING];		//	Model of this item. In the case of weapons/armor, it's the 'world model' seen attached to the player
 	int				nSkin;								//	If model has multiple skins, specify here
 
+	int				nItemType;							//	What type of item is this? ( see MSSItemTypes_t )
+	int				nItemLevel;							//	This will have different effects depending on Item Type.  For weapons, determines base damage
 // WEAPONS
 	char			szViewModel[MAX_ITEM_STRING];		// View model of this weapon
 	char			szAnimationPrefix[MAX_ITEM_PREFIX];	// Prefix of the animations that should be used by the player carrying this weapon
-	bool			m_bBuiltRightHanded;				// This helps cl_righthand make the decision about whether to flip the model or not.
-	bool			m_bAllowFlipping;					// False to disallow flipping the model
+//	bool			m_bBuiltRightHanded;				// This helps cl_righthand make the decision about whether to flip the model or not.
+//	bool			m_bAllowFlipping;					// False to disallow flipping the model
 
 //	int				iSlot;									// inventory slot.
 //	int				iPosition;								// position in the inventory slot.
@@ -125,6 +127,8 @@ public:
 // SERVER DLL
 
 };
+
+
 
 // The item parse function
 bool ReadItemDataFromFile( IFileSystem* filesystem, const char *szWeaponName, 

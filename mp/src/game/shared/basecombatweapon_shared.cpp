@@ -891,7 +891,7 @@ void CBaseCombatWeapon::SetPickupTouch( void )
 {
 #if !defined( CLIENT_DLL )
 	SetTouch(&CBaseCombatWeapon::DefaultTouch);
-
+/* BOXBOX TODO make sure commenting this out stops weapons from dying after 30 seconds on ground
 	if ( gpGlobals->maxClients > 1 )
 	{
 		if ( GetSpawnFlags() & SF_NORESPAWN )
@@ -900,7 +900,7 @@ void CBaseCombatWeapon::SetPickupTouch( void )
 			SetNextThink( gpGlobals->curtime + 30.0f );
 		}
 	}
-
+*/
 #endif
 }
 

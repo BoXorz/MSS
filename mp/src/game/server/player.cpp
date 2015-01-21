@@ -5658,8 +5658,8 @@ void CBloodSplat::Think( void )
 CBaseEntity	*CBasePlayer::GiveNamedItem( const char *pszName, int iSubType )
 {
 	// If I already own this type don't create one
-	if ( Weapon_OwnsThisType(pszName, iSubType) )
-		return NULL;
+//	if ( Weapon_OwnsThisType(pszName, iSubType) )
+//		return NULL;
 
 	// Msg( "giving %s\n", pszName );
 

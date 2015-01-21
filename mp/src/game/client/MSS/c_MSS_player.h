@@ -139,6 +139,18 @@ public:
 
 	int		m_nBackpackSize;
 
+// INVENTORY
+	int		m_nLeftHandItem;
+	int		m_nRightHandItem;
+	int		m_nArmorItem;
+	int		m_nHelmetItem;
+	int		m_nGlovesItem;
+	int		m_nBootsItem;
+	int		m_nBeltItems[10];
+	int m_nBackpackItems[100];
+
+
+
 	void	TabulateStats( void ); // BOXBOX Here is where we calculate all the player stats that we don't need to save in the character files
 
 

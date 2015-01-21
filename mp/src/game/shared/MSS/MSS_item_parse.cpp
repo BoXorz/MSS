@@ -174,15 +174,19 @@ void PrecacheFileItemInfoDatabase( IFileSystem *filesystem, const unsigned char 
 				char fileBase[512];
 				Q_FileBase( sub->GetString(), fileBase, sizeof(fileBase) );
 
+				ITEM_FILE_INFO_HANDLE tmp;
+				ReadItemDataFromFile( filesystem, fileBase, &tmp, pICEKey );
+/*
 #ifdef CLIENT_DLL
-//				if ( ReadItemDataFromFileForSlot( filesystem, fileBase, &tmp, pICEKey ) )
-//				{
-//					gWR.LoadWeaponSprites( tmp );
-//				}
+				if ( ReadItemDataFromFile( filesystem, fileBase, &tmp, pICEKey ) )
+				{
+					gWR.LoadWeaponSprites( tmp );
+				}
 #else
 				ITEM_FILE_INFO_HANDLE tmp;
 				ReadItemDataFromFile( filesystem, fileBase, &tmp, pICEKey );
 #endif
+*/
 			}
 			else
 			{
@@ -309,14 +313,18 @@ FileItemInfo_t::FileItemInfo_t()
 	szClassName[0] = 0;
 	szPrintName[0] = 0;
 	szDescription[0] = 0;
-
+	szIconFileName[0] = 0;
 	nItemType = 0;
 	nItemLevel = 0;
 	nSkin = 0;
 
-	szViewModel[0] = 0;
 	szWorldModel[0] = 0;
+
+	szViewModel[0] = 0;
 	szAnimationPrefix[0] = 0;
+
+	memset( aWpnSounds, 0, sizeof( aWpnSounds ) );
+
 //	iSlot = 0;
 //	iPosition = 0;
 //	iMaxClip1 = 0;
@@ -330,7 +338,6 @@ FileItemInfo_t::FileItemInfo_t()
 //	iFlags = 0;
 //	szAmmo1[0] = 0;
 //	szAmmo2[0] = 0;
-	memset( aWpnSounds, 0, sizeof( aWpnSounds ) );
 //	iAmmoType = 0;
 //	iAmmo2Type = 0;
 //	m_bMeleeWeapon = false;
@@ -344,8 +351,9 @@ FileItemInfo_t::FileItemInfo_t()
 //	iconZoomedCrosshair = 0;
 //	iconZoomedAutoaim = 0;
 //	bShowUsageHint = false;
-	m_bAllowFlipping = true;
-	m_bBuiltRightHanded = true;
+//	m_bAllowFlipping = true;
+//	m_bBuiltRightHanded = true;
+
 }
 
 #ifdef CLIENT_DLL
@@ -366,21 +374,23 @@ void FileItemInfo_t::Parse( KeyValues *pKeyValuesData, const char *szItemName )
 	// Item description
 	Q_strncpy( szDescription, pKeyValuesData->GetString( "description", "Default Item Description" ), MAX_DESCRIPTION_STRING );
 
+	// Icon path/file
+	Q_snprintf( szIconFileName, MAX_ITEM_STRING, "icons\\%s", szItemName );
+
 	// Model
 	Q_strncpy( szWorldModel, pKeyValuesData->GetString( "model" ), MAX_ITEM_STRING );
-
-	// View model
-	Q_strncpy( szViewModel, pKeyValuesData->GetString( "viewmodel" ), MAX_ITEM_STRING );
-
 	nSkin = pKeyValuesData->GetInt( "skin", 0 );
+
 	nItemType = pKeyValuesData->GetInt( "itemtype", ITEMTYPE_ANY );
 	nItemLevel = pKeyValuesData->GetInt( "itemlevel", 0 );
 
 // WEAPON STUFF
+
+	Q_strncpy( szViewModel, pKeyValuesData->GetString( "viewmodel" ), MAX_ITEM_STRING );
 	Q_strncpy( szAnimationPrefix, pKeyValuesData->GetString( "anim_prefix" ), MAX_ITEM_PREFIX );
 
-	m_bBuiltRightHanded = ( pKeyValuesData->GetInt( "righthanded", 1 ) != 0 ) ? true : false;
-	m_bAllowFlipping = ( pKeyValuesData->GetInt( "allowflip", 1 ) != 0 ) ? true : false;
+//	m_bBuiltRightHanded = ( pKeyValuesData->GetInt( "righthanded", 1 ) != 0 ) ? true : false;
+//	m_bAllowFlipping = ( pKeyValuesData->GetInt( "allowflip", 1 ) != 0 ) ? true : false;
 
 	// weapon sounds
 	memset( aWpnSounds, 0, sizeof( aWpnSounds ) );

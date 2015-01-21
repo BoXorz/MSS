@@ -21,26 +21,54 @@ class CDroppableLabel;
 ////////////////////////////////  BOXBOX DRAGGABLE IMAGE  ///////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+class CDragItem : public vgui::ImagePanel
+{
+public:
+	DECLARE_CLASS_SIMPLE( CDragItem, ImagePanel );
+
+	CDragItem( Panel *pParent, const char *name );
+
+//	virtual void ApplySchemeSettings( vgui::IScheme *pScheme );
+	virtual bool IsDroppable( CUtlVector< KeyValues * >& msglist ) { return true; }
+
+	virtual void OnDraggablePanelPaint();
+	virtual void OnDroppablePanelPaint( CUtlVector< KeyValues * >& msglist, CUtlVector< Panel * >& dragPanels );
+
+	void OnPanelEnteredDroppablePanel( CUtlVector< KeyValues * >& msglist );
+	void OnPanelExitedDroppablePanel ( CUtlVector< KeyValues * >& msglist );
+	virtual void OnPanelDropped(  CUtlVector< KeyValues * >& msglist );
+
+//	virtual void OnStartDragging();
+
+//	virtual void OnCreateDragData( KeyValues *msg );
+//	void OnMoveAway();
+
+	ITEM_FILE_INFO_HANDLE	m_hItem; // BOXBOX Index into item held in slot
+	const FileItemInfo_t	&GetItemData( ITEM_FILE_INFO_HANDLE item ) const;
+
+//	int m_nItemType;
+
+};
+
+/*
 class CDraggableImage : public vgui::ImagePanel
 {
 public:
 	DECLARE_CLASS_SIMPLE( CDraggableImage, ImagePanel );
 
-	CDraggableImage( Panel *pParent, const char *name, int itemtype );
+	CDraggableImage( Panel *pParent, const char *name );
 //	virtual void OnStartDragging();
 	virtual void OnDraggablePanelPaint();
 //	virtual void OnCreateDragData( KeyValues *msg );
-	//	void OnMoveAway();
-
-//	CDroppableLabel	*m_pPreviousSlot; // BOXBOX use this to set a slot's item to NULL when dragged away
+//	void OnMoveAway();
 
 	int m_nItemType;
 };
-
+*/
 //////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////  BOXBOX DROPPABLE LABEL  ///////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
-
+/*
 class CDroppableLabel : public Label
 {
 	DECLARE_CLASS_SIMPLE( CDroppableLabel, Label );
@@ -48,7 +76,6 @@ class CDroppableLabel : public Label
 public:
 
 	CDroppableLabel( Panel *parent, const char *name );
-//	CDroppableLabel( Panel *pParent, const char *name, const char *text ) : Label( pParent, name, text ) { SetDropEnabled( true ); }
 
 	virtual void ApplySchemeSettings( vgui::IScheme *pScheme );
 	virtual bool IsDroppable( CUtlVector< KeyValues * >& msglist ) { return true; }
@@ -58,18 +85,13 @@ public:
 	void OnPanelEnteredDroppablePanel( CUtlVector< KeyValues * >& msglist );
 	void OnPanelExitedDroppablePanel ( CUtlVector< KeyValues * >& msglist );
 
-	void			SetItem( CDraggableImage *item );
-	CDraggableImage	*GetItem( void ) { return m_pItem; }
-	bool			HasItem( void ) { return m_pItem != NULL; }
-
 	int				GetItemType( void ) { return m_nItemType; }
 	void			SetItemType( int type ) { m_nItemType = type; }
 private:
 
-	CDraggableImage	*m_pItem; // BOXBOX what item is currently dropped in this slot ( NULL if nothing )
 	int m_nItemType;
 };
-
+*/
 //////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////  BOXBOX INVENTORY MENU  ////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,12 +119,46 @@ public:
   	virtual bool IsVisible() { return BaseClass::IsVisible(); }
   	virtual void SetParent( vgui::VPANEL parent ) { BaseClass::SetParent( parent ); }
 
-	void	NewItem( KeyValues itemData ); // BOXBOX we just got a new item( picked up, or from a treasure chest, etc.)
-	bool	PutItemInBackpack( CDraggableImage *item ); // BOXBOX returns false if backpack is full, otherwise places item in an empty slot and returns true
-	bool	PutItemOnBelt( CDraggableImage *item ); // BOXBOX returns false if belt is full, otherwise places item in an empty slot and returns true
-	void	DropItemOnGround( void ); // BOXBOX no space for item, drop it.
+//	void	NewItem( KeyValues itemData );
+//	const FileItemInfo_t	&GetItemData( ITEM_FILE_INFO_HANDLE item ) const;
 
+	CDragItem		*m_pBackpackItems[ BACKPACK_SLOTS_X ][ BACKPACK_SLOTS_Y ];
+	CDragItem		*m_pBeltItems[ 10 ];
+
+	CDragItem		*m_pLeftHandItem;
+	CDragItem		*m_pRightHandItem;
+	CDragItem		*m_pArmorItem;
+	CDragItem		*m_pHelmetItem;
+	CDragItem		*m_pGlovesItem;
+	CDragItem		*m_pBootsItem;
+
+/*
+	CDraggableImage		*m_pBackpackItems[ BACKPACK_SLOTS_X ][ BACKPACK_SLOTS_Y ];
+	CDraggableImage		*m_pBeltItems[ 10 ];
+
+	CDraggableImage		*m_pLeftHandItem;
+	CDraggableImage		*m_pRightHandItem;
+	CDraggableImage		*m_pArmorItem;
+	CDraggableImage		*m_pHelmetItem;
+	CDraggableImage		*m_pGlovesItem;
+	CDraggableImage		*m_pBootsItem;
+
+	CDroppableLabel		*m_pBackpackDropSlots[ BACKPACK_SLOTS_X ][ BACKPACK_SLOTS_Y ];
+	CDroppableLabel		*m_pBeltSlots[ 10 ]; // BOXBOX TODO Apply Quick Slot to these (1 through 0 keys on keyboard)
+
+	CDroppableLabel		*m_pLeftHandSlot;
+	CDroppableLabel		*m_pRightHandSlot;
+	CDroppableLabel		*m_pArmorSlot;
+	CDroppableLabel		*m_pHelmetSlot;
+	CDroppableLabel		*m_pGlovesSlot;
+	CDroppableLabel		*m_pBootsSlot;
+
+	CDragItem			*m_pDragTest;
+	CDragItem			*m_pDragTest2;
+*/
 protected:	
+
+//	ITEM_FILE_INFO_HANDLE	m_hItemFileInfo;
 
 	virtual void OnCommand( const char *command);
 
@@ -113,20 +169,6 @@ protected:
 	vgui::Label			*m_pRightPageTitleLabel;
 	vgui::Label			*m_pBackpackLabel;
 	vgui::Label			*m_pGoldLabel;
-
-	CDraggableImage		*m_pDragTest;
-	CDraggableImage		*m_pDragTest2;
-
- // BOXBOX TODO Should we start with a smaller backpack and create bigger backpacks later in game?
-	CDroppableLabel		*m_pBackpackDropSlots[ BACKPACK_SLOTS_X ][ BACKPACK_SLOTS_Y ];
-	CDroppableLabel		*m_pBeltSlots[10]; // BOXBOX Apply Quick Slot to these (1 through 0 keys on keyboard)
-
-	CDroppableLabel		*m_pLeftHandSlot;
-	CDroppableLabel		*m_pRightHandSlot;
-	CDroppableLabel		*m_pArmorSlot;
-	CDroppableLabel		*m_pHelmetSlot;
-	CDroppableLabel		*m_pGlovesSlot;
-	CDroppableLabel		*m_pBootsSlot;
 
 	CModelPanel			*m_pCharModel;
 };

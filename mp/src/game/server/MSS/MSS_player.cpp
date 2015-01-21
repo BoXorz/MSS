@@ -90,6 +90,16 @@ IMPLEMENT_SERVERCLASS_ST(CMSS_Player, DT_MSS_Player)
 
 	SendPropInt( SENDINFO( m_nBackpackSize ), 5 ),
 
+// INVENTORY
+	SendPropInt( SENDINFO( m_nLeftHandItem ), 11 ), // BOXBOX 11 bits will allow 1024 total items in game
+	SendPropInt( SENDINFO( m_nRightHandItem ), 11 ),
+	SendPropInt( SENDINFO( m_nArmorItem ), 11 ),
+	SendPropInt( SENDINFO( m_nHelmetItem ), 11 ),
+	SendPropInt( SENDINFO( m_nGlovesItem ), 11 ),
+	SendPropInt( SENDINFO( m_nBootsItem ), 11 ),
+	SendPropArray( SendPropInt( SENDINFO_ARRAY( m_nBeltItems ) ), m_nBeltItems ),
+	SendPropArray( SendPropInt( SENDINFO_ARRAY( m_nBackpackItems ) ), m_nBackpackItems ),
+
 	//SendPropArray3( SENDINFO_ARRAY3( m_PreloadedCharInfo ), SendPropInt( SENDINFO_ARRAY(m_PreloadedCharInfo), 0, SendProxy_Preload ) ),
 	//SendPropArray3( SENDINFO_ARRAY3( m_PreloadedCharInfo ), SendPropInt( SENDINFO_ARRAY(m_PreloadedCharInfo), 0, SendProxy_Preload ) ),
 //	SendPropArray( SendPropString( SENDINFO_ARRAY( m_PreloadedCharInfo_Name ), 0, SendProxy_String_tToString ), m_PreloadedCharInfo_Name ),
@@ -954,13 +964,17 @@ void CMSS_Player::SetAnimation( PLAYER_ANIM playerAnim )
 
 
 extern int	gEvilImpulse101;
+
 //-----------------------------------------------------------------------------
 // Purpose: Player reacts to bumping a weapon. 
 // Input  : pWeapon - the weapon that the player bumped into.
 // Output : Returns true if player picked up the weapon
 //-----------------------------------------------------------------------------
+
+// BOXBOX redoing this for MSS
 bool CMSS_Player::BumpWeapon( CBaseCombatWeapon *pWeapon )
 {
+/*
 	CBaseCombatCharacter *pOwner = pWeapon->GetOwner();
 
 	// Can I have this weapon type?
@@ -975,13 +989,13 @@ bool CMSS_Player::BumpWeapon( CBaseCombatWeapon *pWeapon )
 		}
 		return false;
 	}
-
+*/
 	// Don't let the player fetch weapons through walls (use MASK_SOLID so that you can't pickup through windows)
 	if( !pWeapon->FVisible( this, MASK_SOLID ) && !(GetFlags() & FL_NOTARGET) )
 	{
 		return false;
 	}
-
+/*
 	bool bOwnsWeaponAlready = !!Weapon_OwnsThisType( pWeapon->GetClassname(), pWeapon->GetSubType());
 
 	if ( bOwnsWeaponAlready == true ) 
@@ -999,10 +1013,24 @@ bool CMSS_Player::BumpWeapon( CBaseCombatWeapon *pWeapon )
 			 return false;
 		 }
 	}
+*/
+//	pWeapon->CheckRespawn();
+//	Weapon_Equip( pWeapon ); // BOXBOX TODO here is the line to use when player drags wpn icon to a hand slot!
 
-	pWeapon->CheckRespawn();
-	Weapon_Equip( pWeapon );
+// BOXBOX TODO new MSS mechanics here!
 
+	int item = pWeapon->m_hItemFileInfo;
+	Warning(" ITEM TOUCHED IS: %i\n", item );
+
+	if( !PutItemInBackpack( item ) )
+	{
+		if( !PutItemOnBelt( item ) )
+		{
+//			DropItemOnGround( item );
+			return false;
+		}
+	}
+	pWeapon->Kill(); // BOXBOX picked up item, so kill the instance on the ground
 	return true;
 }
 
@@ -1360,6 +1388,68 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 			page = max( page, MENUPAGE_STATS );
 
 			m_nCurMenuPage = page;
+			return true;
+		}
+	}
+
+	else if ( FStrEq( args[0], "moveitem" ) )
+	{
+		if ( args.ArgC() == 3 )
+		{
+			int from = atoi( args[1] );
+			int to = atoi( args[2] );
+			int item = -1;
+
+			if( ( from > -1 ) && ( from < 100 )  )
+			{
+				item = m_nBackpackItems.Get( from );
+				m_nBackpackItems.Set( from, 0 );
+			}
+			else if( ( from > 99 ) && ( from < 110 )  )
+			{
+				item = m_nBeltItems.Get( from );
+				m_nBeltItems.Set( from, 0 );
+			}
+			else if ( from == 110 )
+			{
+				item = m_nLeftHandItem;					
+				m_nLeftHandItem = 0;
+			}
+			else if ( from == 111 )
+			{
+				item = m_nRightHandItem;					
+				m_nRightHandItem = 0;
+			}
+			else if ( from == 112 )
+			{
+				item = m_nArmorItem;					
+				m_nArmorItem = 0;
+			}
+			else if ( from == 113 )
+			{
+				item = m_nHelmetItem;					
+				m_nHelmetItem = 0;
+			}
+			else if ( from == 114 )
+			{
+				item = m_nGlovesItem;					
+				m_nGlovesItem = 0;
+			}
+			else if ( from == 115 )
+			{
+				item = m_nBootsItem;					
+				m_nBootsItem = 0;
+			}
+
+			if( ( to > -1 ) && ( to < 100 )  )			m_nBackpackItems.Set( to, item );
+			else if( ( to > 99 ) && ( to < 110 )  )		m_nBeltItems.Set( to - 100, item );
+			else if ( to == 110 )						m_nLeftHandItem = item;
+			else if ( to == 111 )						m_nRightHandItem = item;
+			else if ( to == 112 )						m_nArmorItem = item;
+			else if ( to == 113 )						m_nHelmetItem = item;
+			else if ( to == 114 )						m_nGlovesItem = item;
+			else if ( to == 115 )						m_nBootsItem = item;
+
 			return true;
 		}
 	}
@@ -2367,6 +2457,49 @@ void CC_SetGold( const CCommand& args ) // BOXBOX arg1 is the value to set gold 
 		}
 }
 static ConCommand setgold("setgold", CC_SetGold, "Bump gold pieces for dev testing.", FCVAR_CHEAT);
+
+
+bool CMSS_Player::PutItemInBackpack( int item )
+{
+	for( int x = 0 ; x < m_nBackpackSize * 10 ; x++ )
+	{
+		if( !m_nBackpackItems[x] ) // BOXBOX if we found an empty slot
+		{
+			m_nBackpackItems.Set( x, item ); // BOXBOX then put the item in that slot
+			return true;
+		}
+	}
+
+	return false; // BOXBOX backpack full!
+}
+
+bool CMSS_Player::PutItemOnBelt( int item )
+{
+	for( int x = 0 ; x < 10 ; x++ )
+	{
+		if( !m_nBeltItems[x] )
+		{
+			m_nBeltItems.Set( x, item );
+			return true;
+		}
+	}
+
+	return false; // BOXBOX belt full!
+}
+
+void CMSS_Player::DropItemOnGround( int item )
+{
+
+}
+
+
+
+
+
+
+
+
+
 /*
 void CMSS_Player::UpdateStats( void )
 {

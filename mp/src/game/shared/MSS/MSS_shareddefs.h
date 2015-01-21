@@ -174,6 +174,4 @@ enum MSSItemTypes_t
 
 
 
-
-
 #endif // MSS_SHAREDDEFS_H

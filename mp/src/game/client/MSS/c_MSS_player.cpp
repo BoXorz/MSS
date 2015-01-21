@@ -66,6 +66,16 @@ IMPLEMENT_CLIENTCLASS_DT(C_MSS_Player, DT_MSS_Player, CMSS_Player)
 
 	RecvPropInt( RECVINFO( m_nBackpackSize ) ),
 
+// INVENTORY
+	RecvPropInt( RECVINFO( m_nLeftHandItem ) ),
+	RecvPropInt( RECVINFO( m_nRightHandItem ) ),
+	RecvPropInt( RECVINFO( m_nArmorItem ) ),
+	RecvPropInt( RECVINFO( m_nHelmetItem ) ),
+	RecvPropInt( RECVINFO( m_nGlovesItem ) ),
+	RecvPropInt( RECVINFO( m_nBootsItem ) ),
+	RecvPropArray( RecvPropInt( RECVINFO( m_nBeltItems[0] ) ), m_nBeltItems ),
+	RecvPropArray( RecvPropInt( RECVINFO( m_nBackpackItems[0] ) ), m_nBackpackItems ),
+
 	//RecvPropArray( RecvPropString( RECVINFO( m_PreloadedCharInfo ) ), m_PreloadedCharInfo ),
 	//RecvPropArray3( RECVINFO_ARRAY( m_PreloadedCharInfo ), RecvPropString( RECVINFO( m_PreloadedCharInfo ), 0, RecvProxy_Preload ) ),
 //	RecvPropArray( RecvPropString( RECVINFO( m_PreloadedCharInfo_Name[0]) ), m_PreloadedCharInfo_Name ),

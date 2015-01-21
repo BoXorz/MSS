@@ -20,6 +20,8 @@
 
 extern ConVar sv_footsteps;
 
+
+
 /* BOXBOX removing footstep override
 const char *g_ppszPlayerSoundPrefixNames[PLAYER_SOUNDS_MAX] =
 {

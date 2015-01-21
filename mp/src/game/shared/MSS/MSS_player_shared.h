@@ -33,6 +33,8 @@ enum MSSPlayerState
 #define CMSS_Player C_MSS_Player
 #endif
 
+
+
 class CPlayerAnimState
 {
 public:

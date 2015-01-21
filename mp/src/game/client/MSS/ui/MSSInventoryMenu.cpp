@@ -28,6 +28,7 @@
 using namespace vgui;
 extern INetworkStringTable *g_pStringTableInfoPanel;
 
+//extern CUtlDict< FileItemInfo_t*, unsigned short > m_ItemInfoDatabase;
 
 //extern const char *pszGenderNames[];
 //extern const char *pszRaceNames[];
@@ -53,20 +54,35 @@ CMSInventoryMenu::CMSInventoryMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_IN
 	m_pBackpackLabel = new Label( this, "BackpackLabel", "0" );
 	m_pGoldLabel = new Label( this, "GoldLabel", "0" );
 
-	m_pDragTest = new CDraggableImage( this, "DragTest", ITEMTYPE_WEAPON );
-	m_pDragTest->SetImage("icons/RustyShortSword");
-
-	m_pDragTest2 = new CDraggableImage( this, "DragTest2", ITEMTYPE_WEAPON );
-	m_pDragTest2->SetImage("icons/RustyShortSword");
-
 	for( int y = 0 ; y < BACKPACK_SLOTS_Y ; y++ )
 	{
 		for( int x = 0 ; x < BACKPACK_SLOTS_X ; x++ )
 		{
-			m_pBackpackDropSlots[x][y] = new CDroppableLabel( this, VarArgs( "BackpackSlot %i %i", x, y ) );
+			m_pBackpackItems[x][y] = new CDragItem( this, VarArgs( "BackpackItem %i %i", x, y ) );
+
+//			m_pBackpackItems[x][y] = new CDraggableImage( this, VarArgs( "BackpackItem %i %i", x, y ) );
+//			m_pBackpackDropSlots[x][y] = new CDroppableLabel( this, VarArgs( "BackpackSlot %i %i", x, y ) );
 		}
-		m_pBeltSlots[y] = new CDroppableLabel( this, VarArgs( "BeltSlot %i", y ) );
+		m_pBeltItems[y] = new CDragItem( this, VarArgs( "BeltItem %i", y ) );
+
+//		m_pBeltItems[y] = new CDraggableImage( this, VarArgs( "BeltItem %i", y ) );
+//		m_pBeltSlots[y] = new CDroppableLabel( this, VarArgs( "BeltSlot %i", y ) );
 	}
+
+	m_pLeftHandItem		= new CDragItem( this, "LeftHandItem" );
+	m_pRightHandItem	= new CDragItem( this, "RightHandItem" );
+	m_pArmorItem		= new CDragItem( this, "ArmorItem" );
+	m_pHelmetItem		= new CDragItem( this, "HelmetItem" );
+	m_pGlovesItem		= new CDragItem( this, "GlovesItem" );
+	m_pBootsItem		= new CDragItem( this, "BootsItem" );
+
+/*
+	m_pLeftHandItem		= new CDraggableImage( this, "LeftHandItem" );
+	m_pRightHandItem	= new CDraggableImage( this, "RightHandItem" );
+	m_pArmorItem		= new CDraggableImage( this, "ArmorItem" );
+	m_pHelmetItem		= new CDraggableImage( this, "HelmetItem" );
+	m_pGlovesItem		= new CDraggableImage( this, "GlovesItem" );
+	m_pBootsItem		= new CDraggableImage( this, "BootsItem" );
 
 	m_pLeftHandSlot		= new CDroppableLabel( this, "LeftHandSlot" );
 	m_pRightHandSlot	= new CDroppableLabel( this, "RightHandSlot" );
@@ -74,8 +90,12 @@ CMSInventoryMenu::CMSInventoryMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_IN
 	m_pHelmetSlot		= new CDroppableLabel( this, "HelmetSlot" );
 	m_pGlovesSlot		= new CDroppableLabel( this, "GlovesSlot" );
 	m_pBootsSlot		= new CDroppableLabel( this, "BootsSlot" );
-
+*/
 	m_pCharModel = new CModelPanel( this, "charmodel" );
+
+//	m_pDragTest = new CDragItem( this, "TestItem" );
+//	m_pDragTest2 = new CDragItem( this, "TestItem2" );
+
 }
 
 void CMSInventoryMenu::ApplySchemeSettings( IScheme *pScheme )
@@ -91,11 +111,42 @@ void CMSInventoryMenu::ApplySchemeSettings( IScheme *pScheme )
 	{
 		for( int x = 0 ; x < BACKPACK_SLOTS_X ; x++ )
 		{
-			m_pBackpackDropSlots[x][y]->SetPos( xpos + (x*65), ypos +(y*65) );
-		}
-		m_pBeltSlots[y]->SetPos( xpos + (y*65), 888 );
-	}
+			m_pBackpackItems[x][y]->SetDragEnabled( false );
+			m_pBackpackItems[x][y]->SetPos( xpos + (x*65), ypos +(y*65) );
 
+//			m_pBackpackDropSlots[x][y]->SetPos( xpos + (x*65), ypos +(y*65) );
+		}
+		m_pBeltItems[y]->SetDragEnabled( false );
+		m_pBeltItems[y]->SetPos( xpos + (y*65), 888 );
+
+//		m_pBeltSlots[y]->SetPos( xpos + (y*65), 888 );
+	}
+	m_pLeftHandItem->SetDragEnabled( false );
+	m_pLeftHandItem->SetPos( 1084, 500 );
+//	m_pLeftHandItem->m_nItemType = ITEMTYPE_WEAPON;
+
+	m_pRightHandItem->SetDragEnabled( false );
+	m_pRightHandItem->SetPos( 1600, 500 );
+//	m_pRightHandItem->m_nItemType = ITEMTYPE_WEAPON;
+
+	m_pArmorItem->SetDragEnabled( false );
+	m_pArmorItem->SetPos( 1345, 400 );
+//	m_pArmorItem->m_nItemType = ITEMTYPE_ARMOR;
+
+	m_pHelmetItem->SetDragEnabled( false );
+	m_pHelmetItem->SetPos( 1345, 180 );
+//	m_pHelmetItem->m_nItemType = ITEMTYPE_HELMET;
+
+	m_pGlovesItem->SetDragEnabled( false );
+	m_pGlovesItem->SetPos( 1140, 400 );
+//	m_pGlovesItem->m_nItemType = ITEMTYPE_GLOVES;
+
+	m_pBootsItem->SetDragEnabled( false );
+	m_pBootsItem->SetPos( 1345, 780 );
+//	m_pBootsItem->m_nItemType = ITEMTYPE_BOOTS;
+
+//	Reset();
+/*
 	m_pLeftHandSlot->SetPos( 1084, 500 );
 	m_pLeftHandSlot->SetItemType( ITEMTYPE_WEAPON ) ;
 	m_pRightHandSlot->SetPos( 1600, 500 );
@@ -110,7 +161,10 @@ void CMSInventoryMenu::ApplySchemeSettings( IScheme *pScheme )
 	m_pBootsSlot->SetItemType( ITEMTYPE_BOOTS );
 
 	m_pDragTest->SetPos( 1000, 600 );
+	m_pDragTest->SetImage("icons/weapon_RustyShortSword");
 	m_pDragTest2->SetPos( 1065, 600 );
+	m_pDragTest2->SetImage("icons/weapon_RustyShortSword");
+*/
 }
 
 CMSInventoryMenu::~CMSInventoryMenu()
@@ -120,6 +174,17 @@ CMSInventoryMenu::~CMSInventoryMenu()
 
 void CMSInventoryMenu::Reset( void )
 {
+/*
+	C_MSS_Player *pPlayer = ToMSSPlayer( C_BasePlayer::GetLocalPlayer() );
+	if( !pPlayer ) return;
+
+	m_pRightPageTitleLabel->SetText( pPlayer->m_pszCharName );
+	m_pBackpackLabel->SetText( pszBackpackNames[ pPlayer->m_nBackpackSize ] );
+
+	char buf[10];
+	itoa( pPlayer->m_nGold, buf, 10 );
+	m_pGoldLabel->SetText( buf );
+*/
 
 
 //	Update();
@@ -142,12 +207,137 @@ void CMSInventoryMenu::Update( void )
 	{
 		for( int x = 0 ; x < BACKPACK_SLOTS_X ; x++ )
 		{
-			m_pBackpackDropSlots[x][y]->SetVisible( pPlayer->m_nBackpackSize > y );
+//			m_pBackpackDropSlots[x][y]->SetVisible( pPlayer->m_nBackpackSize > y );
+			m_pBackpackItems[x][y]->SetVisible( pPlayer->m_nBackpackSize > y );
+
+			// BOXBOX set up icons
+			if( !pPlayer->m_nBackpackItems[ y * 10 + x ] ) // no item in this slot
+			{
+				m_pBackpackItems[x][y]->m_hItem = GetInvalidItemInfoHandle();
+				m_pBackpackItems[x][y]->SetImage( "icons/Blank" );
+				m_pBackpackItems[x][y]->SetDragEnabled( false );
+			}
+			else
+			{
+				FileItemInfo_t *pItem = GetFileItemInfoFromHandle( (ITEM_FILE_INFO_HANDLE)pPlayer->m_nBackpackItems[ y * 10 + x  ] );
+				if( !pItem ) return;
+
+				m_pBackpackItems[x][y]->m_hItem = (ITEM_FILE_INFO_HANDLE)pPlayer->m_nBackpackItems[ y * 10 + x  ];
+				m_pBackpackItems[x][y]->SetImage( pItem->szIconFileName );
+				m_pBackpackItems[x][y]->SetDragEnabled( true );
+
+//				m_pBackpackItems[x][y]->m_nItemType = pItem->nItemType;
+//				m_pBackpackItems[x][y]->SetVisible( true );
+//				Warning("FOUND %s IN BACKPACK SLOT %i\n", pItem->szPrintName , y * 10 + x );
+
+			}
 		}
+
+		if( !pPlayer->m_nBeltItems[ y ] ) // no item in this slot
+		{
+//			m_pBeltItems[y]->SetVisible( false );
+			m_pBeltItems[y]->SetDragEnabled( false );
+			m_pBeltItems[y]->SetImage( "icons/Blank" );
+		}
+		else
+		{
+			FileItemInfo_t *pItem = GetFileItemInfoFromHandle( (ITEM_FILE_INFO_HANDLE)pPlayer->m_nBackpackItems[ y ] );
+			if( !pItem ) return;
+
+			m_pBeltItems[y]->SetDragEnabled( true );
+			m_pBeltItems[y]->SetImage( pItem->szIconFileName );
+//			m_pBeltItems[y]->m_nItemType = pItem->nItemType;
+//			m_pBeltItems[y]->SetVisible( true );
+		}
+	}
+
+	if( !pPlayer->m_nLeftHandItem )
+	{
+		m_pLeftHandItem->SetDragEnabled( false );
+		m_pLeftHandItem->SetImage( "icons/Blank" );
+	}
+	else
+	{
+		FileItemInfo_t *pItem = GetFileItemInfoFromHandle( (ITEM_FILE_INFO_HANDLE)pPlayer->m_nLeftHandItem );
+		if( !pItem ) return;
+
+		m_pLeftHandItem->SetDragEnabled( true );
+		m_pLeftHandItem->SetImage( pItem->szIconFileName );
+	}
+
+	if( !pPlayer->m_nRightHandItem )
+	{
+		m_pRightHandItem->SetDragEnabled( false );
+		m_pRightHandItem->SetImage( "icons/Blank" );
+	}
+	else
+	{
+		FileItemInfo_t *pItem = GetFileItemInfoFromHandle( (ITEM_FILE_INFO_HANDLE)pPlayer->m_nRightHandItem );
+		if( !pItem ) return;
+
+		m_pRightHandItem->SetDragEnabled( true );
+		m_pRightHandItem->SetImage( pItem->szIconFileName );
+	}
+
+	if( !pPlayer->m_nArmorItem )
+	{
+		m_pArmorItem->SetDragEnabled( false );
+		m_pArmorItem->SetImage( "icons/Blank" );
+	}
+	else
+	{
+		FileItemInfo_t *pItem = GetFileItemInfoFromHandle( (ITEM_FILE_INFO_HANDLE)pPlayer->m_nArmorItem );
+		if( !pItem ) return;
+
+		m_pArmorItem->SetDragEnabled( true );
+		m_pArmorItem->SetImage( pItem->szIconFileName );
+	}
+
+	if( !pPlayer->m_nHelmetItem )
+	{
+		m_pHelmetItem->SetDragEnabled( false );
+		m_pHelmetItem->SetImage( "icons/Blank" );
+	}
+	else
+	{
+		FileItemInfo_t *pItem = GetFileItemInfoFromHandle( (ITEM_FILE_INFO_HANDLE)pPlayer->m_nHelmetItem );
+		if( !pItem ) return;
+
+		m_pHelmetItem->SetDragEnabled( true );
+		m_pHelmetItem->SetImage( pItem->szIconFileName );
+	}
+
+	if( !pPlayer->m_nGlovesItem )
+	{
+		m_pGlovesItem->SetDragEnabled( false );
+		m_pGlovesItem->SetImage( "icons/Blank" );
+	}
+	else
+	{
+		FileItemInfo_t *pItem = GetFileItemInfoFromHandle( (ITEM_FILE_INFO_HANDLE)pPlayer->m_nGlovesItem );
+		if( !pItem ) return;
+
+		m_pGlovesItem->SetDragEnabled( true );
+		m_pGlovesItem->SetImage( pItem->szIconFileName );
+	}
+
+	if( !pPlayer->m_nBootsItem )
+	{
+		m_pBootsItem->SetDragEnabled( false );
+		m_pBootsItem->SetImage( "icons/Blank" );
+	}
+	else
+	{
+		FileItemInfo_t *pItem = GetFileItemInfoFromHandle( (ITEM_FILE_INFO_HANDLE)pPlayer->m_nBootsItem );
+		if( !pItem ) return;
+
+		m_pBootsItem->SetDragEnabled( true );
+		m_pBootsItem->SetImage( pItem->szIconFileName );
 	}
 
 	m_pCharModel->SwapModel( pszPlayerModels[ pPlayer->m_nPlayerModelIndex ], NULL ); 
 	m_pCharModel->MoveToFront();
+
 }
 
 
@@ -194,70 +384,250 @@ void CMSInventoryMenu::ShowPanel( bool bShow )
 		SetVisible( false );
 	}
 }
-/*
-void CMSInventoryMenu::NewItem( KeyValues itemData ) // BOXBOX TODO do keyvalues and finish this 
-{
-	CDraggableImage *pNewItem = new CDraggableImage( this, itemData.GetString( "ItemName" ), itemData.GetInt( "ItemType" ) );
-	pNewItem->SetImage( itemData.GetString( "Icon" ) );
-
-	if( !PutItemInBackpack( pNewItem ) ) // BOXBOX TODO this will probably all be server side here on
-	{
-		if( !PutItemOnBelt( pNewItem ) )
-			DropItemOnGround();
-	}
-}
-*/
-bool CMSInventoryMenu::PutItemInBackpack( CDraggableImage *item )
-{
-	for( int y = 0 ; y < BACKPACK_SLOTS_Y ; y++ )
-	{
-		for( int x = 0 ; x < BACKPACK_SLOTS_X ; x++ )
-		{
-			if( !m_pBackpackDropSlots[x][y]->HasItem() ) // BOXBOX if we found an empty slot
-			{
-				m_pBackpackDropSlots[x][y]->SetItem( item );
-				return true;
-			}
-		}
-	}
-
-	return false; // BOXBOX backpack full!
-}
-
-bool CMSInventoryMenu::PutItemOnBelt( CDraggableImage *item )
-{
-	for( int x = 0 ; x < 10 ; x++ )
-	{
-		if( !m_pBeltSlots[x]->HasItem() ) // BOXBOX if we found an empty slot
-		{
-			m_pBeltSlots[x]->SetItem( item );
-			return true;
-		}
-	}
-
-	return false; // BOXBOX belt full!
-}
-
-void CMSInventoryMenu::DropItemOnGround( void )
-{
-
-}
-
-
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////  BOXBOX DRAGGABLE IMAGE  ///////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-CDraggableImage::CDraggableImage( Panel *pParent, const char *name, int itemtype ) : ImagePanel( pParent, name )
+CDragItem::CDragItem( Panel *pParent, const char *name ) : ImagePanel( pParent, name )
+{
+	SetDragEnabled( true );
+	SetDropEnabled( true );
+	SetVisible( true );
+	SetZPos( 2 );
+	SetSize( 64, 64 );
+	SetImage( "icons/Blank" );
+}
+
+const FileItemInfo_t &CDragItem::GetItemData( ITEM_FILE_INFO_HANDLE item ) const
+{
+	return *GetFileItemInfoFromHandle( m_hItem );
+}
+
+// BOXBOX this is for when a drag/drop item is being dragged, but is not over another drag/drop item
+void CDragItem::OnDraggablePanelPaint( )
+{
+	IImage *pImage = GetImage();
+	if( pImage )
+	{
+		int x = 0, y = 0;
+		input()->GetCursorPos(x, y);
+
+		int w = 0, h = 0;
+		pImage->GetSize( w, h );
+
+		pImage->SetPos(x - (w * 0.5f), y - (h * 0.5f));
+
+		pImage->Paint();
+	}
+}
+
+ // BOXBOX this is for when a drag/drop item is being dragged, and IS over another drag/drop item
+void CDragItem::OnDroppablePanelPaint( CUtlVector< KeyValues * >& msglist, CUtlVector< Panel * >& dragPanels )
+{
+// BOXBOX First, draw an outline around me(the drop item)
+	int w, h;
+	GetSize( w, h );
+
+	int x, y;
+	x = y = 0;
+	LocalToScreen( x, y );
+
+	surface()->DrawSetColor( Color(255, 255, 255, 255) );
+	surface()->DrawOutlinedRect( x-1, y-1, x + w+1, y + h+1 );
+
+// BOXBOX now get the dragged item and draw it normally
+	Panel *pDrag = (Panel *)msglist.Head()->GetFirstSubKey()->GetPtr(); // BOXBOX get pointer to dragged image!
+	if( !pDrag ) return;
+
+	CDragItem *pItem = (CDragItem*)pDrag;
+
+	IImage *pImage = pItem->GetImage();
+	if( pImage )
+	{
+		int x = 0, y = 0;
+		input()->GetCursorPos(x, y);
+
+		int w = 0, h = 0;
+		pImage->GetSize( w, h );
+		pImage->SetPos(x - (w * 0.5f), y - (h * 0.5f));
+		pImage->Paint();
+	}
+}
+
+void CDragItem::OnPanelEnteredDroppablePanel( CUtlVector< KeyValues * >& msglist )
+{
+	if( GetItemData( m_hItem ).nItemType == ITEMTYPE_ANY ) return; // BOXBOX any type of item can be dropped here (backpack, belt)
+
+	Panel *pDrag = (Panel *)msglist.Head()->GetFirstSubKey()->GetPtr(); // BOXBOX get pointer to dragged image!
+	if( !pDrag ) return;
+
+	CDragItem *pItem = dynamic_cast<CDragItem *>(pDrag); // BOXBOX cast it to our draggable class
+	if( !pItem ) return;
+
+	if( GetItemData( m_hItem ).nItemType != pItem->GetItemData( pItem->m_hItem ).nItemType )
+	{
+		SetDropEnabled( false );
+	}
+}
+
+void CDragItem::OnPanelExitedDroppablePanel( CUtlVector< KeyValues * >& msglist )
+{
+	SetDropEnabled( true );
+}
+
+void CDragItem::OnPanelDropped( CUtlVector< KeyValues * >& msglist ) // BOXBOX an item has been dropped on me!
+{
+	C_MSS_Player *pPlayer = ToMSSPlayer( C_BasePlayer::GetLocalPlayer() );
+	if( !pPlayer ) return;
+
+	Panel *pDrag = (Panel *)msglist.Head()->GetFirstSubKey()->GetPtr(); // BOXBOX get pointer to dragged image!
+	if( !pDrag ) return;
+
+	CDragItem *pItem = dynamic_cast<CDragItem *>(pDrag);
+	if( !pItem ) return;
+
+	if( GetItemData( m_hItem ).nItemType != ITEMTYPE_ANY )
+	{
+		if( GetItemData( m_hItem ).nItemType != pItem->GetItemData( pItem->m_hItem ).nItemType )
+		{
+			SetDropEnabled( true );
+			return;
+		}
+	}
+
+	CMSInventoryMenu *pMenu = (CMSInventoryMenu *)GetParent( );
+	if( !pMenu ) return;
+
+	SetDragEnabled( true );
+	SetImage( pItem->GetImage() );
+	pItem->SetDragEnabled( false );
+	pItem->SetImage( "icons/Blank" ); // BOXBOX why does this only work once?
+
+// BOXBOX Find the from slot and the to slot, and adjust inventory
+	int nFrom = -1;
+	int nTo = -1;
+
+	for( int y = 0 ; y < BACKPACK_SLOTS_Y ; y++ )
+	{
+		for( int x = 0 ; x < BACKPACK_SLOTS_X ; x++ )
+		{
+			if( pMenu->m_pBackpackItems[ x ][ y ] == pItem )
+			{
+				nFrom = y * 10 + x;
+				pPlayer->m_nBackpackItems[ nFrom ] = 0;
+			}
+
+			if( pMenu->m_pBackpackItems[ x ][ y ] == this )
+			{
+				nTo = y * 10 + x;
+				pPlayer->m_nBackpackItems[ nTo ] = pMenu->m_pBackpackItems[ x ][ y ]->m_hItem;
+			}
+		}
+
+		if( pMenu->m_pBeltItems[ y ] == pItem )
+		{
+			nFrom = y + 100;
+			pPlayer->m_nBeltItems[ y ] = 0;
+		}
+
+		if( pMenu->m_pBeltItems[ y ] == this )
+		{
+			nTo = y + 100;
+			pPlayer->m_nBeltItems[ y ] = pMenu->m_pBeltItems[ y ]->m_hItem;
+		}
+	}
+
+	if( pMenu->m_pLeftHandItem == pItem )
+		{
+			nFrom = 110;
+			pPlayer->m_nLeftHandItem = 0;
+		}
+	if( pMenu->m_pRightHandItem == pItem )
+		{
+			nFrom = 111;
+			pPlayer->m_nRightHandItem = 0;
+		}
+	if( pMenu->m_pArmorItem == pItem )
+		{
+			nFrom = 112;
+			pPlayer->m_nArmorItem = 0;
+		}
+	if( pMenu->m_pHelmetItem == pItem )
+		{
+			nFrom = 113;
+			pPlayer->m_nHelmetItem = 0;
+		}
+	if( pMenu->m_pGlovesItem == pItem )
+		{
+			nFrom = 114;
+			pPlayer->m_nGlovesItem = 0;
+		}
+	if( pMenu->m_pBootsItem == pItem )
+		{
+			nFrom = 115;
+			pPlayer->m_nBootsItem = 0;
+		}
+
+	if( pMenu->m_pLeftHandItem == this )
+		{
+			nTo = 110;
+			pPlayer->m_nLeftHandItem = pMenu->m_pLeftHandItem->m_hItem;
+		}
+	if( pMenu->m_pRightHandItem == this )
+		{
+			nTo = 111;
+			pPlayer->m_nRightHandItem = pMenu->m_pRightHandItem->m_hItem;
+		}
+	if( pMenu->m_pArmorItem == this )
+		{
+			nTo = 112;
+			pPlayer->m_nArmorItem = pMenu->m_pArmorItem->m_hItem;
+		}
+	if( pMenu->m_pHelmetItem == this )
+		{
+			nTo = 113;
+			pPlayer->m_nHelmetItem = pMenu->m_pHelmetItem->m_hItem;
+		}
+	if( pMenu->m_pGlovesItem == this )
+		{
+			nTo = 114;
+			pPlayer->m_nGlovesItem = pMenu->m_pGlovesItem->m_hItem;
+		}
+	if( pMenu->m_pBootsItem == this )
+		{
+			nTo = 115;
+			pPlayer->m_nBootsItem = pMenu->m_pBootsItem->m_hItem;
+		}
+
+// BOXBOX Finally, tell the server about the move and update the Inventory Menu
+	engine->ClientCmd( VarArgs("moveitem %i %i", nFrom, nTo ) );
+
+	pMenu->Update();
+}
+
+
+
+
+
+
+
+// BOXBOX OLD CODE BELOW
+
+
+
+
+/*
+CDraggableImage::CDraggableImage( Panel *pParent, const char *name ) : ImagePanel( pParent, name )
 {
 	SetDragEnabled( true );
 	SetZPos( 3 );
 	SetSize( 64, 64 );
-	m_nItemType = itemtype;
+	m_nItemType = ITEMTYPE_ANY;
 //	m_pPreviousSlot = NULL;
 }
+*/
 
 /*
 void CDraggableImage::OnStartDragging() // BOXBOX this is BS I gotta do all this...
@@ -277,7 +647,7 @@ void CDraggableImage::OnStartDragging() // BOXBOX this is BS I gotta do all this
 	BaseClass::OnStartDragging();
 }
 */
-
+/*
 void CDraggableImage::OnDraggablePanelPaint( )
 {
 	IImage *pImage = GetImage();
@@ -294,7 +664,7 @@ void CDraggableImage::OnDraggablePanelPaint( )
 		pImage->Paint();
 	}
 }
-
+*/
 /*
 void CDraggableImage::OnCreateDragData( KeyValues *msg )
 {
@@ -316,7 +686,7 @@ void CDraggableImage::OnMoveAway()
 //////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////  BOXBOX DROPPABLE LABEL  ///////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
-
+/*
 CDroppableLabel::CDroppableLabel( Panel *parent, const char *name ) : Label( parent, name, "" )
 {
 	SetVisible( true );
@@ -325,7 +695,7 @@ CDroppableLabel::CDroppableLabel( Panel *parent, const char *name ) : Label( par
 	SetSize( 66, 66 );
 	SetBgColor( Color( 0, 0, 0, 255 ) );
 
-	m_pItem = NULL;
+//	m_pItem = NULL;
 	m_nItemType = ITEMTYPE_ANY;
 }
 
@@ -355,13 +725,15 @@ void CDroppableLabel::OnDroppablePanelPaint( CUtlVector< KeyValues * >& msglist,
 		pImage->Paint();
 	}
 }
+*/
 
+/*
 void CDroppableLabel::OnPanelEnteredDroppablePanel( CUtlVector< KeyValues * >& msglist )
 {
-//	SetZPos( 4 );
+	SetZPos( 4 );
 	
 	//	Warning("*** PANEL ENTERED %s ***\n", GetName() );
-/*
+
 	if( HasItem() )
 	{
 		Warning("*** HAS ITEM ***\n" );
@@ -370,8 +742,8 @@ void CDroppableLabel::OnPanelEnteredDroppablePanel( CUtlVector< KeyValues * >& m
 	{
 		Warning("*** NO ITEM ***\n" );
 	}
-*/
-	SetBgColor( Color( 0, 0, 0, 150 ) );
+
+
 
 	if( m_nItemType == ITEMTYPE_ANY ) return; // BOXBOX any type of item can be dropped here (backpack, belt)
 
@@ -385,6 +757,10 @@ void CDroppableLabel::OnPanelEnteredDroppablePanel( CUtlVector< KeyValues * >& m
 	{
 		SetDropEnabled( false );
 	}
+	else
+	{
+		SetBgColor( Color( 0, 0, 0, 150 ) );
+	}
 }
 
 void CDroppableLabel::OnPanelExitedDroppablePanel( CUtlVector< KeyValues * >& msglist )
@@ -392,24 +768,18 @@ void CDroppableLabel::OnPanelExitedDroppablePanel( CUtlVector< KeyValues * >& ms
 	SetBgColor( Color( 0, 0, 0, 255 ) );
 	SetDropEnabled( true );
 	
-	//	SetZPos( 2 );
+	SetZPos( 2 );
 	
 	//	Warning("*** PANEL EXITED %s ***\n", GetName() );
 }
+*/
 
+/*
 void CDroppableLabel::OnPanelDropped( CUtlVector< KeyValues * >& msglist ) // BOXBOX an item has been dropped on me!
 {
-/*
-	Panel *panel = GetParent();
-	if( !panel ) return;
 
-	for (int i = 0; i < panel->GetChildCount(); i++)
-	{
-		CDroppableLabel *child = dynamic_cast<CDroppableLabel *>(panel->GetChild(i));
-		if( child )
-			child->SetZPos( 2 );
-	}
-*/
+	SetZPos( 2 );
+
 	SetBgColor( Color( 0, 0, 0, 255 ) );
 	Panel *pDrag = (Panel *)msglist.Head()->GetFirstSubKey()->GetPtr(); // BOXBOX get pointer to dragged image!
 	if( !pDrag ) return;
@@ -423,40 +793,111 @@ void CDroppableLabel::OnPanelDropped( CUtlVector< KeyValues * >& msglist ) // BO
 			return;
 	}
 
+	pDrag->SetVisible( false );
 
-/*
-	if( m_pItem != NULL ) // BOXBOX if I already have an item, send current one to backpack!
+	CMSInventoryMenu *pMenu = (CMSInventoryMenu *)GetParent( );
+	if( !pMenu ) return;
+
+// BOXBOX Find the drop slot we were dragged from, to, and change icons
+	int nFrom = -1;
+	int nTo = -1;
+
+	for( int y = 0 ; y < BACKPACK_SLOTS_Y ; y++ )
 	{
-		CMSInventoryMenu *pInventory = (CMSInventoryMenu *)GetParent();
-		if( !pInventory ) return;
+		for( int x = 0 ; x < BACKPACK_SLOTS_X ; x++ )
+		{
+			if( pMenu->m_pBackpackItems[ x ][ y ] == pItem )
+			{
+				nFrom = y * 10 + x;
+			}
 
-		if ( !pInventory->PutItemInBackpack( m_pItem ) ) return;
+			if( pMenu->m_pBackpackDropSlots[ x ][ y ] == this )
+			{
+				pMenu->m_pBackpackItems[ x ][ y ]->SetImage( pItem->GetImage() );
+				pMenu->m_pBackpackItems[ x ][ y ]->SetVisible( true );
+				nTo = y * 10 + x;
+			}
+		}
+
+		if( pMenu->m_pBeltItems[ y ] == pItem )
+		{
+			nFrom = y + 100;
+		}
+
+		if( pMenu->m_pBeltSlots[ y ] == this )
+		{
+			pMenu->m_pBeltItems[ y ]->SetImage( pItem->GetImage() );
+			pMenu->m_pBeltItems[ y ]->SetVisible( true );
+			nTo = y + 100;
+		}
 	}
-*/
 
-//	if( pItem->m_pPreviousSlot )
-//	{
-//		pItem->m_pPreviousSlot->SetItem( NULL ); // BOXBOX tell the slot we just dragged from that there is no item in that slot now
-//	}
+	if( pMenu->m_pLeftHandItem == pItem ) nFrom = 110;
+	if( pMenu->m_pRightHandItem == pItem ) nFrom = 111;
+	if( pMenu->m_pArmorItem == pItem ) nFrom = 112;
+	if( pMenu->m_pHelmetItem == pItem ) nFrom = 113;
+	if( pMenu->m_pGlovesItem == pItem ) nFrom = 114;
+	if( pMenu->m_pBootsItem == pItem ) nFrom = 115;
 
+	if( pMenu->m_pLeftHandSlot == this )
+	{
+		pMenu->m_pLeftHandItem->SetImage( pItem->GetImage() );
+		pMenu->m_pLeftHandItem->SetVisible( true );
+		nTo = 110;
+	}
+	if( pMenu->m_pRightHandSlot == this )
+	{
+		pMenu->m_pRightHandItem->SetImage( pItem->GetImage() );
+		pMenu->m_pRightHandItem->SetVisible( true );
+		nTo = 111;
+	}
+	if( pMenu->m_pArmorSlot == this )
+	{
+		pMenu->m_pArmorItem->SetImage( pItem->GetImage() );
+		pMenu->m_pArmorItem->SetVisible( true );
+		nTo = 112;
+	}
+	if( pMenu->m_pHelmetSlot == this )
+	{
+		pMenu->m_pHelmetItem->SetImage( pItem->GetImage() );
+		pMenu->m_pHelmetItem->SetVisible( true );
+		nTo = 113;
+	}
+	if( pMenu->m_pGlovesSlot == this )
+	{
+		pMenu->m_pGlovesItem->SetImage( pItem->GetImage() );
+		pMenu->m_pGlovesItem->SetVisible( true );
+		nTo = 114;
+	}
+	if( pMenu->m_pBootsSlot == this )
+	{
+		pMenu->m_pBootsItem->SetImage( pItem->GetImage() );
+		pMenu->m_pBootsItem->SetVisible( true );
+		nTo = 115;
+	}
 
+// BOXBOX whew! Finally, tell the server about the move so the player's inventory can be updated.
+	engine->ClientCmd( VarArgs("moveitem %i %i", nFrom, nTo ) );
 
-
-	m_pItem = pItem; // BOXBOX now set the item in this one
+//	m_pItem = pItem; // BOXBOX now set the item in this one
 //	m_pItem->m_pPreviousSlot = this;
 
-	int x, y;
-	GetPos(x, y);
-	m_pItem->SetPos(x+1, y+1);
+//	int x, y;
+//	GetPos(x, y);
+//	m_pItem->SetPos(x+1, y+1);
 
-	Warning("*** DROPPED %s ON %s ***\n", pDrag->GetName(), GetName() );
+//	Warning("*** DROPPED %s ON %s ***\n", pDrag->GetName(), GetName() );
 
 // BOXBOX use this code below if we want to access the Inventory Menu
 //	CMSInventoryMenu *pParentMenu = (CMSInventoryMenu *)GetParent( );
 //	pParentMenu->OnDraggedItem( pDragPanel, this );
+
 }
+*/
 
 
+
+/*
 void CDroppableLabel::SetItem( CDraggableImage *item )
 {
 	m_pItem = item;
@@ -464,7 +905,7 @@ void CDroppableLabel::SetItem( CDraggableImage *item )
 	GetPos(x, y);
 	m_pItem->SetPos(x, y);
 }
-
+*/
 
 
 

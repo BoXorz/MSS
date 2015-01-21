@@ -617,8 +617,10 @@ public:
 
 	IPhysicsConstraint		*GetConstraint() { return m_pConstraint; }
 
-private:
 	ITEM_FILE_INFO_HANDLE	m_hItemFileInfo;
+
+private:
+
 	IPhysicsConstraint		*m_pConstraint;
 
 	int						m_iAltFireHudHintCount;		// How many times has this weapon displayed its alt-fire HUD hint?
