@@ -28,8 +28,6 @@
 using namespace vgui;
 extern INetworkStringTable *g_pStringTableInfoPanel;
 
-//extern CUtlDict< FileItemInfo_t*, unsigned short > m_ItemInfoDatabase;
-
 //extern const char *pszGenderNames[];
 //extern const char *pszRaceNames[];
 //extern const char *pszSkillNames[];
@@ -59,14 +57,8 @@ CMSInventoryMenu::CMSInventoryMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_IN
 		for( int x = 0 ; x < BACKPACK_SLOTS_X ; x++ )
 		{
 			m_pBackpackItems[x][y] = new CDragItem( this, VarArgs( "BackpackItem %i %i", x, y ) );
-
-//			m_pBackpackItems[x][y] = new CDraggableImage( this, VarArgs( "BackpackItem %i %i", x, y ) );
-//			m_pBackpackDropSlots[x][y] = new CDroppableLabel( this, VarArgs( "BackpackSlot %i %i", x, y ) );
 		}
 		m_pBeltItems[y] = new CDragItem( this, VarArgs( "BeltItem %i", y ) );
-
-//		m_pBeltItems[y] = new CDraggableImage( this, VarArgs( "BeltItem %i", y ) );
-//		m_pBeltSlots[y] = new CDroppableLabel( this, VarArgs( "BeltSlot %i", y ) );
 	}
 
 	m_pLeftHandItem		= new CDragItem( this, "LeftHandItem" );
@@ -76,26 +68,7 @@ CMSInventoryMenu::CMSInventoryMenu(IViewPort *pViewPort) : Frame( NULL, PANEL_IN
 	m_pGlovesItem		= new CDragItem( this, "GlovesItem" );
 	m_pBootsItem		= new CDragItem( this, "BootsItem" );
 
-/*
-	m_pLeftHandItem		= new CDraggableImage( this, "LeftHandItem" );
-	m_pRightHandItem	= new CDraggableImage( this, "RightHandItem" );
-	m_pArmorItem		= new CDraggableImage( this, "ArmorItem" );
-	m_pHelmetItem		= new CDraggableImage( this, "HelmetItem" );
-	m_pGlovesItem		= new CDraggableImage( this, "GlovesItem" );
-	m_pBootsItem		= new CDraggableImage( this, "BootsItem" );
-
-	m_pLeftHandSlot		= new CDroppableLabel( this, "LeftHandSlot" );
-	m_pRightHandSlot	= new CDroppableLabel( this, "RightHandSlot" );
-	m_pArmorSlot		= new CDroppableLabel( this, "ArmorSlot" );
-	m_pHelmetSlot		= new CDroppableLabel( this, "HelmetSlot" );
-	m_pGlovesSlot		= new CDroppableLabel( this, "GlovesSlot" );
-	m_pBootsSlot		= new CDroppableLabel( this, "BootsSlot" );
-*/
 	m_pCharModel = new CModelPanel( this, "charmodel" );
-
-//	m_pDragTest = new CDragItem( this, "TestItem" );
-//	m_pDragTest2 = new CDragItem( this, "TestItem2" );
-
 }
 
 void CMSInventoryMenu::ApplySchemeSettings( IScheme *pScheme )
@@ -113,58 +86,33 @@ void CMSInventoryMenu::ApplySchemeSettings( IScheme *pScheme )
 		{
 			m_pBackpackItems[x][y]->SetDragEnabled( false );
 			m_pBackpackItems[x][y]->SetPos( xpos + (x*65), ypos +(y*65) );
-
-//			m_pBackpackDropSlots[x][y]->SetPos( xpos + (x*65), ypos +(y*65) );
 		}
 		m_pBeltItems[y]->SetDragEnabled( false );
 		m_pBeltItems[y]->SetPos( xpos + (y*65), 888 );
-
-//		m_pBeltSlots[y]->SetPos( xpos + (y*65), 888 );
 	}
 	m_pLeftHandItem->SetDragEnabled( false );
 	m_pLeftHandItem->SetPos( 1084, 500 );
-//	m_pLeftHandItem->m_nItemType = ITEMTYPE_WEAPON;
+	m_pLeftHandItem->m_nDropType = ITEMTYPE_WEAPON;
 
 	m_pRightHandItem->SetDragEnabled( false );
 	m_pRightHandItem->SetPos( 1600, 500 );
-//	m_pRightHandItem->m_nItemType = ITEMTYPE_WEAPON;
+	m_pRightHandItem->m_nDropType = ITEMTYPE_WEAPON;
 
 	m_pArmorItem->SetDragEnabled( false );
 	m_pArmorItem->SetPos( 1345, 400 );
-//	m_pArmorItem->m_nItemType = ITEMTYPE_ARMOR;
+	m_pArmorItem->m_nDropType = ITEMTYPE_ARMOR;
 
 	m_pHelmetItem->SetDragEnabled( false );
 	m_pHelmetItem->SetPos( 1345, 180 );
-//	m_pHelmetItem->m_nItemType = ITEMTYPE_HELMET;
+	m_pHelmetItem->m_nDropType = ITEMTYPE_HELMET;
 
 	m_pGlovesItem->SetDragEnabled( false );
 	m_pGlovesItem->SetPos( 1140, 400 );
-//	m_pGlovesItem->m_nItemType = ITEMTYPE_GLOVES;
+	m_pGlovesItem->m_nDropType = ITEMTYPE_GLOVES;
 
 	m_pBootsItem->SetDragEnabled( false );
 	m_pBootsItem->SetPos( 1345, 780 );
-//	m_pBootsItem->m_nItemType = ITEMTYPE_BOOTS;
-
-//	Reset();
-/*
-	m_pLeftHandSlot->SetPos( 1084, 500 );
-	m_pLeftHandSlot->SetItemType( ITEMTYPE_WEAPON ) ;
-	m_pRightHandSlot->SetPos( 1600, 500 );
-	m_pRightHandSlot->SetItemType( ITEMTYPE_WEAPON );
-	m_pArmorSlot->SetPos( 1345, 400 );
-	m_pArmorSlot->SetItemType( ITEMTYPE_ARMOR );
-	m_pHelmetSlot->SetPos( 1345, 180 );
-	m_pHelmetSlot->SetItemType( ITEMTYPE_HELMET );
-	m_pGlovesSlot->SetPos( 1140, 400 );
-	m_pGlovesSlot->SetItemType( ITEMTYPE_GLOVES );
-	m_pBootsSlot->SetPos( 1345, 780 );
-	m_pBootsSlot->SetItemType( ITEMTYPE_BOOTS );
-
-	m_pDragTest->SetPos( 1000, 600 );
-	m_pDragTest->SetImage("icons/weapon_RustyShortSword");
-	m_pDragTest2->SetPos( 1065, 600 );
-	m_pDragTest2->SetImage("icons/weapon_RustyShortSword");
-*/
+	m_pBootsItem->m_nDropType = ITEMTYPE_BOOTS;
 }
 
 CMSInventoryMenu::~CMSInventoryMenu()
@@ -174,22 +122,8 @@ CMSInventoryMenu::~CMSInventoryMenu()
 
 void CMSInventoryMenu::Reset( void )
 {
-/*
-	C_MSS_Player *pPlayer = ToMSSPlayer( C_BasePlayer::GetLocalPlayer() );
-	if( !pPlayer ) return;
 
-	m_pRightPageTitleLabel->SetText( pPlayer->m_pszCharName );
-	m_pBackpackLabel->SetText( pszBackpackNames[ pPlayer->m_nBackpackSize ] );
-
-	char buf[10];
-	itoa( pPlayer->m_nGold, buf, 10 );
-	m_pGoldLabel->SetText( buf );
-*/
-
-
-//	Update();
 }
-
 
 void CMSInventoryMenu::Update( void )
 {
@@ -207,15 +141,14 @@ void CMSInventoryMenu::Update( void )
 	{
 		for( int x = 0 ; x < BACKPACK_SLOTS_X ; x++ )
 		{
-//			m_pBackpackDropSlots[x][y]->SetVisible( pPlayer->m_nBackpackSize > y );
 			m_pBackpackItems[x][y]->SetVisible( pPlayer->m_nBackpackSize > y );
 
-			// BOXBOX set up icons
-			if( !pPlayer->m_nBackpackItems[ y * 10 + x ] ) // no item in this slot
+			if( !pPlayer->m_nBackpackItems[ y * 10 + x ] ) // BOXBOX no item in this slot
 			{
 				m_pBackpackItems[x][y]->m_hItem = GetInvalidItemInfoHandle();
 				m_pBackpackItems[x][y]->SetImage( "icons/Blank" );
 				m_pBackpackItems[x][y]->SetDragEnabled( false );
+//				m_pBackpackItems[x][y]->m_nDropType = ITEMTYPE_ANY;
 			}
 			else
 			{
@@ -225,114 +158,123 @@ void CMSInventoryMenu::Update( void )
 				m_pBackpackItems[x][y]->m_hItem = (ITEM_FILE_INFO_HANDLE)pPlayer->m_nBackpackItems[ y * 10 + x  ];
 				m_pBackpackItems[x][y]->SetImage( pItem->szIconFileName );
 				m_pBackpackItems[x][y]->SetDragEnabled( true );
-
-//				m_pBackpackItems[x][y]->m_nItemType = pItem->nItemType;
-//				m_pBackpackItems[x][y]->SetVisible( true );
-//				Warning("FOUND %s IN BACKPACK SLOT %i\n", pItem->szPrintName , y * 10 + x );
-
+				m_pBackpackItems[x][y]->m_nDropType = pItem->nItemType;
 			}
 		}
 
 		if( !pPlayer->m_nBeltItems[ y ] ) // no item in this slot
 		{
-//			m_pBeltItems[y]->SetVisible( false );
-			m_pBeltItems[y]->SetDragEnabled( false );
+			m_pBeltItems[y]->m_hItem = GetInvalidItemInfoHandle();
 			m_pBeltItems[y]->SetImage( "icons/Blank" );
+			m_pBeltItems[y]->SetDragEnabled( false );
+//			m_pBeltItems[y]->m_nDropType = ITEMTYPE_ANY;
 		}
 		else
 		{
-			FileItemInfo_t *pItem = GetFileItemInfoFromHandle( (ITEM_FILE_INFO_HANDLE)pPlayer->m_nBackpackItems[ y ] );
+			FileItemInfo_t *pItem = GetFileItemInfoFromHandle( (ITEM_FILE_INFO_HANDLE)pPlayer->m_nBeltItems[ y ] );
 			if( !pItem ) return;
 
-			m_pBeltItems[y]->SetDragEnabled( true );
+			m_pBeltItems[y]->m_hItem = (ITEM_FILE_INFO_HANDLE)pPlayer->m_nBeltItems[ y ];
 			m_pBeltItems[y]->SetImage( pItem->szIconFileName );
-//			m_pBeltItems[y]->m_nItemType = pItem->nItemType;
-//			m_pBeltItems[y]->SetVisible( true );
+			m_pBeltItems[y]->SetDragEnabled( true );
+			m_pBeltItems[y]->m_nDropType = pItem->nItemType;
 		}
 	}
 
 	if( !pPlayer->m_nLeftHandItem )
 	{
-		m_pLeftHandItem->SetDragEnabled( false );
+		m_pLeftHandItem->m_hItem = GetInvalidItemInfoHandle();
 		m_pLeftHandItem->SetImage( "icons/Blank" );
+		m_pLeftHandItem->SetDragEnabled( false );
 	}
 	else
 	{
 		FileItemInfo_t *pItem = GetFileItemInfoFromHandle( (ITEM_FILE_INFO_HANDLE)pPlayer->m_nLeftHandItem );
 		if( !pItem ) return;
 
-		m_pLeftHandItem->SetDragEnabled( true );
+		m_pLeftHandItem->m_hItem = (ITEM_FILE_INFO_HANDLE)pPlayer->m_nLeftHandItem;
 		m_pLeftHandItem->SetImage( pItem->szIconFileName );
+		m_pLeftHandItem->SetDragEnabled( true );
 	}
 
 	if( !pPlayer->m_nRightHandItem )
 	{
-		m_pRightHandItem->SetDragEnabled( false );
+		m_pRightHandItem->m_hItem = GetInvalidItemInfoHandle();
 		m_pRightHandItem->SetImage( "icons/Blank" );
+		m_pRightHandItem->SetDragEnabled( false );
 	}
 	else
 	{
 		FileItemInfo_t *pItem = GetFileItemInfoFromHandle( (ITEM_FILE_INFO_HANDLE)pPlayer->m_nRightHandItem );
 		if( !pItem ) return;
 
-		m_pRightHandItem->SetDragEnabled( true );
+		m_pRightHandItem->m_hItem = (ITEM_FILE_INFO_HANDLE)pPlayer->m_nRightHandItem;
 		m_pRightHandItem->SetImage( pItem->szIconFileName );
+		m_pRightHandItem->SetDragEnabled( true );
 	}
 
 	if( !pPlayer->m_nArmorItem )
 	{
-		m_pArmorItem->SetDragEnabled( false );
+		m_pArmorItem->m_hItem = GetInvalidItemInfoHandle();
 		m_pArmorItem->SetImage( "icons/Blank" );
+		m_pArmorItem->SetDragEnabled( false );
 	}
 	else
 	{
 		FileItemInfo_t *pItem = GetFileItemInfoFromHandle( (ITEM_FILE_INFO_HANDLE)pPlayer->m_nArmorItem );
 		if( !pItem ) return;
 
-		m_pArmorItem->SetDragEnabled( true );
+		m_pArmorItem->m_hItem = (ITEM_FILE_INFO_HANDLE)pPlayer->m_nArmorItem;
 		m_pArmorItem->SetImage( pItem->szIconFileName );
+		m_pArmorItem->SetDragEnabled( true );
 	}
 
 	if( !pPlayer->m_nHelmetItem )
 	{
-		m_pHelmetItem->SetDragEnabled( false );
+		m_pHelmetItem->m_hItem = GetInvalidItemInfoHandle();
 		m_pHelmetItem->SetImage( "icons/Blank" );
+		m_pHelmetItem->SetDragEnabled( false );
 	}
 	else
 	{
 		FileItemInfo_t *pItem = GetFileItemInfoFromHandle( (ITEM_FILE_INFO_HANDLE)pPlayer->m_nHelmetItem );
 		if( !pItem ) return;
 
-		m_pHelmetItem->SetDragEnabled( true );
+		m_pHelmetItem->m_hItem = (ITEM_FILE_INFO_HANDLE)pPlayer->m_nHelmetItem;
 		m_pHelmetItem->SetImage( pItem->szIconFileName );
+		m_pHelmetItem->SetDragEnabled( true );
 	}
 
 	if( !pPlayer->m_nGlovesItem )
 	{
-		m_pGlovesItem->SetDragEnabled( false );
+		m_pGlovesItem->m_hItem = GetInvalidItemInfoHandle();
 		m_pGlovesItem->SetImage( "icons/Blank" );
+		m_pGlovesItem->SetDragEnabled( false );
 	}
 	else
 	{
 		FileItemInfo_t *pItem = GetFileItemInfoFromHandle( (ITEM_FILE_INFO_HANDLE)pPlayer->m_nGlovesItem );
 		if( !pItem ) return;
 
-		m_pGlovesItem->SetDragEnabled( true );
+		m_pGlovesItem->m_hItem = (ITEM_FILE_INFO_HANDLE)pPlayer->m_nGlovesItem;
 		m_pGlovesItem->SetImage( pItem->szIconFileName );
+		m_pGlovesItem->SetDragEnabled( true );
 	}
 
 	if( !pPlayer->m_nBootsItem )
 	{
-		m_pBootsItem->SetDragEnabled( false );
+		m_pBootsItem->m_hItem = GetInvalidItemInfoHandle();
 		m_pBootsItem->SetImage( "icons/Blank" );
+		m_pBootsItem->SetDragEnabled( false );
 	}
 	else
 	{
 		FileItemInfo_t *pItem = GetFileItemInfoFromHandle( (ITEM_FILE_INFO_HANDLE)pPlayer->m_nBootsItem );
 		if( !pItem ) return;
 
-		m_pBootsItem->SetDragEnabled( true );
+		m_pBootsItem->m_hItem = (ITEM_FILE_INFO_HANDLE)pPlayer->m_nBootsItem;
 		m_pBootsItem->SetImage( pItem->szIconFileName );
+		m_pBootsItem->SetDragEnabled( true );
 	}
 
 	m_pCharModel->SwapModel( pszPlayerModels[ pPlayer->m_nPlayerModelIndex ], NULL ); 
@@ -397,7 +339,8 @@ CDragItem::CDragItem( Panel *pParent, const char *name ) : ImagePanel( pParent, 
 	SetVisible( true );
 	SetZPos( 2 );
 	SetSize( 64, 64 );
-	SetImage( "icons/Blank" );
+//	SetImage( "icons/Blank" );
+	m_nDropType = ITEMTYPE_ANY;
 }
 
 const FileItemInfo_t &CDragItem::GetItemData( ITEM_FILE_INFO_HANDLE item ) const
@@ -423,26 +366,31 @@ void CDragItem::OnDraggablePanelPaint( )
 	}
 }
 
- // BOXBOX this is for when a drag/drop item is being dragged, and IS over another drag/drop item
+// BOXBOX this is for when a drag/drop item is being dragged, and IS over another drag/drop item
 void CDragItem::OnDroppablePanelPaint( CUtlVector< KeyValues * >& msglist, CUtlVector< Panel * >& dragPanels )
 {
-// BOXBOX First, draw an outline around me(the drop item)
-	int w, h;
-	GetSize( w, h );
-
-	int x, y;
-	x = y = 0;
-	LocalToScreen( x, y );
-
-	surface()->DrawSetColor( Color(255, 255, 255, 255) );
-	surface()->DrawOutlinedRect( x-1, y-1, x + w+1, y + h+1 );
-
-// BOXBOX now get the dragged item and draw it normally
 	Panel *pDrag = (Panel *)msglist.Head()->GetFirstSubKey()->GetPtr(); // BOXBOX get pointer to dragged image!
 	if( !pDrag ) return;
 
 	CDragItem *pItem = (CDragItem*)pDrag;
 
+	if( ( m_nDropType == ITEMTYPE_ANY ) || ( m_nDropType == pItem->m_nDropType ) )
+	{
+		// BOXBOX Draw an outline around me(the drop item)
+		int w, h;
+		GetSize( w, h );
+
+		int x, y;
+		x = y = 0;
+		LocalToScreen( x, y );
+
+		surface()->DrawSetColor( Color(255, 255, 255, 255) );
+		surface()->DrawOutlinedRect( x-1, y-1, x + w+1, y + h+1 );
+		surface()->DrawOutlinedRect( x+1, y+1, x + w-1, y + h-1 );
+
+	}
+
+// BOXBOX now get the dragged item and draw it normally
 	IImage *pImage = pItem->GetImage();
 	if( pImage )
 	{
@@ -458,15 +406,18 @@ void CDragItem::OnDroppablePanelPaint( CUtlVector< KeyValues * >& msglist, CUtlV
 
 void CDragItem::OnPanelEnteredDroppablePanel( CUtlVector< KeyValues * >& msglist )
 {
-	if( GetItemData( m_hItem ).nItemType == ITEMTYPE_ANY ) return; // BOXBOX any type of item can be dropped here (backpack, belt)
+	if( m_nDropType == ITEMTYPE_ANY ) return; // BOXBOX any type of item can be dropped here (backpack, belt)
 
 	Panel *pDrag = (Panel *)msglist.Head()->GetFirstSubKey()->GetPtr(); // BOXBOX get pointer to dragged image!
 	if( !pDrag ) return;
 
-	CDragItem *pItem = dynamic_cast<CDragItem *>(pDrag); // BOXBOX cast it to our draggable class
-	if( !pItem ) return;
+	CDragItem *pItem = (CDragItem*)pDrag;
+//	CDragItem *pItem = dynamic_cast<CDragItem *>(pDrag); // BOXBOX cast it to our draggable class
+//	if( !pItem ) return;
 
-	if( GetItemData( m_hItem ).nItemType != pItem->GetItemData( pItem->m_hItem ).nItemType )
+//	Warning("ITEM TYPE %i DRAGGED OVER ITEM TYPE %i\n", pItem->m_nDropType, m_nDropType );
+
+	if( m_nDropType != pItem->m_nDropType )
 	{
 		SetDropEnabled( false );
 	}
@@ -485,12 +436,13 @@ void CDragItem::OnPanelDropped( CUtlVector< KeyValues * >& msglist ) // BOXBOX a
 	Panel *pDrag = (Panel *)msglist.Head()->GetFirstSubKey()->GetPtr(); // BOXBOX get pointer to dragged image!
 	if( !pDrag ) return;
 
-	CDragItem *pItem = dynamic_cast<CDragItem *>(pDrag);
-	if( !pItem ) return;
+	CDragItem *pItem = (CDragItem*)pDrag;
+//	CDragItem *pItem = dynamic_cast<CDragItem *>(pDrag);
+//	if( !pItem ) return;
 
-	if( GetItemData( m_hItem ).nItemType != ITEMTYPE_ANY )
+	if( m_nDropType != ITEMTYPE_ANY )
 	{
-		if( GetItemData( m_hItem ).nItemType != pItem->GetItemData( pItem->m_hItem ).nItemType )
+		if( m_nDropType != pItem->m_nDropType )
 		{
 			SetDropEnabled( true );
 			return;
@@ -513,101 +465,152 @@ void CDragItem::OnPanelDropped( CUtlVector< KeyValues * >& msglist ) // BOXBOX a
 	{
 		for( int x = 0 ; x < BACKPACK_SLOTS_X ; x++ )
 		{
-			if( pMenu->m_pBackpackItems[ x ][ y ] == pItem )
-			{
-				nFrom = y * 10 + x;
-				pPlayer->m_nBackpackItems[ nFrom ] = 0;
-			}
-
-			if( pMenu->m_pBackpackItems[ x ][ y ] == this )
+			if( pMenu->m_pBackpackItems[ x ][ y ] == this ) // BOXBOX the filled backpack slot
 			{
 				nTo = y * 10 + x;
-				pPlayer->m_nBackpackItems[ nTo ] = pMenu->m_pBackpackItems[ x ][ y ]->m_hItem;
+				m_hItem = pItem->m_hItem;
+				pPlayer->m_nBackpackItems[ nTo ] = m_hItem;
+				m_nDropType = pItem->m_nDropType;
+			}
+		}
+
+		if( pMenu->m_pBeltItems[ y ] == this )
+		{
+			nTo = y + 100;
+			m_hItem = pItem->m_hItem;
+			pPlayer->m_nBeltItems[ y ] = m_hItem;
+			m_nDropType = pItem->m_nDropType;
+		}
+	}
+
+	if( pMenu->m_pLeftHandItem == this )
+	{
+		nTo = 110;
+		m_hItem = pItem->m_hItem;
+		pPlayer->m_nLeftHandItem = m_hItem;
+	}
+	if( pMenu->m_pRightHandItem == this )
+	{
+		nTo = 111;
+		m_hItem = pItem->m_hItem;
+		pPlayer->m_nRightHandItem = m_hItem;
+	}
+	if( pMenu->m_pArmorItem == this )
+	{
+		nTo = 112;
+		m_hItem = pItem->m_hItem;
+		pPlayer->m_nArmorItem = m_hItem;
+	}
+	if( pMenu->m_pHelmetItem == this )
+	{
+		nTo = 113;
+		m_hItem = pItem->m_hItem;
+		pPlayer->m_nHelmetItem = m_hItem;
+	}
+	if( pMenu->m_pGlovesItem == this )
+	{
+		nTo = 114;
+		m_hItem = pItem->m_hItem;
+		pPlayer->m_nGlovesItem = m_hItem;
+	}
+	if( pMenu->m_pBootsItem == this )
+	{
+		nTo = 115;
+		m_hItem = pItem->m_hItem;
+		pPlayer->m_nBootsItem = m_hItem;
+	}
+
+	for( int y = 0 ; y < BACKPACK_SLOTS_Y ; y++ )
+	{
+		for( int x = 0 ; x < BACKPACK_SLOTS_X ; x++ )
+		{
+			if( pMenu->m_pBackpackItems[ x ][ y ] == pItem ) // BOXBOX the abandoned backpack slot
+			{
+				nFrom = y * 10 + x;
+				m_hItem = GetInvalidItemInfoHandle();
+				pPlayer->m_nBackpackItems[ nFrom ] = 0;
+				pItem->m_nDropType = ITEMTYPE_ANY;
 			}
 		}
 
 		if( pMenu->m_pBeltItems[ y ] == pItem )
 		{
 			nFrom = y + 100;
+			m_hItem = GetInvalidItemInfoHandle();
 			pPlayer->m_nBeltItems[ y ] = 0;
-		}
-
-		if( pMenu->m_pBeltItems[ y ] == this )
-		{
-			nTo = y + 100;
-			pPlayer->m_nBeltItems[ y ] = pMenu->m_pBeltItems[ y ]->m_hItem;
+			pItem->m_nDropType = ITEMTYPE_ANY;
 		}
 	}
 
 	if( pMenu->m_pLeftHandItem == pItem )
 		{
 			nFrom = 110;
+			m_hItem = GetInvalidItemInfoHandle();
 			pPlayer->m_nLeftHandItem = 0;
 		}
 	if( pMenu->m_pRightHandItem == pItem )
 		{
 			nFrom = 111;
+			m_hItem = GetInvalidItemInfoHandle();
 			pPlayer->m_nRightHandItem = 0;
 		}
 	if( pMenu->m_pArmorItem == pItem )
 		{
 			nFrom = 112;
+			m_hItem = GetInvalidItemInfoHandle();
 			pPlayer->m_nArmorItem = 0;
 		}
 	if( pMenu->m_pHelmetItem == pItem )
 		{
 			nFrom = 113;
+			m_hItem = GetInvalidItemInfoHandle();
 			pPlayer->m_nHelmetItem = 0;
 		}
 	if( pMenu->m_pGlovesItem == pItem )
 		{
 			nFrom = 114;
+			m_hItem = GetInvalidItemInfoHandle();
 			pPlayer->m_nGlovesItem = 0;
 		}
 	if( pMenu->m_pBootsItem == pItem )
 		{
 			nFrom = 115;
+			m_hItem = GetInvalidItemInfoHandle();
 			pPlayer->m_nBootsItem = 0;
-		}
-
-	if( pMenu->m_pLeftHandItem == this )
-		{
-			nTo = 110;
-			pPlayer->m_nLeftHandItem = pMenu->m_pLeftHandItem->m_hItem;
-		}
-	if( pMenu->m_pRightHandItem == this )
-		{
-			nTo = 111;
-			pPlayer->m_nRightHandItem = pMenu->m_pRightHandItem->m_hItem;
-		}
-	if( pMenu->m_pArmorItem == this )
-		{
-			nTo = 112;
-			pPlayer->m_nArmorItem = pMenu->m_pArmorItem->m_hItem;
-		}
-	if( pMenu->m_pHelmetItem == this )
-		{
-			nTo = 113;
-			pPlayer->m_nHelmetItem = pMenu->m_pHelmetItem->m_hItem;
-		}
-	if( pMenu->m_pGlovesItem == this )
-		{
-			nTo = 114;
-			pPlayer->m_nGlovesItem = pMenu->m_pGlovesItem->m_hItem;
-		}
-	if( pMenu->m_pBootsItem == this )
-		{
-			nTo = 115;
-			pPlayer->m_nBootsItem = pMenu->m_pBootsItem->m_hItem;
 		}
 
 // BOXBOX Finally, tell the server about the move and update the Inventory Menu
 	engine->ClientCmd( VarArgs("moveitem %i %i", nFrom, nTo ) );
 
 	pMenu->Update();
+	DrawItemTypeHalo();
 }
 
+void CDragItem::DrawItemTypeHalo( void )
+{
 
+		int w, h;
+		GetSize( w, h );
+
+		int x, y;
+		x = y = 0;
+		LocalToScreen( x, y );
+
+		Warning( "DRAWITEMTYPEHALO W: %i  H: %i  X: %i  Y: %i\n", w, h, x, y );
+//		surface()-> // BOXBOX TODO why this not working?
+
+		vgui::surface()->DrawSetColor( Color(255, 50, 50, 200) );
+		vgui::surface()->DrawOutlinedRect( x-1, y-1, x + w+1, y + h+1 );
+
+		vgui::surface()->DrawSetColor( Color(255, 50, 50, 150) );
+		vgui::surface()->DrawOutlinedRect( x+1, y+1, x + w-1, y + h-1 );
+
+		vgui::surface()->DrawSetColor( Color(255, 50, 50, 100) );
+		vgui::surface()->DrawOutlinedRect( x+2, y+2, x + w-2, y + h-2 );
+
+		vgui::surface()->DrawSetColor( Color(255, 50, 50, 50) );
+		vgui::surface()->DrawOutlinedRect( x+3, y+3, x + w-3, y + h-3 );
+}
 
 
 

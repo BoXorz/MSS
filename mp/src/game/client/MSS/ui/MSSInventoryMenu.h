@@ -39,14 +39,14 @@ public:
 	virtual void OnPanelDropped(  CUtlVector< KeyValues * >& msglist );
 
 //	virtual void OnStartDragging();
-
 //	virtual void OnCreateDragData( KeyValues *msg );
-//	void OnMoveAway();
+
+	void DrawItemTypeHalo( void );
 
 	ITEM_FILE_INFO_HANDLE	m_hItem; // BOXBOX Index into item held in slot
 	const FileItemInfo_t	&GetItemData( ITEM_FILE_INFO_HANDLE item ) const;
 
-//	int m_nItemType;
+	int m_nDropType; // BOXBOX needed for equipment slots to reject bad item types
 
 };
 

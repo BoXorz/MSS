@@ -166,6 +166,29 @@ enum MSSItemTypes_t
 };
 
 
+#define COLOR_RED		Color(255, 50, 50, 255)
+#define COLOR_ORANGE	Color(255, 120, 0, 255)
+#define COLOR_YELLOW	Color(255, 180, 0, 255)
+#define COLOR_GREEN		Color(50, 255, 50, 255)
+#define COLOR_BLUE		Color(50, 50, 255, 255)
+#define COLOR_PURPLE	Color(255, 50, 255, 255)
+#define COLOR_BROWN		Color(150, 150, 0, 255)
+#define COLOR_WHITE		Color(255, 255, 255, 255)
+#define COLOR_GREY		Color(150, 150, 150, 255)
+#define COLOR_BLACK		Color(0, 0, 0, 255)
+
+enum
+{
+	DONT_BLEED = -1,
+
+	BLOOD_COLOR_RED = 0,
+	BLOOD_COLOR_YELLOW,
+	BLOOD_COLOR_GREEN,
+	BLOOD_COLOR_MECH,
+	BLOOD_COLOR_ANTLION,
+	BLOOD_COLOR_ZOMBIE,
+	BLOOD_COLOR_ANTLION_WORKER,
+};
 
 
 
