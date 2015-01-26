@@ -31,6 +31,9 @@ public:
 //	virtual void ApplySchemeSettings( vgui::IScheme *pScheme );
 	virtual bool IsDroppable( CUtlVector< KeyValues * >& msglist ) { return true; }
 
+	virtual void OnCursorEntered();
+	virtual void OnCursorExited();
+
 	virtual void OnDraggablePanelPaint();
 	virtual void OnDroppablePanelPaint( CUtlVector< KeyValues * >& msglist, CUtlVector< Panel * >& dragPanels );
 
@@ -41,7 +44,8 @@ public:
 //	virtual void OnStartDragging();
 //	virtual void OnCreateDragData( KeyValues *msg );
 
-	void DrawItemTypeHalo( void );
+//	void DrawItemTypeHalo( void );
+//	ImagePanel *m_pBackgroundImage;
 
 	ITEM_FILE_INFO_HANDLE	m_hItem; // BOXBOX Index into item held in slot
 	const FileItemInfo_t	&GetItemData( ITEM_FILE_INFO_HANDLE item ) const;
@@ -50,48 +54,7 @@ public:
 
 };
 
-/*
-class CDraggableImage : public vgui::ImagePanel
-{
-public:
-	DECLARE_CLASS_SIMPLE( CDraggableImage, ImagePanel );
 
-	CDraggableImage( Panel *pParent, const char *name );
-//	virtual void OnStartDragging();
-	virtual void OnDraggablePanelPaint();
-//	virtual void OnCreateDragData( KeyValues *msg );
-//	void OnMoveAway();
-
-	int m_nItemType;
-};
-*/
-//////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////  BOXBOX DROPPABLE LABEL  ///////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////
-/*
-class CDroppableLabel : public Label
-{
-	DECLARE_CLASS_SIMPLE( CDroppableLabel, Label );
-
-public:
-
-	CDroppableLabel( Panel *parent, const char *name );
-
-	virtual void ApplySchemeSettings( vgui::IScheme *pScheme );
-	virtual bool IsDroppable( CUtlVector< KeyValues * >& msglist ) { return true; }
-	virtual void OnDroppablePanelPaint( CUtlVector< KeyValues * >& msglist, CUtlVector< Panel * >& dragPanels );
-
-	virtual void OnPanelDropped(  CUtlVector< KeyValues * >& msglist );
-	void OnPanelEnteredDroppablePanel( CUtlVector< KeyValues * >& msglist );
-	void OnPanelExitedDroppablePanel ( CUtlVector< KeyValues * >& msglist );
-
-	int				GetItemType( void ) { return m_nItemType; }
-	void			SetItemType( int type ) { m_nItemType = type; }
-private:
-
-	int m_nItemType;
-};
-*/
 //////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////  BOXBOX INVENTORY MENU  ////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -119,8 +82,7 @@ public:
   	virtual bool IsVisible() { return BaseClass::IsVisible(); }
   	virtual void SetParent( vgui::VPANEL parent ) { BaseClass::SetParent( parent ); }
 
-//	void	NewItem( KeyValues itemData );
-//	const FileItemInfo_t	&GetItemData( ITEM_FILE_INFO_HANDLE item ) const;
+//	void SetBgImage( ImagePanel *panel, int ItemType );
 
 	CDragItem		*m_pBackpackItems[ BACKPACK_SLOTS_X ][ BACKPACK_SLOTS_Y ];
 	CDragItem		*m_pBeltItems[ 10 ];
@@ -132,30 +94,6 @@ public:
 	CDragItem		*m_pGlovesItem;
 	CDragItem		*m_pBootsItem;
 
-/*
-	CDraggableImage		*m_pBackpackItems[ BACKPACK_SLOTS_X ][ BACKPACK_SLOTS_Y ];
-	CDraggableImage		*m_pBeltItems[ 10 ];
-
-	CDraggableImage		*m_pLeftHandItem;
-	CDraggableImage		*m_pRightHandItem;
-	CDraggableImage		*m_pArmorItem;
-	CDraggableImage		*m_pHelmetItem;
-	CDraggableImage		*m_pGlovesItem;
-	CDraggableImage		*m_pBootsItem;
-
-	CDroppableLabel		*m_pBackpackDropSlots[ BACKPACK_SLOTS_X ][ BACKPACK_SLOTS_Y ];
-	CDroppableLabel		*m_pBeltSlots[ 10 ]; // BOXBOX TODO Apply Quick Slot to these (1 through 0 keys on keyboard)
-
-	CDroppableLabel		*m_pLeftHandSlot;
-	CDroppableLabel		*m_pRightHandSlot;
-	CDroppableLabel		*m_pArmorSlot;
-	CDroppableLabel		*m_pHelmetSlot;
-	CDroppableLabel		*m_pGlovesSlot;
-	CDroppableLabel		*m_pBootsSlot;
-
-	CDragItem			*m_pDragTest;
-	CDragItem			*m_pDragTest2;
-*/
 protected:	
 
 //	ITEM_FILE_INFO_HANDLE	m_hItemFileInfo;

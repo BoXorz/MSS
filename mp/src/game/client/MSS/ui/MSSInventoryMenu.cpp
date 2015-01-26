@@ -3,6 +3,7 @@
 
 #include "cbase.h"
 #include "MSSInventoryMenu.h"
+#include "MSSItemInfoSheet.h"
 
 #include "c_MSS_player.h"
 
@@ -148,7 +149,7 @@ void CMSInventoryMenu::Update( void )
 				m_pBackpackItems[x][y]->m_hItem = GetInvalidItemInfoHandle();
 				m_pBackpackItems[x][y]->SetImage( "icons/Blank" );
 				m_pBackpackItems[x][y]->SetDragEnabled( false );
-//				m_pBackpackItems[x][y]->m_nDropType = ITEMTYPE_ANY;
+				m_pBackpackItems[x][y]->m_nDropType = ITEMTYPE_ANY;
 			}
 			else
 			{
@@ -167,7 +168,7 @@ void CMSInventoryMenu::Update( void )
 			m_pBeltItems[y]->m_hItem = GetInvalidItemInfoHandle();
 			m_pBeltItems[y]->SetImage( "icons/Blank" );
 			m_pBeltItems[y]->SetDragEnabled( false );
-//			m_pBeltItems[y]->m_nDropType = ITEMTYPE_ANY;
+			m_pBeltItems[y]->m_nDropType = ITEMTYPE_ANY;
 		}
 		else
 		{
@@ -279,10 +280,28 @@ void CMSInventoryMenu::Update( void )
 
 	m_pCharModel->SwapModel( pszPlayerModels[ pPlayer->m_nPlayerModelIndex ], NULL ); 
 	m_pCharModel->MoveToFront();
-
 }
-
-
+/*
+void CMSInventoryMenu::SetBgImage( ImagePanel *panel, int ItemType )
+{
+	if( ItemType == ITEMTYPE_WEAPON )
+		panel->SetImage( "icons/bgRed" );
+	else if( ItemType == ITEMTYPE_ALCHEMY )
+		panel->SetImage( "icons/bgGreen" );
+	else if( ItemType == ITEMTYPE_MAGICWORK )
+		panel->SetImage( "icons/bgBlue" );
+	else if( ItemType == ITEMTYPE_CLOTHWORK )
+		panel->SetImage( "icons/bgPurple" );
+	else if( ItemType == ITEMTYPE_WOODWORK )
+		panel->SetImage( "icons/bgBrown" );
+	else if( ItemType == ITEMTYPE_STONEWORK )
+		panel->SetImage( "icons/bgGray" );
+	else if( ItemType == ITEMTYPE_METALWORK )
+		panel->SetImage( "icons/bgOrange" );
+	else if( ItemType > ITEMTYPE_METALWORK )
+		panel->SetImage( "icons/bgYellow" );
+}
+*/
 void CMSInventoryMenu::OnCommand( const char *command )
 {
     if (!Q_strcmp(command, "TurnPageLeft"))
@@ -341,11 +360,59 @@ CDragItem::CDragItem( Panel *pParent, const char *name ) : ImagePanel( pParent, 
 	SetSize( 64, 64 );
 //	SetImage( "icons/Blank" );
 	m_nDropType = ITEMTYPE_ANY;
+
+//	m_pBackgroundImage = new ImagePanel( this, VarArgs( "%sBg", name ) );
+//	m_pBackgroundImage->SetZPos( 4 );
 }
 
 const FileItemInfo_t &CDragItem::GetItemData( ITEM_FILE_INFO_HANDLE item ) const
 {
 	return *GetFileItemInfoFromHandle( m_hItem );
+}
+
+void CDragItem::OnCursorEntered()
+{
+	if( m_hItem == GetInvalidItemInfoHandle() )
+		return;
+
+	IViewPortPanel *panel = gViewPortInterface->FindPanelByName( PANEL_ITEMINFO );
+	CMSItemInfoSheet *pItemInfo = (CMSItemInfoSheet*)panel;
+
+// BOXBOX determine where to place the item info window based on where the CDragItem is
+	int x = 0, y = 0;
+	GetPos(x, y);
+	int w = 0, h = 0;
+	vgui::surface()->GetScreenSize( w, h );
+
+	if( ( x < w / 2 ) && ( y < h / 2 ) ) // Mouse in upper left quadrant of screen
+	{
+		pItemInfo->SetPos( x,  y + 80 );
+	}
+	else if( ( x >= w / 2 ) && ( y < h / 2 ) ) // upper right quadrant of screen
+	{
+		pItemInfo->SetPos( x - 600,  y + 80 );
+	}
+	else if( ( x < w / 2 ) && ( y >= h / 2 ) ) // Mouse in lower left quadrant of screen
+	{
+		pItemInfo->SetPos( x,  y - 380 );
+	}
+	else if( ( x >= w / 2 ) && ( y >= h / 2 ) ) // lower right quadrant of screen
+	{
+		pItemInfo->SetPos( x - 600,  y - 380 );
+	}
+
+	pItemInfo->SetItemToDisplay( this->m_hItem );
+	pItemInfo->ShowPanel( true );
+	pItemInfo->MoveToFront();
+}
+
+void CDragItem::OnCursorExited()
+{
+	IViewPortPanel *panel = gViewPortInterface->FindPanelByName( PANEL_ITEMINFO );
+	CMSItemInfoSheet *pItemInfo = (CMSItemInfoSheet*)panel;
+
+	if( pItemInfo->IsVisible() )
+		pItemInfo->ShowPanel( false );
 }
 
 // BOXBOX this is for when a drag/drop item is being dragged, but is not over another drag/drop item
@@ -412,10 +479,6 @@ void CDragItem::OnPanelEnteredDroppablePanel( CUtlVector< KeyValues * >& msglist
 	if( !pDrag ) return;
 
 	CDragItem *pItem = (CDragItem*)pDrag;
-//	CDragItem *pItem = dynamic_cast<CDragItem *>(pDrag); // BOXBOX cast it to our draggable class
-//	if( !pItem ) return;
-
-//	Warning("ITEM TYPE %i DRAGGED OVER ITEM TYPE %i\n", pItem->m_nDropType, m_nDropType );
 
 	if( m_nDropType != pItem->m_nDropType )
 	{
@@ -437,8 +500,6 @@ void CDragItem::OnPanelDropped( CUtlVector< KeyValues * >& msglist ) // BOXBOX a
 	if( !pDrag ) return;
 
 	CDragItem *pItem = (CDragItem*)pDrag;
-//	CDragItem *pItem = dynamic_cast<CDragItem *>(pDrag);
-//	if( !pItem ) return;
 
 	if( m_nDropType != ITEMTYPE_ANY )
 	{
@@ -455,7 +516,7 @@ void CDragItem::OnPanelDropped( CUtlVector< KeyValues * >& msglist ) // BOXBOX a
 	SetDragEnabled( true );
 	SetImage( pItem->GetImage() );
 	pItem->SetDragEnabled( false );
-	pItem->SetImage( "icons/Blank" ); // BOXBOX why does this only work once?
+	pItem->SetImage( "icons/Blank" );
 
 // BOXBOX Find the from slot and the to slot, and adjust inventory
 	int nFrom = -1;
@@ -583,33 +644,6 @@ void CDragItem::OnPanelDropped( CUtlVector< KeyValues * >& msglist ) // BOXBOX a
 	engine->ClientCmd( VarArgs("moveitem %i %i", nFrom, nTo ) );
 
 	pMenu->Update();
-	DrawItemTypeHalo();
-}
-
-void CDragItem::DrawItemTypeHalo( void )
-{
-
-		int w, h;
-		GetSize( w, h );
-
-		int x, y;
-		x = y = 0;
-		LocalToScreen( x, y );
-
-		Warning( "DRAWITEMTYPEHALO W: %i  H: %i  X: %i  Y: %i\n", w, h, x, y );
-//		surface()-> // BOXBOX TODO why this not working?
-
-		vgui::surface()->DrawSetColor( Color(255, 50, 50, 200) );
-		vgui::surface()->DrawOutlinedRect( x-1, y-1, x + w+1, y + h+1 );
-
-		vgui::surface()->DrawSetColor( Color(255, 50, 50, 150) );
-		vgui::surface()->DrawOutlinedRect( x+1, y+1, x + w-1, y + h-1 );
-
-		vgui::surface()->DrawSetColor( Color(255, 50, 50, 100) );
-		vgui::surface()->DrawOutlinedRect( x+2, y+2, x + w-2, y + h-2 );
-
-		vgui::surface()->DrawSetColor( Color(255, 50, 50, 50) );
-		vgui::surface()->DrawOutlinedRect( x+3, y+3, x + w-3, y + h-3 );
 }
 
 

@@ -81,6 +81,7 @@ public:
 	int				nItemType;							//	What type of item is this? ( see MSSItemTypes_t )
 	int				nItemLevel;							//	This will have different effects depending on Item Type.  For weapons, determines base damage
 // WEAPONS
+	int				nWeaponType;
 	char			szViewModel[MAX_ITEM_STRING];		// View model of this weapon
 	char			szAnimationPrefix[MAX_ITEM_PREFIX];	// Prefix of the animations that should be used by the player carrying this weapon
 //	bool			m_bBuiltRightHanded;				// This helps cl_righthand make the decision about whether to flip the model or not.

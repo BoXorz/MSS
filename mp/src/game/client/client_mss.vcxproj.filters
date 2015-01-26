@@ -1964,6 +1964,9 @@
     <ClInclude Include="..\shared\MSS\MSS_item_parse.h">
       <Filter>Source Files\MSS</Filter>
     </ClInclude>
+    <ClInclude Include="MSS\ui\MSSItemInfoSheet.h">
+      <Filter>Source Files\MSS\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mp3player.cpp">
@@ -3525,6 +3528,9 @@
     </ClCompile>
     <ClCompile Include="..\shared\MSS\MSS_item_parse.cpp">
       <Filter>Source Files\MSS</Filter>
+    </ClCompile>
+    <ClCompile Include="MSS\ui\MSSItemInfoSheet.cpp">
+      <Filter>Source Files\MSS\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -28,6 +28,8 @@
 #define PANEL_INVENTORYMENU		"inventorymenu"	// PAGE 3-4
 #define PANEL_POWERUPMENU		"powerupmenu"	// PAGE 5-6
 
+#define PANEL_ITEMINFO			"iteminfosheet"
+
 //#define PANEL_OVERVIEW		"overview"	// BOXBOX TODO replace this with a PANEL_MAP?
 //#define PANEL_CLASS			"class"
 //#define PANEL_TEAM			"team"

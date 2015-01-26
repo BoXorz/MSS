@@ -52,6 +52,8 @@
 #include "MSSInventoryMenu.h"
 #include "MSSPowerupMenu.h"
 
+#include "MSSItemInfoSheet.h"
+
 
 // our definition
 #include "baseviewport.h"
@@ -254,6 +256,8 @@ void CBaseViewport::CreateDefaultPanels( void )
 	AddNewPanel( CreatePanelByName( PANEL_INVENTORYMENU ), "PANEL_INVENTORYMENU" );
 	AddNewPanel( CreatePanelByName( PANEL_POWERUPMENU ), "PANEL_POWERUPMENU" );
 
+	AddNewPanel( CreatePanelByName( PANEL_ITEMINFO ), "PANEL_ITEMINFO" );
+
 
 	AddNewPanel( CreatePanelByName( PANEL_INFO ), "PANEL_INFO" );
 //	AddNewPanel( CreatePanelByName( PANEL_SPECGUI ), "PANEL_SPECGUI" );
@@ -325,7 +329,10 @@ IViewPortPanel* CBaseViewport::CreatePanelByName(const char *szPanelName)
 	{
 		newpanel = new CMSPowerupMenu( this );
 	}
-
+	else if ( Q_strcmp(PANEL_ITEMINFO, szPanelName) == 0 )
+	{
+		newpanel = new CMSItemInfoSheet( this );
+	}
 
 /*	else if ( Q_strcmp(PANEL_OVERVIEW, szPanelName) == 0 )
 	{

@@ -319,7 +319,7 @@ FileItemInfo_t::FileItemInfo_t()
 	nSkin = 0;
 
 	szWorldModel[0] = 0;
-
+	nItemType = 0;
 	szViewModel[0] = 0;
 	szAnimationPrefix[0] = 0;
 
@@ -385,7 +385,7 @@ void FileItemInfo_t::Parse( KeyValues *pKeyValuesData, const char *szItemName )
 	nItemLevel = pKeyValuesData->GetInt( "itemlevel", 0 );
 
 // WEAPON STUFF
-
+	nWeaponType = pKeyValuesData->GetInt( "weapontype", 0 );
 	Q_strncpy( szViewModel, pKeyValuesData->GetString( "viewmodel" ), MAX_ITEM_STRING );
 	Q_strncpy( szAnimationPrefix, pKeyValuesData->GetString( "anim_prefix" ), MAX_ITEM_PREFIX );
 
