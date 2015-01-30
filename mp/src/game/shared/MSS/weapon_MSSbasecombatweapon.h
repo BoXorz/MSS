@@ -14,21 +14,21 @@
 #include "weapon_MSSbase.h"
 
 #if defined( CLIENT_DLL )
-#define CBaseHL2MPCombatWeapon C_BaseHL2MPCombatWeapon
+#define CBaseMSSCombatWeapon C_BaseMSSCombatWeapon
 #endif
 
-class CBaseHL2MPCombatWeapon : public CWeaponMSSBase
+class CBaseMSSCombatWeapon : public CWeaponMSSBase
 {
 #if !defined( CLIENT_DLL )
 	DECLARE_DATADESC();
 #endif
 
-	DECLARE_CLASS( CBaseHL2MPCombatWeapon, CWeaponMSSBase );
+	DECLARE_CLASS( CBaseMSSCombatWeapon, CWeaponMSSBase );
 public:
 	DECLARE_NETWORKCLASS();
 	DECLARE_PREDICTABLE();
 
-	CBaseHL2MPCombatWeapon();
+	CBaseMSSCombatWeapon();
 
 	virtual bool	WeaponShouldBeLowered( void );
 
@@ -57,7 +57,7 @@ protected:
 
 private:
 	
-	CBaseHL2MPCombatWeapon( const CBaseHL2MPCombatWeapon & );
+	CBaseMSSCombatWeapon( const CBaseMSSCombatWeapon & );
 };
 
 #endif // WEAPON_BASEHL2MPCOMBATWEAPON_SHARED_H

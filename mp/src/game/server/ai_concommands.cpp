@@ -828,7 +828,7 @@ CON_COMMAND( npc_heal, "Heals the target back to full health" )
 		}
 	}
 }
-
+/*
 CON_COMMAND( npc_ammo_deplete, "Subtracts half of the target's ammo" )
 {
 	if ( !UTIL_IsCommandIssuedByServerAdmin() )
@@ -844,7 +844,7 @@ CON_COMMAND( npc_ammo_deplete, "Subtracts half of the target's ammo" )
 		}
 	}
 }
-
+*/
 CON_COMMAND( ai_clear_bad_links, "Clears bits set on nav links indicating link is unusable " )
 {
 	if ( !UTIL_IsCommandIssuedByServerAdmin() )

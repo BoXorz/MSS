@@ -875,11 +875,11 @@ void CBasePlayer::SelectLastItem(void)
 //-----------------------------------------------------------------------------
 // Purpose: Abort any reloads we're in
 //-----------------------------------------------------------------------------
-void CBasePlayer::AbortReload( void )
+void CBasePlayer::AbortReload( void ) // BOXBOX TODO Use this for archery
 {
 	if ( GetActiveWeapon() )
 	{
-		GetActiveWeapon()->AbortReload();
+//		GetActiveWeapon()->AbortReload();
 	}
 }
 

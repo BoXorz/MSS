@@ -4,7 +4,7 @@
 //
 //=============================================================================//
 
-#include "basehlcombatweapon.h"
+//#include "basehlcombatweapon.h"
 #include "soundenvelope.h"
 
 #ifndef WEAPON_FLAREGUN_H
@@ -90,10 +90,10 @@ public:
 //---------------------
 // Flaregun
 //---------------------
-class CFlaregun:public CBaseHLCombatWeapon
+class CFlaregun:public CBaseCombatWeapon
 {
 public:
-	DECLARE_CLASS( CFlaregun, CBaseHLCombatWeapon );
+	DECLARE_CLASS( CFlaregun, CBaseCombatWeapon );
 
 	DECLARE_SERVERCLASS();
 

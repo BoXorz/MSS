@@ -68,12 +68,12 @@ CBaseCombatWeapon::CBaseCombatWeapon()
 	// CONSTRUCT_PREDICTABLE( CBaseCombatWeapon );
 
 	// Some default values.  There should be set in the particular weapon classes
-	m_fMinRange1		= 65;
-	m_fMinRange2		= 65;
-	m_fMaxRange1		= 1024;
-	m_fMaxRange2		= 1024;
+	m_fMinRange1		= 0;
+	m_fMinRange2		= 0;
+	m_fMaxRange1		= 30;
+	m_fMaxRange2		= 30;
 
-	m_bReloadsSingly	= false;
+//	m_bReloadsSingly	= false;
 
 	// Defaults to zero
 	m_nViewModelIndex	= 0;
@@ -82,10 +82,10 @@ CBaseCombatWeapon::CBaseCombatWeapon()
 
 #if defined( CLIENT_DLL )
 	m_iState = m_iOldState = WEAPON_NOT_CARRIED;
-	m_iClip1 = -1;
-	m_iClip2 = -1;
-	m_iPrimaryAmmoType = -1;
-	m_iSecondaryAmmoType = -1;
+//	m_iClip1 = -1;
+//	m_iClip2 = -1;
+//	m_iPrimaryAmmoType = -1;
+//	m_iSecondaryAmmoType = -1;
 #endif
 
 #if !defined( CLIENT_DLL )
@@ -132,14 +132,19 @@ void CBaseCombatWeapon::Activate( void )
 	if ( GetOwnerEntity() )
 		return;
 
+/* BOXBOX removing
 	if ( g_pGameRules->IsAllowedToSpawn( this ) == false )
 	{
 		UTIL_Remove( this );
 		return;
 	}
+*/
+
 #endif
 
 }
+
+/* BOXBOX removing
 void CBaseCombatWeapon::GiveDefaultAmmo( void )
 {
 	// If I use clips, set my clips to the default
@@ -162,6 +167,7 @@ void CBaseCombatWeapon::GiveDefaultAmmo( void )
 		m_iClip2 = WEAPON_NOCLIP;
 	}
 }
+*/
 
 //-----------------------------------------------------------------------------
 // Purpose: Set mode to world model and start falling to the ground
@@ -173,7 +179,7 @@ void CBaseCombatWeapon::Spawn( void )
 	BaseClass::Spawn();
 
 	SetSolid( SOLID_BBOX );
-	m_flNextEmptySoundTime = 0.0f;
+//	m_flNextEmptySoundTime = 0.0f;
 
 	// Weapons won't show up in trace calls if they are being carried...
 	RemoveEFlags( EFL_USE_PARTITION_WHEN_NOT_SOLID );
@@ -182,7 +188,7 @@ void CBaseCombatWeapon::Spawn( void )
 	// Assume 
 	m_nViewModelIndex = 0;
 
-	GiveDefaultAmmo();
+//	GiveDefaultAmmo();
 
 	if ( GetWorldModel() )
 	{
@@ -215,8 +221,8 @@ void CBaseCombatWeapon::Spawn( void )
 	// characters even when they're not in the frustum.
 	AddEffects( EF_BONEMERGE_FASTCULL );
 
-	m_iReloadHudHintCount = 0;
-	m_iAltFireHudHintCount = 0;
+//	m_iReloadHudHintCount = 0;
+//	m_iAltFireHudHintCount = 0;
 	m_flHudHintMinDisplayTime = 0;
 }
 
@@ -340,6 +346,7 @@ const char *CBaseCombatWeapon::GetAnimPrefix( void ) const
 	return GetItemData().szAnimationPrefix;
 }
 
+/* BOXBOX removing
 int CBaseCombatWeapon::GetMaxClip1( void ) const
 {
 	return 0;
@@ -375,11 +382,6 @@ bool CBaseCombatWeapon::UsesClipsForAmmo2( void ) const
 	return false;
 }
 
-int CBaseCombatWeapon::GetWeight( void ) const
-{
-	return 0;
-}
-
 bool CBaseCombatWeapon::AllowsAutoSwitchTo( void ) const
 {
 	return 0;
@@ -390,17 +392,23 @@ bool CBaseCombatWeapon::AllowsAutoSwitchFrom( void ) const
 	return 0;
 }
 
-int CBaseCombatWeapon::GetWeaponFlags( void ) const
-{
-	return 0;
-}
-
 int CBaseCombatWeapon::GetSlot( void ) const
 {
 	return 0;
 }
 
 int CBaseCombatWeapon::GetPosition( void ) const
+{
+	return 0;
+}
+*/
+
+int CBaseCombatWeapon::GetWeight( void ) const
+{
+	return 0;
+}
+
+int CBaseCombatWeapon::GetWeaponFlags( void ) const
 {
 	return 0;
 }
@@ -527,9 +535,7 @@ bool CBaseCombatWeapon::IsAllowedToSwitch( void )
 	return true;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Return true if this weapon can be selected via the weapon selection
-//-----------------------------------------------------------------------------
+/* BOXBOX removing
 bool CBaseCombatWeapon::CanBeSelected( void )
 {
 	if ( !VisibleInWeaponSelection() )
@@ -537,10 +543,9 @@ bool CBaseCombatWeapon::CanBeSelected( void )
 
 	return HasAmmo();
 }
+*/
 
-//-----------------------------------------------------------------------------
-// Purpose: Return true if this weapon has some ammo
-//-----------------------------------------------------------------------------
+/* BOXBOX removing
 bool CBaseCombatWeapon::HasAmmo( void )
 {
 	// Weapons with no ammo types can always be selected
@@ -554,6 +559,7 @@ bool CBaseCombatWeapon::HasAmmo( void )
 		return false;
 	return ( m_iClip1 > 0 || player->GetAmmoCount( m_iPrimaryAmmoType ) || m_iClip2 > 0 || player->GetAmmoCount( m_iSecondaryAmmoType ) );
 }
+*/
 
 //-----------------------------------------------------------------------------
 // Purpose: Return true if this weapon should be seen, and hence be selectable, in the weapon selection
@@ -664,7 +670,7 @@ void CBaseCombatWeapon::Drop( const Vector &vecVelocity )
 
 
 
-void CBaseCombatWeapon::OnPickedUp( CBaseCombatCharacter *pNewOwner ) // BOXBOX TODO if weapon is better than current, switch?
+void CBaseCombatWeapon::OnPickedUp( CBaseCombatCharacter *pNewOwner ) // BOXBOX redoing this
 {
 #if !defined( CLIENT_DLL )
 	RemoveEffects( EF_ITEM_BLINK );
@@ -685,7 +691,7 @@ void CBaseCombatWeapon::OnPickedUp( CBaseCombatCharacter *pNewOwner ) // BOXBOX 
 		}
 		if ( filter.GetRecipientCount() )
 		{
-			CBaseEntity::EmitSound( filter, pNewOwner->entindex(), "Player.PickupWeapon" );
+			CBaseEntity::EmitSound( filter, pNewOwner->entindex(), "Player.PickupWeapon" ); // BOXBOX TODO set item pickup sounds
 		}
 
 		// Robin: We don't want to delete weapons the player has picked up, so 
@@ -705,7 +711,7 @@ void CBaseCombatWeapon::OnPickedUp( CBaseCombatCharacter *pNewOwner ) // BOXBOX 
 	// Someone picked me up, so make it so that I can't be removed.
 	SetRemoveable( false );
 
-	pNewOwner->SwitchToNextBestWeapon( pNewOwner->GetActiveWeapon() ); // BOXBOX NOW switch weapons on pickup only if new weapon is better
+//	pNewOwner->SwitchToNextBestWeapon( pNewOwner->GetActiveWeapon() ); // BOXBOX dont switch in MSS
 
 #endif
 }
@@ -792,10 +798,7 @@ void CBaseCombatWeapon::DefaultTouch( CBaseEntity *pOther )
 #endif
 }
 
-//---------------------------------------------------------
-// It's OK for base classes to override this completely 
-// without calling up. (sjb)
-//---------------------------------------------------------
+/* BOXBOX removing
 bool CBaseCombatWeapon::ShouldDisplayAltFireHUDHint()
 {
 	if( m_iAltFireHudHintCount >= WEAPON_RELOAD_HUD_HINT_COUNT )
@@ -885,7 +888,7 @@ void CBaseCombatWeapon::RescindReloadHudHint()
 	m_bReloadHudHintDisplayed = false;
 #endif//CLIENT_DLL
 }
-
+*/
 
 void CBaseCombatWeapon::SetPickupTouch( void )
 {
@@ -1143,14 +1146,7 @@ bool CBaseCombatWeapon::SendWeaponAnim( int iActivity )
 	return SetIdealActivity( (Activity) iActivity );
 }
 
-//====================================================================================
-// WEAPON SELECTION
-//====================================================================================
-
-//-----------------------------------------------------------------------------
-// Purpose: Returns true if the weapon currently has ammo or doesn't need ammo
-// Output :
-//-----------------------------------------------------------------------------
+/* BOXBOX removing
 bool CBaseCombatWeapon::HasAnyAmmo( void )
 {
 	// If I don't use ammo of any kind, I can always fire
@@ -1234,6 +1230,7 @@ bool CBaseCombatWeapon::UsesSecondaryAmmo( void )
 		return false;
 	return true;
 }
+*/
 
 //-----------------------------------------------------------------------------
 // Purpose: Show/hide weapon and corresponding view model if any
@@ -1284,10 +1281,7 @@ bool CBaseCombatWeapon::IsWeaponVisible( void )
 	return false;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: If the current weapon has more ammo, reload it. Otherwise, switch 
-//			to the next best weapon we've got. Returns true if it took any action.
-//-----------------------------------------------------------------------------
+/* BOXBOX removing
 bool CBaseCombatWeapon::ReloadOrSwitchWeapons( void )
 {
 	CBasePlayer *pOwner = ToBasePlayer( GetOwner() );
@@ -1322,24 +1316,10 @@ bool CBaseCombatWeapon::ReloadOrSwitchWeapons( void )
 
 	return false;
 }
+*/
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : *szViewModel - 
-//			*szWeaponModel - 
-//			iActivity - 
-//			*szAnimExt - 
-// Output : Returns true on success, false on failure.
-//-----------------------------------------------------------------------------
 bool CBaseCombatWeapon::DefaultDeploy( char *szViewModel, char *szWeaponModel, int iActivity, char *szAnimExt )
 {
-	// Msg( "deploy %s at %f\n", GetClassname(), gpGlobals->curtime );
-
-	// Weapons that don't autoswitch away when they run out of ammo 
-	// can still be deployed when they have no ammo.
-	if ( !HasAnyAmmo() && AllowsAutoSwitchFrom() )
-		return false;
-
 	CBasePlayer *pOwner = ToBasePlayer( GetOwner() );
 	if ( pOwner )
 	{
@@ -1360,8 +1340,8 @@ bool CBaseCombatWeapon::DefaultDeploy( char *szViewModel, char *szWeaponModel, i
 	m_flNextSecondaryAttack	= gpGlobals->curtime + SequenceDuration();
 	m_flHudHintMinDisplayTime = 0;
 
-	m_bAltFireHudHintDisplayed = false;
-	m_bReloadHudHintDisplayed = false;
+//	m_bAltFireHudHintDisplayed = false;
+//	m_bReloadHudHintDisplayed = false;
 	m_flHudHintPollTime = gpGlobals->curtime + 5.0f;
 	
 	WeaponSound( DEPLOY );
@@ -1394,16 +1374,9 @@ Activity CBaseCombatWeapon::GetDrawActivity( void )
 	return ACT_VM_DRAW;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
 bool CBaseCombatWeapon::Holster( CBaseCombatWeapon *pSwitchingTo )
 { 
 	MDLCACHE_CRITICAL_SECTION();
-
-	// cancel any reload in progress.
-	m_bInReload = false; 
-	m_bFiringWholeClip = false;
 
 	// kill any think functions
 	SetThink(NULL);
@@ -1435,7 +1408,7 @@ bool CBaseCombatWeapon::Holster( CBaseCombatWeapon *pSwitchingTo )
 		SetContextThink( &CBaseCombatWeapon::HideThink, gpGlobals->curtime + flSequenceDuration, HIDEWEAPON_THINK_CONTEXT );
 	}
 
-	// if we were displaying a hud hint, squelch it.
+/* BOXBOX removing
 	if (m_flHudHintMinDisplayTime && gpGlobals->curtime < m_flHudHintMinDisplayTime)
 	{
 		if( m_bAltFireHudHintDisplayed )
@@ -1444,7 +1417,7 @@ bool CBaseCombatWeapon::Holster( CBaseCombatWeapon *pSwitchingTo )
 		if( m_bReloadHudHintDisplayed )
 			RescindReloadHudHint();
 	}
-
+*/
 	return true;
 }
 
@@ -1489,6 +1462,7 @@ void CBaseCombatWeapon::HideThink( void )
 	}
 }
 
+/* BOXBOX removing
 bool CBaseCombatWeapon::CanReload( void )
 {
 	if ( AutoFiresFullClip() && m_bFiringWholeClip )
@@ -1498,6 +1472,7 @@ bool CBaseCombatWeapon::CanReload( void )
 
 	return true;
 }
+*/
 
 #if defined ( TF_CLIENT_DLL ) || defined ( TF_DLL )
 //-----------------------------------------------------------------------------
@@ -1556,6 +1531,7 @@ void CBaseCombatWeapon::ItemPreFrame( void )
 {
 	MaintainIdealActivity();
 
+/* BOXBOX removing
 #ifndef CLIENT_DLL
 #ifndef HL2_EPISODIC
 	if ( IsX360() )
@@ -1589,6 +1565,8 @@ void CBaseCombatWeapon::ItemPreFrame( void )
 		}
 	}
 #endif
+*/
+
 }
 
 //====================================================================================
@@ -1727,9 +1705,9 @@ void CBaseCombatWeapon::ItemPostFrame( void )
 */
 }
 
+/* BOXBOX removing
 void CBaseCombatWeapon::HandleFireOnEmpty()
 {
-/*
 	if ( m_bFireOnEmpty )
 	{
 		ReloadOrSwitchWeapons();
@@ -1744,8 +1722,8 @@ void CBaseCombatWeapon::HandleFireOnEmpty()
 		}
 		m_bFireOnEmpty = true;
 	}
-*/
 }
+*/
 
 //-----------------------------------------------------------------------------
 // Purpose: Called each frame by the player PostThink, if the player's not ready to attack yet
@@ -1755,7 +1733,7 @@ void CBaseCombatWeapon::ItemBusyFrame( void )
 //	UpdateAutoFire();
 }
 
-
+/* BOXBOX removing
 int CBaseCombatWeapon::GetBulletType( void )
 {
 	return 0;
@@ -1771,6 +1749,7 @@ const Vector& CBaseCombatWeapon::GetBulletSpread( void )
 	static Vector cone = VECTOR_CONE_15DEGREES;
 	return cone;
 }
+*/
 
 //-----------------------------------------------------------------------------
 const WeaponProficiencyInfo_t *CBaseCombatWeapon::GetProficiencyValues()
@@ -1900,12 +1879,9 @@ void CBaseCombatWeapon::StopWeaponSound( WeaponSound_t sound_type )
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
+/* BOXBOX removing
 bool CBaseCombatWeapon::DefaultReload( int iClipSize1, int iClipSize2, int iActivity )
 {
-/*
 	CBaseCombatCharacter *pOwner = GetOwner();
 	if (!pOwner)
 		return false;
@@ -1958,13 +1934,13 @@ bool CBaseCombatWeapon::DefaultReload( int iClipSize1, int iClipSize2, int iActi
 	m_flNextPrimaryAttack = m_flNextSecondaryAttack = flSequenceEndTime;
 
 	m_bInReload = true;
-*/
+
 	return true;
 }
 
 bool CBaseCombatWeapon::ReloadsSingly( void ) const
 {
-/*
+
 #if defined ( TF_DLL ) || defined ( TF_CLIENT_DLL )
 	float fHasReload = 1.0f;
 	CALL_ATTRIB_HOOK_FLOAT( fHasReload, mod_no_reload_display_only );
@@ -1980,7 +1956,7 @@ bool CBaseCombatWeapon::ReloadsSingly( void ) const
 		return false;
 	}
 #endif // TF_DLL || TF_CLIENT_DLL
-*/
+
 	return m_bReloadsSingly;
 }
 
@@ -1991,6 +1967,7 @@ bool CBaseCombatWeapon::Reload( void )
 {
 	return DefaultReload( GetMaxClip1(), GetMaxClip2(), ACT_VM_RELOAD );
 }
+*/
 
 //=========================================================
 void CBaseCombatWeapon::WeaponIdle( void )
@@ -2035,32 +2012,27 @@ char *CBaseCombatWeapon::GetDeathNoticeName( void )
 #endif
 }
 
-//====================================================================================
-// WEAPON RELOAD TYPES
-//====================================================================================
+/* BOXBOX
 void CBaseCombatWeapon::CheckReload( void )
 {
-	if ( m_bReloadsSingly )
-	{
-		CBasePlayer *pOwner = ToBasePlayer( GetOwner() );
-		if ( !pOwner )
-			return;
+	CBasePlayer *pOwner = ToBasePlayer( GetOwner() );
+	if ( !pOwner ) return;
 
 		if ((m_bInReload) && (m_flNextPrimaryAttack <= gpGlobals->curtime))
 		{
-			if ( pOwner->m_nButtons & (IN_ATTACK | IN_ATTACK2) && m_iClip1 > 0 )
+			if ( pOwner->m_nButtons & (IN_ATTACK | IN_ATTACK2) )
 			{
 				m_bInReload = false;
 				return;
 			}
 
 			// If out of ammo end reload
-			if (pOwner->GetAmmoCount(m_iPrimaryAmmoType) <=0)
+			if (pOwner->GetAmmoCount(m_nArrows) <=0) // BOXBOX TODO make this arrows
 			{
 				FinishReload();
 				return;
 			}
-			// If clip not full reload again
+/*			// If clip not full reload again
 			else if (m_iClip1 < GetMaxClip1())
 			{
 				// Add them to the clip
@@ -2078,6 +2050,7 @@ void CBaseCombatWeapon::CheckReload( void )
 				m_flNextSecondaryAttack = gpGlobals->curtime;
 				return;
 			}
+			
 		}
 	}
 	else
@@ -2090,6 +2063,7 @@ void CBaseCombatWeapon::CheckReload( void )
 			m_bInReload = false;
 		}
 	}
+
 }
 
 //-----------------------------------------------------------------------------
@@ -2129,17 +2103,17 @@ void CBaseCombatWeapon::FinishReload( void )
 //-----------------------------------------------------------------------------
 void CBaseCombatWeapon::AbortReload( void )
 {
-/*
+
 #ifdef CLIENT_DLL
 	StopWeaponSound( RELOAD ); 
 #endif
-*/
+
 	m_bInReload = false;
 }
 
 void CBaseCombatWeapon::UpdateAutoFire( void )
 {
-/*
+
 	if ( !AutoFiresFullClip() )
 		return;
 
@@ -2184,21 +2158,15 @@ void CBaseCombatWeapon::UpdateAutoFire( void )
 		// Fake the attack key
 		pOwner->m_nButtons |= IN_ATTACK;
 	}
-*/
+
 }
+*/
 
 //-----------------------------------------------------------------------------
 // Purpose: Primary fire button attack
 //-----------------------------------------------------------------------------
 void CBaseCombatWeapon::PrimaryAttack( void )
 {
-	// If my clip is empty (and I use clips) start reload
-	if ( UsesClipsForAmmo1() && !m_iClip1 ) 
-	{
-		Reload();
-		return;
-	}
-
 	// Only the player fires this way so we can cast
 	CBasePlayer *pPlayer = ToBasePlayer( GetOwner() );
 
@@ -2234,7 +2202,7 @@ void CBaseCombatWeapon::PrimaryAttack( void )
 			break;
 	}
 
-	// Make sure we don't fire more than the amount in the clip
+/* BOXBOX removing
 	if ( UsesClipsForAmmo1() )
 	{
 		info.m_iShots = MIN( info.m_iShots, m_iClip1 );
@@ -2265,7 +2233,7 @@ void CBaseCombatWeapon::PrimaryAttack( void )
 		// HEV suit - indicate out of ammo condition
 		pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0); 
 	}
-
+*/
 	//Add our view kick in
 	AddViewKick();
 }
@@ -2482,33 +2450,33 @@ BEGIN_PREDICTION_DATA( CBaseCombatWeapon )
 	DEFINE_PRED_FIELD_TOL( m_flNextSecondaryAttack, FIELD_FLOAT, FTYPEDESC_INSENDTABLE, TD_MSECTOLERANCE ),
 	DEFINE_PRED_FIELD_TOL( m_flTimeWeaponIdle, FIELD_FLOAT, FTYPEDESC_INSENDTABLE, TD_MSECTOLERANCE ),
 
-	DEFINE_PRED_FIELD( m_iPrimaryAmmoType, FIELD_INTEGER, FTYPEDESC_INSENDTABLE ),
-	DEFINE_PRED_FIELD( m_iSecondaryAmmoType, FIELD_INTEGER, FTYPEDESC_INSENDTABLE ),
-	DEFINE_PRED_FIELD( m_iClip1, FIELD_INTEGER, FTYPEDESC_INSENDTABLE ),			
-	DEFINE_PRED_FIELD( m_iClip2, FIELD_INTEGER, FTYPEDESC_INSENDTABLE ),			
+//	DEFINE_PRED_FIELD( m_iPrimaryAmmoType, FIELD_INTEGER, FTYPEDESC_INSENDTABLE ),
+//	DEFINE_PRED_FIELD( m_iSecondaryAmmoType, FIELD_INTEGER, FTYPEDESC_INSENDTABLE ),
+//	DEFINE_PRED_FIELD( m_iClip1, FIELD_INTEGER, FTYPEDESC_INSENDTABLE ),			
+//	DEFINE_PRED_FIELD( m_iClip2, FIELD_INTEGER, FTYPEDESC_INSENDTABLE ),			
 
 	DEFINE_PRED_FIELD( m_nViewModelIndex, FIELD_INTEGER, FTYPEDESC_INSENDTABLE ),
 
 	// Not networked
 
 	DEFINE_PRED_FIELD( m_flTimeWeaponIdle, FIELD_FLOAT, FTYPEDESC_INSENDTABLE ),
-	DEFINE_FIELD( m_bInReload, FIELD_BOOLEAN ),
-	DEFINE_FIELD( m_bFireOnEmpty, FIELD_BOOLEAN ),
-	DEFINE_FIELD( m_bFiringWholeClip, FIELD_BOOLEAN ),
-	DEFINE_FIELD( m_flNextEmptySoundTime, FIELD_FLOAT ),
+//	DEFINE_FIELD( m_bInReload, FIELD_BOOLEAN ),
+//	DEFINE_FIELD( m_bFireOnEmpty, FIELD_BOOLEAN ),
+//	DEFINE_FIELD( m_bFiringWholeClip, FIELD_BOOLEAN ),
+//	DEFINE_FIELD( m_flNextEmptySoundTime, FIELD_FLOAT ),
 	DEFINE_FIELD( m_Activity, FIELD_INTEGER ),
-	DEFINE_FIELD( m_fFireDuration, FIELD_FLOAT ),
+//	DEFINE_FIELD( m_fFireDuration, FIELD_FLOAT ),
 	DEFINE_FIELD( m_iszName, FIELD_INTEGER ),		
-	DEFINE_FIELD( m_bFiresUnderwater, FIELD_BOOLEAN ),
-	DEFINE_FIELD( m_bAltFiresUnderwater, FIELD_BOOLEAN ),
-	DEFINE_FIELD( m_fMinRange1, FIELD_FLOAT ),		
-	DEFINE_FIELD( m_fMinRange2, FIELD_FLOAT ),		
-	DEFINE_FIELD( m_fMaxRange1, FIELD_FLOAT ),		
-	DEFINE_FIELD( m_fMaxRange2, FIELD_FLOAT ),		
-	DEFINE_FIELD( m_bReloadsSingly, FIELD_BOOLEAN ),	
+//	DEFINE_FIELD( m_bFiresUnderwater, FIELD_BOOLEAN ),
+//	DEFINE_FIELD( m_bAltFiresUnderwater, FIELD_BOOLEAN ),
+//	DEFINE_FIELD( m_fMinRange1, FIELD_FLOAT ),		
+//	DEFINE_FIELD( m_fMinRange2, FIELD_FLOAT ),		
+//	DEFINE_FIELD( m_fMaxRange1, FIELD_FLOAT ),		
+//	DEFINE_FIELD( m_fMaxRange2, FIELD_FLOAT ),		
+//	DEFINE_FIELD( m_bReloadsSingly, FIELD_BOOLEAN ),	
 	DEFINE_FIELD( m_bRemoveable, FIELD_BOOLEAN ),
-	DEFINE_FIELD( m_iPrimaryAmmoCount, FIELD_INTEGER ),
-	DEFINE_FIELD( m_iSecondaryAmmoCount, FIELD_INTEGER ),
+//	DEFINE_FIELD( m_iPrimaryAmmoCount, FIELD_INTEGER ),
+//	DEFINE_FIELD( m_iSecondaryAmmoCount, FIELD_INTEGER ),
 
 	//DEFINE_PHYSPTR( m_pConstraint ),
 
@@ -2535,25 +2503,25 @@ BEGIN_DATADESC( CBaseCombatWeapon )
 	DEFINE_FIELD( m_flNextSecondaryAttack, FIELD_TIME ),
 	DEFINE_FIELD( m_flTimeWeaponIdle, FIELD_TIME ),
 
-	DEFINE_FIELD( m_bInReload, FIELD_BOOLEAN ),
-	DEFINE_FIELD( m_bFireOnEmpty, FIELD_BOOLEAN ),
+//	DEFINE_FIELD( m_bInReload, FIELD_BOOLEAN ),
+//	DEFINE_FIELD( m_bFireOnEmpty, FIELD_BOOLEAN ),
 	DEFINE_FIELD( m_hOwner, FIELD_EHANDLE ),
 
 	DEFINE_FIELD( m_iState, FIELD_INTEGER ),
 	DEFINE_FIELD( m_iszName, FIELD_STRING ),
-	DEFINE_FIELD( m_iPrimaryAmmoType, FIELD_INTEGER ),
-	DEFINE_FIELD( m_iSecondaryAmmoType, FIELD_INTEGER ),
-	DEFINE_FIELD( m_iClip1, FIELD_INTEGER ),
-	DEFINE_FIELD( m_iClip2, FIELD_INTEGER ),
-	DEFINE_FIELD( m_bFiresUnderwater, FIELD_BOOLEAN ),
-	DEFINE_FIELD( m_bAltFiresUnderwater, FIELD_BOOLEAN ),
-	DEFINE_FIELD( m_fMinRange1, FIELD_FLOAT ),
-	DEFINE_FIELD( m_fMinRange2, FIELD_FLOAT ),
-	DEFINE_FIELD( m_fMaxRange1, FIELD_FLOAT ),
-	DEFINE_FIELD( m_fMaxRange2, FIELD_FLOAT ),
+//	DEFINE_FIELD( m_iPrimaryAmmoType, FIELD_INTEGER ),
+//	DEFINE_FIELD( m_iSecondaryAmmoType, FIELD_INTEGER ),
+//	DEFINE_FIELD( m_iClip1, FIELD_INTEGER ),
+//	DEFINE_FIELD( m_iClip2, FIELD_INTEGER ),
+//	DEFINE_FIELD( m_bFiresUnderwater, FIELD_BOOLEAN ),
+//	DEFINE_FIELD( m_bAltFiresUnderwater, FIELD_BOOLEAN ),
+//	DEFINE_FIELD( m_fMinRange1, FIELD_FLOAT ),
+//	DEFINE_FIELD( m_fMinRange2, FIELD_FLOAT ),
+//	DEFINE_FIELD( m_fMaxRange1, FIELD_FLOAT ),
+//	DEFINE_FIELD( m_fMaxRange2, FIELD_FLOAT ),
 
-	DEFINE_FIELD( m_iPrimaryAmmoCount, FIELD_INTEGER ),
-	DEFINE_FIELD( m_iSecondaryAmmoCount, FIELD_INTEGER ),
+//	DEFINE_FIELD( m_iPrimaryAmmoCount, FIELD_INTEGER ),
+//	DEFINE_FIELD( m_iSecondaryAmmoCount, FIELD_INTEGER ),
 
 	DEFINE_FIELD( m_nViewModelIndex, FIELD_INTEGER ),
 
@@ -2563,9 +2531,9 @@ BEGIN_DATADESC( CBaseCombatWeapon )
  	DEFINE_FIELD( m_nIdealSequence, FIELD_INTEGER ),
 	DEFINE_FIELD( m_IdealActivity, FIELD_INTEGER ),
 
-	DEFINE_FIELD( m_fFireDuration, FIELD_FLOAT ),
+//	DEFINE_FIELD( m_fFireDuration, FIELD_FLOAT ),
 
-	DEFINE_FIELD( m_bReloadsSingly, FIELD_BOOLEAN ),
+//	DEFINE_FIELD( m_bReloadsSingly, FIELD_BOOLEAN ),
 	DEFINE_FIELD( m_iSubType, FIELD_INTEGER ),
  	DEFINE_FIELD( m_bRemoveable, FIELD_BOOLEAN ),
 
@@ -2578,10 +2546,10 @@ BEGIN_DATADESC( CBaseCombatWeapon )
 
 	DEFINE_PHYSPTR( m_pConstraint ),
 
-	DEFINE_FIELD( m_iReloadHudHintCount,	FIELD_INTEGER ),
-	DEFINE_FIELD( m_iAltFireHudHintCount,	FIELD_INTEGER ),
-	DEFINE_FIELD( m_bReloadHudHintDisplayed, FIELD_BOOLEAN ),
-	DEFINE_FIELD( m_bAltFireHudHintDisplayed, FIELD_BOOLEAN ),
+//	DEFINE_FIELD( m_iReloadHudHintCount,	FIELD_INTEGER ),
+//	DEFINE_FIELD( m_iAltFireHudHintCount,	FIELD_INTEGER ),
+//	DEFINE_FIELD( m_bReloadHudHintDisplayed, FIELD_BOOLEAN ),
+//	DEFINE_FIELD( m_bAltFireHudHintDisplayed, FIELD_BOOLEAN ),
 	DEFINE_FIELD( m_flHudHintPollTime, FIELD_TIME ),
 	DEFINE_FIELD( m_flHudHintMinDisplayTime, FIELD_TIME ),
 
@@ -2713,10 +2681,10 @@ END_NETWORK_TABLE()
 //-----------------------------------------------------------------------------
 BEGIN_NETWORK_TABLE_NOBASE( CBaseCombatWeapon, DT_LocalWeaponData )
 #if !defined( CLIENT_DLL )
-	SendPropIntWithMinusOneFlag( SENDINFO(m_iClip1 ), 8 ),
-	SendPropIntWithMinusOneFlag( SENDINFO(m_iClip2 ), 8 ),
-	SendPropInt( SENDINFO(m_iPrimaryAmmoType ), 8 ),
-	SendPropInt( SENDINFO(m_iSecondaryAmmoType ), 8 ),
+//	SendPropIntWithMinusOneFlag( SENDINFO(m_iClip1 ), 8 ),
+//	SendPropIntWithMinusOneFlag( SENDINFO(m_iClip2 ), 8 ),
+//	SendPropInt( SENDINFO(m_iPrimaryAmmoType ), 8 ),
+//	SendPropInt( SENDINFO(m_iSecondaryAmmoType ), 8 ),
 
 	SendPropInt( SENDINFO( m_nViewModelIndex ), VIEWMODEL_INDEX_BITS, SPROP_UNSIGNED ),
 
@@ -2727,10 +2695,10 @@ BEGIN_NETWORK_TABLE_NOBASE( CBaseCombatWeapon, DT_LocalWeaponData )
 #endif
 
 #else
-	RecvPropIntWithMinusOneFlag( RECVINFO(m_iClip1 )),
-	RecvPropIntWithMinusOneFlag( RECVINFO(m_iClip2 )),
-	RecvPropInt( RECVINFO(m_iPrimaryAmmoType )),
-	RecvPropInt( RECVINFO(m_iSecondaryAmmoType )),
+//	RecvPropIntWithMinusOneFlag( RECVINFO(m_iClip1 )),
+//	RecvPropIntWithMinusOneFlag( RECVINFO(m_iClip2 )),
+//	RecvPropInt( RECVINFO(m_iPrimaryAmmoType )),
+//	RecvPropInt( RECVINFO(m_iSecondaryAmmoType )),
 
 	RecvPropInt( RECVINFO( m_nViewModelIndex ) ),
 

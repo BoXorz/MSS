@@ -6945,7 +6945,7 @@ bool CAI_BaseNPC::CreateVPhysics()
 //-----------------------------------------------------------------------------
 void CAI_BaseNPC::OnUpdateShotRegulator( )
 {
-	CBaseCombatWeapon *pWeapon = GetActiveWeapon();
+/*	CBaseCombatWeapon *pWeapon = GetActiveWeapon();
 	if ( !pWeapon )
 		return;
 
@@ -6953,7 +6953,7 @@ void CAI_BaseNPC::OnUpdateShotRegulator( )
 	m_ShotRegulator.SetBurstInterval( pWeapon->GetFireRate(), pWeapon->GetFireRate() );
 	m_ShotRegulator.SetBurstShotCountRange( pWeapon->GetMinBurst(), pWeapon->GetMaxBurst() );
 	m_ShotRegulator.SetRestInterval( pWeapon->GetMinRestTime(), pWeapon->GetMaxRestTime() );
-
+*/
 	// Let the behavior have a whack at it.
 	if ( GetRunningBehavior() )
 	{
@@ -7056,13 +7056,13 @@ int CAI_BaseNPC::UnholsterWeapon( void )
 
 				m_iDesiredWeaponState = DESIREDWEAPONSTATE_CHANGING;
 			}
-
+/*
 			// Refill the clip
 			if ( GetActiveWeapon()->UsesClipsForAmmo1() )
 			{
 				GetActiveWeapon()->m_iClip1 = GetActiveWeapon()->GetMaxClip1(); 
 			}
-
+*/
 			// Make sure we don't try to reload while we're unholstering
 			ClearCondition(COND_LOW_PRIMARY_AMMO);
 			ClearCondition(COND_NO_PRIMARY_AMMO);
@@ -8377,7 +8377,7 @@ void CAI_BaseNPC::HandleAnimEvent( animevent_t *pEvent )
 
 			break;
 		}
-
+/*
   	case EVENT_WEAPON_RELOAD:
 		{
   			if ( GetActiveWeapon() )
@@ -8411,7 +8411,7 @@ void CAI_BaseNPC::HandleAnimEvent( animevent_t *pEvent )
   			}
   			break;
 		}
-
+*/
 	case NPC_EVENT_LEFTFOOT:
 	case NPC_EVENT_RIGHTFOOT:
 		// For right now, do nothing. All functionality for this lives in individual npcs.

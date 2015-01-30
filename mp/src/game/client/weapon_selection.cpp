@@ -222,7 +222,7 @@ void CBaseHudWeaponSelection::HideSelection( void )
 //-----------------------------------------------------------------------------
 bool CBaseHudWeaponSelection::CanBeSelectedInHUD( C_BaseCombatWeapon *pWeapon )
 {
-	// Xbox: In plus type, weapons without ammo can still be selected in the HUD
+/* // BOXBOX changing this
 	if( HUDTYPE_PLUS == hud_fastswitch.GetInt() )
 	{
 		return pWeapon->VisibleInWeaponSelection();
@@ -235,6 +235,8 @@ bool CBaseHudWeaponSelection::CanBeSelectedInHUD( C_BaseCombatWeapon *pWeapon )
 
 	// All other current hud types
 	return pWeapon->CanBeSelected();
+	*/
+	return false;
 }
 
 //-----------------------------------------------------------------------------
@@ -515,7 +517,7 @@ void CBaseHudWeaponSelection::SelectWeapon( void )
 		engine->ClientCmd( "cancelselect\n" );
 		return;
 	}
-
+/*
 	C_BasePlayer *player = C_BasePlayer::GetLocalPlayer();
 	if ( !player )
 		return;
@@ -527,15 +529,15 @@ void CBaseHudWeaponSelection::SelectWeapon( void )
 	}
 	else
 	{
-		SetWeaponSelected();
+*/		SetWeaponSelected();
 	
 		m_hSelectedWeapon = NULL;
 	
 		engine->ClientCmd( "cancelselect\n" );
 
 		// Play the "weapon selected" sound
-		player->EmitSound( "Player.WeaponSelected" );
-	}
+//		player->EmitSound( "Player.WeaponSelected" );
+//	}
 }
 
 //-----------------------------------------------------------------------------
@@ -568,6 +570,7 @@ void CBaseHudWeaponSelection::CancelWeaponSelection( void )
 //-----------------------------------------------------------------------------
 // Purpose: Returns the first weapon for a given slot.
 //-----------------------------------------------------------------------------
+/* // BOXBOX TODO DID I REMOVE ALL THIS HUD SELECTION BUSINISS??
 C_BaseCombatWeapon *CBaseHudWeaponSelection::GetFirstPos( int iSlot )
 {
 	int iLowestPosition = MAX_WEAPON_POSITIONS;
@@ -630,3 +633,4 @@ C_BaseCombatWeapon *CBaseHudWeaponSelection::GetNextActivePos( int iSlot, int iS
 
 	return pNextWeapon;
 }
+*/

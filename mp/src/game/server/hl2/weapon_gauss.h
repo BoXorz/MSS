@@ -4,7 +4,7 @@
 //
 //=============================================================================//
 
-#include "basehlcombatweapon.h"
+//#include "basehlcombatweapon.h"
 
 #ifndef WEAPON_GAUSS_H
 #define WEAPON_GAUSS_H

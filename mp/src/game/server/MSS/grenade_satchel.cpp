@@ -28,7 +28,7 @@ BEGIN_DATADESC( CSatchelCharge )
 	DEFINE_FIELD( m_flNextBounceSoundTime, FIELD_TIME ),
 	DEFINE_FIELD( m_bInAir, FIELD_BOOLEAN ),
 	DEFINE_FIELD( m_vLastPosition, FIELD_POSITION_VECTOR ),
-	DEFINE_FIELD( m_pMyWeaponSLAM, FIELD_CLASSPTR ),
+//	DEFINE_FIELD( m_pMyWeaponSLAM, FIELD_CLASSPTR ),
 	DEFINE_FIELD( m_bIsAttached, FIELD_BOOLEAN ),
 
 	// Function Pointers
@@ -204,7 +204,7 @@ void CSatchelCharge::BounceSound( void )
 CSatchelCharge::CSatchelCharge(void)
 {
 	m_vLastPosition.Init();
-	m_pMyWeaponSLAM = NULL;
+//	m_pMyWeaponSLAM = NULL;
 }
 
 CSatchelCharge::~CSatchelCharge(void)

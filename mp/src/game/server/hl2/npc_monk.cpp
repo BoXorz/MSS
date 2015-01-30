@@ -485,7 +485,7 @@ int CNPC_Monk::SelectSchedule()
 
 void CNPC_Monk::StartTask( const Task_t *pTask )
 {
-	switch( pTask->iTask )
+/*	switch( pTask->iTask )
 	{
 	case TASK_RELOAD:
 		{
@@ -516,6 +516,7 @@ void CNPC_Monk::StartTask( const Task_t *pTask )
 		BaseClass::StartTask( pTask );
 		break;
 	}
+*/
 }
 
 
@@ -594,7 +595,7 @@ void CNPC_Monk::GatherConditions()
 		// I see many zombies, or I'm quite injured.
 		SpeakIfAllowed( TLK_HELP_ME );
 	}
-
+/*
 	// NOTE!!!!!! This code assumes grigori is using annabelle!
 	ClearCondition(COND_LOW_PRIMARY_AMMO);
 	if ( GetActiveWeapon() )
@@ -612,6 +613,7 @@ void CNPC_Monk::GatherConditions()
 			}
 		}
 	}
+*/
 }
 
 //-----------------------------------------------------------------------------
@@ -635,7 +637,7 @@ void CNPC_Monk::OnKilledNPC( CBaseCombatCharacter *pKilled )
 
 	if ( pKilled->Classify() == CLASS_ZOMBIE )
 	{
-		// Don't speak if the gun is empty, cause grigori will want to speak while he's reloading.
+/*		// Don't speak if the gun is empty, cause grigori will want to speak while he's reloading.
 		if ( GetActiveWeapon() )
 		{
 			if ( GetActiveWeapon()->UsesPrimaryAmmo() && !GetActiveWeapon()->HasPrimaryAmmo() )
@@ -649,7 +651,7 @@ void CNPC_Monk::OnKilledNPC( CBaseCombatCharacter *pKilled )
 				}
 			}
 		}
-
+*/
 		if( m_iNumZombies == 1 || random->RandomInt( 1, 3 ) == 1 )
 		{
 			SpeakIfAllowed( TLK_ENEMY_DEAD );

@@ -2101,10 +2101,7 @@ void CBaseCombatCharacter::Weapon_Equip( CBaseCombatWeapon *pWeapon )
 	// Weapon is now on my team
 	pWeapon->ChangeTeam( GetTeamNumber() );
 
-	// ----------------------
-	//  Give Primary Ammo
-	// ----------------------
-	// If gun doesn't use clips, just give ammo
+/*
 	if (pWeapon->GetMaxClip1() == -1)
 	{
 #ifdef HL2_DLL
@@ -2142,7 +2139,7 @@ void CBaseCombatCharacter::Weapon_Equip( CBaseCombatWeapon *pWeapon )
 		pWeapon->m_iClip2 = pWeapon->GetMaxClip2();
 		GiveAmmo( (pWeapon->GetDefaultClip2() - pWeapon->GetMaxClip2()), pWeapon->m_iSecondaryAmmoType); 
 	}
-
+*/
 	pWeapon->Equip( this );
 
 	// Players don't automatically holster their current weapon
@@ -2184,10 +2181,7 @@ void CBaseCombatCharacter::Weapon_Equip( CBaseCombatWeapon *pWeapon )
 	pWeapon->SetLightingOriginRelative( GetLightingOriginRelative() );
 }
 
-//-----------------------------------------------------------------------------
-// Purpose:	Leaves weapon, giving only ammo to the character
-// Input  : Weapon
-//-----------------------------------------------------------------------------
+/*
 bool CBaseCombatCharacter::Weapon_EquipAmmoOnly( CBaseCombatWeapon *pWeapon )
 {
 	// Check for duplicates
@@ -2230,12 +2224,8 @@ bool CBaseCombatCharacter::Weapon_EquipAmmoOnly( CBaseCombatWeapon *pWeapon )
 
 	return false;
 }
-
-//-----------------------------------------------------------------------------
-// Purpose: Returns whether the weapon passed in would occupy a slot already occupied by the carrier
-// Input  : *pWeapon - weapon to test for
-// Output : Returns true on success, false on failure.
-//-----------------------------------------------------------------------------
+*/
+/*
 bool CBaseCombatCharacter::Weapon_SlotOccupied( CBaseCombatWeapon *pWeapon )
 {
 	if ( pWeapon == NULL )
@@ -2247,11 +2237,8 @@ bool CBaseCombatCharacter::Weapon_SlotOccupied( CBaseCombatWeapon *pWeapon )
 
 	return true;
 }
-
-//-----------------------------------------------------------------------------
-// Purpose: Returns the weapon (if any) in the requested slot
-// Input  : slot - which slot to poll
-//-----------------------------------------------------------------------------
+*/
+/*
 CBaseCombatWeapon *CBaseCombatCharacter::Weapon_GetSlot( int slot ) const
 {
 	int	targetSlot = slot;
@@ -2269,10 +2256,8 @@ CBaseCombatWeapon *CBaseCombatCharacter::Weapon_GetSlot( int slot ) const
 	
 	return NULL;
 }
-
-//-----------------------------------------------------------------------------
-// Purpose: Get a pointer to a weapon this character has that uses the specified ammo
-//-----------------------------------------------------------------------------
+*/
+/*
 CBaseCombatWeapon *CBaseCombatCharacter::Weapon_GetWpnForAmmo( int iAmmoIndex )
 {
 	for ( int i = 0; i < MAX_WEAPONS; i++ )
@@ -2289,7 +2274,7 @@ CBaseCombatWeapon *CBaseCombatCharacter::Weapon_GetWpnForAmmo( int iAmmoIndex )
 
 	return NULL;
 }
-
+*/
 
 //-----------------------------------------------------------------------------
 // Purpose: Can this character operate this weapon?
@@ -3247,16 +3232,16 @@ void CBaseCombatCharacter::SetActiveWeapon( CBaseCombatWeapon *pNewWeapon )
 //-----------------------------------------------------------------------------
 Vector CBaseCombatCharacter::GetAttackSpread( CBaseCombatWeapon *pWeapon, CBaseEntity *pTarget )
 {
-	if ( pWeapon )
-		return pWeapon->GetBulletSpread(GetCurrentWeaponProficiency());
+//	if ( pWeapon )
+//		return pWeapon->GetBulletSpread(GetCurrentWeaponProficiency());
 	return VECTOR_CONE_15DEGREES;
 }
 
 //-----------------------------------------------------------------------------
 float CBaseCombatCharacter::GetSpreadBias( CBaseCombatWeapon *pWeapon, CBaseEntity *pTarget )
 {
-	if ( pWeapon )
-		return pWeapon->GetSpreadBias(GetCurrentWeaponProficiency());
+//	if ( pWeapon )
+//		return pWeapon->GetSpreadBias(GetCurrentWeaponProficiency());
 	return 1.0;
 }
 

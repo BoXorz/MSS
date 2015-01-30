@@ -12,11 +12,11 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
-LINK_ENTITY_TO_CLASS( basehl2mpcombatweapon, CBaseHL2MPCombatWeapon );
+LINK_ENTITY_TO_CLASS( basehl2mpcombatweapon, CBaseMSSCombatWeapon );
 
-IMPLEMENT_NETWORKCLASS_ALIASED( BaseHL2MPCombatWeapon , DT_BaseHL2MPCombatWeapon )
+IMPLEMENT_NETWORKCLASS_ALIASED( BaseMSSCombatWeapon , DT_BaseMSSCombatWeapon )
 
-BEGIN_NETWORK_TABLE( CBaseHL2MPCombatWeapon , DT_BaseHL2MPCombatWeapon )
+BEGIN_NETWORK_TABLE( CBaseMSSCombatWeapon , DT_BaseMSSCombatWeapon )
 #if !defined( CLIENT_DLL )
 //	SendPropInt( SENDINFO( m_bReflectViewModelAnimations ), 1, SPROP_UNSIGNED ),
 #else
@@ -32,7 +32,7 @@ END_NETWORK_TABLE()
 //---------------------------------------------------------
 // Save/Restore
 //---------------------------------------------------------
-BEGIN_DATADESC( CBaseHL2MPCombatWeapon )
+BEGIN_DATADESC( CBaseMSSCombatWeapon )
 
 	DEFINE_FIELD( m_bLowered,			FIELD_BOOLEAN ),
 	DEFINE_FIELD( m_flRaiseTime,		FIELD_TIME ),
@@ -42,12 +42,12 @@ END_DATADESC()
 
 #endif
 
-BEGIN_PREDICTION_DATA( CBaseHL2MPCombatWeapon )
+BEGIN_PREDICTION_DATA( CBaseMSSCombatWeapon )
 END_PREDICTION_DATA()
 
-extern ConVar sk_auto_reload_time;
+//extern ConVar sk_auto_reload_time;
 
-CBaseHL2MPCombatWeapon::CBaseHL2MPCombatWeapon( void )
+CBaseMSSCombatWeapon::CBaseMSSCombatWeapon( void )
 {
 
 }
@@ -55,7 +55,7 @@ CBaseHL2MPCombatWeapon::CBaseHL2MPCombatWeapon( void )
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
-void CBaseHL2MPCombatWeapon::ItemHolsterFrame( void )
+void CBaseMSSCombatWeapon::ItemHolsterFrame( void )
 {
 	BaseClass::ItemHolsterFrame();
 
@@ -67,20 +67,21 @@ void CBaseHL2MPCombatWeapon::ItemHolsterFrame( void )
 	if ( GetOwner()->GetActiveWeapon() == this )
 		return;
 
-	// If it's been longer than three seconds, reload
+/*	// If it's been longer than three seconds, reload
 	if ( ( gpGlobals->curtime - m_flHolsterTime ) > sk_auto_reload_time.GetFloat() )
 	{
 		// Just load the clip with no animations
-		FinishReload();
+//		FinishReload();
 		m_flHolsterTime = gpGlobals->curtime;
 	}
+*/
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Drops the weapon into a lowered pose
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-bool CBaseHL2MPCombatWeapon::Lower( void )
+bool CBaseMSSCombatWeapon::Lower( void )
 {
 	//Don't bother if we don't have the animation
 	if ( SelectWeightedSequence( ACT_VM_IDLE_LOWERED ) == ACTIVITY_NOT_AVAILABLE )
@@ -94,7 +95,7 @@ bool CBaseHL2MPCombatWeapon::Lower( void )
 // Purpose: Brings the weapon up to the ready position
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-bool CBaseHL2MPCombatWeapon::Ready( void )
+bool CBaseMSSCombatWeapon::Ready( void )
 {
 	//Don't bother if we don't have the animation
 	if ( SelectWeightedSequence( ACT_VM_LOWERED_TO_IDLE ) == ACTIVITY_NOT_AVAILABLE )
@@ -109,7 +110,7 @@ bool CBaseHL2MPCombatWeapon::Ready( void )
 // Purpose: 
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-bool CBaseHL2MPCombatWeapon::Deploy( void )
+bool CBaseMSSCombatWeapon::Deploy( void )
 {
 	// If we should be lowered, deploy in the lowered position
 	// We have to ask the player if the last time it checked, the weapon was lowered
@@ -142,7 +143,7 @@ bool CBaseHL2MPCombatWeapon::Deploy( void )
 // Purpose: 
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-bool CBaseHL2MPCombatWeapon::Holster( CBaseCombatWeapon *pSwitchingTo )
+bool CBaseMSSCombatWeapon::Holster( CBaseCombatWeapon *pSwitchingTo )
 {
 	if ( BaseClass::Holster( pSwitchingTo ) )
 	{
@@ -158,7 +159,7 @@ bool CBaseHL2MPCombatWeapon::Holster( CBaseCombatWeapon *pSwitchingTo )
 // Purpose: 
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
-bool CBaseHL2MPCombatWeapon::WeaponShouldBeLowered( void )
+bool CBaseMSSCombatWeapon::WeaponShouldBeLowered( void )
 {
 	// Can't be in the middle of another animation
   	if ( GetIdealActivity() != ACT_VM_IDLE_LOWERED && GetIdealActivity() != ACT_VM_IDLE &&
@@ -181,7 +182,7 @@ bool CBaseHL2MPCombatWeapon::WeaponShouldBeLowered( void )
 //-----------------------------------------------------------------------------
 // Purpose: Allows the weapon to choose proper weapon idle animation
 //-----------------------------------------------------------------------------
-void CBaseHL2MPCombatWeapon::WeaponIdle( void )
+void CBaseMSSCombatWeapon::WeaponIdle( void )
 {
 	//See if we should idle high or low
 	if ( WeaponShouldBeLowered() )
@@ -219,8 +220,8 @@ void CBaseHL2MPCombatWeapon::WeaponIdle( void )
 #define	HL2_BOB			0.002f
 #define	HL2_BOB_UP		0.5f
 
-extern float	g_lateralBob;
-extern float	g_verticalBob;
+//extern float	g_lateralBob;
+//extern float	g_verticalBob;
 
 static ConVar	cl_bobcycle( "cl_bobcycle","0.8" );
 static ConVar	cl_bob( "cl_bob","0.002" );
@@ -238,9 +239,9 @@ static ConVar	v_ipitch_level( "v_ipitch_level", "0.3", FCVAR_REPLICATED | FCVAR_
 // Purpose: 
 // Output : float
 //-----------------------------------------------------------------------------
-float CBaseHL2MPCombatWeapon::CalcViewmodelBob( void )
+float CBaseMSSCombatWeapon::CalcViewmodelBob( void )
 {
-	static	float bobtime;
+/*	static	float bobtime;
 	static	float lastbobtime;
 	float	cycle;
 	
@@ -303,7 +304,7 @@ float CBaseHL2MPCombatWeapon::CalcViewmodelBob( void )
 	g_lateralBob = g_lateralBob*0.3 + g_lateralBob*0.7*sin(cycle);
 	g_lateralBob = clamp( g_lateralBob, -7.0f, 4.0f );
 	
-	//NOTENOTE: We don't use this return value in our case (need to restructure the calculation function setup!)
+*/
 	return 0.0f;
 }
 
@@ -313,9 +314,9 @@ float CBaseHL2MPCombatWeapon::CalcViewmodelBob( void )
 //			&angles - 
 //			viewmodelindex - 
 //-----------------------------------------------------------------------------
-void CBaseHL2MPCombatWeapon::AddViewmodelBob( CBaseViewModel *viewmodel, Vector &origin, QAngle &angles )
+void CBaseMSSCombatWeapon::AddViewmodelBob( CBaseViewModel *viewmodel, Vector &origin, QAngle &angles )
 {
-	Vector	forward, right;
+/*	Vector	forward, right;
 	AngleVectors( angles, &forward, &right, NULL );
 
 	CalcViewmodelBob();
@@ -333,22 +334,25 @@ void CBaseHL2MPCombatWeapon::AddViewmodelBob( CBaseViewModel *viewmodel, Vector 
 	angles[ YAW ]	-= g_lateralBob  * 0.3f;
 
 	VectorMA( origin, g_lateralBob * 0.8f, right, origin );
+*/
 }
 
 //-----------------------------------------------------------------------------
-Vector CBaseHL2MPCombatWeapon::GetBulletSpread( WeaponProficiency_t proficiency )
+Vector CBaseMSSCombatWeapon::GetBulletSpread( WeaponProficiency_t proficiency )
 {
-	return BaseClass::GetBulletSpread( proficiency );
+//	return BaseClass::GetBulletSpread( proficiency );
+	return VECTOR_CONE_15DEGREES;
 }
 
 //-----------------------------------------------------------------------------
-float CBaseHL2MPCombatWeapon::GetSpreadBias( WeaponProficiency_t proficiency )
+float CBaseMSSCombatWeapon::GetSpreadBias( WeaponProficiency_t proficiency )
 {
-	return BaseClass::GetSpreadBias( proficiency );
+//	return BaseClass::GetSpreadBias( proficiency );
+	return 1.0;
 }
 //-----------------------------------------------------------------------------
 
-const WeaponProficiencyInfo_t *CBaseHL2MPCombatWeapon::GetProficiencyValues()
+const WeaponProficiencyInfo_t *CBaseMSSCombatWeapon::GetProficiencyValues()
 {
 	return NULL;
 }
@@ -356,7 +360,7 @@ const WeaponProficiencyInfo_t *CBaseHL2MPCombatWeapon::GetProficiencyValues()
 #else
 
 // Server stubs
-float CBaseHL2MPCombatWeapon::CalcViewmodelBob( void )
+float CBaseMSSCombatWeapon::CalcViewmodelBob( void )
 {
 	return 0.0f;
 }
@@ -367,36 +371,39 @@ float CBaseHL2MPCombatWeapon::CalcViewmodelBob( void )
 //			&angles - 
 //			viewmodelindex - 
 //-----------------------------------------------------------------------------
-void CBaseHL2MPCombatWeapon::AddViewmodelBob( CBaseViewModel *viewmodel, Vector &origin, QAngle &angles )
+void CBaseMSSCombatWeapon::AddViewmodelBob( CBaseViewModel *viewmodel, Vector &origin, QAngle &angles )
 {
 }
 
 
 //-----------------------------------------------------------------------------
-Vector CBaseHL2MPCombatWeapon::GetBulletSpread( WeaponProficiency_t proficiency )
+Vector CBaseMSSCombatWeapon::GetBulletSpread( WeaponProficiency_t proficiency )
 {
-	Vector baseSpread = BaseClass::GetBulletSpread( proficiency );
+/*	Vector baseSpread = BaseClass::GetBulletSpread( proficiency );
 
 	const WeaponProficiencyInfo_t *pProficiencyValues = GetProficiencyValues();
 	float flModifier = (pProficiencyValues)[ proficiency ].spreadscale;
 	return ( baseSpread * flModifier );
+*/
+
+	return VECTOR_CONE_15DEGREES;
 }
 
 //-----------------------------------------------------------------------------
-float CBaseHL2MPCombatWeapon::GetSpreadBias( WeaponProficiency_t proficiency )
+float CBaseMSSCombatWeapon::GetSpreadBias( WeaponProficiency_t proficiency )
 {
 	const WeaponProficiencyInfo_t *pProficiencyValues = GetProficiencyValues();
 	return (pProficiencyValues)[ proficiency ].bias;
 }
 
 //-----------------------------------------------------------------------------
-const WeaponProficiencyInfo_t *CBaseHL2MPCombatWeapon::GetProficiencyValues()
+const WeaponProficiencyInfo_t *CBaseMSSCombatWeapon::GetProficiencyValues()
 {
 	return GetDefaultProficiencyValues();
 }
 
 //-----------------------------------------------------------------------------
-const WeaponProficiencyInfo_t *CBaseHL2MPCombatWeapon::GetDefaultProficiencyValues()
+const WeaponProficiencyInfo_t *CBaseMSSCombatWeapon::GetDefaultProficiencyValues()
 {
 	// Weapon proficiency table. Keep this in sync with WeaponProficiency_t enum in the header!!
 	static WeaponProficiencyInfo_t g_BaseWeaponProficiencyTable[] =

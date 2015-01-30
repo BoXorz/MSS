@@ -172,7 +172,7 @@ public:
 protected:
 
 	int			m_nMSSWeaponType;
-
+	int			m_nArrows;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // BOXBOX END MSS STUFF
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -200,9 +200,9 @@ public:
 	virtual	int				UpdateClientData( CBasePlayer *pPlayer );
 
 	virtual bool			IsAllowedToSwitch( void );
-	virtual bool			CanBeSelected( void );
+//	virtual bool			CanBeSelected( void );
 	virtual bool			VisibleInWeaponSelection( void );
-	virtual bool			HasAmmo( void );
+//	virtual bool			HasAmmo( void );
 
 	// Weapon Pickup For Player
 	virtual void			SetPickupTouch( void );
@@ -210,13 +210,13 @@ public:
 	virtual void			GiveTo( CBaseEntity *pOther );
 
 	// HUD Hints
-	virtual bool			ShouldDisplayAltFireHUDHint();
-	virtual void			DisplayAltFireHudHint();	
-	virtual void			RescindAltFireHudHint(); ///< undisplay the hud hint and pretend it never showed.
+//	virtual bool			ShouldDisplayAltFireHUDHint();
+//	virtual void			DisplayAltFireHudHint();	
+//	virtual void			RescindAltFireHudHint(); ///< undisplay the hud hint and pretend it never showed.
 
-	virtual bool			ShouldDisplayReloadHUDHint();
-	virtual void			DisplayReloadHudHint();
-	virtual void			RescindReloadHudHint();
+//	virtual bool			ShouldDisplayReloadHUDHint();
+//	virtual void			DisplayReloadHudHint();
+//	virtual void			RescindReloadHudHint();
 
 	// Weapon client handling
 	virtual void			SetViewModelIndex( int index = 0 );
@@ -232,12 +232,12 @@ public:
 	virtual float			GetWeaponIdleTime( void );
 
 	// Weapon selection
-	virtual bool			HasAnyAmmo( void );							// Returns true is weapon has ammo
-	virtual bool			HasPrimaryAmmo( void );						// Returns true is weapon has ammo
-	virtual bool			HasSecondaryAmmo( void );					// Returns true is weapon has ammo
-	bool					UsesPrimaryAmmo( void );					// returns true if the weapon actually uses primary ammo
-	bool					UsesSecondaryAmmo( void );					// returns true if the weapon actually uses secondary ammo
-	void					GiveDefaultAmmo( void );
+//	virtual bool			HasAnyAmmo( void );							// Returns true is weapon has ammo
+//	virtual bool			HasPrimaryAmmo( void );						// Returns true is weapon has ammo
+//	virtual bool			HasSecondaryAmmo( void );					// Returns true is weapon has ammo
+//	bool					UsesPrimaryAmmo( void );					// returns true if the weapon actually uses primary ammo
+//	bool					UsesSecondaryAmmo( void );					// returns true if the weapon actually uses secondary ammo
+//	void					GiveDefaultAmmo( void );
 	
 	virtual bool			CanHolster( void ) { return TRUE; };		// returns true if the weapon can be holstered
 	virtual bool			DefaultDeploy( char *szViewModel, char *szWeaponModel, int iActivity, char *szAnimExt );
@@ -247,7 +247,7 @@ public:
 	virtual CBaseCombatWeapon *GetLastWeapon( void ) { return this; }
 	virtual void			SetWeaponVisible( bool visible );
 	virtual bool			IsWeaponVisible( void );
-	virtual bool			ReloadOrSwitchWeapons( void );
+//	virtual bool			ReloadOrSwitchWeapons( void );
 	virtual void			OnActiveStateChanged( int iOldState ) { return; }
 	virtual bool			HolsterOnDetach() { return false; }
 	virtual bool			IsHolstered(){ return false; }
@@ -259,11 +259,11 @@ public:
 	virtual void			ItemBusyFrame( void );					// called each frame by the player PostThink, if the player's not ready to attack yet
 	virtual void			ItemHolsterFrame( void ) {};			// called each frame by the player PreThink, if the weapon is holstered
 	virtual void			WeaponIdle( void );						// called when no buttons pressed
-	virtual void			HandleFireOnEmpty();					// Called when they have the attack button down
+//	virtual void			HandleFireOnEmpty();					// Called when they have the attack button down
 																	// but they are out of ammo. The default implementation
 																	// either reloads, switches weapons, or plays an empty sound.
 
-	virtual bool			ShouldBlockPrimaryFire() { return !AutoFiresFullClip(); }
+//	virtual bool			ShouldBlockPrimaryFire() { return !AutoFiresFullClip(); }
 
 #ifdef CLIENT_DLL
 	virtual void			CreateMove( float flInputSampleTime, CUserCmd *pCmd, const QAngle &vecOldViewAngles ) {}
@@ -272,17 +272,17 @@ public:
 
 	virtual bool			IsWeaponZoomed() { return false; }		// Is this weapon in its 'zoomed in' mode?
 
-	// Reloading
-	virtual	void			CheckReload( void );
-	virtual void			FinishReload( void );
-	virtual void			AbortReload( void );
-	virtual bool			Reload( void );
-	bool					DefaultReload( int iClipSize1, int iClipSize2, int iActivity );
-	bool					ReloadsSingly( void ) const;
+	// BOXBOX TODO use these for archery?
+//	virtual	void			CheckReload( void );
+//	virtual void			FinishReload( void );
+//	virtual void			AbortReload( void );
+//	virtual bool			Reload( void );
+//	bool					DefaultReload( int iActivity );
+//	bool					ReloadsSingly( void ) const;
 
-	virtual bool			AutoFiresFullClip( void ) { return false; }
-	virtual bool			CanOverload( void ) { return false; }
-	virtual void			UpdateAutoFire( void );
+//	virtual bool			AutoFiresFullClip( void ) { return false; }
+//	virtual bool			CanOverload( void ) { return false; }
+//	virtual void			UpdateAutoFire( void );
 
 	// Weapon firing
 	virtual void			PrimaryAttack( void );						// do "+ATTACK"
@@ -295,16 +295,16 @@ public:
 	virtual float			GetDefaultAnimSpeed( void ) { return 1.0; }
 
 	// Bullet launch information
-	virtual int				GetBulletType( void );
-	virtual const Vector&	GetBulletSpread( void );
-	virtual Vector			GetBulletSpread( WeaponProficiency_t proficiency )		{ return GetBulletSpread(); }
-	virtual float			GetSpreadBias( WeaponProficiency_t proficiency )			{ return 1.0; }
+//	virtual int				GetBulletType( void );
+//	virtual const Vector&	GetBulletSpread( void );
+//	virtual Vector			GetBulletSpread( WeaponProficiency_t proficiency )		{ return GetBulletSpread(); }
+//	virtual float			GetSpreadBias( WeaponProficiency_t proficiency )			{ return 1.0; }
 	virtual float			GetFireRate( void );
-	virtual int				GetMinBurst() { return 1; }
-	virtual int				GetMaxBurst() { return 1; }
+//	virtual int				GetMinBurst() { return 1; }
+//	virtual int				GetMaxBurst() { return 1; }
 	virtual float			GetMinRestTime() { return 0.3; }
 	virtual float			GetMaxRestTime() { return 0.6; }
-	virtual int				GetRandomBurst() { return random->RandomInt( GetMinBurst(), GetMaxBurst() ); }
+//	virtual int				GetRandomBurst() { return random->RandomInt( GetMinBurst(), GetMaxBurst() ); }
 	virtual void			WeaponSound( WeaponSound_t sound_type, float soundtime = 0.0f );
 	virtual void			StopWeaponSound( WeaponSound_t sound_type );
 	virtual const WeaponProficiencyInfo_t *GetProficiencyValues();
@@ -349,47 +349,50 @@ public:
 
 	virtual int				GetSkinOverride() const { return -1; }
 
+	int				m_iPrimaryAttacks;		// # of primary attacks performed with this weapon
+	int				m_iSecondaryAttacks;	// # of secondary attacks performed with this weapon
+
 public:
 
-	// Weapon info accessors for data in the weapon's data file
+	// Weapon info accessors for data in the item's data file
 	const FileItemInfo_t	&GetItemData( void ) const;
 	virtual const char		*GetViewModel( int viewmodelindex = 0 ) const;
 	virtual const char		*GetWorldModel( void ) const;
 	virtual const char		*GetAnimPrefix( void ) const;
-	virtual int				GetMaxClip1( void ) const;
-	virtual int				GetMaxClip2( void ) const;
-	virtual int				GetDefaultClip1( void ) const;
-	virtual int				GetDefaultClip2( void ) const;
+//	virtual int				GetMaxClip1( void ) const;
+//	virtual int				GetMaxClip2( void ) const;
+//	virtual int				GetDefaultClip1( void ) const;
+//	virtual int				GetDefaultClip2( void ) const;
 	virtual int				GetWeight( void ) const;
-	virtual bool			AllowsAutoSwitchTo( void ) const;
-	virtual bool			AllowsAutoSwitchFrom( void ) const;
+//	virtual bool			AllowsAutoSwitchTo( void ) const;
+//	virtual bool			AllowsAutoSwitchFrom( void ) const;
 	virtual int				GetWeaponFlags( void ) const;
-	virtual int				GetSlot( void ) const;
-	virtual int				GetPosition( void ) const;
+//	virtual int				GetSlot( void ) const;
+//	virtual int				GetPosition( void ) const;
 	virtual char const		*GetName( void ) const;
 	virtual char const		*GetPrintName( void ) const;
 	virtual char const		*GetWpnSound( int iIndex ) const;
 //	virtual int				GetRumbleEffect() const;
-	virtual bool			UsesClipsForAmmo1( void ) const;
-	virtual bool			UsesClipsForAmmo2( void ) const;
-	bool					IsMeleeWeapon() const;
+//	virtual bool			UsesClipsForAmmo1( void ) const;
+//	virtual bool			UsesClipsForAmmo2( void ) const;
+//	bool					IsMeleeWeapon() const;
 
 	// derive this function if you mod uses encrypted weapon info files
 	virtual const unsigned char *GetEncryptionKey( void );
 
-	virtual int				GetPrimaryAmmoType( void )  const { return m_iPrimaryAmmoType; }
-	virtual int				GetSecondaryAmmoType( void )  const { return m_iSecondaryAmmoType; }
-	virtual int				Clip1() { return m_iClip1; }
-	virtual int				Clip2() { return m_iClip2; }
+//	virtual int				GetPrimaryAmmoType( void )  const { return m_iPrimaryAmmoType; }
+//	virtual int				GetSecondaryAmmoType( void )  const { return m_iSecondaryAmmoType; }
+//	virtual int				Clip1() { return m_iClip1; }
+//	virtual int				Clip2() { return m_iClip2; }
 
 	// Ammo quantity queries for weapons that do not use clips. These are only
 	// used to determine how much ammo is in a weapon that does not have an owner.
 	// That is, a weapon that's on the ground for the player to get ammo out of.
-	int GetPrimaryAmmoCount() { return m_iPrimaryAmmoCount; }
-	void SetPrimaryAmmoCount( int count ) { m_iPrimaryAmmoCount = count; }
+//	int GetPrimaryAmmoCount() { return m_iPrimaryAmmoCount; }
+//	void SetPrimaryAmmoCount( int count ) { m_iPrimaryAmmoCount = count; }
 
-	int GetSecondaryAmmoCount() { return m_iSecondaryAmmoCount; }
-	void SetSecondaryAmmoCount( int count ) { m_iSecondaryAmmoCount = count; }
+//	int GetSecondaryAmmoCount() { return m_iSecondaryAmmoCount; }
+//	void SetSecondaryAmmoCount( int count ) { m_iSecondaryAmmoCount = count; }
 /*
 	virtual CHudTexture const	*GetSpriteActive( void ) const;
 	virtual CHudTexture const	*GetSpriteInactive( void ) const;
@@ -534,7 +537,7 @@ public:
 	virtual bool			Lower( void ) { return false; }
 
 	virtual void			HideThink( void );
-	virtual bool			CanReload( void );
+//	virtual bool			CanReload( void );
 
 private:
 	typedef CHandle< CBaseCombatCharacter > CBaseCombatCharacterHandle;
@@ -563,13 +566,13 @@ public:
 	CNetworkVar( float, m_flTimeWeaponIdle );							// soonest time ItemPostFrame will call WeaponIdle
 	// Weapon state
 	bool					m_bInReload;			// Are we in the middle of a reload;
-	bool					m_bFireOnEmpty;			// True when the gun is empty and the player is still holding down the attack key(s)
-	bool					m_bFiringWholeClip;		// Are we in the middle of firing the whole clip;
+//	bool					m_bFireOnEmpty;			// True when the gun is empty and the player is still holding down the attack key(s)
+//	bool					m_bFiringWholeClip;		// Are we in the middle of firing the whole clip;
 	// Weapon art
 	CNetworkVar( int, m_iViewModelIndex );
 	CNetworkVar( int, m_iWorldModelIndex );
 	// Sounds
-	float					m_flNextEmptySoundTime;				// delay on empty sound playing
+//	float					m_flNextEmptySoundTime;				// delay on empty sound playing
 
 	Activity				GetIdealActivity( void ) { return m_IdealActivity; }
 	int						GetIdealSequence( void ) { return m_nIdealSequence; }
@@ -584,8 +587,8 @@ private:
 
 	bool					m_bRemoveable;
 
-	int						m_iPrimaryAmmoCount;
-	int						m_iSecondaryAmmoCount;
+//	int						m_iPrimaryAmmoCount;
+//	int						m_iSecondaryAmmoCount;
 
 public:
 
@@ -596,18 +599,18 @@ public:
 	// Weapon data
 	CNetworkVar( int, m_iState );				// See WEAPON_* definition
 	string_t				m_iszName;				// Classname of this weapon.
-	CNetworkVar( int, m_iPrimaryAmmoType );		// "primary" ammo index into the ammo info array 
-	CNetworkVar( int, m_iSecondaryAmmoType );	// "secondary" ammo index into the ammo info array
-	CNetworkVar( int, m_iClip1 );				// number of shots left in the primary weapon clip, -1 it not used
-	CNetworkVar( int, m_iClip2 );				// number of shots left in the secondary weapon clip, -1 it not used
-	bool					m_bFiresUnderwater;		// true if this weapon can fire underwater
-	bool					m_bAltFiresUnderwater;		// true if this weapon can fire underwater
+//	CNetworkVar( int, m_iPrimaryAmmoType );		// "primary" ammo index into the ammo info array 
+//	CNetworkVar( int, m_iSecondaryAmmoType );	// "secondary" ammo index into the ammo info array
+//	CNetworkVar( int, m_iClip1 );				// number of shots left in the primary weapon clip, -1 it not used
+//	CNetworkVar( int, m_iClip2 );				// number of shots left in the secondary weapon clip, -1 it not used
+//	bool					m_bFiresUnderwater;		// true if this weapon can fire underwater
+//	bool					m_bAltFiresUnderwater;		// true if this weapon can fire underwater
 	float					m_fMinRange1;			// What's the closest this weapon can be used?
 	float					m_fMinRange2;			// What's the closest this weapon can be used?
 	float					m_fMaxRange1;			// What's the furthest this weapon can be used?
 	float					m_fMaxRange2;			// What's the furthest this weapon can be used?
-	bool					m_bReloadsSingly;		// True if this weapon reloads 1 round at a time
-	float					m_fFireDuration;		// The amount of time that the weapon has sustained firing
+//	bool					m_bReloadsSingly;		// True if this weapon reloads 1 round at a time
+//	float					m_fFireDuration;		// The amount of time that the weapon has sustained firing
 	int						m_iSubType;
 
 	float					m_flUnlockTime;
@@ -623,10 +626,10 @@ private:
 
 	IPhysicsConstraint		*m_pConstraint;
 
-	int						m_iAltFireHudHintCount;		// How many times has this weapon displayed its alt-fire HUD hint?
-	int						m_iReloadHudHintCount;		// How many times has this weapon displayed its reload HUD hint?
-	bool					m_bAltFireHudHintDisplayed;	// Have we displayed an alt-fire HUD hint since this weapon was deployed?
-	bool					m_bReloadHudHintDisplayed;	// Have we displayed a reload HUD hint since this weapon was deployed?
+//	int						m_iAltFireHudHintCount;		// How many times has this weapon displayed its alt-fire HUD hint?
+//	int						m_iReloadHudHintCount;		// How many times has this weapon displayed its reload HUD hint?
+//	bool					m_bAltFireHudHintDisplayed;	// Have we displayed an alt-fire HUD hint since this weapon was deployed?
+//	bool					m_bReloadHudHintDisplayed;	// Have we displayed a reload HUD hint since this weapon was deployed?
 	float					m_flHudHintPollTime;	// When to poll the weapon again for whether it should display a hud hint.
 	float					m_flHudHintMinDisplayTime; // if the hint is squelched before this, reset my counter so we'll display it again.
 	

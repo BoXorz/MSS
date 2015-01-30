@@ -993,7 +993,7 @@ void CNPC_Combine::StartTask( const Task_t *pTask )
 		break;
 	case TASK_RANGE_ATTACK1:
 		{
-			m_nShots = GetActiveWeapon()->GetRandomBurst();
+//			m_nShots = GetActiveWeapon()->GetRandomBurst();
 			m_flShotDelay = GetActiveWeapon()->GetFireRate();
 
 			m_flNextAttack = gpGlobals->curtime + m_flShotDelay - 0.1;
@@ -2364,7 +2364,7 @@ void CNPC_Combine::HandleAnimEvent( animevent_t *pEvent )
 				handledEvent = true;
 				break;
 			}
-		case COMBINE_AE_RELOAD:
+/*		case COMBINE_AE_RELOAD:
 
 			// We never actually run out of ammo, just need to refill the clip
 			if (GetActiveWeapon())
@@ -2378,7 +2378,7 @@ void CNPC_Combine::HandleAnimEvent( animevent_t *pEvent )
 			ClearCondition(COND_NO_SECONDARY_AMMO);
 			handledEvent = true;
 			break;
-
+*/
 		case COMBINE_AE_GREN_TOSS:
 			{
 				Vector vecSpin;
@@ -3185,7 +3185,7 @@ bool CNPC_Combine::HasShotgun()
 //-----------------------------------------------------------------------------
 bool CNPC_Combine::ActiveWeaponIsFullyLoaded()
 {
-	CBaseCombatWeapon *pWeapon = GetActiveWeapon();
+/*	CBaseCombatWeapon *pWeapon = GetActiveWeapon();
 
 	if( !pWeapon )
 		return false;
@@ -3194,6 +3194,8 @@ bool CNPC_Combine::ActiveWeaponIsFullyLoaded()
 		return false;
 
 	return ( pWeapon->Clip1() >= pWeapon->GetMaxClip1() );
+*/
+	return true;
 }
 
 

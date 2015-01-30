@@ -78,6 +78,8 @@ BEGIN_PREDICTION_DATA( CWeaponArozenSword )
 END_PREDICTION_DATA()
 
 LINK_ENTITY_TO_CLASS( weapon_arozensword, CWeaponArozenSword );
+
+
 PRECACHE_WEAPON_REGISTER( weapon_arozensword );
 
 #ifndef CLIENT_DLL

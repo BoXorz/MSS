@@ -214,13 +214,13 @@ void WeaponsResource::LoadWeaponSprites( ITEM_FILE_INFO_HANDLE hWeaponFileInfo )
 	FreeHudTextureList( tempList );
 */
 }
-
+/*
 //-----------------------------------------------------------------------------
 // Purpose: Helper function to return a Ammo pointer from id
 //-----------------------------------------------------------------------------
 CHudTexture *WeaponsResource::GetAmmoIconFromWeapon( int iAmmoId )
 {
-/*	C_BasePlayer *player = C_BasePlayer::GetLocalPlayer();
+	C_BasePlayer *player = C_BasePlayer::GetLocalPlayer();
 	if ( !player )
 		return NULL;
 
@@ -239,13 +239,11 @@ CHudTexture *WeaponsResource::GetAmmoIconFromWeapon( int iAmmoId )
 			return weapon->GetWpnData().iconAmmo2;
 		}
 	}
-*/
+
 	return NULL;
 }
-
-//-----------------------------------------------------------------------------
-// Purpose: Get a pointer to a weapon using this ammo
-//-----------------------------------------------------------------------------
+*/
+/*
 const FileItemInfo_t *WeaponsResource::GetWeaponFromAmmo( int iAmmoId )
 {
 	C_BasePlayer *player = C_BasePlayer::GetLocalPlayer();
@@ -270,4 +268,4 @@ const FileItemInfo_t *WeaponsResource::GetWeaponFromAmmo( int iAmmoId )
 
 	return NULL;
 }
-
+*/

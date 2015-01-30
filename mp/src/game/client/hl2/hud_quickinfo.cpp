@@ -283,7 +283,7 @@ void CHUDQuickInfo::Paint()
 			m_warnHealth = false;
 		}
 	}
-
+/*
 	// Check our ammo for a warning
 	int	ammo = pWeapon->Clip1();
 	if ( ammo != m_lastAmmo )
@@ -311,7 +311,7 @@ void CHUDQuickInfo::Paint()
 			m_warnAmmo = false;
 		}
 	}
-
+*/
 	Color clrNormal = gHUD.m_clrNormal;
 	clrNormal[3] = 255 * scalar;
 	m_icon_c->DrawSelf( xCenter, yCenter, clrNormal );
@@ -351,7 +351,7 @@ void CHUDQuickInfo::Paint()
 		
 		gHUD.DrawIconProgressBar( xCenter - (m_icon_lb->Width() * 2), yCenter, m_icon_lb, m_icon_lbe, ( 1.0f - healthPerc ), healthColor, CHud::HUDPB_VERTICAL );
 	}
-
+/*
 	// Update our ammo
 	if ( m_ammoFade > 0.0f )
 	{
@@ -384,6 +384,7 @@ void CHUDQuickInfo::Paint()
 		
 		gHUD.DrawIconProgressBar( xCenter + m_icon_rb->Width(), yCenter, m_icon_rb, m_icon_rbe, ammoPerc, ammoColor, CHud::HUDPB_VERTICAL );
 	}
+*/
 }
 
 //-----------------------------------------------------------------------------

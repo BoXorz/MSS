@@ -49,8 +49,8 @@ public:
 	virtual void SwitchToLastWeapon( void );
 	virtual C_BaseCombatWeapon *GetWeaponInSlot( int iSlot, int iSlotPos ) = 0;
 	virtual void SelectWeaponSlot( int iSlot ) = 0;
-	virtual C_BaseCombatWeapon	*GetFirstPos( int iSlot );
-	virtual C_BaseCombatWeapon	*GetNextActivePos( int iSlot, int iSlotPos );
+//	virtual C_BaseCombatWeapon	*GetFirstPos( int iSlot );
+//	virtual C_BaseCombatWeapon	*GetNextActivePos( int iSlot, int iSlotPos );
 	virtual void				SetWeaponSelected( void );
 	virtual void				SelectWeapon( void );
 

@@ -317,7 +317,7 @@ void CItem_DynamicResupply::InputBecomeMaster( inputdata_t &data )
 //-----------------------------------------------------------------------------
 void CItem_DynamicResupply::SpawnFullItem( CItem_DynamicResupply *pMaster, CBasePlayer *pPlayer, int iDebug )
 {
-	// Can we not actually spawn the item?
+/*	// Can we not actually spawn the item?
 	if ( !HasSpawnFlags(SF_DYNAMICRESUPPLY_ALWAYS_SPAWN) )
 		return;
 
@@ -327,8 +327,8 @@ void CItem_DynamicResupply::SpawnFullItem( CItem_DynamicResupply *pMaster, CBase
 	for ( i = 0; i < NUM_AMMO_ITEMS; ++i )
 	{
 		int iAmmoType = GetAmmoDef()->Index( g_DynamicResupplyAmmoItems[i].sAmmoDef );
-		bool bCanSpawn = pPlayer->Weapon_GetWpnForAmmo( iAmmoType ) != NULL;
-
+//		bool bCanSpawn = pPlayer->Weapon_GetWpnForAmmo( iAmmoType ) != NULL;
+		bool bCanSpawn = false;
 		if ( bCanSpawn && ( g_DynamicResupplyAmmoItems[i].flFullProbability != 0 ) && ( pMaster->m_flDesiredAmmo[i] != 0.0f ) )
 		{
 			flTotalProb += g_DynamicResupplyAmmoItems[i].flFullProbability;
@@ -378,6 +378,7 @@ void CItem_DynamicResupply::SpawnFullItem( CItem_DynamicResupply *pMaster, CBase
 	{
 		Msg("Player is full on all health + ammo, is not spawning.\n" );
 	}
+*/
 }
 
 
@@ -480,7 +481,7 @@ void CItem_DynamicResupply::ComputeHealthRatios( CItem_DynamicResupply* pMaster,
 //-----------------------------------------------------------------------------
 void CItem_DynamicResupply::ComputeAmmoRatios( CItem_DynamicResupply* pMaster, CBasePlayer *pPlayer, int iDebug, SpawnInfo_t *pSpawnInfo )
 {
-	for ( int i = 0; i < NUM_AMMO_ITEMS; i++ )
+/*	for ( int i = 0; i < NUM_AMMO_ITEMS; i++ )
 	{
 		// Get the ammodef's
 		int iAmmoType = GetAmmoDef()->Index( g_DynamicResupplyAmmoItems[i].sAmmoDef );
@@ -514,6 +515,7 @@ void CItem_DynamicResupply::ComputeAmmoRatios( CItem_DynamicResupply* pMaster, C
 				g_DynamicResupplyAmmoItems[i].sEntityName, pSpawnInfo[i].m_flDesiredRatio, pSpawnInfo[i].m_flCurrentRatio, pSpawnInfo[i].m_flDelta );
 		}
 	}
+*/
 }
 
 

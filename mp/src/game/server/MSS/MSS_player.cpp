@@ -3,6 +3,8 @@
 
 #include "cbase.h"
 #include "weapon_MSSbasecombatweapon.h"
+//#include "weapon_MSSbasebasebludgeon.h"
+
 #include "MSS_player.h"
 #include "globalstate.h"
 #include "game.h"
@@ -407,6 +409,12 @@ void CMSS_Player::Spawn(void)
 	m_Local.m_bDucked = false;
 
 	SetPlayerUnderwater(false);
+
+	CBaseCombatWeapon *pWeapon = Weapon_Create( "weapon_unarmed" ); // BOXBOX TODO redo this?
+	if( pWeapon )
+	{
+		Weapon_Equip( pWeapon );
+	}
 
 //	m_bReady = false;
 }
@@ -1020,14 +1028,14 @@ bool CMSS_Player::BumpWeapon( CBaseCombatWeapon *pWeapon )
 // BOXBOX TODO new MSS mechanics here!
 
 	int item = pWeapon->m_hItemFileInfo;
-	Warning(" ITEM TOUCHED IS: %i\n", item );
+//	Warning(" ITEM TOUCHED IS: %i\n", item );
 
 	if( !PutItemInBackpack( item ) )
 	{
 		if( !PutItemOnBelt( item ) )
 		{
-//			DropItemOnGround( item );
-			return false;
+			Weapon_Drop( pWeapon );
+			return true;
 		}
 	}
 	pWeapon->Kill(); // BOXBOX picked up item, so kill the instance on the ground
@@ -1163,6 +1171,7 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 			Msg("No weapon in hand!\n");
 		}
 		Weapon_Drop( GetActiveWeapon() );
+		m_nRightHandItem = 0; // BOXBOX tell client this icon is toast!
 		return true;
 	}
 
@@ -1418,8 +1427,18 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 			else if ( from == 111 )
 			{
 				item = m_nRightHandItem;					
+
+//				CBaseCombatWeapon *pWeapon = (CBaseCombatWeapon*)gEntList.FindEntityByName( NULL, "weapon_unarmed" );
+				CBaseCombatWeapon *pWeapon = Weapon_Create( "weapon_unarmed" );
+
+				if( pWeapon )
+				{
+					Weapon_Equip( pWeapon );
+				}
+	
+
 				m_nRightHandItem = 0;
-			}
+		}
 			else if ( from == 112 )
 			{
 				item = m_nArmorItem;					
@@ -1444,7 +1463,20 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 			if( ( to > -1 ) && ( to < 100 )  )			m_nBackpackItems.Set( to, item );
 			else if( ( to > 99 ) && ( to < 110 )  )		m_nBeltItems.Set( to - 100, item );
 			else if ( to == 110 )						m_nLeftHandItem = item;
-			else if ( to == 111 )						m_nRightHandItem = item;
+			else if ( to == 111 )
+			{
+				m_nRightHandItem = item;
+				FileItemInfo_t	*pItem = GetFileItemInfoFromHandle( item );
+				if( !pItem ) return false;				
+
+//				CBaseCombatWeapon *pWeapon = GetWeapon( item );
+				CBaseCombatWeapon *pWeapon = Weapon_Create( pItem->szClassName );
+
+				if( pWeapon )
+				{
+					Weapon_Equip( pWeapon );
+				}
+			}
 			else if ( to == 112 )						m_nArmorItem = item;
 			else if ( to == 113 )						m_nHelmetItem = item;
 			else if ( to == 114 )						m_nGlovesItem = item;

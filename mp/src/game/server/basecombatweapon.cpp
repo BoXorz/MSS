@@ -369,11 +369,11 @@ bool CBaseCombatWeapon::WeaponLOSCondition( const Vector &ownerPos, const Vector
 //-----------------------------------------------------------------------------
 int CBaseCombatWeapon::WeaponRangeAttack1Condition( float flDot, float flDist )
 {
- 	if ( UsesPrimaryAmmo() && !HasPrimaryAmmo() )
+/* 	if ( UsesPrimaryAmmo() && !HasPrimaryAmmo() )
  	{
  		return COND_NO_PRIMARY_AMMO;
  	}
- 	else if ( flDist < m_fMinRange1) 
+ 	else*/ if ( flDist < m_fMinRange1) 
  	{
  		return COND_TOO_CLOSE_TO_ATTACK;
  	}
@@ -396,7 +396,7 @@ int CBaseCombatWeapon::WeaponRangeAttack2Condition( float flDot, float flDist )
 {
 	// currently disabled
 	return COND_NONE;
-
+/*
 	if ( m_bReloadsSingly )
 	{
 		if (m_iClip2 <=0)
@@ -417,7 +417,7 @@ int CBaseCombatWeapon::WeaponRangeAttack2Condition( float flDot, float flDist )
 		}
 		return COND_CAN_RANGE_ATTACK2;
 	}
-
+*/
 	return COND_NONE;
 }
 

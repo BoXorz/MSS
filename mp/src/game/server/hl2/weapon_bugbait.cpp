@@ -6,7 +6,7 @@
 //=============================================================================//
 
 #include "cbase.h"
-#include "basehlcombatweapon.h"
+//#include "basehlcombatweapon.h"
 #include "engine/IEngineSound.h"
 #include "npcevent.h"
 #include "in_buttons.h"
@@ -21,12 +21,12 @@
 // Bug Bait Weapon
 //
 
-class CWeaponBugBait : public CBaseHLCombatWeapon
+class CWeaponBugBait : public CBaseCombatWeapon
 {
-	DECLARE_CLASS( CWeaponBugBait, CBaseHLCombatWeapon );
+	DECLARE_CLASS( CWeaponBugBait, CBaseCombatWeapon );
 public:
 
-	DECLARE_SERVERCLASS();
+//	DECLARE_SERVERCLASS();
 
 	CWeaponBugBait( void );
 
@@ -67,8 +67,8 @@ protected:
 	EHANDLE		m_hSporeTrail;
 };
 
-IMPLEMENT_SERVERCLASS_ST(CWeaponBugBait, DT_WeaponBugBait)
-END_SEND_TABLE()
+//IMPLEMENT_SERVERCLASS_ST(CWeaponBugBait, DT_WeaponBugBait)
+//END_SEND_TABLE()
 
 LINK_ENTITY_TO_CLASS( weapon_bugbait, CWeaponBugBait );
 #ifndef MSS

@@ -1065,10 +1065,10 @@ private:
 #define CWeaponPhysCannon C_WeaponPhysCannon
 #endif
 
-class CWeaponPhysCannon : public CBaseHL2MPCombatWeapon
+class CWeaponPhysCannon : public CBaseMSSCombatWeapon
 {
 public:
-	DECLARE_CLASS( CWeaponPhysCannon, CBaseHL2MPCombatWeapon );
+	DECLARE_CLASS( CWeaponPhysCannon, CBaseMSSCombatWeapon );
 
 	DECLARE_NETWORKCLASS(); 
 	DECLARE_PREDICTABLE();

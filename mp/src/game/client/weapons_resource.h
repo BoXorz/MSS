@@ -35,8 +35,8 @@ public:
 	void LoadAllWeaponSprites( void );
 
 	// Ammo Handling
-	CHudTexture					*GetAmmoIconFromWeapon( int iAmmoId );
-	const FileItemInfo_t		*GetWeaponFromAmmo( int iAmmoId );
+//	CHudTexture					*GetAmmoIconFromWeapon( int iAmmoId );
+//	const FileItemInfo_t		*GetWeaponFromAmmo( int iAmmoId );
 };
 
 extern WeaponsResource gWR;

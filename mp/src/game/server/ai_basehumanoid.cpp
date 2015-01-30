@@ -66,7 +66,7 @@ void CAI_BaseHumanoid::CheckAmmo( void )
 	// Don't do this while holstering / unholstering
 	if ( IsWeaponStateChanging() )
 		return;
-
+/*
 	if (GetActiveWeapon()->UsesPrimaryAmmo())
 	{
 		if (!GetActiveWeapon()->HasPrimaryAmmo() )
@@ -87,6 +87,7 @@ void CAI_BaseHumanoid::CheckAmmo( void )
 			SetCondition(COND_NO_SECONDARY_AMMO);
 		}
 	}
+*/
 }
 
 

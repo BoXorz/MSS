@@ -176,7 +176,7 @@ bool CSingleplayRules::Damage_ShouldNotBleed( int iDmgType )
 	//-----------------------------------------------------------------------------
 	bool CSingleplayRules::FShouldSwitchWeapon( CBasePlayer *pPlayer, CBaseCombatWeapon *pWeapon )
 	{
-		//Must have ammo
+/*		//Must have ammo
 		if ( ( pWeapon->HasAnyAmmo() == false ) && ( pPlayer->GetAmmoCount( pWeapon->m_iPrimaryAmmoType ) <= 0 ) )
 			return false;
 
@@ -199,7 +199,7 @@ bool CSingleplayRules::Damage_ShouldNotBleed( int iDmgType )
 		//Only switch if the weapon is better than what we're using
 		if ( ( pWeapon != pPlayer->GetActiveWeapon() ) && ( pWeapon->GetWeight() <= pPlayer->GetActiveWeapon()->GetWeight() ) )
 			return false;
-
+*/
 		return true;
 	}
 
@@ -208,7 +208,7 @@ bool CSingleplayRules::Damage_ShouldNotBleed( int iDmgType )
 	//-----------------------------------------------------------------------------
 	CBaseCombatWeapon *CSingleplayRules::GetNextBestWeapon( CBaseCombatCharacter *pPlayer, CBaseCombatWeapon *pCurrentWeapon )
 	{
-		if ( pCurrentWeapon && !pCurrentWeapon->AllowsAutoSwitchFrom() )
+/*		if ( pCurrentWeapon && !pCurrentWeapon->AllowsAutoSwitchFrom() )
 			return NULL;
 
 		CBaseCombatWeapon	*pBestWeapon = NULL;
@@ -247,6 +247,8 @@ bool CSingleplayRules::Damage_ShouldNotBleed( int iDmgType )
 		}
 
 		return pBestWeapon;
+*/
+		return pCurrentWeapon;
 	}
 
 	//-----------------------------------------------------------------------------

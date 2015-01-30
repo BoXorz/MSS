@@ -34,6 +34,8 @@ END_NETWORK_TABLE()
 BEGIN_PREDICTION_DATA( CBaseMSSBludgeonWeapon )
 END_PREDICTION_DATA()
 
+LINK_ENTITY_TO_CLASS( weapon_unarmed, CBaseMSSBludgeonWeapon ); // BOXBOX TODO temporary!!!
+
 #define BLUDGEON_HULL_DIM		16
 
 static const Vector g_bludgeonMins(-BLUDGEON_HULL_DIM,-BLUDGEON_HULL_DIM,-BLUDGEON_HULL_DIM);
@@ -44,7 +46,7 @@ static const Vector g_bludgeonMaxs(BLUDGEON_HULL_DIM,BLUDGEON_HULL_DIM,BLUDGEON_
 //-----------------------------------------------------------------------------
 CBaseMSSBludgeonWeapon::CBaseMSSBludgeonWeapon()
 {
-	m_bFiresUnderwater = true;
+//	m_bFiresUnderwater = true;
 }
 
 //-----------------------------------------------------------------------------

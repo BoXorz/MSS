@@ -8,7 +8,7 @@
 // $NoKeywords: $
 //=============================================================================//
 
-#include "basehlcombatweapon.h"
+//#include "basehlcombatweapon.h"
 
 #ifndef BASEBLUDGEONWEAPON_H
 #define BASEBLUDGEONWEAPON_H
@@ -16,13 +16,13 @@
 //=========================================================
 // CBaseHLBludgeonWeapon 
 //=========================================================
-class CBaseHLBludgeonWeapon : public CBaseHLCombatWeapon
+class CBaseHLBludgeonWeapon : public CBaseCombatWeapon
 {
-	DECLARE_CLASS( CBaseHLBludgeonWeapon, CBaseHLCombatWeapon );
+	DECLARE_CLASS( CBaseHLBludgeonWeapon, CBaseCombatWeapon );
 public:
 	CBaseHLBludgeonWeapon();
 
-	DECLARE_SERVERCLASS();
+//	DECLARE_SERVERCLASS();
 
 	virtual	void	Spawn( void );
 	virtual	void	Precache( void );

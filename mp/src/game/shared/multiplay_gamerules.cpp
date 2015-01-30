@@ -474,7 +474,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 			return true;
 		}
 
-		if ( !pWeapon->AllowsAutoSwitchTo() )
+/*		if ( !pWeapon->AllowsAutoSwitchTo() )
 		{
 			// The given weapon should not be auto switched to from another weapon.
 			return false;
@@ -485,7 +485,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 			// The active weapon does not allow autoswitching away from it.
 			return false;
 		}
-
+*/
 		if ( pWeapon->GetWeight() > pPlayer->GetActiveWeapon()->GetWeight() )
 		{
 			return true;
@@ -508,7 +508,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 		// If I have a weapon, make sure I'm allowed to holster it
 		if ( pCurrentWeapon )
 		{
-			if ( !pCurrentWeapon->AllowsAutoSwitchFrom() || !pCurrentWeapon->CanHolster() )
+			if ( /*!pCurrentWeapon->AllowsAutoSwitchFrom() ||*/ !pCurrentWeapon->CanHolster() )
 			{
 				// Either this weapon doesn't allow autoswitching away from it or I
 				// can't put this weapon away right now, so I can't switch.
@@ -526,7 +526,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 
 			// If we have an active weapon and this weapon doesn't allow autoswitching away
 			// from another weapon, skip it.
-			if ( pCurrentWeapon && !pCheck->AllowsAutoSwitchTo() )
+			if ( pCurrentWeapon /*&& !pCheck->AllowsAutoSwitchTo()*/ )
 				continue;
 
 /* BOXBOX commenting this out, because no 2 weapons in MSS should have the same weight, and if they do, we don't want to switch anyway

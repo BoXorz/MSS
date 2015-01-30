@@ -41,9 +41,9 @@
 //-----------------------------------------------------------------------------
 // Fragmentation grenades
 //-----------------------------------------------------------------------------
-class CWeaponFrag: public CBaseHL2MPCombatWeapon
+class CWeaponFrag: public CBaseMSSCombatWeapon
 {
-	DECLARE_CLASS( CWeaponFrag, CBaseHL2MPCombatWeapon );
+	DECLARE_CLASS( CWeaponFrag, CBaseMSSCombatWeapon );
 public:
 
 	DECLARE_NETWORKCLASS(); 
@@ -133,7 +133,7 @@ LINK_ENTITY_TO_CLASS( weapon_frag, CWeaponFrag );
 PRECACHE_WEAPON_REGISTER(weapon_frag);
 
 CWeaponFrag::CWeaponFrag( void ) :
-	CBaseHL2MPCombatWeapon()
+	CBaseMSSCombatWeapon()
 {
 	m_bRedraw = false;
 }
@@ -233,8 +233,8 @@ bool CWeaponFrag::Holster( CBaseCombatWeapon *pSwitchingTo )
 //-----------------------------------------------------------------------------
 bool CWeaponFrag::Reload( void )
 {
-	if ( !HasPrimaryAmmo() )
-		return false;
+//	if ( !HasPrimaryAmmo() )
+//		return false;
 
 	if ( ( m_bRedraw ) && ( m_flNextPrimaryAttack <= gpGlobals->curtime ) && ( m_flNextSecondaryAttack <= gpGlobals->curtime ) )
 	{
@@ -261,8 +261,8 @@ void CWeaponFrag::SecondaryAttack( void )
 	if ( m_bRedraw )
 		return;
 
-	if ( !HasPrimaryAmmo() )
-		return;
+//	if ( !HasPrimaryAmmo() )
+//		return;
 
 	CBaseCombatCharacter *pOwner  = GetOwner();
 
@@ -283,10 +283,10 @@ void CWeaponFrag::SecondaryAttack( void )
 	m_flNextSecondaryAttack	= FLT_MAX;
 
 	// If I'm now out of ammo, switch away
-	if ( !HasPrimaryAmmo() )
-	{
-		pPlayer->SwitchToNextBestWeapon( this );
-	}
+//	if ( !HasPrimaryAmmo() )
+//	{
+//		pPlayer->SwitchToNextBestWeapon( this );
+//	}
 }
 
 //-----------------------------------------------------------------------------
@@ -319,10 +319,10 @@ void CWeaponFrag::PrimaryAttack( void )
 	m_flNextPrimaryAttack = FLT_MAX;
 
 	// If I'm now out of ammo, switch away
-	if ( !HasPrimaryAmmo() )
-	{
-		pPlayer->SwitchToNextBestWeapon( this );
-	}
+//	if ( !HasPrimaryAmmo() )
+//	{
+//		pPlayer->SwitchToNextBestWeapon( this );
+//	}
 }
 
 //-----------------------------------------------------------------------------
@@ -331,7 +331,7 @@ void CWeaponFrag::PrimaryAttack( void )
 //-----------------------------------------------------------------------------
 void CWeaponFrag::DecrementAmmo( CBaseCombatCharacter *pOwner )
 {
-	pOwner->RemoveAmmo( 1, m_iPrimaryAmmoType );
+//	pOwner->RemoveAmmo( 1, m_iPrimaryAmmoType );
 }
 
 //-----------------------------------------------------------------------------

@@ -1091,7 +1091,7 @@ void CMSSRules::CleanUpMap()
 	CBaseEntity *pCur = gEntList.FirstEnt();
 	while ( pCur )
 	{
-		CBaseHL2MPCombatWeapon *pWeapon = dynamic_cast< CBaseHL2MPCombatWeapon* >( pCur );
+		CBaseMSSCombatWeapon *pWeapon = dynamic_cast< CBaseMSSCombatWeapon* >( pCur );
 		// Weapons with owners don't want to be removed..
 		if ( pWeapon )
 		{

@@ -7,7 +7,7 @@
 //=============================================================================//
 
 #include "cbase.h"
-#include "basehlcombatweapon.h"
+//#include "basehlcombatweapon.h"
 #include "player.h"
 #include "gamerules.h"
 #include "ammodef.h"
@@ -25,8 +25,8 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
-IMPLEMENT_SERVERCLASS_ST( CBaseHLBludgeonWeapon, DT_BaseHLBludgeonWeapon )
-END_SEND_TABLE()
+//IMPLEMENT_SERVERCLASS_ST( CBaseHLBludgeonWeapon, DT_BaseHLBludgeonWeapon )
+//END_SEND_TABLE()
 
 #define BLUDGEON_HULL_DIM		16
 
@@ -38,7 +38,7 @@ static const Vector g_bludgeonMaxs(BLUDGEON_HULL_DIM,BLUDGEON_HULL_DIM,BLUDGEON_
 //-----------------------------------------------------------------------------
 CBaseHLBludgeonWeapon::CBaseHLBludgeonWeapon()
 {
-	m_bFiresUnderwater = true;
+//	m_bFiresUnderwater = true;
 }
 
 //-----------------------------------------------------------------------------

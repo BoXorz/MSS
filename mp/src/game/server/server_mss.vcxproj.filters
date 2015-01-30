@@ -1571,12 +1571,6 @@
     <ClInclude Include="basebludgeonweapon.h">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClInclude>
-    <ClInclude Include="hl2\basehlcombatweapon.h">
-      <Filter>Source Files\HL2 DLL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\game\shared\hl2\basehlcombatweapon_shared.h">
-      <Filter>Source Files\HL2 DLL</Filter>
-    </ClInclude>
     <ClInclude Include="hl2\cbasehelicopter.h">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClInclude>
@@ -1760,9 +1754,6 @@
     <ClInclude Include="..\..\game\shared\MSS\weapon_physcannon.h">
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\game\shared\MSS\weapon_slam.h">
-      <Filter>Source Files\MSS\Weapons</Filter>
-    </ClInclude>
     <ClInclude Include="nav.h">
       <Filter>Source Files\Navigation Mesh</Filter>
     </ClInclude>
@@ -1821,6 +1812,9 @@
       <Filter>Source Files\MSS\Monsters</Filter>
     </ClInclude>
     <ClInclude Include="..\shared\MSS\MSS_item_parse.h">
+      <Filter>Source Files\MSS</Filter>
+    </ClInclude>
+    <ClInclude Include="MSS\MSS_BaseItem.h">
       <Filter>Source Files\MSS</Filter>
     </ClInclude>
   </ItemGroup>
@@ -2962,12 +2956,6 @@
     <ClCompile Include="basebludgeonweapon.cpp">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClCompile>
-    <ClCompile Include="hl2\basehlcombatweapon.cpp">
-      <Filter>Source Files\HL2 DLL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\game\shared\hl2\basehlcombatweapon_shared.cpp">
-      <Filter>Source Files\HL2 DLL</Filter>
-    </ClCompile>
     <ClCompile Include="hl2\cbasehelicopter.cpp">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClCompile>
@@ -3217,9 +3205,6 @@
     <ClCompile Include="hl2\vehicle_viewcontroller.cpp">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClCompile>
-    <ClCompile Include="hl2\weapon_annabelle.cpp">
-      <Filter>Source Files\HL2 DLL</Filter>
-    </ClCompile>
     <ClCompile Include="hl2\weapon_bugbait.cpp">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClCompile>
@@ -3293,12 +3278,6 @@
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClCompile>
     <ClCompile Include="..\..\game\shared\MSS\weapon_physcannon.cpp">
-      <Filter>Source Files\MSS\Weapons</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\game\shared\MSS\weapon_slam.cpp">
-      <Filter>Source Files\MSS\Weapons</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\game\shared\MSS\weapon_stunstick.cpp">
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClCompile>
     <ClCompile Include="nav_area.cpp">
@@ -3521,6 +3500,9 @@
       <Filter>Source Files\MSS\Monsters</Filter>
     </ClCompile>
     <ClCompile Include="..\shared\MSS\MSS_item_parse.cpp">
+      <Filter>Source Files\MSS</Filter>
+    </ClCompile>
+    <ClCompile Include="MSS\MSS_BaseItem.cpp">
       <Filter>Source Files\MSS</Filter>
     </ClCompile>
   </ItemGroup>

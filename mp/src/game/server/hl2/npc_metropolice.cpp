@@ -1221,7 +1221,9 @@ void CNPC_MetroPolice::OnUpdateShotRegulator( )
 			}
 			else
 			{
-				GetShotRegulator()->SetBurstShotCountRange(GetActiveWeapon()->GetMinBurst(), GetActiveWeapon()->GetMaxBurst() );
+//				GetShotRegulator()->SetBurstShotCountRange(GetActiveWeapon()->GetMinBurst(), GetActiveWeapon()->GetMaxBurst() );
+				GetShotRegulator()->SetBurstShotCountRange( 1, 1 );
+
 				GetShotRegulator()->SetRestInterval( 0.6, 1.4 );
 			}
 		}
@@ -4124,7 +4126,7 @@ int CNPC_MetroPolice::SelectSchedule( void )
 	// This will cause the cops to run backwards + shoot at the same time
 	if ( !bHighHealth && !HasBaton() )
 	{
-		if ( GetActiveWeapon() && (GetActiveWeapon()->m_iClip1 <= 5) )
+//		if ( GetActiveWeapon() && (GetActiveWeapon()->m_iClip1 <= 5) )
 		{
 			m_Sentences.Speak( "METROPOLICE_COVER_LOW_AMMO" );
 			return SCHED_HIDE_AND_RELOAD;
@@ -4584,7 +4586,7 @@ void CNPC_MetroPolice::StartTask( const Task_t *pTask )
 			TaskComplete();
 		}
 		break;
-
+/*
 	case TASK_METROPOLICE_RELOAD_FOR_BURST:
 		{
 			if (GetActiveWeapon())
@@ -4621,7 +4623,7 @@ void CNPC_MetroPolice::StartTask( const Task_t *pTask )
 		m_nBurstReloadCount = METROPOLICE_BURST_RELOAD_COUNT;
 		BaseClass::StartTask( pTask );
 		break;
-
+*/
 	case TASK_METROPOLICE_GET_PATH_TO_BESTSOUND_LOS:
 		{
 		}
