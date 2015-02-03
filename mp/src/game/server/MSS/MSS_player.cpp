@@ -1161,7 +1161,8 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 	// BOXBOX adding this
 	else if ( !Q_stricmp( args[0], "dropweapon" ) )
 	{
-		CBaseCombatWeapon *pWeapon = GetActiveWeapon();
+/*		CBaseCombatWeapon *pWeapon = GetActiveWeapon();
+
 		if( pWeapon )
 		{
 			Msg("Dropping %s\n", pWeapon->GetName() );
@@ -1170,7 +1171,12 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 		{
 			Msg("No weapon in hand!\n");
 		}
-		Weapon_Drop( GetActiveWeapon() );
+*/
+		if( m_nRightHandItem ) // BOXBOX don't throw your hands! lul
+		{
+			Weapon_Drop( GetActiveWeapon() );
+		}
+
 		m_nRightHandItem = 0; // BOXBOX tell client this icon is toast!
 		return true;
 	}
@@ -1416,8 +1422,8 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 			}
 			else if( ( from > 99 ) && ( from < 110 )  )
 			{
-				item = m_nBeltItems.Get( from );
-				m_nBeltItems.Set( from, 0 );
+				item = m_nBeltItems.Get( from - 100 );
+				m_nBeltItems.Set( from - 100, 0 );
 			}
 			else if ( from == 110 )
 			{
@@ -1436,7 +1442,6 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 					Weapon_Equip( pWeapon );
 				}
 	
-
 				m_nRightHandItem = 0;
 		}
 			else if ( from == 112 )
@@ -1485,7 +1490,28 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 			return true;
 		}
 	}
+/*	else if ( FStrEq( args[0], "slot" ) )
+	{
+		if ( args.ArgC() == 2 )
+		{
+			int slot = atoi( args[1] );
 
+			Warning("GOT COMMAND SLOT %i\n", slot );
+
+			if( !m_nBeltItems[ slot ] ) // BOXBOX no item in this slot, do nothing
+				return true;
+
+			FileItemInfo_t *pItem = GetFileItemInfoFromHandle( (ITEM_FILE_INFO_HANDLE)m_nBeltItems[ slot ] );
+
+			if( pItem->nItemType == ITEMTYPE_WEAPON )
+			{
+				int swap = m_nRightHandItem;
+				m_nRightHandItem = m_nBeltItems[ slot ];
+				m_nBeltItems.Set( slot, swap );
+			}
+		}
+	}
+*/
 	return BaseClass::ClientCommand( args );
 }
 
@@ -1655,8 +1681,6 @@ void CMSS_Player::FlashlightTurnOff( void )
 
 void CMSS_Player::Weapon_Drop( CBaseCombatWeapon *pWeapon, const Vector *pvecTarget, const Vector *pVelocity )
 {
-// BOXBOX TODO why do melee weapons not drop?
-
 /*
 	if ( GetActiveWeapon() )
 	{
@@ -2518,6 +2542,52 @@ bool CMSS_Player::PutItemOnBelt( int item )
 
 	return false; // BOXBOX belt full!
 }
+
+
+void CMSS_Player::HandleSlotCommand( int slot )
+{
+//	Warning("GOT COMMAND SLOT %i\n", slot );
+
+	slot -= 1;
+	if( slot == -1 ) slot = 9;
+	
+	if( !m_nBeltItems[ slot ] ) // BOXBOX no item in this slot, do nothing
+		return;
+
+	FileItemInfo_t *pItem = GetFileItemInfoFromHandle( (ITEM_FILE_INFO_HANDLE)m_nBeltItems[ slot ] );
+
+	if( pItem->nItemType == ITEMTYPE_WEAPON )
+	{
+		int swap = m_nRightHandItem;
+		m_nRightHandItem = m_nBeltItems[ slot ];
+		m_nBeltItems.Set( slot, swap );
+
+		CBaseCombatWeapon *pWeapon = Weapon_Create( pItem->szClassName ); // BOXBOX TODO dont create a new one!
+
+		if( pWeapon )
+		{
+			Weapon_Equip( pWeapon );
+		}
+	}
+}
+
+void CC_Slot( const CCommand& args ) // BOXBOX arg1 is the slot number
+{
+	CBasePlayer *pPlayer = UTIL_GetCommandClient();
+	if ( !pPlayer ) return;
+	CMSS_Player *pMSSPlayer = ToMSSPlayer( pPlayer );
+	if ( !pMSSPlayer ) return;
+
+	if ( args.ArgC() == 2 )
+	{
+		int slot = atoi( args[1] );
+		slot = clamp( slot, 0, 9 );
+
+		pMSSPlayer->HandleSlotCommand( slot );
+	}
+}	
+static ConCommand slot("slot", CC_Slot, "MSS Quick Slot commands.");
+
 
 void CMSS_Player::DropItemOnGround( int item )
 {

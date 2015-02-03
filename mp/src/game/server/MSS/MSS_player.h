@@ -176,6 +176,8 @@ public:
 	bool	PutItemOnBelt( int item ); // BOXBOX returns false if belt is full, otherwise places item in an empty slot and returns true
 	void	DropItemOnGround( int item ); // BOXBOX no space for item, drop it.
 
+	void	HandleSlotCommand( int slot ); // BOXBOX player has hit a quick slot button!
+
 protected:
 	CNetworkVar( int, m_nPlayerModelIndex ); // BOXBOX index into player's model, see MSSPlayerModelIndex_t
 

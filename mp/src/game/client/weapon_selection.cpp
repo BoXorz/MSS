@@ -22,9 +22,7 @@
 ConVar hud_drawhistory_time( "hud_drawhistory_time", HISTORY_DRAW_TIME, 0 );
 ConVar hud_fastswitch( "hud_fastswitch", "0", FCVAR_ARCHIVE | FCVAR_ARCHIVE_XBOX );
 
-//-----------------------------------------------------------------------------
-// Purpose: Weapon Selection commands
-//-----------------------------------------------------------------------------
+/* BOXBOX NOPE
 DECLARE_HUD_COMMAND_NAME(CBaseHudWeaponSelection, Slot1, "CHudWeaponSelection");
 DECLARE_HUD_COMMAND_NAME(CBaseHudWeaponSelection, Slot2, "CHudWeaponSelection");
 DECLARE_HUD_COMMAND_NAME(CBaseHudWeaponSelection, Slot3, "CHudWeaponSelection");
@@ -56,7 +54,7 @@ HOOK_COMMAND( cancelselect, Close );
 HOOK_COMMAND( invnext, NextWeapon );
 HOOK_COMMAND( invprev, PrevWeapon );
 HOOK_COMMAND( lastinv, LastWeapon );
-
+*/
 // instance info
 CBaseHudWeaponSelection *CBaseHudWeaponSelection::s_pInstance = NULL;
 CBaseHudWeaponSelection *CBaseHudWeaponSelection::GetInstance()
@@ -276,9 +274,7 @@ void CBaseHudWeaponSelection::OnWeaponPickup( C_BaseCombatWeapon *pWeapon )
 	}
 }
 
-//------------------------------------------------------------------------
-// Command Handlers
-//------------------------------------------------------------------------
+/* BOXBOX NOPE
 void CBaseHudWeaponSelection::UserCmd_Slot1(void)
 {
 	if( HUDTYPE_CAROUSEL == hud_fastswitch.GetInt() )
@@ -361,7 +357,7 @@ void CBaseHudWeaponSelection::UserCmd_Slot10(void)
 {
 	SelectSlot( 10 );
 }
-
+*/
 //-----------------------------------------------------------------------------
 // Purpose: returns true if the CHudMenu should take slot1, etc commands
 //-----------------------------------------------------------------------------
@@ -399,9 +395,7 @@ bool CBaseHudWeaponSelection::IsHudMenuPreventingWeaponSelection()
 	return IsHudMenuTakingInput();
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Menu Selection Code
-//-----------------------------------------------------------------------------
+/* BOXBOX NOPE
 void CBaseHudWeaponSelection::SelectSlot( int iSlot )
 {
 	// A menu may be overriding weapon selection commands
@@ -473,15 +467,16 @@ void CBaseHudWeaponSelection::UserCmd_LastWeapon(void)
 	if ( !BaseClass::ShouldDraw() )
 		return;
 
-	/*
+
 	if ( IsHudMenuPreventingWeaponSelection() )	
 	{ 
 		return;
 	}
-	*/
+
 
 	SwitchToLastWeapon();
 }
+*/
 
 //-----------------------------------------------------------------------------
 // Purpose: Switches the last weapon the player was using

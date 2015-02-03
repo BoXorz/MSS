@@ -15,8 +15,9 @@
 #endif
 
 #include "basegrenade_shared.h"
-#include "weapon_rpg.h"
+//#include "weapon_rpg.h"
 
+/*
 enum HomerRocketTrail_t
 {
 	HOMER_SMOKE_TRAIL_OFF,			// No smoke trail
@@ -79,5 +80,5 @@ public:
 
 	DECLARE_DATADESC();
 };
-
+*/
 #endif	//GRENADEHOMER_H

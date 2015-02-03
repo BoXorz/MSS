@@ -324,11 +324,8 @@ void CMSInventoryMenu::OnCommand( const char *command )
 
 void CMSInventoryMenu::PlayPageTurnSound( void )
 {
-	int rnd = RandomInt( 0, 1 );
-	if( rnd )
-		vgui::surface()->PlaySound( "UI/pageturn2.wav" );
-	else
-		vgui::surface()->PlaySound( "UI/pageturn3.wav" );
+	int rnd = RandomInt( 2, 4 );
+	vgui::surface()->PlaySound( VarArgs("UI/pageturn%i.wav", rnd ) );
 }
 
 void CMSInventoryMenu::ShowPanel( bool bShow )
@@ -532,6 +529,7 @@ void CDragItem::OnPanelDropped( CUtlVector< KeyValues * >& msglist ) // BOXBOX a
 				m_hItem = pItem->m_hItem;
 				pPlayer->m_nBackpackItems[ nTo ] = m_hItem;
 				m_nDropType = pItem->m_nDropType;
+				vgui::surface()->PlaySound( "UI/BackpackSlot.wav" );
 			}
 		}
 
@@ -541,6 +539,7 @@ void CDragItem::OnPanelDropped( CUtlVector< KeyValues * >& msglist ) // BOXBOX a
 			m_hItem = pItem->m_hItem;
 			pPlayer->m_nBeltItems[ y ] = m_hItem;
 			m_nDropType = pItem->m_nDropType;
+			vgui::surface()->PlaySound( "UI/BeltSlot.wav" );
 		}
 	}
 
@@ -549,12 +548,14 @@ void CDragItem::OnPanelDropped( CUtlVector< KeyValues * >& msglist ) // BOXBOX a
 		nTo = 110;
 		m_hItem = pItem->m_hItem;
 		pPlayer->m_nLeftHandItem = m_hItem;
+		vgui::surface()->PlaySound( "UI/WeaponSlot.wav" );
 	}
 	if( pMenu->m_pRightHandItem == this )
 	{
 		nTo = 111;
 		m_hItem = pItem->m_hItem;
 		pPlayer->m_nRightHandItem = m_hItem;
+		vgui::surface()->PlaySound( "UI/WeaponSlot.wav" );
 	}
 	if( pMenu->m_pArmorItem == this )
 	{

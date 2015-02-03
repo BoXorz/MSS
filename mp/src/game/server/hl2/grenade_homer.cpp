@@ -1,12 +1,8 @@
-//========= Copyright Valve Corporation, All rights reserved. ============//
-//
-// Purpose: Grenade used by the city scanner
-//
-// $NoKeywords: $
-//=============================================================================//
 
 #include "cbase.h"
 #include "grenade_homer.h"
+
+/*
 #include "weapon_ar2.h"
 #include "soundent.h"
 #include "decals.h"
@@ -194,56 +190,7 @@ void CGrenadeHomer::StartRocketTrail(void)
 
 		m_hRocketTrail[0] = pRocketTrail;
 	}
-	/*
-	pRocketTrail = RocketTrail::CreateRocketTrail();
-	if(pRocketTrail)
-	{
-		pRocketTrail->m_SpawnRate = 100;
-		pRocketTrail->m_ParticleLifetime = HOMER_TRAIL1_LIFE;
-		if ( m_nRocketTrailType == HOMER_SMOKE_TRAIL_ALIEN )
-		{
-			pRocketTrail->m_StartColor.Init(0.0, 0.0, 0.5);
-		}
-		else
-		{
-			pRocketTrail->m_StartColor.Init(0.5, 0.5, 0.0);
-		}
-		pRocketTrail->m_EndColor.Init(0.5,0.5,0.5);
-		pRocketTrail->m_StartSize = 3;
-		pRocketTrail->m_EndSize = 6;
-		pRocketTrail->m_SpawnRadius = 1;
-		pRocketTrail->m_MinSpeed = 15;
-		pRocketTrail->m_MaxSpeed = 25;
-		pRocketTrail->SetLifetime(120);
-		pRocketTrail->FollowEntity(this);
 
-		m_hRocketTrail[1] = pRocketTrail;
-	}
-	pRocketTrail = RocketTrail::CreateRocketTrail();
-	if(pRocketTrail)
-	{
-		pRocketTrail->m_SpawnRate = 50;
-		pRocketTrail->m_ParticleLifetime = HOMER_TRAIL2_LIFE;
-		if ( m_nRocketTrailType == HOMER_SMOKE_TRAIL_ALIEN )
-		{
-			pRocketTrail->m_StartColor.Init(0.1, 0.0, 0.1);
-		}
-		else
-		{
-			pRocketTrail->m_StartColor.Init(0.1, 0.1, 0.1);
-		}
-		pRocketTrail->m_EndColor.Init(0.5,0.5,0.5);
-		pRocketTrail->m_StartSize = 8;
-		pRocketTrail->m_EndSize = 20;
-		pRocketTrail->m_SpawnRadius = 1;
-		pRocketTrail->m_MinSpeed = 15;
-		pRocketTrail->m_MaxSpeed = 25;
-		pRocketTrail->SetLifetime(120);
-		pRocketTrail->FollowEntity(this);
-
-		m_hRocketTrail[2] = pRocketTrail;
-	}
-	*/
 }
 
 //------------------------------------------------------------------------------
@@ -694,3 +641,4 @@ CGrenadeHomer::CGrenadeHomer(void)
 		m_hRocketTrail[i]  = NULL;
 	}
 }
+*/

@@ -31,6 +31,8 @@ enum MSSPlayerState
 
 #if defined( CLIENT_DLL )
 #define CMSS_Player C_MSS_Player
+#else
+#include "MSS_player.h" // BOXBOX adding, for some weird ass reason of a fail-compile that reared it's head mysteriously Feb 01 2015
 #endif
 
 

@@ -170,11 +170,8 @@ void CMSPowerupMenu::OnCommand( const char *command )
 
 void CMSPowerupMenu::PlayPageTurnSound( void )
 {
-	int rnd = RandomInt( 0, 1 );
-	if( rnd )
-		vgui::surface()->PlaySound( "UI/pageturn2.wav" );
-	else
-		vgui::surface()->PlaySound( "UI/pageturn3.wav" );
+	int rnd = RandomInt( 2, 4 );
+	vgui::surface()->PlaySound( VarArgs("UI/pageturn%i.wav", rnd ) );
 }
 
 void CMSPowerupMenu::ShowPanel( bool bShow )

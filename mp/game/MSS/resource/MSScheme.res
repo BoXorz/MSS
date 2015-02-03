@@ -7,13 +7,13 @@ Scheme
 
 		"Bg"			"0 0 0 210"
 		"BgArmed"		"150 90 0 30"
-
-		"Text"			"255 176 100 200"
-		"TextArmed"		"255 176 100 255"
 		
 		"InkWell"		"90 40 0 255" // BOXBOX MSS
 		"InkWellLight"	"120 70 0 255"
 		"RedInk"			"140 20 0 255"
+		
+		"Text"			"InkWell"
+		"TextArmed"		"InkWellLight"	
 	}
 
 	BaseSettings
@@ -300,6 +300,7 @@ Scheme
 				"name"		"Stonehenge"
 				"tall"		"72"
 				"weight"		"1000"
+				"antialias"	"1"					
 			}
 		}
 		"HeaderFontSmall"
@@ -309,6 +310,7 @@ Scheme
 				"name"		"Stonehenge"
 				"tall"		"45"
 				"weight"		"1000"
+				"antialias"	"1"					
 			}
 		}
 		"HeaderFontSmaller"
@@ -318,8 +320,29 @@ Scheme
 				"name"		"Stonehenge"
 				"tall"		"40"
 				"weight"		"1000"
+				"antialias"	"1"					
 			}
-		}		
+		}	
+		"HeaderFont34"
+		{
+			"1"
+			{
+				"name"		"Stonehenge"
+				"tall"		"34"
+				"weight"		"1000"
+				"antialias"	"1"				
+			}
+		}
+		"HeaderFont22"
+		{
+			"1"
+			{
+				"name"		"Stonehenge"
+				"tall"		"22"
+				"weight"		"1000"
+				"antialias"	"1"				
+			}
+		}			
 		"CaligFont"
 		{
 			"1"

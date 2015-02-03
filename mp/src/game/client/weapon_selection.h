@@ -58,7 +58,7 @@ public:
 
 	virtual void OnWeaponPickup( C_BaseCombatWeapon *pWeapon );
 	virtual bool IsInSelectionMode();
-
+/* BOXBOX NOPE
 	void UserCmd_Slot1( void );
 	void UserCmd_Slot2( void );
 	void UserCmd_Slot3( void );
@@ -77,7 +77,7 @@ public:
 	void UserCmd_DropPrimary( void );
 
 	virtual void		SelectSlot( int iSlot );
-
+*/
 	virtual bool IsHudMenuTakingInput();
 	virtual bool IsHudMenuPreventingWeaponSelection();
 

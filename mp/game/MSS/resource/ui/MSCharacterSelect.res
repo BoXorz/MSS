@@ -110,7 +110,7 @@
 		"ypos"		"130"
 		"zpos"		"1"
 		"wide"		"180"
-		"tall"		"230"
+		"tall"		"260"
 		"autoResize"		"0"
 		"pinCorner"		"2"
 		"visible"		"1"
@@ -134,7 +134,7 @@
 		"ypos"		"130"
 		"zpos"		"1"		
 		"wide"		"180"
-		"tall"		"230"
+		"tall"		"260"
 		"autoResize"		"0"
 		"pinCorner"		"2"
 		"visible"		"1"
@@ -157,7 +157,7 @@
 		"ypos"		"130"
 		"zpos"		"1"		
 		"wide"		"180"
-		"tall"		"230"
+		"tall"		"260"
 		"autoResize"		"0"
 		"pinCorner"		"2"
 		"visible"		"1"
@@ -177,7 +177,7 @@
 		"ControlName"		"Button"
 		"fieldName"		"DeleteCharButton1"
 		"xpos"		"c-270"
-		"ypos"		"370"
+		"ypos"		"400"
 		"wide"		"180"
 		"tall"		"20"
 		"autoResize"		"0"
@@ -199,7 +199,7 @@
 		"ControlName"		"Button"
 		"fieldName"		"DeleteCharButton2"
 		"xpos"		"c-90"
-		"ypos"		"370"
+		"ypos"		"400"
 		"wide"		"180"
 		"tall"		"20"
 		"autoResize"		"0"
@@ -221,7 +221,7 @@
 		"ControlName"		"Button"
 		"fieldName"		"DeleteCharButton3"
 		"xpos"		"c90"
-		"ypos"		"370"
+		"ypos"		"400"
 		"wide"		"180"
 		"tall"		"20"
 		"autoResize"		"0"
@@ -239,30 +239,6 @@
 		"border"			"NoBorder"		
 	}
 	
-	
-	"NewCharButton"
-	{
-		"ControlName"		"Button"
-		"fieldName"		"NewCharButton"
-		"xpos"		"c-120"
-		"ypos"		"400"
-		"wide"		"240"
-		"tall"		"20"
-		"autoResize"		"0"
-		"pinCorner"		"2"
-		"visible"		"1"
-		"enabled"		"1"
-		"tabPosition"		"0"
-		"font"			"WritingFontSmall"
-		"defaultFgColor_override"	"InkWellLight"
-//		"armedBgColor_override"	"Blank"
-		"labelText"		"#MSS_NEWCHAR"
-		"textAlignment"		"center"
-		"command"		"createchar"
-		"Default"		"1"
-		"border"			"NoBorder"		
-	}	
-
 	// BOXBOX the delete confirm controls
 	"ConfirmBGImg"
 	{
@@ -341,65 +317,6 @@
 		"command"		"confirmno"
 		"Default"		"1"
 	}	
-
-	// BOXBOX the full character controls
-	"FullCharBGImg"
-	{
-		"ControlName"		"ImagePanel"
-		"fieldName"		"FullCharBGImg"		
-		"xpos"			"c-270"
-		"ypos"			"c-70"
-		"zpos"			"1"		
-		"wide"			"540"
-		"tall"			"140"
-		"visible"		"0"		
-		"tileImage"		"0"
-		"scaleImage"		"1"
-		"image"			"mss_scroll"
-		"border"			"border"
-	}
-	"FullCharLabel"
-	{
-		"ControlName"		"Label"
-		"fieldName"		"FullCharLabel"
-		"xpos"		"c-180"
-		"ypos"		"c-36"
-		"zpos"		"2"
-		"wide"		"400"
-		"tall"		"42"
-		"autoResize"		"0"
-		"pinCorner"		"0"
-		"visible"		"0"
-		"enabled"		"0"
-//		"tabPosition"		"0"
-		"disabledfgcolor2_override"	"InkWellLight"
-		"textAlignment"		"center"
-//		"labelText"		"#MSS_FULL_CHAR"
-	}
-	"FullCharButton"
-	{
-		"ControlName"		"Button"
-		"fieldName"		"FullCharButton"
-		"xpos"		"c-80"
-		"ypos"		"c10"
-		"zpos"		"2"		
-		"wide"		"160"
-		"tall"		"24"
-		"autoResize"		"0"
-		"pinCorner"		"2"
-		"visible"		"0"
-		"enabled"		"0"
-		"tabPosition"		"0"
-		"font"			"WritingFontSmall"
-		"defaultFgColor_override"	"InkWellLight"
-//		"armedBgColor_override"	"Blank"
-//		"labelText"		"#MSS_OK"
-		"textAlignment"		"center"
-		"command"		"fullcharok"
-		"Default"		"1"
-	}
-
-
 	"charone" 
 	{
 		"ControlName"		"CModelPanel"
@@ -408,7 +325,7 @@
 		"ypos"		"130"
 		"zpos"		"0"		
 		"wide"		"180"
-		"tall"		"230"
+		"tall"		"260"
 		"autoResize"		"0"
 		"pinCorner"		"2"
 		"visible"		"1"
@@ -438,7 +355,6 @@
 //			}
 		}
 	}
-	
 	"chartwo"
 	{
 		"ControlName"		"CModelPanel"
@@ -447,7 +363,7 @@
 		"ypos"		"130"
 		"zpos"		"0"		
 		"wide"		"180"
-		"tall"		"230"
+		"tall"		"260"
 		"autoResize"		"0"
 		"pinCorner"		"2"
 		"visible"		"1"
@@ -477,7 +393,6 @@
 //			}
 		}
 	}	
-	
 	"charthree"
 	{
 		"ControlName"		"CModelPanel"
@@ -486,7 +401,7 @@
 		"ypos"		"130"
 		"zpos"		"0"		
 		"wide"		"180"
-		"tall"		"230"
+		"tall"		"260"
 		"autoResize"		"0"
 		"pinCorner"		"2"
 		"visible"		"1"
@@ -516,25 +431,4 @@
 //			}
 		}
 	}
-	
-	
-	
-//	"ms_character"
-//	{
-//		"ControlName"	"Frame"
-//		"fieldName"		"ms_character"
-//		"wide"			"640"
-//		"tall"			"480"
-//		"bgcolor_override"		"0 0 0 255"
-
-//		"3dchar_dist_forward"		"143"
-//		"3dchar_dist_side"			"1.8"
-//		"3dchar_dist_up"			"-46"
-//		"3dchar_dist_side_spacing"		"69.0f"
-		
-//		"SlotTitle_Y"	"158"
-//		"Slot_Y"		"170"
-//		"Slot_W"		"110"
-//		"Slot_H"		"200"
-//	}	
 }

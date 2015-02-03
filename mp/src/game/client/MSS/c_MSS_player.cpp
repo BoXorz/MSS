@@ -1050,3 +1050,5 @@ void C_MSS_Player::PostThink( void )
 	// Store the eye angles pitch so the client can compute its animation state correctly.
 	m_angEyeAngles = EyeAngles();
 }
+
+

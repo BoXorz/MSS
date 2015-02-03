@@ -284,7 +284,7 @@ void CNPC_Launcher::LaunchGrenade( CBaseEntity* pEnemy )
 		Vector vUp;
 		AngleVectors( GetAbsAngles(), NULL, NULL, &vUp );
 		Vector vLaunchVelocity = (vUp * m_flLaunchSpeed);
-
+/*
 		CGrenadeHomer *pGrenade = CGrenadeHomer::CreateGrenadeHomer( m_sMissileModel, m_sFlySound,  GetAbsOrigin(), vec3_angle, edict() );
 		pGrenade->Spawn( );
 		pGrenade->SetSpin(m_flSpinMagnitude,m_flSpinSpeed);
@@ -292,6 +292,7 @@ void CNPC_Launcher::LaunchGrenade( CBaseEntity* pEnemy )
 		pGrenade->SetDamage(m_flDamage);
 		pGrenade->SetDamageRadius(m_flDamageRadius);
 		pGrenade->Launch(this,pEnemy,vLaunchVelocity,m_flHomingSpeed,GetGravity(),m_nSmokeTrail);
+*/
 	}
 
 	CPASAttenuationFilter filter( this, 0.3 );

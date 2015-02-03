@@ -34,7 +34,19 @@ END_NETWORK_TABLE()
 BEGIN_PREDICTION_DATA( CBaseMSSBludgeonWeapon )
 END_PREDICTION_DATA()
 
-LINK_ENTITY_TO_CLASS( weapon_unarmed, CBaseMSSBludgeonWeapon ); // BOXBOX TODO temporary!!!
+ 
+LINK_ENTITY_TO_CLASS( weapon_unarmed, CBaseMSSBludgeonWeapon );
+
+// BOXBOX TODO temporary!!!  go through all item script files, pick out the weapons, and fill out a LINK_ENTITY_TO_CLASS for each!
+/*
+for( x = 1; x < m_ItemInfoDatabase.Count(); x++ )
+{
+	FileItemInfo_t *pItem = GetFileItemInfoFromHandle( (ITEM_FILE_INFO_HANDLE)pPlayer->m_nBootsItem );
+}
+*/
+
+
+
 
 #define BLUDGEON_HULL_DIM		16
 
