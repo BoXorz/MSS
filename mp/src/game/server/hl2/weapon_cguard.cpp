@@ -6,7 +6,7 @@
 //=============================================================================//
 
 #include "cbase.h"
-//#include "basehlcombatweapon.h"
+#include "basecombatweapon.h"
 #include "basecombatcharacter.h"
 #include "player.h"
 #include "grenade_ar2.h"
@@ -187,11 +187,11 @@ void CreateConcussiveBlast( const Vector &origin, const Vector &surfaceNormal, C
 
 #if 0
 
-class CWeaponCGuard : public CBaseHLCombatWeapon
+class CWeaponCGuard : public CBaseCombatWeapon
 {
 	DECLARE_DATADESC();
 public:
-	DECLARE_CLASS( CWeaponCGuard, CBaseHLCombatWeapon );
+	DECLARE_CLASS( CWeaponCGuard, CBaseCombatWeapon );
 
 	DECLARE_SERVERCLASS();
 

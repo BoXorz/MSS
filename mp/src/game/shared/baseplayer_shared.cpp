@@ -862,25 +862,27 @@ bool CBasePlayer::Weapon_Switch( CBaseCombatWeapon *pWeapon, int viewmodelindex 
 
 void CBasePlayer::SelectLastItem(void)
 {
-	if ( m_hLastWeapon.Get() == NULL )
+/*	if ( m_hLastWeapon.Get() == NULL )
 		return;
 
 	if ( GetActiveWeapon() && !GetActiveWeapon()->CanHolster() )
 		return;
 
 	SelectItem( m_hLastWeapon.Get()->GetClassname(), m_hLastWeapon.Get()->GetSubType() );
+*/
 }
 
 
 //-----------------------------------------------------------------------------
 // Purpose: Abort any reloads we're in
 //-----------------------------------------------------------------------------
-void CBasePlayer::AbortReload( void ) // BOXBOX TODO Use this for archery
+void CBasePlayer::AbortReload( void )
 {
-	if ( GetActiveWeapon() )
+/*	if ( GetActiveWeapon() )
 	{
-//		GetActiveWeapon()->AbortReload();
+		GetActiveWeapon()->AbortReload();
 	}
+*/
 }
 
 #if !defined( NO_ENTITY_PREDICTION )

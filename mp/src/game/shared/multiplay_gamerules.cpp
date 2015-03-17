@@ -462,6 +462,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 	//=========================================================
 	bool CMultiplayRules::FShouldSwitchWeapon( CBasePlayer *pPlayer, CBaseCombatWeapon *pWeapon )
 	{
+/*
 		if ( !pPlayer->Weapon_CanSwitchTo( pWeapon ) )
 		{
 			// Can't switch weapons for some reason.
@@ -474,7 +475,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 			return true;
 		}
 
-/*		if ( !pWeapon->AllowsAutoSwitchTo() )
+		if ( !pWeapon->AllowsAutoSwitchTo() )
 		{
 			// The given weapon should not be auto switched to from another weapon.
 			return false;
@@ -485,18 +486,18 @@ ConVarRef suitcharger( "sk_suitcharger" );
 			// The active weapon does not allow autoswitching away from it.
 			return false;
 		}
-*/
+
 		if ( pWeapon->GetWeight() > pPlayer->GetActiveWeapon()->GetWeight() )
 		{
 			return true;
 		}
-
+*/
 		return false;
 	}
 
-// BOXBOX reformed this function for MSS
 	CBaseCombatWeapon *CMultiplayRules::GetNextBestWeapon( CBaseCombatCharacter *pPlayer, CBaseCombatWeapon *pCurrentWeapon )
 	{
+/*
 		CBaseCombatWeapon *pCheck;
 		CBaseCombatWeapon *pBest;// this will be used in the event that we don't find a weapon in the same category.
 
@@ -508,7 +509,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 		// If I have a weapon, make sure I'm allowed to holster it
 		if ( pCurrentWeapon )
 		{
-			if ( /*!pCurrentWeapon->AllowsAutoSwitchFrom() ||*/ !pCurrentWeapon->CanHolster() )
+			if ( !pCurrentWeapon->AllowsAutoSwitchFrom() || !pCurrentWeapon->CanHolster() )
 			{
 				// Either this weapon doesn't allow autoswitching away from it or I
 				// can't put this weapon away right now, so I can't switch.
@@ -526,10 +527,9 @@ ConVarRef suitcharger( "sk_suitcharger" );
 
 			// If we have an active weapon and this weapon doesn't allow autoswitching away
 			// from another weapon, skip it.
-			if ( pCurrentWeapon /*&& !pCheck->AllowsAutoSwitchTo()*/ )
+			if ( pCurrentWeapon && !pCheck->AllowsAutoSwitchTo() )
 				continue;
 
-/* BOXBOX commenting this out, because no 2 weapons in MSS should have the same weight, and if they do, we don't want to switch anyway
 			if ( pCheck->GetWeight() > -1 && pCheck->GetWeight() == iCurrentWeight && pCheck != pCurrentWeapon )
 			{
 				// this weapon is from the same category. 
@@ -542,7 +542,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 				}
 			}
 			else
-*/			
+			
 			if ( pCheck->GetWeight() > iCurrentBestWeight && pCheck != pCurrentWeapon )// don't reselect the weapon we're trying to get rid of
 			{
 				//Msg( "Considering %s\n", STRING( pCheck->GetClassname() );
@@ -565,6 +565,8 @@ ConVarRef suitcharger( "sk_suitcharger" );
 		// if pBest is null, we didn't find ANYTHING. Shouldn't be possible- should always 
 		// at least get the crowbar, but ya never know.
 		return pBest;
+*/
+		return pCurrentWeapon; // BOXBOX TODO do we want to do anything with this?
 	}
 
 	//-----------------------------------------------------------------------------
@@ -884,7 +886,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 	//=========================================================
 	float CMultiplayRules::FlWeaponRespawnTime( CBaseCombatWeapon *pWeapon )
 	{
-		if ( weaponstay.GetInt() > 0 )
+/*		if ( weaponstay.GetInt() > 0 )
 		{
 			// make sure it's only certain weapons
 			if ( !(pWeapon->GetWeaponFlags() & ITEM_FLAG_LIMITINWORLD) )
@@ -892,7 +894,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 				return gpGlobals->curtime + 0;		// weapon respawns almost instantly
 			}
 		}
-
+*/
 		return gpGlobals->curtime + WEAPON_RESPAWN_TIME;
 	}
 
@@ -907,7 +909,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 	//=========================================================
 	float CMultiplayRules::FlWeaponTryRespawn( CBaseCombatWeapon *pWeapon )
 	{
-		if ( pWeapon && (pWeapon->GetWeaponFlags() & ITEM_FLAG_LIMITINWORLD) )
+/*		if ( pWeapon && (pWeapon->GetWeaponFlags() & ITEM_FLAG_LIMITINWORLD) )
 		{
 			if ( gEntList.NumberOfEntities() < (gpGlobals->maxEntities - ENTITY_INTOLERANCE) )
 				return 0;
@@ -915,7 +917,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 			// we're past the entity tolerance level,  so delay the respawn
 			return FlWeaponRespawnTime( pWeapon );
 		}
-
+*/
 		return 0;
 	}
 
@@ -948,7 +950,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 	//=========================================================
 	bool CMultiplayRules::CanHavePlayerItem( CBasePlayer *pPlayer, CBaseCombatWeapon *pItem )
 	{
-		if ( weaponstay.GetInt() > 0 )
+/*		if ( weaponstay.GetInt() > 0 )
 		{
 			if ( pItem->GetWeaponFlags() & ITEM_FLAG_LIMITINWORLD )
 				return BaseClass::CanHavePlayerItem( pPlayer, pItem );
@@ -962,7 +964,7 @@ ConVarRef suitcharger( "sk_suitcharger" );
 				}
 			}
 		}
-
+*/
 		return BaseClass::CanHavePlayerItem( pPlayer, pItem );
 	}
 

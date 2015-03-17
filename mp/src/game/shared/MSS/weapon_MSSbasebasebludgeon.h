@@ -22,7 +22,9 @@
 #define CBaseMSSBludgeonWeapon C_BaseMSSBludgeonWeapon
 #endif
 
-
+//=========================================================
+// CBaseHLBludgeonWeapon 
+//=========================================================
 class CBaseMSSBludgeonWeapon : public CBaseMSSCombatWeapon
 {
 	DECLARE_CLASS( CBaseMSSBludgeonWeapon, CBaseMSSCombatWeapon );

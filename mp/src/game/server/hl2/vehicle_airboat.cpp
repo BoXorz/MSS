@@ -19,7 +19,7 @@
 #include "physics_saverestore.h"
 #include "movevars_shared.h"
 #include "npc_attackchopper.h"
-//#include "weapon_rpg.h"
+#include "weapon_rpg.h"
 #include "vphysics/constraints.h"
 #include "world.h"
 #include "rumble_shared.h"

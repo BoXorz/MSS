@@ -174,7 +174,7 @@ CBaseCombatWeapon* CBaseCombatCharacter::Weapon_OwnsThisType( const char *pszWea
 		if ( m_hMyWeapons[i].Get() && FClassnameIs( m_hMyWeapons[i], pszWeapon ) )
 		{
 			// Make sure it matches the subtype
-			if ( m_hMyWeapons[i]->GetSubType() == iSubType )
+//			if ( m_hMyWeapons[i]->GetSubType() == iSubType )
 				return m_hMyWeapons[i];
 		}
 	}

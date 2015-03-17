@@ -7,12 +7,12 @@
 #include "cbase.h"
 
 #include "npc_citizen17.h"
-#include "npcevent.h"
+
 #include "ammodef.h"
 #include "globalstate.h"
 #include "soundent.h"
 #include "BasePropDoor.h"
-//#include "weapon_rpg.h"
+#include "weapon_rpg.h"
 #include "hl2_player.h"
 #include "items.h"
 
@@ -109,7 +109,7 @@ const float HEAL_TARGET_RANGE_Z = 72; // a second check that Gordon isn't too fa
 #endif
 
 // player must be at least this distance away from an enemy before we fire an RPG at him
-const float RPG_SAFE_DISTANCE = 256.0;
+const float RPG_SAFE_DISTANCE = CMissile::EXPLOSION_RADIUS + 64.0;
 
 // Animation events
 int AE_CITIZEN_GET_PACKAGE;
@@ -2154,11 +2154,11 @@ Vector CNPC_Citizen::GetActualShootPosition( const Vector &shootOrigin )
 //-----------------------------------------------------------------------------
 void CNPC_Citizen::OnChangeActiveWeapon( CBaseCombatWeapon *pOldWeapon, CBaseCombatWeapon *pNewWeapon )
 {
-//	if ( pNewWeapon )
-//	{
-//		GetShotRegulator()->SetParameters( pNewWeapon->GetMinBurst(), pNewWeapon->GetMaxBurst(), pNewWeapon->GetMinRestTime(), pNewWeapon->GetMaxRestTime() );
-//	}
-	BaseClass::OnChangeActiveWeapon( pOldWeapon, pNewWeapon );
+/*	if ( pNewWeapon )
+	{
+		GetShotRegulator()->SetParameters( pNewWeapon->GetMinBurst(), pNewWeapon->GetMaxBurst(), pNewWeapon->GetMinRestTime(), pNewWeapon->GetMaxRestTime() );
+	}
+*/	BaseClass::OnChangeActiveWeapon( pOldWeapon, pNewWeapon );
 }
 
 //-----------------------------------------------------------------------------
@@ -3477,7 +3477,7 @@ bool CNPC_Citizen::ShouldHealTarget( CBaseEntity *pTarget, bool bActiveUse )
 			}
 		}
 	}
-/*
+
 	// Only players need ammo
 	if ( IsAmmoResupplier() && bTargetIsPlayer )
 	{
@@ -3502,7 +3502,6 @@ bool CNPC_Citizen::ShouldHealTarget( CBaseEntity *pTarget, bool bActiveUse )
 			}
 		}
 	}
-*/
 	return false;
 }
 

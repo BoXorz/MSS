@@ -98,7 +98,6 @@ extern Vector		g_vecAttackDir;
 		"ammo_gaussclip",	// 16
 		"weapon_handgrenade",// 17
 		"weapon_tripmine",	// 18
-		"weapon_satchel",	// 19
 		"weapon_snark",		// 20
 		"weapon_hornetgun",	// 21
 	};

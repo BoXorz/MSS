@@ -287,11 +287,10 @@ bool CHudHistoryResource::ShouldDraw( void )
 #endif
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Draw the pickup history
-//-----------------------------------------------------------------------------
+// BOXBOX redoing
 void CHudHistoryResource::Paint( void )
 {
+/*
 	if ( m_bDoNotDraw )
 	{
 		// this is to not draw things until the first rendered
@@ -334,7 +333,7 @@ void CHudHistoryResource::Paint( void )
 
 			switch ( m_PickupHistory[i].type )
 			{
-/*			case HISTSLOT_AMMO:
+			case HISTSLOT_AMMO:
 				{
 					// Get the weapon we belong to
 #ifndef MSS
@@ -375,20 +374,20 @@ void CHudHistoryResource::Paint( void )
 					clr[3] = MIN( scale, 255 );
 				}
 				break;
-*/
+
 			case HISTSLOT_WEAP:
 				{
 					C_BaseCombatWeapon *pWeapon = m_PickupHistory[i].m_hWeapon;
 					if ( !pWeapon )
 						return;
-/*
+
 					if ( !pWeapon->HasAmmo() )
 					{
 						// if the weapon doesn't have ammo, display it as red
 						clr = gHUD.m_clrCaution;	
 						clr[3] = MIN( scale, 255 );
 					}
-*/
+
 //					itemIcon = pWeapon->GetSpriteInactive();
 					bHalfHeight = false;
 				}
@@ -460,6 +459,7 @@ void CHudHistoryResource::Paint( void )
 			}
 		}
 	}
+*/
 }
 
 

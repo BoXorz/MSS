@@ -9,7 +9,7 @@
 #ifdef _WIN32
 #pragma once
 #endif
-
+/*
 #include "basebludgeonweapon.h"
 
 #define	STUNSTICK_RANGE		75.0f
@@ -54,5 +54,5 @@ private:
 
 	CNetworkVar( bool, m_bActive );
 };
-
+*/
 #endif // WEAPON_STUNSTICK_H

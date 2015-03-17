@@ -1,8 +1,8 @@
 
 // The MasterSword: Source player
 
-#ifndef MSS_PLAYER_H
-#define MSS_PLAYER_H
+//#ifndef MSS_PLAYER_H
+//#define MSS_PLAYER_H
 #pragma once
 
 class CMSS_Player;
@@ -18,6 +18,8 @@ class CMSS_Player;
 #include "MSS_charsave.h"
 
 #include "utldict.h"
+
+
 
 //=============================================================================
 // >> MSS_Player
@@ -178,6 +180,17 @@ public:
 
 	void	HandleSlotCommand( int slot ); // BOXBOX player has hit a quick slot button!
 
+	int		GetWeaponSkill( int skill ) { return m_nWeaponSkills[ skill ]; }
+	int		GetStatMight( void )		{ return m_nMight; }
+	int		GetStatAgility( void )		{ return m_nAgility; }
+	int		GetStatStamina( void )		{ return m_nStamina; }
+	int		GetStatIntellect( void )	{ return m_nIntellect; }
+	int		GetStatWit( void )			{ return m_nWit; }
+	int		GetStatFortitude( void )	{ return m_nFortitude; }
+	int		GetStatLuck( void )			{ return m_nLuck; }
+
+	void	TabulateStats( void ); // BOXBOX Here is where we calculate all the player stats that we don't need to save in the character files
+
 protected:
 	CNetworkVar( int, m_nPlayerModelIndex ); // BOXBOX index into player's model, see MSSPlayerModelIndex_t
 
@@ -228,7 +241,6 @@ protected:
 	CNetworkArray( int, m_nBeltItems, 10 );
 	CNetworkArray( int, m_nBackpackItems, 100 );
 
-	void	TabulateStats( void ); // BOXBOX Here is where we calculate all the player stats that we don't need to save in the character files
 
 //	CNetworkVar(unsigned int, ms_playerKills);
 //	CNetworkVar(unsigned int, ms_mana);
@@ -299,4 +311,4 @@ inline CMSS_Player *ToMSSPlayer( CBaseEntity *pEntity )
 	return dynamic_cast<CMSS_Player*>( pEntity );
 }
 
-#endif //MSS_PLAYER_H
+//#endif //MSS_PLAYER_H

@@ -984,8 +984,8 @@ int CNPC_PlayerCompanion::TranslateSchedule( int scheduleType )
 				return SCHED_RELOAD;
 			}
 		}
-		break;
-*/
+*/		break;
+
 	case SCHED_COWER:
 		return SCHED_PC_COWER;
 
@@ -1443,11 +1443,11 @@ void CNPC_PlayerCompanion::HandleAnimEvent( animevent_t *pEvent )
 		return;
 	}
 #endif // HL2_EPISODIC
-/*
+
 	switch( pEvent->event )
 	{
 	case EVENT_WEAPON_RELOAD:
-		if ( GetActiveWeapon() )
+/*		if ( GetActiveWeapon() )
 		{
 //			GetActiveWeapon()->WeaponSound( RELOAD_NPC );
 			GetActiveWeapon()->m_iClip1 = GetActiveWeapon()->GetMaxClip1(); 
@@ -1455,13 +1455,12 @@ void CNPC_PlayerCompanion::HandleAnimEvent( animevent_t *pEvent )
 			ClearCondition(COND_NO_PRIMARY_AMMO);
 			ClearCondition(COND_NO_SECONDARY_AMMO);
 		}
-		break;
+*/		break;
 
 	default:
 		BaseClass::HandleAnimEvent( pEvent );
 		break;
 	}
-*/
 }
 
 //-----------------------------------------------------------------------------

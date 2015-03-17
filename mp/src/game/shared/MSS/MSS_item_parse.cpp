@@ -360,6 +360,11 @@ FileItemInfo_t::FileItemInfo_t()
 extern ConVar hud_fastswitch;
 #endif
 
+// BOXBOX OK taking the plunge into my first macro!  make a macro to automatically create C++ classes based on all weapons in the scripts, so they can be linked!
+//#define CREATE_CLASS_TO_LINK(className) \
+//	class C##className : public CBaseCombatWeapon{};
+//	LINK_ENTITY_TO_CLASS( weapon_className, className );
+
 void FileItemInfo_t::Parse( KeyValues *pKeyValuesData, const char *szItemName )
 {
 	// Okay, we tried at least once to look this up...
@@ -367,6 +372,10 @@ void FileItemInfo_t::Parse( KeyValues *pKeyValuesData, const char *szItemName )
 
 	// Classname
 	Q_strncpy( szClassName, szItemName, MAX_ITEM_STRING );
+
+//	CREATE_CLASS_TO_LINK(szClassName);
+	
+//	LINK_ENTITY_TO_CLASS( szClassName, CszClassName );
 
 	// Printable name
 	Q_strncpy( szPrintName, pKeyValuesData->GetString( "printname", ITEM_PRINTNAME_MISSING ), MAX_ITEM_STRING );

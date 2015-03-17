@@ -1222,8 +1222,6 @@ void CNPC_MetroPolice::OnUpdateShotRegulator( )
 			else
 			{
 //				GetShotRegulator()->SetBurstShotCountRange(GetActiveWeapon()->GetMinBurst(), GetActiveWeapon()->GetMaxBurst() );
-				GetShotRegulator()->SetBurstShotCountRange( 1, 1 );
-
 				GetShotRegulator()->SetRestInterval( 0.6, 1.4 );
 			}
 		}
@@ -1493,12 +1491,12 @@ void CNPC_MetroPolice::PredictShootTargetVelocity( float flDeltaTime, Vector *pV
 //-----------------------------------------------------------------------------
 int CNPC_MetroPolice::CountShotsInTime( float flDeltaTime ) const
 {
-	return (int)(flDeltaTime / GetActiveWeapon()->GetFireRate() + 0.5f);
+	return (int)(flDeltaTime / 1.5f);
 }
 
 float CNPC_MetroPolice::GetTimeForShots( int nShotCount ) const
 {
-	return nShotCount * GetActiveWeapon()->GetFireRate();
+	return nShotCount * 1.0f;
 }
 
 
@@ -4124,15 +4122,15 @@ int CNPC_MetroPolice::SelectSchedule( void )
 	bool bHighHealth = ((float)GetHealth() / (float)GetMaxHealth() > 0.75f);
 
 	// This will cause the cops to run backwards + shoot at the same time
-	if ( !bHighHealth && !HasBaton() )
+/*	if ( !bHighHealth && !HasBaton() )
 	{
-//		if ( GetActiveWeapon() && (GetActiveWeapon()->m_iClip1 <= 5) )
+		if ( GetActiveWeapon() && (GetActiveWeapon()->m_iClip1 <= 5) )
 		{
 			m_Sentences.Speak( "METROPOLICE_COVER_LOW_AMMO" );
 			return SCHED_HIDE_AND_RELOAD;
 		}
 	}
-
+*/
 	if( HasCondition( COND_NO_PRIMARY_AMMO ) )
 	{
 		if ( bHighHealth )
@@ -4586,8 +4584,8 @@ void CNPC_MetroPolice::StartTask( const Task_t *pTask )
 			TaskComplete();
 		}
 		break;
-/*
-	case TASK_METROPOLICE_RELOAD_FOR_BURST:
+
+/*	case TASK_METROPOLICE_RELOAD_FOR_BURST:
 		{
 			if (GetActiveWeapon())
 			{

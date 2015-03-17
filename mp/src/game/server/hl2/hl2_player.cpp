@@ -10,7 +10,7 @@
 #include "game.h"
 #include "gamerules.h"
 #include "trains.h"
-//#include "basehlcombatweapon_shared.h"
+#include "basecombatweapon_shared.h"
 #include "vcollide_parse.h"
 #include "in_buttons.h"
 #include "ai_interactions.h"
@@ -58,7 +58,7 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
-extern ConVar weapon_showproficiency;
+//extern ConVar weapon_showproficiency;
 extern ConVar autoaim_max_dist;
 
 // Do not touch with without seeing me, please! (sjb)
@@ -204,7 +204,7 @@ public:
 	void InputSetFlashlightSlowDrain( inputdata_t &inputdata );
 	void InputSetFlashlightNormalDrain( inputdata_t &inputdata );
 	void InputSetPlayerHealth( inputdata_t &inputdata );
-//	void InputRequestAmmoState( inputdata_t &inputdata );
+	void InputRequestAmmoState( inputdata_t &inputdata );
 	void InputLowerWeapon( inputdata_t &inputdata );
 	void InputEnableCappedPhysicsDamage( inputdata_t &inputdata );
 	void InputDisableCappedPhysicsDamage( inputdata_t &inputdata );
@@ -2577,10 +2577,16 @@ bool CHL2_Player::ShouldKeepLockedAutoaimTarget( EHANDLE hLockedTarget )
 	return true;
 }
 
-/*
+//-----------------------------------------------------------------------------
+// Purpose: 
+// Input  : iCount - 
+//			iAmmoIndex - 
+//			bSuppressSound - 
+// Output : int
+//-----------------------------------------------------------------------------
 int CHL2_Player::GiveAmmo( int nCount, int nAmmoIndex, bool bSuppressSound)
 {
-	// Don't try to give the player invalid ammo indices.
+/*
 	if (nAmmoIndex < 0)
 		return 0;
 
@@ -2617,8 +2623,9 @@ int CHL2_Player::GiveAmmo( int nCount, int nAmmoIndex, bool bSuppressSound)
 	}
 
 	return nAdd;
-}
 */
+	return 0; // BOXBOX
+}
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -2684,7 +2691,7 @@ bool CHL2_Player::BumpWeapon( CBaseCombatWeapon *pWeapon )
 	// ----------------------------------------
 	// If I already have it just take the ammo
 	// ----------------------------------------
-/*	if (Weapon_OwnsThisType( pWeapon->GetClassname(), pWeapon->GetSubType())) 
+	if (Weapon_OwnsThisType( pWeapon->GetClassname(), pWeapon->GetSubType())) 
 	{
 		//Only remove the weapon if we attained ammo from it
 		if ( Weapon_EquipAmmoOnly( pWeapon ) == false )
@@ -2698,7 +2705,6 @@ bool CHL2_Player::BumpWeapon( CBaseCombatWeapon *pWeapon )
 		UTIL_Remove( pWeapon );
 		return false;
 	}
-
 	// -------------------------
 	// Otherwise take the weapon
 	// -------------------------
@@ -2723,18 +2729,18 @@ bool CHL2_Player::BumpWeapon( CBaseCombatWeapon *pWeapon )
 
 			return false;
 		}
-*/
-		pWeapon->CheckRespawn();
+
+//		pWeapon->CheckRespawn();
 
 		pWeapon->AddSolidFlags( FSOLID_NOT_SOLID );
 		pWeapon->AddEffects( EF_NODRAW );
 
 		Weapon_Equip( pWeapon );
 
-//		EmitSound( "HL2Player.PickupWeapon" ); // BOXBOX TODO put sound here?
+		EmitSound( "HL2Player.PickupWeapon" );
 		
 		return true;
-//	}
+	}
 #else
 
 	return BaseClass::BumpWeapon( pWeapon );
@@ -2879,18 +2885,18 @@ void CHL2_Player::PlayerUse ( void )
 			if ( ( pWeapon != NULL ) && ( Weapon_CanSwitchTo( pWeapon ) ) )
 			{
 				//Try to take ammo or swap the weapon
-/*				if ( Weapon_OwnsThisType( pWeapon->GetClassname(), pWeapon->GetSubType() ) )
+				if ( Weapon_OwnsThisType( pWeapon->GetClassname(), pWeapon->GetSubType() ) )
 				{
 					Weapon_EquipAmmoOnly( pWeapon );
 				}
 				else
 				{
-*/					Weapon_DropSlot( pWeapon->GetSlot() );
+					Weapon_DropSlot( pWeapon->GetSlot() );
 					Weapon_Equip( pWeapon );
 				}
 
 				usedSomething = true;
-//			}
+			}
 		}
 #endif
 	}
@@ -3082,7 +3088,8 @@ bool CHL2_Player::Weapon_Ready( void )
 //-----------------------------------------------------------------------------
 bool CHL2_Player::Weapon_CanSwitchTo( CBaseCombatWeapon *pWeapon )
 {
-/*	CBasePlayer *pPlayer = (CBasePlayer *)this;
+/*
+	CBasePlayer *pPlayer = (CBasePlayer *)this;
 #if !defined( CLIENT_DLL )
 	IServerVehicle *pVehicle = pPlayer->GetVehicle();
 #else
@@ -3091,8 +3098,8 @@ bool CHL2_Player::Weapon_CanSwitchTo( CBaseCombatWeapon *pWeapon )
 	if (pVehicle && !pPlayer->UsingStandardWeaponsInVehicle())
 		return false;
 
-	if ( !pWeapon->HasAnyAmmo() && !GetAmmoCount( pWeapon->m_iPrimaryAmmoType ) )
-		return false;
+//	if ( !pWeapon->HasAnyAmmo() && !GetAmmoCount( pWeapon->m_iPrimaryAmmoType ) )
+//		return false;
 
 	if ( !pWeapon->CanDeploy() )
 		return false;
@@ -3327,19 +3334,18 @@ bool CHL2_Player::Weapon_Switch( CBaseCombatWeapon *pWeapon, int viewmodelindex 
 }
 
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+// BOXBOX redoing stuff
 WeaponProficiency_t CHL2_Player::CalcWeaponProficiency( CBaseCombatWeapon *pWeapon )
 {
 	WeaponProficiency_t proficiency;
 
 	proficiency = WEAPON_PROFICIENCY_PERFECT;
-
+/*
 	if( weapon_showproficiency.GetBool() != 0 )
 	{
 		Msg("Player switched to %s, proficiency is %s\n", pWeapon->GetClassname(), GetWeaponProficiencyName( proficiency ) );
 	}
-
+*/
 	return proficiency;
 }
 
@@ -3774,7 +3780,7 @@ BEGIN_DATADESC( CLogicPlayerProxy )
 	DEFINE_INPUTFUNC( FIELD_VOID,	"SetFlashlightSlowDrain",	InputSetFlashlightSlowDrain ),
 	DEFINE_INPUTFUNC( FIELD_VOID,	"SetFlashlightNormalDrain",	InputSetFlashlightNormalDrain ),
 	DEFINE_INPUTFUNC( FIELD_INTEGER, "SetPlayerHealth",	InputSetPlayerHealth ),
-//	DEFINE_INPUTFUNC( FIELD_VOID,	"RequestAmmoState", InputRequestAmmoState ),
+	DEFINE_INPUTFUNC( FIELD_VOID,	"RequestAmmoState", InputRequestAmmoState ),
 	DEFINE_INPUTFUNC( FIELD_VOID,	"LowerWeapon", InputLowerWeapon ),
 	DEFINE_INPUTFUNC( FIELD_VOID,	"EnableCappedPhysicsDamage", InputEnableCappedPhysicsDamage ),
 	DEFINE_INPUTFUNC( FIELD_VOID,	"DisableCappedPhysicsDamage", InputDisableCappedPhysicsDamage ),
@@ -3844,10 +3850,10 @@ void CLogicPlayerProxy::InputSetFlashlightNormalDrain( inputdata_t &inputdata )
 	if( pPlayer )
 		pPlayer->SetFlashlightPowerDrainScale( 1.0f );
 }
-/*
+
 void CLogicPlayerProxy::InputRequestAmmoState( inputdata_t &inputdata )
 {
-	if( m_hPlayer == NULL )
+/*	if( m_hPlayer == NULL )
 		return;
 
 	CHL2_Player *pPlayer = dynamic_cast<CHL2_Player*>(m_hPlayer.Get());
@@ -3867,8 +3873,9 @@ void CLogicPlayerProxy::InputRequestAmmoState( inputdata_t &inputdata )
 	}
 
 	m_PlayerHasNoAmmo.FireOutput( this, this, 0 );
-}
 */
+}
+
 void CLogicPlayerProxy::InputLowerWeapon( inputdata_t &inputdata )
 {
 	if( m_hPlayer == NULL )

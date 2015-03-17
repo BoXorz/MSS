@@ -107,7 +107,6 @@ END_PREDICTION_DATA()
 
 #endif
 
-// Grenades flagged with this will be triggered when the owner calls detonateSatchelCharges
 #define SF_DETONATE		0x0001
 
 // UNDONE: temporary scorching for PreAlpha - find a less sleazy permenant solution.

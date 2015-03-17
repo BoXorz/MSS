@@ -3,8 +3,6 @@
 
 #include "cbase.h"
 #include "weapon_MSSbasecombatweapon.h"
-//#include "weapon_MSSbasebasebludgeon.h"
-
 #include "MSS_player.h"
 #include "globalstate.h"
 #include "game.h"
@@ -16,7 +14,6 @@
 #include "KeyValues.h"
 //#include "team.h"
 #include "weapon_MSSbase.h"
-#include "grenade_satchel.h"
 #include "eventqueue.h"
 #include "gamestats.h"
 #include "viewport_panel_names.h" // BOXBOX added
@@ -57,10 +54,10 @@ IMPLEMENT_SERVERCLASS_ST(CMSS_Player, DT_MSS_Player)
 	SendPropInt( SENDINFO( m_iSpawnInterpCounter ), 4 ),
 //	SendPropInt( SENDINFO( m_iPlayerSoundType), 3 ),
 
-// BOXBOXBOX MSS STUFF
+// BOXBOX MSS STUFF
 	SendPropString( SENDINFO( m_szCharName ) ),
 	SendPropInt( SENDINFO( m_nGender ), 3 ), // BOXBOX need 3 bits here
-	SendPropInt( SENDINFO( m_nRace ), 3 ), // BOXBOXBOX remember, only sending 3 bits limits races to 4 (0-3) so if we ever add more races than 4, more bit(s) will be needed!
+	SendPropInt( SENDINFO( m_nRace ), 3 ), // BOXBOX remember, only sending 3 bits limits races to 4 (0-3) so if we ever add more races than 4, more bit(s) will be needed!
 	SendPropInt( SENDINFO( m_nTotalExp ), 21 ), // BOXBOX need 21 bits here because total exp. maxes out at 1 million
 
 	SendPropInt( SENDINFO( m_nGold ), 21 ), // BOXBOX Gold maxes out at a mill
@@ -187,6 +184,8 @@ void CMSS_Player::Precache( void )
 	BaseClass::Precache();
 
 	PrecacheModel ( "sprites/glow01.vmt" );
+
+	PrecacheModel( "models/weapons/v_martial.mdl" );
 
 // BOXBOX precache player models
 	PrecacheModel( pszPlayerModels[ MODEL_HUMANMALE ]);
@@ -410,10 +409,16 @@ void CMSS_Player::Spawn(void)
 
 	SetPlayerUnderwater(false);
 
-	CBaseCombatWeapon *pWeapon = Weapon_Create( "weapon_unarmed" ); // BOXBOX TODO redo this?
-	if( pWeapon )
+	if( !m_nRightHandItem )
 	{
-		Weapon_Equip( pWeapon );
+//		GiveNamedItem( "weapon_unarmed" );
+		CBaseCombatWeapon *pWeapon = Weapon_Create( "weapon_unarmed" ); // BOXBOX TODO redo this so we're not creating a new item?
+		if( pWeapon )
+		{
+			Weapon_Equip( pWeapon );
+//			pWeapon->Deploy();
+		}
+
 	}
 
 //	m_bReady = false;
@@ -671,7 +676,7 @@ void CMSS_Player::PostThink( void )
 	SetLocalAngles( angles );
 
 
-// BOXBOXBOX MSS STUFF
+// BOXBOX MSS STUFF
 
 	if( ( m_flLastSaveTime ) && ( gpGlobals->curtime - m_flLastSaveTime > 10.0f ) )
 	{
@@ -1028,14 +1033,14 @@ bool CMSS_Player::BumpWeapon( CBaseCombatWeapon *pWeapon )
 // BOXBOX TODO new MSS mechanics here!
 
 	int item = pWeapon->m_hItemFileInfo;
-//	Warning(" ITEM TOUCHED IS: %i\n", item );
+	Warning(" ITEM TOUCHED IS: %i\n", item );
 
 	if( !PutItemInBackpack( item ) )
 	{
 		if( !PutItemOnBelt( item ) )
 		{
-			Weapon_Drop( pWeapon );
-			return true;
+//			DropItemOnGround( item );
+			return false;
 		}
 	}
 	pWeapon->Kill(); // BOXBOX picked up item, so kill the instance on the ground
@@ -1161,23 +1166,19 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 	// BOXBOX adding this
 	else if ( !Q_stricmp( args[0], "dropweapon" ) )
 	{
-/*		CBaseCombatWeapon *pWeapon = GetActiveWeapon();
-
-		if( pWeapon )
-		{
-			Msg("Dropping %s\n", pWeapon->GetName() );
-		}
-		else
-		{
-			Msg("No weapon in hand!\n");
-		}
-*/
 		if( m_nRightHandItem ) // BOXBOX don't throw your hands! lul
 		{
 			Weapon_Drop( GetActiveWeapon() );
+			m_nRightHandItem = 0; // BOXBOX tell client this icon is toast!
+
+			CBaseCombatWeapon *pWeapon = Weapon_Create( "weapon_unarmed" ); // BOXBOX TODO redo this so we're not creating a new item?
+			if( pWeapon )
+			{
+				Weapon_Equip( pWeapon );
+				pWeapon->Deploy();
+			}
 		}
 
-		m_nRightHandItem = 0; // BOXBOX tell client this icon is toast!
 		return true;
 	}
 
@@ -1440,10 +1441,11 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 				if( pWeapon )
 				{
 					Weapon_Equip( pWeapon );
+					pWeapon->Deploy();
 				}
 	
 				m_nRightHandItem = 0;
-		}
+			}
 			else if ( from == 112 )
 			{
 				item = m_nArmorItem;					
@@ -1471,15 +1473,13 @@ bool CMSS_Player::ClientCommand( const CCommand &args )
 			else if ( to == 111 )
 			{
 				m_nRightHandItem = item;
-				FileItemInfo_t	*pItem = GetFileItemInfoFromHandle( item );
-				if( !pItem ) return false;				
-
-//				CBaseCombatWeapon *pWeapon = GetWeapon( item );
+				FileItemInfo_t *pItem = GetFileItemInfoFromHandle( (ITEM_FILE_INFO_HANDLE)m_nRightHandItem ); 
 				CBaseCombatWeapon *pWeapon = Weapon_Create( pItem->szClassName );
 
 				if( pWeapon )
 				{
 					Weapon_Equip( pWeapon );
+					pWeapon->Deploy();
 				}
 			}
 			else if ( to == 112 )						m_nArmorItem = item;
@@ -1703,19 +1703,7 @@ void CMSS_Player::Weapon_Drop( CBaseCombatWeapon *pWeapon, const Vector *pvecTar
 
 void CMSS_Player::DetonateTripmines( void )
 {
-	CBaseEntity *pEntity = NULL;
 
-	while ((pEntity = gEntList.FindEntityByClassname( pEntity, "npc_satchel" )) != NULL)
-	{
-		CSatchelCharge *pSatchel = dynamic_cast<CSatchelCharge *>(pEntity);
-		if (pSatchel->m_bIsLive && pSatchel->GetThrower() == this )
-		{
-			g_EventQueue.AddEvent( pSatchel, "Explode", 0.20, this, this );
-		}
-	}
-
-	// Play sound for pressing the detonator
-	EmitSound( "Weapon_SLAM.SatchelDetonate" );
 }
 
 void CMSS_Player::Event_Killed( const CTakeDamageInfo &info )
@@ -2231,6 +2219,8 @@ void CMSS_Player::IncrementWeaponSkill( int skill )
 				break;
 			}
 	}
+
+	TabulateStats();
 }
 
 void CMSS_Player::CheatSetTotalExp( int amt )
@@ -2419,6 +2409,8 @@ void CC_SetExp( const CCommand& args ) // BOXBOX arg1 is the skill to set, arg2 
 			amt = Min(100000, amt );
 
 			pMSSPlayer->CheatSetWeaponExp( skill, amt );
+
+			pMSSPlayer->TabulateStats();
 		}
 }
 static ConCommand setexp("setexp", CC_SetExp, "Bump a weapon skill for dev testing.", FCVAR_CHEAT);
@@ -2567,6 +2559,7 @@ void CMSS_Player::HandleSlotCommand( int slot )
 		if( pWeapon )
 		{
 			Weapon_Equip( pWeapon );
+			pWeapon->Deploy();
 		}
 	}
 }

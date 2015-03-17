@@ -4239,7 +4239,7 @@ void CAI_BaseNPC::GatherAttackConditions( CBaseEntity *pTarget, float flDist )
 	int		capability;
 	Vector  targetPos;
 	bool	bWeaponHasLOS;
-	int		condition;
+//	int		condition;
 
 	capability		= CapabilitiesGet();
 
@@ -4273,7 +4273,7 @@ void CAI_BaseNPC::GatherAttackConditions( CBaseEntity *pTarget, float flDist )
 
 	bool bWeaponIsReady = (GetActiveWeapon() && !IsWeaponStateChanging());
 
-	// FIXME: move this out of here
+/*
 	if ( (capability & bits_CAP_WEAPON_RANGE_ATTACK1) && bWeaponIsReady )
 	{
 		AI_PROFILE_SCOPE( CAI_BaseNPC_GatherAttackConditions_WeaponRangeAttack1Condition );
@@ -4319,7 +4319,7 @@ void CAI_BaseNPC::GatherAttackConditions( CBaseEntity *pTarget, float flDist )
 			SetCondition(condition);
 		}
 	}
-
+*/
 	if ( (capability & bits_CAP_WEAPON_MELEE_ATTACK1) && bWeaponIsReady)
 	{
 		AI_PROFILE_SCOPE( CAI_BaseNPC_GatherAttackConditions_WeaponMeleeAttack1Condition );
@@ -6953,12 +6953,13 @@ void CAI_BaseNPC::OnUpdateShotRegulator( )
 	m_ShotRegulator.SetBurstInterval( pWeapon->GetFireRate(), pWeapon->GetFireRate() );
 	m_ShotRegulator.SetBurstShotCountRange( pWeapon->GetMinBurst(), pWeapon->GetMaxBurst() );
 	m_ShotRegulator.SetRestInterval( pWeapon->GetMinRestTime(), pWeapon->GetMaxRestTime() );
-*/
+
 	// Let the behavior have a whack at it.
 	if ( GetRunningBehavior() )
 	{
 		GetRunningBehavior()->OnUpdateShotRegulator();
 	}
+*/
 }
 
 
@@ -7056,18 +7057,18 @@ int CAI_BaseNPC::UnholsterWeapon( void )
 
 				m_iDesiredWeaponState = DESIREDWEAPONSTATE_CHANGING;
 			}
+
 /*
-			// Refill the clip
 			if ( GetActiveWeapon()->UsesClipsForAmmo1() )
 			{
 				GetActiveWeapon()->m_iClip1 = GetActiveWeapon()->GetMaxClip1(); 
 			}
-*/
+
 			// Make sure we don't try to reload while we're unholstering
 			ClearCondition(COND_LOW_PRIMARY_AMMO);
 			ClearCondition(COND_NO_PRIMARY_AMMO);
 			ClearCondition(COND_NO_SECONDARY_AMMO);
-
+*/
 			return iLayer;
 		}
 	}
@@ -8377,8 +8378,8 @@ void CAI_BaseNPC::HandleAnimEvent( animevent_t *pEvent )
 
 			break;
 		}
-/*
-  	case EVENT_WEAPON_RELOAD:
+
+/*  	case EVENT_WEAPON_RELOAD:
 		{
   			if ( GetActiveWeapon() )
   			{

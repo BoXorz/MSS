@@ -28,10 +28,10 @@
 #define CWeaponRustyShortSword C_WeaponRustyShortSword
 #endif
 
-class CWeaponRustyShortSword : public CBaseMSSBludgeonWeapon
+class CWeaponRustyShortSword : public CBaseCombatWeapon
 {
 public:
-	DECLARE_CLASS( CWeaponRustyShortSword, CBaseMSSBludgeonWeapon );
+	DECLARE_CLASS( CWeaponRustyShortSword, CBaseCombatWeapon );
 
 	DECLARE_NETWORKCLASS(); 
 	DECLARE_PREDICTABLE();
@@ -43,11 +43,11 @@ public:
 	CWeaponRustyShortSword();
 
 	float		GetRange( void );
-	float		GetFireRate( void );
+//	float		GetFireRate( void );
 
 //	void		AddViewKick( void ); // BOXBOX nope
-	float		GetDamageForActivity( Activity hitActivity );
-	void		SecondaryAttack( void )	{ return; }
+//	float		GetDamageForActivity( Activity hitActivity );
+//	void		SecondaryAttack( void )	{ return; }
 
 	void		Drop( const Vector &vecVelocity );
 
@@ -65,9 +65,9 @@ private:
 		
 };
 
-#define RUSTYSHORTSWORD_DAMAGE	5.0f // BOXBOX TODO set up this stuff in scripts
+//#define RUSTYSHORTSWORD_DAMAGE	5.0f
 #define	RUSTYSHORTSWORD_RANGE	60.0f
-#define	RUSTYSHORTSWORD_REFIRE	0.6f
+//#define	RUSTYSHORTSWORD_REFIRE	0.6f
 
 IMPLEMENT_NETWORKCLASS_ALIASED( WeaponRustyShortSword, DT_WeaponRustyShortSword )
 
@@ -100,7 +100,7 @@ IMPLEMENT_ACTTABLE(CWeaponRustyShortSword);
 
 CWeaponRustyShortSword::CWeaponRustyShortSword( void )
 {
-	m_nMSSWeaponType = WEAPONTYPE_ONEHANDSLASHING;
+//	m_nMSSWeaponType = WEAPONTYPE_ONEHANDSLASHING;
 }
 
 /* BOXBOX removing
@@ -232,20 +232,20 @@ void CWeaponRustyShortSword::Drop( const Vector &vecVelocity )
 	AddEffects( EF_ITEM_BLINK ); // BOXBOX TODO adding this, but maybe later change it to highlight using code from estranged?
 #endif
 }
-
+/*
 float CWeaponRustyShortSword::GetDamageForActivity( Activity hitActivity )
 {
 	return RUSTYSHORTSWORD_DAMAGE;
 }
-
+*/
 float CWeaponRustyShortSword::GetRange( void )
 {
 	return	RUSTYSHORTSWORD_RANGE;	
 }
-
+/*
 float CWeaponRustyShortSword::GetFireRate( void )
 {
 	return	RUSTYSHORTSWORD_REFIRE;	
 }
-
+*/
 

@@ -60,9 +60,8 @@ void CMSS_Player::PrecacheFootStepSounds( void )
 //-----------------------------------------------------------------------------
 Vector CMSS_Player::GetAttackSpread( CBaseCombatWeapon *pWeapon, CBaseEntity *pTarget )
 {
-// BOXBOX TODO use this?
 //	if ( pWeapon )
-//		return pWeapon->GetArrowSpread( WEAPON_PROFICIENCY_PERFECT );
+//		return pWeapon->GetBulletSpread( WEAPON_PROFICIENCY_PERFECT );
 	
 	return VECTOR_CONE_15DEGREES;
 }

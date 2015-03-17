@@ -176,30 +176,30 @@ bool CSingleplayRules::Damage_ShouldNotBleed( int iDmgType )
 	//-----------------------------------------------------------------------------
 	bool CSingleplayRules::FShouldSwitchWeapon( CBasePlayer *pPlayer, CBaseCombatWeapon *pWeapon )
 	{
-/*		//Must have ammo
-		if ( ( pWeapon->HasAnyAmmo() == false ) && ( pPlayer->GetAmmoCount( pWeapon->m_iPrimaryAmmoType ) <= 0 ) )
-			return false;
+		//Must have ammo
+//		if ( ( pWeapon->HasAnyAmmo() == false ) && ( pPlayer->GetAmmoCount( pWeapon->m_iPrimaryAmmoType ) <= 0 ) )
+//			return false;
 
 		//Always take a loaded gun if we have nothing else
 		if ( pPlayer->GetActiveWeapon() == NULL )
 			return true;
 
 		// The given weapon must allow autoswitching to it from another weapon.
-		if ( !pWeapon->AllowsAutoSwitchTo() )
-			return false;
+//		if ( !pWeapon->AllowsAutoSwitchTo() )
+//			return false;
 
 		// The active weapon must allow autoswitching from it.
-		if ( !pPlayer->GetActiveWeapon()->AllowsAutoSwitchFrom() )
-			return false;
+//		if ( !pPlayer->GetActiveWeapon()->AllowsAutoSwitchFrom() )
+//			return false;
 
 		//Don't switch if our current gun doesn't want to be holstered
 		if ( pPlayer->GetActiveWeapon()->CanHolster() == false )
 			return false;
 
 		//Only switch if the weapon is better than what we're using
-		if ( ( pWeapon != pPlayer->GetActiveWeapon() ) && ( pWeapon->GetWeight() <= pPlayer->GetActiveWeapon()->GetWeight() ) )
-			return false;
-*/
+//		if ( ( pWeapon != pPlayer->GetActiveWeapon() ) && ( pWeapon->GetWeight() <= pPlayer->GetActiveWeapon()->GetWeight() ) )
+//			return false;
+
 		return true;
 	}
 
@@ -208,13 +208,13 @@ bool CSingleplayRules::Damage_ShouldNotBleed( int iDmgType )
 	//-----------------------------------------------------------------------------
 	CBaseCombatWeapon *CSingleplayRules::GetNextBestWeapon( CBaseCombatCharacter *pPlayer, CBaseCombatWeapon *pCurrentWeapon )
 	{
-/*		if ( pCurrentWeapon && !pCurrentWeapon->AllowsAutoSwitchFrom() )
-			return NULL;
+//		if ( pCurrentWeapon && !pCurrentWeapon->AllowsAutoSwitchFrom() )
+//			return NULL;
 
 		CBaseCombatWeapon	*pBestWeapon = NULL;
 		CBaseCombatWeapon	*pWeapon;
 		
-		int	nBestWeight	= -1;
+//		int	nBestWeight	= -1;
 
 		//Search for the best weapon to use next based on its weight
 		for ( int i = 0; i < pPlayer->WeaponCount(); i++ )
@@ -226,29 +226,27 @@ bool CSingleplayRules::Damage_ShouldNotBleed( int iDmgType )
 
 			// If we have an active weapon and this weapon doesn't allow autoswitching away
 			// from another weapon, skip it.
-			if ( pCurrentWeapon && !pWeapon->AllowsAutoSwitchTo() )
-				continue;
+//			if ( pCurrentWeapon && !pWeapon->AllowsAutoSwitchTo() )
+//				continue;
 
 			// Must be eligible for switching to.
 			if (!pPlayer->Weapon_CanSwitchTo(pWeapon))
 				continue;
 			
 			// Must be of higher quality.
-			if ( pWeapon->GetWeight() <= nBestWeight )
-				continue;
+//			if ( pWeapon->GetWeight() <= nBestWeight )
+//				continue;
 
 			// We must have primary ammo
-			if ( pWeapon->UsesClipsForAmmo1() && pWeapon->Clip1() <= 0 && !pPlayer->GetAmmoCount( pWeapon->GetPrimaryAmmoType() ) )
-				continue;
+//			if ( pWeapon->UsesClipsForAmmo1() && pWeapon->Clip1() <= 0 && !pPlayer->GetAmmoCount( pWeapon->GetPrimaryAmmoType() ) )
+//				continue;
 
 			// This is a better candidate than what we had.
-			nBestWeight = pWeapon->GetWeight();
+//			nBestWeight = pWeapon->GetWeight();
 			pBestWeapon = pWeapon;
 		}
 
 		return pBestWeapon;
-*/
-		return pCurrentWeapon;
 	}
 
 	//-----------------------------------------------------------------------------

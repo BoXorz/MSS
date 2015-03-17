@@ -1,10 +1,3 @@
-//========= Copyright Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-// $Workfile:     $
-// $NoKeywords: $
-//=============================================================================//
 
 #ifndef COMBATWEAPON_H
 #define COMBATWEAPON_H
@@ -14,14 +7,6 @@
 
 #include "entityoutput.h"
 #include "basecombatweapon_shared.h"
-
-//-----------------------------------------------------------------------------
-// Bullet types
-//-----------------------------------------------------------------------------
-
-// -----------------------------------------
-//	Sounds
-// -----------------------------------------
 
 struct animevent_t;
 

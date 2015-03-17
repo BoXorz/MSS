@@ -9,9 +9,8 @@ class C_MSS_Player;
 #include "MSS_shareddefs.h"
 #include "beamdraw.h"
 
-//=============================================================================
-// >> HL2MP_Player
-//=============================================================================
+class CPlayerAnimState;
+
 class C_MSS_Player : public C_BaseHLPlayer
 {
 public:
@@ -81,7 +80,7 @@ public:
 
 	virtual void PostThink( void );
 
-// BOXBOXBOX MSS STUFF
+// BOXBOX MSS STUFF
 
 	int				GetNumChars( void ) { return m_bHasCharInSlot[1] + m_bHasCharInSlot[2] + m_bHasCharInSlot[3]; }
 

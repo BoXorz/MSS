@@ -5,12 +5,13 @@
 // $NoKeywords: $
 //
 //=============================================================================//
-#ifndef MSS_PLAYER_SHARED_H
-#define MSS_PLAYER_SHARED_H
+//#ifndef MSS_PLAYER_SHARED_H
+//#define MSS_PLAYER_SHARED_H
 #pragma once
 
 #define HL2MP_PUSHAWAY_THINK_INTERVAL		(1.0f / 20.0f)
 #include "studio.h"
+
 
 
 enum
@@ -30,9 +31,16 @@ enum MSSPlayerState
 
 
 #if defined( CLIENT_DLL )
-#define CMSS_Player C_MSS_Player
+
+	//#include "c_MSS_player.h"
+	class C_MSS_Player;
+	#define CMSS_Player C_MSS_Player
+
 #else
-#include "MSS_player.h" // BOXBOX adding, for some weird ass reason of a fail-compile that reared it's head mysteriously Feb 01 2015
+
+	//#include "MSS_player.h"
+	class CMSS_Player;
+
 #endif
 
 
@@ -97,4 +105,4 @@ private:
 	float				m_flTurnCorrectionTime;
 };
 
-#endif //MSS_PLAYER_SHARED_h
+//#endif //MSS_PLAYER_SHARED_h

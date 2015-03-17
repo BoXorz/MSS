@@ -109,10 +109,10 @@ private:
 	void ActivateFastswitchWeaponDisplay( C_BaseCombatWeapon *pWeapon );
 	void ActivateWeaponHighlight( C_BaseCombatWeapon *pWeapon );
 	float GetWeaponBoxAlpha( bool bSelected );
-//	int GetLastPosInSlot( int iSlot ) const;
+	int GetLastPosInSlot( int iSlot ) const;
     
-//	void FastWeaponSwitch( int iWeaponSlot );
-//	void PlusTypeFastWeaponSwitch( int iWeaponSlot );
+	void FastWeaponSwitch( int iWeaponSlot );
+	void PlusTypeFastWeaponSwitch( int iWeaponSlot );
 
 	virtual	void SetSelectedWeapon( C_BaseCombatWeapon *pWeapon ) 
 	{ 
@@ -648,7 +648,7 @@ void CHudWeaponSelection::Paint()
 			}
 		}
 	break;
-/*
+
 	case HUDTYPE_BUCKETS:
 		{
 			// bucket style
@@ -656,8 +656,7 @@ void CHudWeaponSelection::Paint()
 			xpos  = (GetWide() - width) / 2;
 			ypos  = 0;
 
-//			int iActiveSlot = (pSelectedWeapon ? pSelectedWeapon->GetSlot() : -1);
-			int iActiveSlot = -1; // BOXBOX
+			int iActiveSlot = (pSelectedWeapon ? pSelectedWeapon->GetSlot() : -1);
 
 			// draw the bucket set
 			// iterate over all the weapon slots
@@ -720,9 +719,8 @@ void CHudWeaponSelection::Paint()
 				xpos += m_flBoxGap;
 			}
 		}
-
 	break;
-*/
+
 	default:
 		{
 			// do nothing
@@ -1032,7 +1030,7 @@ void CHudWeaponSelection::ApplySchemeSettings(vgui::IScheme *pScheme)
 
 	SetForceStereoRenderToFrameBuffer( true );
 }
-/*
+
 //-----------------------------------------------------------------------------
 // Purpose: Opens weapon selection control
 //-----------------------------------------------------------------------------
@@ -1055,8 +1053,10 @@ void CHudWeaponSelection::HideSelection( void )
 	g_pClientMode->GetViewportAnimationController()->StartAnimationSequence("CloseWeaponSelectionMenu");
 	m_bFadingOut = false;
 }
-*/
-/*
+
+//-----------------------------------------------------------------------------
+// Purpose: Returns the next available weapon item in the weapon selection
+//-----------------------------------------------------------------------------
 C_BaseCombatWeapon *CHudWeaponSelection::FindNextWeaponInWeaponSelection(int iCurrentSlot, int iCurrentPosition)
 {
 	C_BasePlayer *pPlayer = C_BasePlayer::GetLocalPlayer();
@@ -1094,8 +1094,10 @@ C_BaseCombatWeapon *CHudWeaponSelection::FindNextWeaponInWeaponSelection(int iCu
 
 	return pNextWeapon;
 }
-*/
-/*
+
+//-----------------------------------------------------------------------------
+// Purpose: Returns the prior available weapon item in the weapon selection
+//-----------------------------------------------------------------------------
 C_BaseCombatWeapon *CHudWeaponSelection::FindPrevWeaponInWeaponSelection(int iCurrentSlot, int iCurrentPosition)
 {
 	C_BasePlayer *pPlayer = C_BasePlayer::GetLocalPlayer();
@@ -1133,8 +1135,10 @@ C_BaseCombatWeapon *CHudWeaponSelection::FindPrevWeaponInWeaponSelection(int iCu
 
 	return pPrevWeapon;
 }
-*/
-/*
+
+//-----------------------------------------------------------------------------
+// Purpose: Moves the selection to the next item in the menu
+//-----------------------------------------------------------------------------
 void CHudWeaponSelection::CycleToNextWeapon( void )
 {
 	// Get the local player.
@@ -1184,8 +1188,10 @@ void CHudWeaponSelection::CycleToNextWeapon( void )
 		pPlayer->EmitSound( "Player.WeaponSelectionMoveSlot" );
 	}
 }
-*/
-/*
+
+//-----------------------------------------------------------------------------
+// Purpose: Moves the selection to the previous item in the menu
+//-----------------------------------------------------------------------------
 void CHudWeaponSelection::CycleToPrevWeapon( void )
 {
 	// Get the local player.
@@ -1235,8 +1241,10 @@ void CHudWeaponSelection::CycleToPrevWeapon( void )
 		pPlayer->EmitSound( "Player.WeaponSelectionMoveSlot" );
 	}
 }
-*/
-/*
+
+//-----------------------------------------------------------------------------
+// Purpose: returns the # of the last weapon in the specified slot
+//-----------------------------------------------------------------------------
 int CHudWeaponSelection::GetLastPosInSlot( int iSlot ) const
 {
 	C_BasePlayer *player = C_BasePlayer::GetLocalPlayer();
@@ -1259,8 +1267,10 @@ int CHudWeaponSelection::GetLastPosInSlot( int iSlot ) const
 
 	return iMaxSlotPos;
 }
-*/
-/*
+
+//-----------------------------------------------------------------------------
+// Purpose: returns the weapon in the specified slot
+//-----------------------------------------------------------------------------
 C_BaseCombatWeapon *CHudWeaponSelection::GetWeaponInSlot( int iSlot, int iSlotPos )
 {
 	C_BasePlayer *player = C_BasePlayer::GetLocalPlayer();
@@ -1280,8 +1290,10 @@ C_BaseCombatWeapon *CHudWeaponSelection::GetWeaponInSlot( int iSlot, int iSlotPo
 
 	return NULL;
 }
-*/
-/*
+
+//-----------------------------------------------------------------------------
+// Purpose: Opens the next weapon in the slot
+//-----------------------------------------------------------------------------
 void CHudWeaponSelection::FastWeaponSwitch( int iWeaponSlot )
 {
 	// get the slot the player's weapon is in
@@ -1294,7 +1306,6 @@ void CHudWeaponSelection::FastWeaponSwitch( int iWeaponSlot )
 	// see where we should start selection
 	int iPosition = -1;
 	C_BaseCombatWeapon *pActiveWeapon = pPlayer->GetActiveWeapon();
-
 	if ( pActiveWeapon && pActiveWeapon->GetSlot() == iWeaponSlot )
 	{
 		// start after this weapon
@@ -1331,6 +1342,9 @@ void CHudWeaponSelection::FastWeaponSwitch( int iWeaponSlot )
 	}
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: Opens the next weapon in the slot
+//-----------------------------------------------------------------------------
 void CHudWeaponSelection::PlusTypeFastWeaponSwitch( int iWeaponSlot )
 {
 	// get the slot the player's weapon is in
@@ -1412,7 +1426,7 @@ void CHudWeaponSelection::PlusTypeFastWeaponSwitch( int iWeaponSlot )
 		SetSelectedWeapon( pPlayer->GetActiveWeapon() );
 	}
 }
-*/
+
 //-----------------------------------------------------------------------------
 // Purpose: Moves selection to the specified slot
 //-----------------------------------------------------------------------------
@@ -1439,7 +1453,7 @@ void CHudWeaponSelection::SelectWeaponSlot( int iSlot )
 	case HUDTYPE_FASTSWITCH:
 	case HUDTYPE_CAROUSEL:
 		{
-//			FastWeaponSwitch( iSlot );
+			FastWeaponSwitch( iSlot );
 			return;
 		}
 		
@@ -1451,11 +1465,11 @@ void CHudWeaponSelection::SelectWeaponSlot( int iSlot )
 				OpenSelection();
 			}
 				
-//			PlusTypeFastWeaponSwitch( iSlot );
+			PlusTypeFastWeaponSwitch( iSlot );
 			ActivateWeaponHighlight( GetSelectedWeapon() );
 		}
 		break;
-/*
+
 	case HUDTYPE_BUCKETS:
 		{
 			int slotPos = 0;
@@ -1487,7 +1501,7 @@ void CHudWeaponSelection::SelectWeaponSlot( int iSlot )
 				SetSelectedSlideDir( 0 );
 			}
 		}
-*/
+
 	default:
 		{
 			// do nothing
@@ -1495,5 +1509,5 @@ void CHudWeaponSelection::SelectWeaponSlot( int iSlot )
 		break;
 	}
 
-//	pPlayer->EmitSound( "Player.WeaponSelectionMoveSlot" );
+	pPlayer->EmitSound( "Player.WeaponSelectionMoveSlot" );
 }

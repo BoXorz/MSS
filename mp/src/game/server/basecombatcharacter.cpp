@@ -63,7 +63,7 @@
 extern int	g_interactionBarnacleVictimReleased;
 #endif //HL2_DLL
 
-extern ConVar weapon_showproficiency;
+//extern ConVar weapon_showproficiency;
 
 ConVar ai_show_hull_attacks( "ai_show_hull_attacks", "0" );
 ConVar ai_force_serverside_ragdoll( "ai_force_serverside_ragdoll", "0" );
@@ -2101,8 +2101,11 @@ void CBaseCombatCharacter::Weapon_Equip( CBaseCombatWeapon *pWeapon )
 	// Weapon is now on my team
 	pWeapon->ChangeTeam( GetTeamNumber() );
 
-/*
-	if (pWeapon->GetMaxClip1() == -1)
+	// ----------------------
+	//  Give Primary Ammo
+	// ----------------------
+	// If gun doesn't use clips, just give ammo
+/*	if (pWeapon->GetMaxClip1() == -1)
 	{
 #ifdef HL2_DLL
 		if( FStrEq(STRING(gpGlobals->mapname), "d3_c17_09") && FClassnameIs(pWeapon, "weapon_rpg") && pWeapon->NameMatches("player_spawn_items") )
@@ -2143,7 +2146,7 @@ void CBaseCombatCharacter::Weapon_Equip( CBaseCombatWeapon *pWeapon )
 	pWeapon->Equip( this );
 
 	// Players don't automatically holster their current weapon
-	if ( IsPlayer() == false )
+//	if ( IsPlayer() == false )
 	{
 		if ( m_hActiveWeapon )
 		{
@@ -2169,23 +2172,26 @@ void CBaseCombatCharacter::Weapon_Equip( CBaseCombatWeapon *pWeapon )
 
 	WeaponProficiency_t proficiency;
 	proficiency = CalcWeaponProficiency( pWeapon );
-	
+/*	
 	if( weapon_showproficiency.GetBool() != 0 )
 	{
 		Msg("%s equipped with %s, proficiency is %s\n", GetClassname(), pWeapon->GetClassname(), GetWeaponProficiencyName( proficiency ) );
 	}
-
+*/
 	SetCurrentWeaponProficiency( proficiency );
 
 	// Pass the lighting origin over to the weapon if we have one
 	pWeapon->SetLightingOriginRelative( GetLightingOriginRelative() );
 }
 
-/*
+//-----------------------------------------------------------------------------
+// Purpose:	Leaves weapon, giving only ammo to the character
+// Input  : Weapon
+//-----------------------------------------------------------------------------
 bool CBaseCombatCharacter::Weapon_EquipAmmoOnly( CBaseCombatWeapon *pWeapon )
 {
 	// Check for duplicates
-	for (int i=0;i<MAX_WEAPONS;i++) 
+/*	for (int i=0;i<MAX_WEAPONS;i++) 
 	{
 		if ( m_hMyWeapons[i].Get() && FClassnameIs(m_hMyWeapons[i], pWeapon->GetClassname()) )
 		{
@@ -2221,27 +2227,35 @@ bool CBaseCombatCharacter::Weapon_EquipAmmoOnly( CBaseCombatWeapon *pWeapon )
 			return false;
 		}
 	}
-
+*/
 	return false;
 }
-*/
-/*
+
+//-----------------------------------------------------------------------------
+// Purpose: Returns whether the weapon passed in would occupy a slot already occupied by the carrier
+// Input  : *pWeapon - weapon to test for
+// Output : Returns true on success, false on failure.
+//-----------------------------------------------------------------------------
 bool CBaseCombatCharacter::Weapon_SlotOccupied( CBaseCombatWeapon *pWeapon )
 {
+/*
 	if ( pWeapon == NULL )
 		return false;
 
 	//Check to see if there's a resident weapon already in this slot
 	if ( Weapon_GetSlot( pWeapon->GetSlot() ) == NULL )
 		return false;
-
+*/
 	return true;
 }
-*/
-/*
+
+//-----------------------------------------------------------------------------
+// Purpose: Returns the weapon (if any) in the requested slot
+// Input  : slot - which slot to poll
+//-----------------------------------------------------------------------------
 CBaseCombatWeapon *CBaseCombatCharacter::Weapon_GetSlot( int slot ) const
 {
-	int	targetSlot = slot;
+/*	int	targetSlot = slot;
 
 	// Check for that slot being occupied already
 	for ( int i=0; i < MAX_WEAPONS; i++ )
@@ -2253,13 +2267,16 @@ CBaseCombatWeapon *CBaseCombatCharacter::Weapon_GetSlot( int slot ) const
 				return m_hMyWeapons[i];
 		}
 	}
-	
+*/	
 	return NULL;
 }
-*/
-/*
+
+//-----------------------------------------------------------------------------
+// Purpose: Get a pointer to a weapon this character has that uses the specified ammo
+//-----------------------------------------------------------------------------
 CBaseCombatWeapon *CBaseCombatCharacter::Weapon_GetWpnForAmmo( int iAmmoIndex )
 {
+/*
 	for ( int i = 0; i < MAX_WEAPONS; i++ )
 	{
 		CBaseCombatWeapon *weapon = GetWeapon( i );
@@ -2271,10 +2288,10 @@ CBaseCombatWeapon *CBaseCombatCharacter::Weapon_GetWpnForAmmo( int iAmmoIndex )
 		if ( weapon->GetSecondaryAmmoType() == iAmmoIndex )
 			return weapon;
 	}
-
+*/
 	return NULL;
 }
-*/
+
 
 //-----------------------------------------------------------------------------
 // Purpose: Can this character operate this weapon?
@@ -2343,7 +2360,7 @@ void CBaseCombatCharacter::RemoveAllWeapons()
 	{
 		if ( m_hMyWeapons[i] )
 		{
-			m_hMyWeapons[i]->Delete( );
+			m_hMyWeapons[i]->Kill( );
 			m_hMyWeapons.Set( i, NULL );
 		}
 	}
@@ -2507,7 +2524,7 @@ int CBaseCombatCharacter::OnTakeDamage_Alive( const CTakeDamageInfo &info )
 		CBaseCombatWeapon *pWeapon = pPlayer->GetActiveWeapon();
 		if( ( pWeapon ) )
 		{
-			pPlayer->IncrementWeaponSkill( pWeapon->GetMSSWeaponType() );
+			pPlayer->IncrementWeaponSkill( pWeapon->GetWeaponType() );
 		}
 	}
 

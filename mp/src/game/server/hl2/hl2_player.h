@@ -14,6 +14,7 @@
 #include "hl2_playerlocaldata.h"
 #include "simtimer.h"
 #include "soundenvelope.h"
+#include "gamerules.h"
 
 class CAI_Squad;
 class CPropCombineBall;
@@ -210,7 +211,7 @@ public:
 
 	void				SetLocatorTargetEntity( CBaseEntity *pEntity ) { m_hLocatorTargetEntity.Set( pEntity ); }
 
-//	virtual int			GiveAmmo( int nCount, int nAmmoIndex, bool bSuppressSound);
+	virtual int			GiveAmmo( int nCount, int nAmmoIndex, bool bSuppressSound);
 	virtual bool		BumpWeapon( CBaseCombatWeapon *pWeapon );
 	
 	virtual bool		Weapon_CanUse( CBaseCombatWeapon *pWeapon );

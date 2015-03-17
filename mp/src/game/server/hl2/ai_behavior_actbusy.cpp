@@ -891,7 +891,7 @@ void CAI_ActBusyBehavior::GatherConditions( void )
 			}
 		}
 	}
-
+/* BOXBOX removing
 	if( m_bAutoFireWeapon && random->RandomInt(0, 5) <= 3 )
 	{
 		CBaseCombatWeapon *pWeapon = GetOuter()->GetActiveWeapon();
@@ -901,7 +901,7 @@ void CAI_ActBusyBehavior::GatherConditions( void )
 			pWeapon->Operator_ForceNPCFire( GetOuter(), false );
 		}
 	}
-
+*/
 	if( ai_debug_actbusy.GetInt() == 5 )
 	{
 		// Visualize them there Actbusy safe volumes

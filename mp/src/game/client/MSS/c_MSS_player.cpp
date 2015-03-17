@@ -29,7 +29,7 @@ IMPLEMENT_CLIENTCLASS_DT(C_MSS_Player, DT_MSS_Player, CMSS_Player)
 
 //	RecvPropBool( RECVINFO( m_fIsWalking ) ), // BOXBOX the serverclass doesnt have this!?
 
-// BOXBOXBOX MSS STUFF
+// BOXBOX MSS STUFF
 
 //	RecvPropInt( RECVINFO( m_nNumChars ) ),
 	RecvPropString( RECVINFO( m_szCharName ) ),

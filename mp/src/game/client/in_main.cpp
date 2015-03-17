@@ -1168,7 +1168,7 @@ void CInput::CreateMove ( int sequence_number, float input_sample_frametime, boo
 		C_BaseCombatWeapon *weapon = m_hSelectedWeapon;
 
 		cmd->weaponselect = weapon->entindex();
-		cmd->weaponsubtype = weapon->GetSubType();
+//		cmd->weaponsubtype = weapon->GetSubType(); // BOXBOX redoing stuff
 
 		// Always clear weapon selection
 		m_hSelectedWeapon = NULL;

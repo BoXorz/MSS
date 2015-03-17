@@ -743,11 +743,6 @@ void CMSSRules::DeathNotice( CBasePlayer *pVictim, const CTakeDamageInfo &info )
 		{
 			killer_weapon_name = "smg1_grenade";
 		}
-		else if ( strcmp( killer_weapon_name, "satchel" ) == 0 || strcmp( killer_weapon_name, "tripmine" ) == 0)
-		{
-			killer_weapon_name = "slam";
-		}
-
 
 	}
 

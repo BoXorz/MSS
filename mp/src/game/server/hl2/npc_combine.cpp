@@ -991,9 +991,9 @@ void CNPC_Combine::StartTask( const Task_t *pTask )
 			BaseClass::StartTask( pTask );
 		}
 		break;
-	case TASK_RANGE_ATTACK1:
+/*	case TASK_RANGE_ATTACK1:
 		{
-//			m_nShots = GetActiveWeapon()->GetRandomBurst();
+			m_nShots = GetActiveWeapon()->GetRandomBurst();
 			m_flShotDelay = GetActiveWeapon()->GetFireRate();
 
 			m_flNextAttack = gpGlobals->curtime + m_flShotDelay - 0.1;
@@ -1001,7 +1001,7 @@ void CNPC_Combine::StartTask( const Task_t *pTask )
 			m_flLastAttackTime = gpGlobals->curtime;
 		}
 		break;
-
+*/
 	case TASK_COMBINE_DIE_INSTANTLY:
 		{
 			CTakeDamageInfo info;
@@ -3195,7 +3195,7 @@ bool CNPC_Combine::ActiveWeaponIsFullyLoaded()
 
 	return ( pWeapon->Clip1() >= pWeapon->GetMaxClip1() );
 */
-	return true;
+	return false; // BOXBOX
 }
 
 

@@ -111,7 +111,7 @@ void CWeaponMSSBase::WeaponSound( WeaponSound_t sound_type, float soundtime /* =
 				
 		CBaseEntity::EmitSound( filter, GetPlayerOwner()->entindex(), wpnsound, &GetPlayerOwner()->GetAbsOrigin() ); 
 #else
-		BaseClass::WeaponSound( sound_type, soundtime );
+//		BaseClass::WeaponSound( sound_type, soundtime );
 #endif
 }
 

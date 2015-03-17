@@ -12,7 +12,7 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
-LINK_ENTITY_TO_CLASS( basehl2mpcombatweapon, CBaseMSSCombatWeapon );
+LINK_ENTITY_TO_CLASS( basemsscombatweapon, CBaseMSSCombatWeapon );
 
 IMPLEMENT_NETWORKCLASS_ALIASED( BaseMSSCombatWeapon , DT_BaseMSSCombatWeapon )
 
@@ -66,12 +66,12 @@ void CBaseMSSCombatWeapon::ItemHolsterFrame( void )
 	// We can't be active
 	if ( GetOwner()->GetActiveWeapon() == this )
 		return;
-
-/*	// If it's been longer than three seconds, reload
+/*
+	// If it's been longer than three seconds, reload
 	if ( ( gpGlobals->curtime - m_flHolsterTime ) > sk_auto_reload_time.GetFloat() )
 	{
 		// Just load the clip with no animations
-//		FinishReload();
+		FinishReload();
 		m_flHolsterTime = gpGlobals->curtime;
 	}
 */
@@ -220,8 +220,11 @@ void CBaseMSSCombatWeapon::WeaponIdle( void )
 #define	HL2_BOB			0.002f
 #define	HL2_BOB_UP		0.5f
 
-//extern float	g_lateralBob;
-//extern float	g_verticalBob;
+extern float	g_lateralBob;
+extern float	g_verticalBob;
+
+//float	g_lateralBob;
+//float	g_verticalBob;
 
 static ConVar	cl_bobcycle( "cl_bobcycle","0.8" );
 static ConVar	cl_bob( "cl_bob","0.002" );
@@ -241,7 +244,7 @@ static ConVar	v_ipitch_level( "v_ipitch_level", "0.3", FCVAR_REPLICATED | FCVAR_
 //-----------------------------------------------------------------------------
 float CBaseMSSCombatWeapon::CalcViewmodelBob( void )
 {
-/*	static	float bobtime;
+	static	float bobtime;
 	static	float lastbobtime;
 	float	cycle;
 	
@@ -304,7 +307,7 @@ float CBaseMSSCombatWeapon::CalcViewmodelBob( void )
 	g_lateralBob = g_lateralBob*0.3 + g_lateralBob*0.7*sin(cycle);
 	g_lateralBob = clamp( g_lateralBob, -7.0f, 4.0f );
 	
-*/
+	//NOTENOTE: We don't use this return value in our case (need to restructure the calculation function setup!)
 	return 0.0f;
 }
 
@@ -316,7 +319,7 @@ float CBaseMSSCombatWeapon::CalcViewmodelBob( void )
 //-----------------------------------------------------------------------------
 void CBaseMSSCombatWeapon::AddViewmodelBob( CBaseViewModel *viewmodel, Vector &origin, QAngle &angles )
 {
-/*	Vector	forward, right;
+	Vector	forward, right;
 	AngleVectors( angles, &forward, &right, NULL );
 
 	CalcViewmodelBob();
@@ -334,21 +337,21 @@ void CBaseMSSCombatWeapon::AddViewmodelBob( CBaseViewModel *viewmodel, Vector &o
 	angles[ YAW ]	-= g_lateralBob  * 0.3f;
 
 	VectorMA( origin, g_lateralBob * 0.8f, right, origin );
-*/
 }
 
-//-----------------------------------------------------------------------------
+// BOXBOX redoing
 Vector CBaseMSSCombatWeapon::GetBulletSpread( WeaponProficiency_t proficiency )
 {
 //	return BaseClass::GetBulletSpread( proficiency );
 	return VECTOR_CONE_15DEGREES;
 }
 
-//-----------------------------------------------------------------------------
+// BOXBOX redoing
 float CBaseMSSCombatWeapon::GetSpreadBias( WeaponProficiency_t proficiency )
 {
 //	return BaseClass::GetSpreadBias( proficiency );
-	return 1.0;
+
+	return 1.0f;
 }
 //-----------------------------------------------------------------------------
 
@@ -379,14 +382,11 @@ void CBaseMSSCombatWeapon::AddViewmodelBob( CBaseViewModel *viewmodel, Vector &o
 //-----------------------------------------------------------------------------
 Vector CBaseMSSCombatWeapon::GetBulletSpread( WeaponProficiency_t proficiency )
 {
-/*	Vector baseSpread = BaseClass::GetBulletSpread( proficiency );
+	Vector baseSpread = VECTOR_CONE_15DEGREES;
 
 	const WeaponProficiencyInfo_t *pProficiencyValues = GetProficiencyValues();
 	float flModifier = (pProficiencyValues)[ proficiency ].spreadscale;
 	return ( baseSpread * flModifier );
-*/
-
-	return VECTOR_CONE_15DEGREES;
 }
 
 //-----------------------------------------------------------------------------

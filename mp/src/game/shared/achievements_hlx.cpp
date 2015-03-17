@@ -221,7 +221,7 @@ DECLARE_ACHIEVEMENT( CAchievementHLXKillEliteSoldierWithOwnEnergyBall, ACHIEVEME
 //-----------------------------------------------------------------------------
 int CalcPlayerAttacks( bool bBulletOnly )
 {
-	CBasePlayer *pPlayer = UTIL_GetLocalPlayer();
+/*	CBasePlayer *pPlayer = UTIL_GetLocalPlayer();
 	CAmmoDef *pAmmoDef = GetAmmoDef();
 	if ( !pPlayer || !pAmmoDef )
 		return 0;
@@ -234,18 +234,20 @@ int CalcPlayerAttacks( bool bBulletOnly )
 		if ( pWeapon )
 		{
 			// add primary attacks if we were asked for all attacks, or only if it uses bullet ammo if we were asked to count bullet attacks
-//			if ( !bBulletOnly || ( pAmmoDef->m_AmmoType[pWeapon->GetPrimaryAmmoType()].nDamageType == DMG_BULLET ) )
-//			{
+			if ( !bBulletOnly || ( pAmmoDef->m_AmmoType[pWeapon->GetPrimaryAmmoType()].nDamageType == DMG_BULLET ) )
+			{
 				iTotalAttacks += pWeapon->m_iPrimaryAttacks;
-//			}
+			}
 			// add secondary attacks if we were asked for all attacks, or only if it uses bullet ammo if we were asked to count bullet attacks
-//			if ( !bBulletOnly || ( pAmmoDef->m_AmmoType[pWeapon->GetSecondaryAmmoType()].nDamageType == DMG_BULLET ) )
-//			{
+			if ( !bBulletOnly || ( pAmmoDef->m_AmmoType[pWeapon->GetSecondaryAmmoType()].nDamageType == DMG_BULLET ) )
+			{
 				iTotalAttacks += pWeapon->m_iSecondaryAttacks;
-//			}
+			}
 		}
 	}
 	return iTotalAttacks;
+*/
+	return 0; // BOXBOX replaced function
 }
 
 #endif	// ( defined( HL2_DLL ) || defined( HL2_EPISODIC ) ) && ( !defined ( PORTAL ) )

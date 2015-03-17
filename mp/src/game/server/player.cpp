@@ -5675,12 +5675,12 @@ CBaseEntity	*CBasePlayer::GiveNamedItem( const char *pszName, int iSubType )
 	pent->SetLocalOrigin( GetLocalOrigin() );
 	pent->AddSpawnFlags( SF_NORESPAWN );
 
-	CBaseCombatWeapon *pWeapon = dynamic_cast<CBaseCombatWeapon*>( (CBaseEntity*)pent );
+/*	CBaseCombatWeapon *pWeapon = dynamic_cast<CBaseCombatWeapon*>( (CBaseEntity*)pent );
 	if ( pWeapon )
 	{
 		pWeapon->SetSubType( iSubType );
 	}
-
+*/
 	DispatchSpawn( pent );
 
 	if ( pent != NULL && !(pent->IsMarkedForDeletion()) ) 
@@ -6559,7 +6559,7 @@ extern bool UTIL_ItemCanBeTouchedByPlayer( CBaseEntity *pItem, CBasePlayer *pPla
 //-----------------------------------------------------------------------------
 bool CBasePlayer::BumpWeapon( CBaseCombatWeapon *pWeapon )
 {
-	CBaseCombatCharacter *pOwner = pWeapon->GetOwner();
+/*	CBaseCombatCharacter *pOwner = pWeapon->GetOwner();
 
 	// Can I have this weapon type?
 	if ( !IsAllowedToPickupWeapons() )
@@ -6588,7 +6588,9 @@ bool CBasePlayer::BumpWeapon( CBaseCombatWeapon *pWeapon )
 			return false;
 	}
 	
-/*
+	// ----------------------------------------
+	// If I already have it just take the ammo
+	// ----------------------------------------
 	if (Weapon_OwnsThisType( pWeapon->GetClassname(), pWeapon->GetSubType())) 
 	{
 		if( Weapon_EquipAmmoOnly( pWeapon ) )
@@ -6605,24 +6607,25 @@ bool CBasePlayer::BumpWeapon( CBaseCombatWeapon *pWeapon )
 			return false;
 		}
 	}
+
 	// -------------------------
 	// Otherwise take the weapon
 	// -------------------------
 	else 
 	{
-		pWeapon->CheckRespawn();
+//		pWeapon->CheckRespawn();
 */
 		pWeapon->AddSolidFlags( FSOLID_NOT_SOLID );
 		pWeapon->AddEffects( EF_NODRAW );
 
 		Weapon_Equip( pWeapon );
+/*
 		if ( IsInAVehicle() )
 		{
 			pWeapon->Holster();
 		}
-/*		else
+		else
 		{
-
 #ifdef HL2_DLL
 
 			if ( IsX360() )
@@ -6646,7 +6649,8 @@ bool CBasePlayer::BumpWeapon( CBaseCombatWeapon *pWeapon )
 #endif
 		}
 */
-	return true;
+		return true;
+//	}
 }
 
 
@@ -6997,8 +7001,8 @@ float CBasePlayer::GetAutoaimScore( const Vector &eyePosition, const Vector &vie
 	float radiusSqr;
 	float targetRadius = pTarget->GetAutoAimRadius() * fScale;
 
-	if( pActiveWeapon != NULL )
-		targetRadius *= pActiveWeapon->WeaponAutoAimScale();
+//	if( pActiveWeapon != NULL )
+//		targetRadius *= pActiveWeapon->WeaponAutoAimScale();
 
 	float targetRadiusSqr = Square( targetRadius );
 
@@ -7173,7 +7177,7 @@ QAngle CBasePlayer::AutoaimDeflection( Vector &vecSrc, autoaim_params_t &params 
 			if( !(pEntity->GetFlags() & FL_FLY) )
 			{
 				// Refuse to take wild shots at targets far from reticle.
-				if( GetActiveWeapon() != NULL && dot < GetActiveWeapon()->GetMaxAutoAimDeflection() )
+				if( GetActiveWeapon() != NULL && dot < 0.99f )
 				{
 					// Be lenient if the player is looking down, though. 30 degrees through 90 degrees of pitch.
 					// (90 degrees is looking down at player's own 'feet'. Looking straight ahead is 0 degrees pitch.
@@ -7299,10 +7303,13 @@ void CBasePlayer::Weapon_Drop( CBaseCombatWeapon *pWeapon, const Vector *pvecTar
 	}
 }
 
-/*
+//-----------------------------------------------------------------------------
+// Purpose: 
+// Input  : weaponSlot - 
+//-----------------------------------------------------------------------------
 void CBasePlayer::Weapon_DropSlot( int weaponSlot )
 {
-	CBaseCombatWeapon *pWeapon;
+/*	CBaseCombatWeapon *pWeapon;
 
 	// Check for that slot being occupied already
 	for ( int i=0; i < MAX_WEAPONS; i++ )
@@ -7318,15 +7325,15 @@ void CBasePlayer::Weapon_DropSlot( int weaponSlot )
 			}
 		}
 	}
-}
 */
+}
+
 //-----------------------------------------------------------------------------
 // Purpose: Override to add weapon to the hud
 //-----------------------------------------------------------------------------
 void CBasePlayer::Weapon_Equip( CBaseCombatWeapon *pWeapon )
 {
 	BaseClass::Weapon_Equip( pWeapon );
-	Weapon_Switch( pWeapon );
 /*
 	bool bShouldSwitch = g_pGameRules->FShouldSwitchWeapon( this, pWeapon );
 
@@ -8703,10 +8710,10 @@ void CBasePlayer::SetViewEntity( CBaseEntity *pEntity )
 	}
 }
 
-/*
+
 bool CBasePlayer::HasAnyAmmoOfType( int nAmmoIndex )
 {
-	// Must be a valid index
+/*	// Must be a valid index
 	if ( nAmmoIndex < 0 )
 		return false;
 
@@ -8740,10 +8747,9 @@ bool CBasePlayer::HasAnyAmmoOfType( int nAmmoIndex )
 		}
 	}	
 
-	// We're completely without this type of ammo
+*/
 	return false;
 }
-*/
 
 bool CBasePlayer::HandleVoteCommands( const CCommand &args )
 {

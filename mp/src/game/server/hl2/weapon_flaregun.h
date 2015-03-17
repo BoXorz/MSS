@@ -4,7 +4,7 @@
 //
 //=============================================================================//
 
-//#include "basehlcombatweapon.h"
+#include "basecombatweapon.h"
 #include "soundenvelope.h"
 
 #ifndef WEAPON_FLAREGUN_H

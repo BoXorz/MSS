@@ -6,6 +6,7 @@
 //=============================================================================//
 
 #include "cbase.h"
+/*
 #include "npcevent.h"
 #include "npc_metropolice.h"
 #include "weapon_stunstick.h"
@@ -150,15 +151,7 @@ int CWeaponStunStick::WeaponMeleeAttack1Condition( float flDot, float flDist )
 			return COND_CAN_MELEE_ATTACK1;
 		}
 	}
-/*
-	if( metropolice_move_and_melee.GetBool() )
-	{
-		if( pNPC->IsMoving() )
-		{
-			flTargetDist *= 1.5f;
-		}
-	}
-*/
+
 	float flTargetDist = 48.0f;
 	if ((flDist > flTargetDist) && (flExtrapolatedDist > flTargetDist))
 	{
@@ -370,3 +363,4 @@ bool CWeaponStunStick::GetStunState( void )
 {
 	return m_bActive;
 }
+*/

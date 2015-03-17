@@ -34,8 +34,9 @@ END_NETWORK_TABLE()
 BEGIN_PREDICTION_DATA( CBaseMSSBludgeonWeapon )
 END_PREDICTION_DATA()
 
+
  
-LINK_ENTITY_TO_CLASS( weapon_unarmed, CBaseMSSBludgeonWeapon );
+//LINK_ENTITY_TO_CLASS( weapon_unarmed, CBaseMSSBludgeonWeapon );
 
 // BOXBOX TODO temporary!!!  go through all item script files, pick out the weapons, and fill out a LINK_ENTITY_TO_CLASS for each!
 /*
@@ -44,8 +45,6 @@ for( x = 1; x < m_ItemInfoDatabase.Count(); x++ )
 	FileItemInfo_t *pItem = GetFileItemInfoFromHandle( (ITEM_FILE_INFO_HANDLE)pPlayer->m_nBootsItem );
 }
 */
-
-
 
 
 #define BLUDGEON_HULL_DIM		16
@@ -115,7 +114,7 @@ void CBaseMSSBludgeonWeapon::ItemPostFrame( void )
 //------------------------------------------------------------------------------
 void CBaseMSSBludgeonWeapon::PrimaryAttack()
 {
-	
+
 #ifndef CLIENT_DLL
 	CMSS_Player *pPlayer = ToMSSPlayer( GetPlayerOwner() );
 	// Move other players back to history positions based on local player's lag

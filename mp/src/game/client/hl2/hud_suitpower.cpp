@@ -72,9 +72,7 @@ bool CHudSuitPower::ShouldDraw()
 	return ( bNeedsDraw && CHudElement::ShouldDraw() );
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
+// BOXBOX redoing
 void CHudSuitPower::OnThink( void )
 {
 	float flCurrentPower = 0;
@@ -98,7 +96,7 @@ void CHudSuitPower::OnThink( void )
 		// we've lost power
 		g_pClientMode->GetViewportAnimationController()->StartAnimationSequence("SuitAuxPowerNotMax");
 	}
-
+/*
 	bool flashlightActive = pPlayer->IsFlashlightActive();
 	bool sprintActive = pPlayer->IsSprinting();
 	bool breatherActive = pPlayer->IsBreatherActive();
@@ -125,15 +123,14 @@ void CHudSuitPower::OnThink( void )
 			break;
 		}
 	}
-
+*/
 	m_flSuitPower = flCurrentPower;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: draws the power bar
-//-----------------------------------------------------------------------------
+// BOXBOX redoing
 void CHudSuitPower::Paint()
 {
+/*
 	C_BaseHLPlayer *pPlayer = (C_BaseHLPlayer *)C_BasePlayer::GetLocalPlayer();
 	if ( !pPlayer )
 		return;
@@ -252,6 +249,7 @@ void CHudSuitPower::Paint()
 			ypos += text2_gap;
 		}
 	}
+*/
 }
 
 

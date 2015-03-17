@@ -1,8 +1,3 @@
-//========= Copyright Valve Corporation, All rights reserved. ============//
-//
-// Purpose: 
-//
-//=============================================================================//
 
 #include "cbase.h"
 #include "ai_basenpc.h"
@@ -15,7 +10,6 @@
 #include "baseviewmodel.h"
 #include "in_buttons.h"
 #include "soundent.h"
-#include "MSS_item_parse.h"
 #include "game.h"
 #include "engine/IEngineSound.h"
 #include "sendproxy.h"
@@ -27,9 +21,8 @@
 #include "iservervehicle.h"
 #include "func_break.h"
 
-//#ifdef MSS
-	#include "MSS_gamerules.h"
-//#endif
+#include "MSS_gamerules.h"
+#include "MSS_item_parse.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -49,27 +42,23 @@ short		g_sModelIndexBubbles;		// holds the index for the bubbles model
 short		g_sModelIndexBloodDrop;		// holds the sprite index for the initial blood
 short		g_sModelIndexBloodSpray;	// holds the sprite index for splattered blood
 
-
-ConVar weapon_showproficiency( "weapon_showproficiency", "0" );
+//ConVar weapon_showproficiency( "weapon_showproficiency", "0" );
 extern ConVar ai_debug_shoot_positions;
 
-//-----------------------------------------------------------------------------
-// Purpose: Precache global weapon sounds
-//-----------------------------------------------------------------------------
+// BOXBOX Precache item script stuff
 void W_Precache(void)
 {
 	PrecacheFileItemInfoDatabase( filesystem, g_pGameRules->GetEncryptionKey() );
 
-
-
+/*
 #ifdef HL1_DLL
 	g_sModelIndexWExplosion = CBaseEntity::PrecacheModel ("sprites/WXplo1.vmt");// underwater fireball
 	g_sModelIndexBloodSpray = CBaseEntity::PrecacheModel ("sprites/bloodspray.vmt"); // initial blood
 	g_sModelIndexBloodDrop = CBaseEntity::PrecacheModel ("sprites/blood.vmt"); // splattered blood 
 	g_sModelIndexLaserDot = CBaseEntity::PrecacheModel("sprites/laserdot.vmt");
 #endif // HL1_DLL
+*/
 
-#ifndef TF_DLL
 	g_sModelIndexFireball = CBaseEntity::PrecacheModel ("sprites/zerogxplode.vmt");// fireball
 
 	g_sModelIndexSmoke = CBaseEntity::PrecacheModel ("sprites/steam1.vmt");// smoke
@@ -82,10 +71,9 @@ void W_Precache(void)
 
 	CBaseEntity::PrecacheModel ("effects/bubble.vmt");//bubble trails
 
-	CBaseEntity::PrecacheModel("models/weapons/w_bullet.mdl");
-#endif
+//	CBaseEntity::PrecacheModel("models/weapons/w_bullet.mdl");
 
-	CBaseEntity::PrecacheScriptSound( "BaseCombatWeapon.WeaponDrop" );
+//	CBaseEntity::PrecacheScriptSound( "BaseCombatWeapon.WeaponDrop" ); // BOXBOX TODO figure out item drop sounds
 //	CBaseEntity::PrecacheScriptSound( "BaseCombatWeapon.WeaponMaterialize" ); // BOXBOX weapons don't respawn
 }
 
@@ -151,20 +139,14 @@ void CBaseCombatWeapon::Operator_FrameUpdate( CBaseCombatCharacter *pOperator )
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : *pEvent - 
-//			*pOperator - 
-//-----------------------------------------------------------------------------
+
 void CBaseCombatWeapon::Operator_HandleAnimEvent( animevent_t *pEvent, CBaseCombatCharacter *pOperator )
 {
 	if ( (pEvent->type & AE_TYPE_NEWEVENTSYSTEM) && (pEvent->type & AE_TYPE_SERVER) )
 	{
-		if ( pEvent->event == AE_NPC_WEAPON_FIRE )
+		if ( pEvent->event == EVENT_WEAPON_MELEE_HIT )
 		{
-			bool bSecondary = (atoi( pEvent->options ) != 0);
-			Operator_ForceNPCFire( pOperator, bSecondary );
-			return;
+			HandleAnimEventMeleeHit( pEvent, pOperator );
 		}
 		else if ( pEvent->event == AE_WPN_PLAYWPNSOUND )
 		{
@@ -192,34 +174,35 @@ void CBaseCombatWeapon::HandleAnimEvent( animevent_t *pEvent )
 	}
 }
 
-
-CBaseEntity* CBaseCombatWeapon::Respawn( void ) // BOXBOX weapons do not respawn
+void CBaseCombatWeapon::HandleAnimEventMeleeHit( animevent_t *pEvent, CBaseCombatCharacter *pOperator )
 {
-	// make a copy of this weapon that is invisible and inaccessible to players (no touch function). The weapon spawn/respawn code
-	// will decide when to make the weapon visible and touchable.
-/*	CBaseEntity *pNewWeapon = CBaseEntity::Create( GetClassname(), g_pGameRules->VecWeaponRespawnSpot( this ), GetLocalAngles(), GetOwnerEntity() );
+	// Trace up or down based on where the enemy is...
+	// But only if we're basically facing that direction
+	Vector vecDirection;
+	AngleVectors( GetAbsAngles(), &vecDirection );
 
-	if ( pNewWeapon )
+	Vector vecEnd;
+	VectorMA( pOperator->Weapon_ShootPosition(), 50, vecDirection, vecEnd );
+	CBaseEntity *pHurt = pOperator->CheckTraceHullAttack( pOperator->Weapon_ShootPosition(), vecEnd, 
+		Vector(-16,-16,-16), Vector(36,36,36), GetDamageForActivity( GetActivity() ), DMG_CLUB, 0.75 );
+	
+	// did I hit someone?
+	if ( pHurt )
 	{
-		pNewWeapon->AddEffects( EF_NODRAW );// invisible for now
-		pNewWeapon->SetTouch( NULL );// no touch
-		pNewWeapon->SetThink( &CBaseCombatWeapon::AttemptToMaterialize );
+		// play sound
+		WeaponSound( MELEE_HIT );
 
-		UTIL_DropToFloor( this, MASK_SOLID );
-
-		// not a typo! We want to know when the weapon the player just picked up should respawn! This new entity we created is the replacement,
-		// but when it should respawn is based on conditions belonging to the weapon that was taken.
-		pNewWeapon->SetNextThink( gpGlobals->curtime + g_pGameRules->FlWeaponRespawnTime( this ) );
+		// Fake a trace impact, so the effects work out like a player's crowbaw
+		trace_t traceHit;
+		UTIL_TraceLine( pOperator->Weapon_ShootPosition(), pHurt->GetAbsOrigin(), MASK_SHOT_HULL, pOperator, COLLISION_GROUP_NONE, &traceHit );
+		ImpactEffect( traceHit );
 	}
 	else
 	{
-		Warning("Respawn failed to create %s!\n", GetClassname() );
+		WeaponSound( MELEE_MISS );
 	}
-
-	return pNewWeapon;
-*/
-	return NULL;
 }
+
 
 //-----------------------------------------------------------------------------
 // Purpose: Weapons ignore other weapons when LOS tracing
@@ -364,16 +347,14 @@ bool CBaseCombatWeapon::WeaponLOSCondition( const Vector &ownerPos, const Vector
 	return false;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Base class always returns not bits
-//-----------------------------------------------------------------------------
+/* BOXBOX removing
 int CBaseCombatWeapon::WeaponRangeAttack1Condition( float flDot, float flDist )
 {
-/* 	if ( UsesPrimaryAmmo() && !HasPrimaryAmmo() )
+ 	if ( UsesPrimaryAmmo() && !HasPrimaryAmmo() )
  	{
  		return COND_NO_PRIMARY_AMMO;
  	}
- 	else*/ if ( flDist < m_fMinRange1) 
+ 	else if ( flDist < m_fMinRange1) 
  	{
  		return COND_TOO_CLOSE_TO_ATTACK;
  	}
@@ -396,7 +377,7 @@ int CBaseCombatWeapon::WeaponRangeAttack2Condition( float flDot, float flDist )
 {
 	// currently disabled
 	return COND_NONE;
-/*
+
 	if ( m_bReloadsSingly )
 	{
 		if (m_iClip2 <=0)
@@ -417,29 +398,22 @@ int CBaseCombatWeapon::WeaponRangeAttack2Condition( float flDot, float flDist )
 		}
 		return COND_CAN_RANGE_ATTACK2;
 	}
-*/
+
 	return COND_NONE;
 }
+*/
 
-//-----------------------------------------------------------------------------
-// Purpose: Base class always returns not bits
-//-----------------------------------------------------------------------------
 int CBaseCombatWeapon::WeaponMeleeAttack1Condition( float flDot, float flDist )
 {
 	return COND_NONE;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Base class always returns not bits
-//-----------------------------------------------------------------------------
 int CBaseCombatWeapon::WeaponMeleeAttack2Condition( float flDot, float flDist )
 {
 	return COND_NONE;
 }
 
-//====================================================================================
-// WEAPON DROPPING / DESTRUCTION
-//====================================================================================
+/* BOXBOX removing
 void CBaseCombatWeapon::Delete( void )
 {
 	SetTouch( NULL );
@@ -447,7 +421,7 @@ void CBaseCombatWeapon::Delete( void )
 	SetThink(&CBaseCombatWeapon::SUB_Remove);
 	SetNextThink( gpGlobals->curtime + 0.1f );
 }
-
+*/
 void CBaseCombatWeapon::DestroyItem( void )
 {
 	CBaseCombatCharacter *pOwner = m_hOwner.Get();
@@ -463,19 +437,12 @@ void CBaseCombatWeapon::DestroyItem( void )
 
 void CBaseCombatWeapon::Kill( void )
 {
-	SetTouch( NULL );
-	// FIXME: why doesn't this just remove itself now?
-	// FIXME: how is this different than Delete(), and why do they have the same code in them?
+	SetTouch( NULL );	// FIXME: why doesn't this just remove itself now?
 	SetThink(&CBaseCombatWeapon::SUB_Remove);
 	SetNextThink( gpGlobals->curtime + 0.1f );
 }
 
-//====================================================================================
-// FALL TO GROUND
-//====================================================================================
-//-----------------------------------------------------------------------------
-// Purpose: Setup for the fall
-//-----------------------------------------------------------------------------
+// BOXBOX Setup for falling to ground
 void CBaseCombatWeapon::FallInit( void )
 {
 	SetModel( GetWorldModel() );
@@ -546,58 +513,40 @@ void CBaseCombatWeapon::FallThink ( void )
 
 	if ( shouldMaterialize )
 	{
+/* BOXBOX removing
 		// clatter if we have an owner (i.e., dropped by someone)
 		// don't clatter if the gun is waiting to respawn (if it's waiting, it is invisible!)
 		if ( GetOwnerEntity() )
 		{
 			EmitSound( "BaseCombatWeapon.WeaponDrop" );
 		}
+*/
 		Materialize(); 
 	}
+
 }
 
-//====================================================================================
-// WEAPON SPAWNING
-//====================================================================================
-//-----------------------------------------------------------------------------
-// Purpose: Make a weapon visible and tangible
-//-----------------------------------------------------------------------------// 
+
 void CBaseCombatWeapon::Materialize( void )
 {
 	if ( IsEffectActive( EF_NODRAW ) )
 	{
-/*
-#ifdef MSS
-		EmitSound( "AlyxEmp.Charge" );
-#else
-	EmitSound( "BaseCombatWeapon.WeaponMaterialize" );
-#endif
-*/			
 		RemoveEffects( EF_NODRAW );
-		DoMuzzleFlash();
+//		DoMuzzleFlash();
 	}
-#ifdef MSS
-	if ( HasSpawnFlags( SF_NORESPAWN ) == false )
-	{
+
+//	if ( HasSpawnFlags( SF_NORESPAWN ) == false )
+//	{
 		VPhysicsInitNormal( SOLID_BBOX, GetSolidFlags() | FSOLID_TRIGGER, false );
 		SetMoveType( MOVETYPE_VPHYSICS );
-
-//		MSSRules()->AddLevelDesignerPlacedObject( this );
-	}
-#else
-	SetSolid( SOLID_BBOX );
-	AddSolidFlags( FSOLID_TRIGGER );
-#endif
+//	}
 
 	SetPickupTouch();
 
 	SetThink (NULL);
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: See if the game rules will let this weapon respawn
-//-----------------------------------------------------------------------------
-
+/* BOXBOX removing
 void CBaseCombatWeapon::AttemptToMaterialize( void ) // BOXBOX changing this
 {
 //	float time = g_pGameRules->FlWeaponTryRespawn( this );
@@ -616,7 +565,7 @@ void CBaseCombatWeapon::AttemptToMaterialize( void ) // BOXBOX changing this
 //-----------------------------------------------------------------------------
 void CBaseCombatWeapon::CheckRespawn( void ) // BOXBOX no weapon respawning in MSS
 {
-/*	switch ( g_pGameRules->WeaponShouldRespawn( this ) )
+	switch ( g_pGameRules->WeaponShouldRespawn( this ) )
 	{
 	case GR_WEAPON_RESPAWN_YES:
 		Respawn();
@@ -625,9 +574,9 @@ void CBaseCombatWeapon::CheckRespawn( void ) // BOXBOX no weapon respawning in M
 		return;
 		break;
 	}
-*/
-}
 
+}
+*/
 class CWeaponList : public CAutoGameSystem
 {
 public:
@@ -706,10 +655,7 @@ int	CBaseCombatWeapon::ObjectCaps( void )
 	return caps;
 }
 
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
+// BOXBOX TODO eliminate bumpweapon, and implement the item pickup system(viewmodel reaches out, use button needed to grab item)
 void CBaseCombatWeapon::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {
 	CBasePlayer *pPlayer = ToBasePlayer( pActivator );

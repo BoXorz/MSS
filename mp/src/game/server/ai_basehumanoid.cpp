@@ -56,7 +56,7 @@ bool CAI_BaseHumanoid::HandleInteraction(int interactionType, void *data, CBaseC
 //-----------------------------------------------------------------------------
 void CAI_BaseHumanoid::CheckAmmo( void )
 {
-	BaseClass::CheckAmmo();
+/*	BaseClass::CheckAmmo();
 
 	// FIXME: put into GatherConditions()?
 	// FIXME: why isn't this a baseclass function?
@@ -66,7 +66,7 @@ void CAI_BaseHumanoid::CheckAmmo( void )
 	// Don't do this while holstering / unholstering
 	if ( IsWeaponStateChanging() )
 		return;
-/*
+
 	if (GetActiveWeapon()->UsesPrimaryAmmo())
 	{
 		if (!GetActiveWeapon()->HasPrimaryAmmo() )

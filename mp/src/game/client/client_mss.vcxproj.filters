@@ -1841,6 +1841,9 @@
     <ClInclude Include="hl2\c_basehelicopter.h">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClInclude>
+    <ClInclude Include="hl2\c_basehlcombatweapon.h">
+      <Filter>Source Files\HL2 DLL</Filter>
+    </ClInclude>
     <ClInclude Include="hl2\c_basehlplayer.h">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClInclude>
@@ -1911,6 +1914,9 @@
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\game\shared\MSS\weapon_physcannon.h">
+      <Filter>Source Files\MSS\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\game\shared\MSS\weapon_slam.h">
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClInclude>
     <ClInclude Include="sixense\in_sixense.h">
@@ -3034,6 +3040,9 @@
     <ClCompile Include="game_controls\vguitextwindow.cpp">
       <Filter>Source Files\game_controls</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\game\shared\hl2\basehlcombatweapon_shared.cpp">
+      <Filter>Source Files\HL2 DLL</Filter>
+    </ClCompile>
     <ClCompile Include="hl2\c_antlion_dust.cpp">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClCompile>
@@ -3047,6 +3056,9 @@
       <Filter>Source Files\HL2 DLL</Filter>
     </ClCompile>
     <ClCompile Include="hl2\c_basehelicopter.cpp">
+      <Filter>Source Files\HL2 DLL</Filter>
+    </ClCompile>
+    <ClCompile Include="hl2\c_basehlcombatweapon.cpp">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClCompile>
     <ClCompile Include="hl2\c_basehlplayer.cpp">
@@ -3166,6 +3178,9 @@
     <ClCompile Include="hl2\hl_prediction.cpp">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClCompile>
+    <ClCompile Include="hl2\hud_ammo.cpp">
+      <Filter>Source Files\HL2 DLL</Filter>
+    </ClCompile>
     <ClCompile Include="hl2\hud_battery.cpp">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClCompile>
@@ -3194,6 +3209,9 @@
       <Filter>Source Files\HL2 DLL</Filter>
     </ClCompile>
     <ClCompile Include="hl2\hud_suitpower.cpp">
+      <Filter>Source Files\HL2 DLL</Filter>
+    </ClCompile>
+    <ClCompile Include="hl2\hud_weaponselection.cpp">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClCompile>
     <ClCompile Include="hl2\hud_zoom.cpp">
@@ -3260,6 +3278,9 @@
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClCompile>
     <ClCompile Include="..\..\game\shared\MSS\weapon_physcannon.cpp">
+      <Filter>Source Files\MSS\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\game\shared\MSS\weapon_slam.cpp">
       <Filter>Source Files\MSS\Weapons</Filter>
     </ClCompile>
     <ClCompile Include="..\..\game\shared\MSS\weapon_stunstick.cpp">

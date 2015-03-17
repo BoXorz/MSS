@@ -1,10 +1,10 @@
 
-// BOXBOX First MSS weapon!
+// BOXBOX My MSS weapon!
 
 #include "cbase.h"
 #include "npcevent.h"
 //#include "weapon_MSSbasecombatweapon.h"
-#include "weapon_MSSbasebasebludgeon.h"
+//#include "weapon_MSSbasebasebludgeon.h"
 
 /*
 #include "gamerules.h"
@@ -28,10 +28,10 @@
 #define CWeaponArozenSword C_WeaponArozenSword
 #endif
 
-class CWeaponArozenSword : public CBaseMSSBludgeonWeapon
+class CWeaponArozenSword : public CBaseCombatWeapon // BOXBOX was CBaseMSSBludgeonWeapon
 {
 public:
-	DECLARE_CLASS( CWeaponArozenSword, CBaseMSSBludgeonWeapon );
+	DECLARE_CLASS( CWeaponArozenSword, CBaseCombatWeapon );
 
 	DECLARE_NETWORKCLASS(); 
 	DECLARE_PREDICTABLE();
@@ -43,11 +43,11 @@ public:
 	CWeaponArozenSword();
 
 	float		GetRange( void );
-	float		GetFireRate( void );
+//	float		GetFireRate( void );
 
 //	void		AddViewKick( void ); // BOXBOX nope
-	float		GetDamageForActivity( Activity hitActivity );
-	void		SecondaryAttack( void )	{ return; }
+//	float		GetDamageForActivity( Activity hitActivity );
+//	void		SecondaryAttack( void )	{ return; }
 
 	void		Drop( const Vector &vecVelocity );
 
@@ -65,9 +65,9 @@ private:
 		
 };
 
-#define AROZENSWORD_DAMAGE	25.0f // BOXBOX for now
+//#define AROZENSWORD_DAMAGE	25.0f // BOXBOX for now
 #define	AROZENSWORD_RANGE	75.0f
-#define	AROZENSWORD_REFIRE	0.4f
+//#define	AROZENSWORD_REFIRE	0.4f
 
 IMPLEMENT_NETWORKCLASS_ALIASED( WeaponArozenSword, DT_WeaponArozenSword )
 
@@ -78,8 +78,6 @@ BEGIN_PREDICTION_DATA( CWeaponArozenSword )
 END_PREDICTION_DATA()
 
 LINK_ENTITY_TO_CLASS( weapon_arozensword, CWeaponArozenSword );
-
-
 PRECACHE_WEAPON_REGISTER( weapon_arozensword );
 
 #ifndef CLIENT_DLL
@@ -102,7 +100,7 @@ IMPLEMENT_ACTTABLE(CWeaponArozenSword);
 
 CWeaponArozenSword::CWeaponArozenSword( void )
 {
-	m_nMSSWeaponType = WEAPONTYPE_ONEHANDSLASHING;
+//	m_nMSSWeaponType = WEAPONTYPE_ONEHANDSLASHING;
 }
 
 /* BOXBOX removing
@@ -235,20 +233,20 @@ void CWeaponArozenSword::Drop( const Vector &vecVelocity )
 	AddEffects( EF_ITEM_BLINK ); // BOXBOX TODO adding this, but maybe later change it to highlight using code from estranged?
 #endif
 }
-
+/*
 float CWeaponArozenSword::GetDamageForActivity( Activity hitActivity )
 {
 	return AROZENSWORD_DAMAGE;
 }
-
+*/
 float CWeaponArozenSword::GetRange( void )
 {
 	return	AROZENSWORD_RANGE;	
 }
-
+/*
 float CWeaponArozenSword::GetFireRate( void )
 {
 	return	AROZENSWORD_REFIRE;	
 }
-
+*/
 

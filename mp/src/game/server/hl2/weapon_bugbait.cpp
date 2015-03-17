@@ -6,7 +6,7 @@
 //=============================================================================//
 
 #include "cbase.h"
-//#include "basehlcombatweapon.h"
+#include "basecombatweapon.h"
 #include "engine/IEngineSound.h"
 #include "npcevent.h"
 #include "in_buttons.h"
@@ -229,7 +229,7 @@ void CWeaponBugBait::PrimaryAttack( void )
 	m_flTimeWeaponIdle		= FLT_MAX;
 	m_flNextPrimaryAttack	= FLT_MAX;
 
-	m_iPrimaryAttacks++;
+//	m_iPrimaryAttacks++;
 	gamestats->Event_WeaponFired( pPlayer, true, GetClassname() );
 }
 
@@ -254,7 +254,7 @@ void CWeaponBugBait::SecondaryAttack( void )
 	CBasePlayer *pOwner = ToBasePlayer( GetOwner() );
 	if ( pOwner )
 	{
-		m_iSecondaryAttacks++;
+//		m_iSecondaryAttacks++;
 		gamestats->Event_WeaponFired( pOwner, false, GetClassname() );
 	}
 }
